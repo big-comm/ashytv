@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 01:02-0300\n"
+"POT-Creation-Date: 2026-10-24 01:25-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -182,50 +182,49 @@ msgstr "Nome utente o password non validi"
 msgid "Account status: {status}"
 msgstr "Stato dell’account: {status}"
 
-#: src/ashytv/ui/detail_dialog.py:88 src/ashytv/ui/detail_dialog.py:149
-#: src/ashytv/ui/pages/channels_page.py:328
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/detail_dialog.py:91 src/ashytv/ui/detail_dialog.py:152
+#: src/ashytv/ui/pages/channels_page.py:328 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Guarda"
 
-#: src/ashytv/ui/detail_dialog.py:114
+#: src/ashytv/ui/detail_dialog.py:117
 msgid "Episodes"
 msgstr "Episodi"
 
-#: src/ashytv/ui/detail_dialog.py:129
+#: src/ashytv/ui/detail_dialog.py:132
 msgid "Could not load"
 msgstr "Impossibile caricare"
 
-#: src/ashytv/ui/detail_dialog.py:148
+#: src/ashytv/ui/detail_dialog.py:151
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Riprendi da {time}"
 
-#: src/ashytv/ui/detail_dialog.py:165
+#: src/ashytv/ui/detail_dialog.py:168
 msgid "No episodes available"
 msgstr "Nessun episodio disponibile"
 
-#: src/ashytv/ui/detail_dialog.py:170
+#: src/ashytv/ui/detail_dialog.py:173
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Stagione {n}"
 
-#: src/ashytv/ui/detail_dialog.py:178
+#: src/ashytv/ui/detail_dialog.py:181
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Guarda {label}"
 
-#: src/ashytv/ui/detail_dialog.py:218
+#: src/ashytv/ui/detail_dialog.py:221
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Episodio {n}"
 
-#: src/ashytv/ui/detail_dialog.py:257 src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/detail_dialog.py:260 src/ashytv/ui/pages/catalog_page.py:197
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Remove from favorites"
 msgstr "Rimuovi dai preferiti"
 
-#: src/ashytv/ui/detail_dialog.py:258 src/ashytv/ui/pages/catalog_page.py:198
+#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:198
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Add to favorites"
 msgstr "Aggiungi ai preferiti"
@@ -406,8 +405,7 @@ msgstr "Guida non disponibile"
 
 #: src/ashytv/ui/pages/epg_page.py:119
 msgid "The guide appears here once your provider's EPG loads."
-msgstr ""
-"La guida apparirà qui non appena l’EPG del tuo provider sarà caricato."
+msgstr "La guida apparirà qui non appena l’EPG del tuo provider sarà caricato."
 
 #: src/ashytv/ui/pages/home_page.py:56
 msgid "Continue Watching"
@@ -833,8 +831,7 @@ msgstr "PIN"
 
 #: src/ashytv/ui/pages/settings_page.py:236
 msgid "With a PIN set, it is required to show adult content."
-msgstr ""
-"Con un PIN impostato, è richiesto per mostrare i contenuti per adulti."
+msgstr "Con un PIN impostato, è richiesto per mostrare i contenuti per adulti."
 
 #: src/ashytv/ui/pages/settings_page.py:238
 msgid "New PIN (4+ digits)"
@@ -1221,12 +1218,10 @@ msgstr "Lettore IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Guarda le tue playlist IPTV (M3U e Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lettore;diretta;canali;film;serie;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lettore;diretta;canali;film;serie;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"

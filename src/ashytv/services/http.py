@@ -8,10 +8,10 @@ from pathlib import Path
 
 from gi.repository import GLib
 
-from .. import __version__
+from .. import APP_VERSION
 from ..i18n import _
 
-USER_AGENT = f"AshyTV/{__version__} (+https://communitybig.org)"
+USER_AGENT = f"AshyTV/{APP_VERSION} (+https://communitybig.org)"
 
 
 def cache_dir(sub: str) -> Path:

@@ -9,6 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 DOMAIN=ashytv
+VERSION=$(sed -n 's/^APP_VERSION = "\(.*\)"/\1/p' src/ashytv/__init__.py)
 POT=locale/$DOMAIN.pot
 DESKTOP_IN=data/org.communitybig.ashytv.desktop.in
 METAINFO_IN=data/org.communitybig.ashytv.metainfo.xml.in
@@ -18,10 +19,11 @@ extract() {
     tmp_py=$(mktemp) tmp_data=$(mktemp)
     find src/ashytv -name '*.py' | sort > "$tmp_py"
     xgettext --language=Python --from-code=UTF-8 --keyword=_ --keyword=ngettext:1,2 \
-        --add-comments=Translators: --sort-by-file --package-name=ashytv --package-version=0.1.0 \
+        --add-comments=Translators: --sort-by-file --package-name=ashytv --package-version="$VERSION" \
         --msgid-bugs-address=https://github.com/big-comm/ashytv/issues \
         --files-from="$tmp_py" -o "$POT"
     xgettext --join-existing --from-code=UTF-8 --add-comments=Translators: \
+        --package-name=ashytv --package-version="$VERSION" \
         -o "$POT" "$DESKTOP_IN" "$METAINFO_IN"
     rm -f "$tmp_py" "$tmp_data"
     echo "Updated $POT ($(grep -c '^msgid ' "$POT") entries)"

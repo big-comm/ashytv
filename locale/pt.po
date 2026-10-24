@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 01:02-0300\n"
+"POT-Creation-Date: 2026-10-24 01:25-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -182,50 +182,49 @@ msgstr "Nome de utilizador ou palavra-passe inválidos"
 msgid "Account status: {status}"
 msgstr "Estado da conta: {status}"
 
-#: src/ashytv/ui/detail_dialog.py:88 src/ashytv/ui/detail_dialog.py:149
-#: src/ashytv/ui/pages/channels_page.py:328
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/detail_dialog.py:91 src/ashytv/ui/detail_dialog.py:152
+#: src/ashytv/ui/pages/channels_page.py:328 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Ver"
 
-#: src/ashytv/ui/detail_dialog.py:114
+#: src/ashytv/ui/detail_dialog.py:117
 msgid "Episodes"
 msgstr "Episódios"
 
-#: src/ashytv/ui/detail_dialog.py:129
+#: src/ashytv/ui/detail_dialog.py:132
 msgid "Could not load"
 msgstr "Não foi possível carregar"
 
-#: src/ashytv/ui/detail_dialog.py:148
+#: src/ashytv/ui/detail_dialog.py:151
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Retomar a partir de {time}"
 
-#: src/ashytv/ui/detail_dialog.py:165
+#: src/ashytv/ui/detail_dialog.py:168
 msgid "No episodes available"
 msgstr "Nenhum episódio disponível"
 
-#: src/ashytv/ui/detail_dialog.py:170
+#: src/ashytv/ui/detail_dialog.py:173
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Temporada {n}"
 
-#: src/ashytv/ui/detail_dialog.py:178
+#: src/ashytv/ui/detail_dialog.py:181
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Ver {label}"
 
-#: src/ashytv/ui/detail_dialog.py:218
+#: src/ashytv/ui/detail_dialog.py:221
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Episódio {n}"
 
-#: src/ashytv/ui/detail_dialog.py:257 src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/detail_dialog.py:260 src/ashytv/ui/pages/catalog_page.py:197
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Remove from favorites"
 msgstr "Remover dos favoritos"
 
-#: src/ashytv/ui/detail_dialog.py:258 src/ashytv/ui/pages/catalog_page.py:198
+#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:198
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Add to favorites"
 msgstr "Adicionar aos favoritos"
@@ -515,8 +514,8 @@ msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr ""
-"Cole a mensagem de boas-vindas do fornecedor: servidor, utilizador e "
-"palavra-passe são preenchidos automaticamente"
+"Cole a mensagem de boas-vindas do fornecedor: servidor, utilizador e palavra-"
+"passe são preenchidos automaticamente"
 
 #: src/ashytv/ui/pages/lists_page.py:113
 msgid "Playlist URL (M3U)"
@@ -590,8 +589,8 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"“{name}” e todos os seus canais, favoritos e histórico serão removidos deste"
-" dispositivo."
+"“{name}” e todos os seus canais, favoritos e histórico serão removidos deste "
+"dispositivo."
 
 #: src/ashytv/ui/pages/lists_page.py:271
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -1096,8 +1095,7 @@ msgstr "Começar"
 
 #: src/ashytv/ui/welcome_view.py:79
 msgid "AshyTV does not provide any content — bring your own playlist."
-msgstr ""
-"O AshyTV não fornece qualquer conteúdo — traga a sua própria playlist."
+msgstr "O AshyTV não fornece qualquer conteúdo — traga a sua própria playlist."
 
 #: src/ashytv/window.py:71
 msgid "Menu"
@@ -1224,12 +1222,10 @@ msgstr "Leitor IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Veja as suas próprias playlists IPTV (M3U e Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;leitor;direto;canais;filmes;séries;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;leitor;direto;canais;filmes;séries;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1245,9 +1241,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"O AshyTV é um leitor IPTV em GTK4/libadwaita. Importe a sua própria playlist"
-" M3U ou conta Xtream Codes e navegue por canais em direto, guia eletrónico "
-"de programação, filmes e séries. O AshyTV não fornece nem inclui qualquer "
+"O AshyTV é um leitor IPTV em GTK4/libadwaita. Importe a sua própria playlist "
+"M3U ou conta Xtream Codes e navegue por canais em direto, guia eletrónico de "
+"programação, filmes e séries. O AshyTV não fornece nem inclui qualquer "
 "conteúdo."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18

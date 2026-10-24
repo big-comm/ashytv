@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 01:02-0300\n"
+"POT-Creation-Date: 2026-10-24 01:25-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -182,50 +182,49 @@ msgstr "사용자 이름 또는 비밀번호가 올바르지 않습니다"
 msgid "Account status: {status}"
 msgstr "계정 상태: {status}"
 
-#: src/ashytv/ui/detail_dialog.py:88 src/ashytv/ui/detail_dialog.py:149
-#: src/ashytv/ui/pages/channels_page.py:328
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/detail_dialog.py:91 src/ashytv/ui/detail_dialog.py:152
+#: src/ashytv/ui/pages/channels_page.py:328 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "시청"
 
-#: src/ashytv/ui/detail_dialog.py:114
+#: src/ashytv/ui/detail_dialog.py:117
 msgid "Episodes"
 msgstr "에피소드"
 
-#: src/ashytv/ui/detail_dialog.py:129
+#: src/ashytv/ui/detail_dialog.py:132
 msgid "Could not load"
 msgstr "불러올 수 없습니다"
 
-#: src/ashytv/ui/detail_dialog.py:148
+#: src/ashytv/ui/detail_dialog.py:151
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "{time}부터 이어보기"
 
-#: src/ashytv/ui/detail_dialog.py:165
+#: src/ashytv/ui/detail_dialog.py:168
 msgid "No episodes available"
 msgstr "시청 가능한 에피소드가 없습니다"
 
-#: src/ashytv/ui/detail_dialog.py:170
+#: src/ashytv/ui/detail_dialog.py:173
 #, python-brace-format
 msgid "Season {n}"
 msgstr "시즌 {n}"
 
-#: src/ashytv/ui/detail_dialog.py:178
+#: src/ashytv/ui/detail_dialog.py:181
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "{label} 시청"
 
-#: src/ashytv/ui/detail_dialog.py:218
+#: src/ashytv/ui/detail_dialog.py:221
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "{n}화"
 
-#: src/ashytv/ui/detail_dialog.py:257 src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/detail_dialog.py:260 src/ashytv/ui/pages/catalog_page.py:197
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Remove from favorites"
 msgstr "즐겨찾기에서 제거"
 
-#: src/ashytv/ui/detail_dialog.py:258 src/ashytv/ui/pages/catalog_page.py:198
+#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:198
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Add to favorites"
 msgstr "즐겨찾기에 추가"
@@ -514,7 +513,9 @@ msgstr "제공업체 메시지 붙여넣기"
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
-msgstr "제공업체의 환영 메시지를 붙여넣으세요. 서버, 사용자 이름, 비밀번호가 자동으로 입력됩니다"
+msgstr ""
+"제공업체의 환영 메시지를 붙여넣으세요. 서버, 사용자 이름, 비밀번호가 자동으"
+"로 입력됩니다"
 
 #: src/ashytv/ui/pages/lists_page.py:113
 msgid "Playlist URL (M3U)"
@@ -532,7 +533,8 @@ msgstr "보안 연결"
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
-msgstr "정보는 사용자 기기에만 저장됩니다. 비밀번호는 시스템 키링에 보관됩니다."
+msgstr ""
+"정보는 사용자 기기에만 저장됩니다. 비밀번호는 시스템 키링에 보관됩니다."
 
 #: src/ashytv/ui/pages/lists_page.py:157
 msgid "Your Playlists"
@@ -871,7 +873,9 @@ msgstr "면책 조항"
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
-msgstr "AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않으며, 사용자가 추가한 재생목록만 재생합니다."
+msgstr ""
+"AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않으며, 사용자가 추가한 재생목록"
+"만 재생합니다."
 
 #: src/ashytv/ui/pages/settings_page.py:282
 msgid "More information"
@@ -1082,7 +1086,8 @@ msgstr "시작하기"
 
 #: src/ashytv/ui/welcome_view.py:79
 msgid "AshyTV does not provide any content — bring your own playlist."
-msgstr "AshyTV는 어떤 콘텐츠도 제공하지 않습니다. 나만의 재생목록을 준비하세요."
+msgstr ""
+"AshyTV는 어떤 콘텐츠도 제공하지 않습니다. 나만의 재생목록을 준비하세요."
 
 #: src/ashytv/window.py:71
 msgid "Menu"
@@ -1206,12 +1211,12 @@ msgstr "IPTV 플레이어"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "나만의 IPTV 재생목록 시청 (M3U 및 Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
 msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;텔레비전;실시간;채널;영화;시리즈;편성표;플레이어;"
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;텔레비전;실시간;채"
+"널;영화;시리즈;편성표;플레이어;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1227,8 +1232,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 Xtream Codes 계정을 가져와"
-" 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다."
+"AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 "
+"Xtream Codes 계정을 가져와 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 "
+"둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 01:02-0300\n"
+"POT-Creation-Date: 2026-10-24 01:25-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -182,50 +182,49 @@ msgstr "Ogiltigt användarnamn eller lösenord"
 msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
-#: src/ashytv/ui/detail_dialog.py:88 src/ashytv/ui/detail_dialog.py:149
-#: src/ashytv/ui/pages/channels_page.py:328
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/detail_dialog.py:91 src/ashytv/ui/detail_dialog.py:152
+#: src/ashytv/ui/pages/channels_page.py:328 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Titta"
 
-#: src/ashytv/ui/detail_dialog.py:114
+#: src/ashytv/ui/detail_dialog.py:117
 msgid "Episodes"
 msgstr "Avsnitt"
 
-#: src/ashytv/ui/detail_dialog.py:129
+#: src/ashytv/ui/detail_dialog.py:132
 msgid "Could not load"
 msgstr "Det gick inte att läsa in"
 
-#: src/ashytv/ui/detail_dialog.py:148
+#: src/ashytv/ui/detail_dialog.py:151
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Fortsätt från {time}"
 
-#: src/ashytv/ui/detail_dialog.py:165
+#: src/ashytv/ui/detail_dialog.py:168
 msgid "No episodes available"
 msgstr "Inga avsnitt tillgängliga"
 
-#: src/ashytv/ui/detail_dialog.py:170
+#: src/ashytv/ui/detail_dialog.py:173
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Säsong {n}"
 
-#: src/ashytv/ui/detail_dialog.py:178
+#: src/ashytv/ui/detail_dialog.py:181
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Titta på {label}"
 
-#: src/ashytv/ui/detail_dialog.py:218
+#: src/ashytv/ui/detail_dialog.py:221
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Avsnitt {n}"
 
-#: src/ashytv/ui/detail_dialog.py:257 src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/detail_dialog.py:260 src/ashytv/ui/pages/catalog_page.py:197
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Remove from favorites"
 msgstr "Ta bort från favoriter"
 
-#: src/ashytv/ui/detail_dialog.py:258 src/ashytv/ui/pages/catalog_page.py:198
+#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:198
 #: src/ashytv/ui/pages/channels_page.py:329
 msgid "Add to favorites"
 msgstr "Lägg till i favoriter"
@@ -591,8 +590,8 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här"
-" enheten."
+"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här "
+"enheten."
 
 #: src/ashytv/ui/pages/lists_page.py:271
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -614,8 +613,7 @@ msgstr "M3U-spellistor"
 
 #: src/ashytv/ui/pages/lists_page.py:331
 msgid "Couldn't find server, username and password in the copied text."
-msgstr ""
-"Hittade inte server, användarnamn och lösenord i den kopierade texten."
+msgstr "Hittade inte server, användarnamn och lösenord i den kopierade texten."
 
 #: src/ashytv/ui/pages/lists_page.py:337
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -1222,12 +1220,10 @@ msgstr "IPTV-spelare"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Titta på dina egna IPTV-spellistor (M3U och Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1243,9 +1239,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen "
-"M3U-spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, "
-"en elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
+"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen M3U-"
+"spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, en "
+"elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
 "innehåller inget innehåll."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
-from ... import __version__
+from ... import APP_VERSION
 from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
@@ -273,7 +273,7 @@ class SettingsPage(Gtk.Box):
     def _sobre(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("About"))
         g.add(Adw.ActionRow(title="AshyTV",
-                            subtitle=_("Version {version}").format(version=__version__)))
+                            subtitle=_("Version {version}").format(version=APP_VERSION)))
         g.add(Adw.ActionRow(title="CommunityBIG", subtitle="communitybig.org"))
         g.add(Adw.ActionRow(
             title=_("Disclaimer"),

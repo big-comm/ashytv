@@ -6,7 +6,7 @@ from pathlib import Path
 
 from gi.repository import Adw, Gdk, Gio, Gtk
 
-from . import APP_ID, __version__
+from . import APP_ID, APP_VERSION
 from .i18n import _
 from .services.logos import logo_loader
 from .services.settings import ACCENTS, Settings
@@ -135,7 +135,7 @@ class AshyTvApplication(Adw.Application):
         about = Adw.AboutDialog(
             application_name="AshyTV",
             application_icon=APP_ID,
-            version=__version__,
+            version=APP_VERSION,
             developer_name="CommunityBIG",
             comments=_("A modern IPTV player for the Linux desktop.\n"
                        "Import your own playlist — no content is provided by the app."),
