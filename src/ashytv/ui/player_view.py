@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import time
 
-from gi.repository import Adw, Gdk, GLib, GObject, Gtk
+from gi.repository import Adw, Gdk, GLib, GObject, Graphene, Gtk
 
 from ..i18n import _
 from ..models import PlayItem
@@ -15,6 +15,7 @@ from .pages._common import set_logo
 from .pages.settings_page import recordings_dir
 
 _HIDE_DELAY = 3500
+_DRAG_THRESHOLD = 8       # pixels the pointer must move before a drag starts
 _SAVE_EVERY = 10          # seconds between history position saves
 _ASPECTS = [(_("Auto"), "no"), ("16:9", "16:9"), ("4:3", "4:3"),
             ("21:9", "2.33:1")]
@@ -73,6 +74,11 @@ class PlayerView(Gtk.Overlay):
         click = Gtk.GestureClick()
         click.connect("released", self._on_click)
         self.video_holder.add_controller(click)
+
+        # Dragging the video moves the window (clicks keep pause/fullscreen).
+        drag = Gtk.GestureDrag(button=Gdk.BUTTON_PRIMARY)
+        drag.connect("drag-update", self._on_video_drag)
+        self.video_holder.add_controller(drag)
 
         scroll = Gtk.EventControllerScroll(
             flags=Gtk.EventControllerScrollFlags.VERTICAL)
@@ -137,8 +143,10 @@ class PlayerView(Gtk.Overlay):
                                 lambda: self.emit("toggle-fullscreen"))
         for b in (self.fav_btn, self.rec_btn, self.pip_btn, self.fs_top):
             bar.append(b)
-        self.top_bar = Gtk.Revealer(child=bar, valign=Gtk.Align.START, reveal_child=True,
-                                    transition_type=Gtk.RevealerTransitionType.CROSSFADE)
+        # WindowHandle: dragging the bar moves the window (buttons still work).
+        self.top_bar = Gtk.Revealer(
+            child=Gtk.WindowHandle(child=bar), valign=Gtk.Align.START, reveal_child=True,
+            transition_type=Gtk.RevealerTransitionType.CROSSFADE)
         return self.top_bar
 
     def _build_bottom_bar(self) -> Gtk.Widget:
@@ -192,8 +200,9 @@ class PlayerView(Gtk.Overlay):
             end.append(b)
         controls.set_end_widget(end)
         bar.append(controls)
-        self.bottom_bar = Gtk.Revealer(child=bar, valign=Gtk.Align.END, reveal_child=True,
-                                       transition_type=Gtk.RevealerTransitionType.CROSSFADE)
+        self.bottom_bar = Gtk.Revealer(
+            child=Gtk.WindowHandle(child=bar), valign=Gtk.Align.END, reveal_child=True,
+            transition_type=Gtk.RevealerTransitionType.CROSSFADE)
         self._update_volume_icon()
         return self.bottom_bar
 
@@ -625,6 +634,28 @@ class PlayerView(Gtk.Overlay):
             return
         # Single click: pause (waits so it does not conflict with a double click).
         self._click_source = GLib.timeout_add(260, self._single_click)
+
+    def _on_video_drag(self, gesture, dx: float, dy: float) -> None:
+        if self._fullscreen or dx * dx + dy * dy < _DRAG_THRESHOLD ** 2:
+            return
+        native = self.get_native()
+        surface = native.get_surface() if native else None
+        if not isinstance(surface, Gdk.Toplevel):
+            return
+        _ok, start_x, start_y = gesture.get_start_point()
+        ok, point = self.video_holder.compute_point(
+            native, Graphene.Point().init(start_x, start_y))
+        if not ok:
+            return
+        if self._click_source:  # it was a drag, not a click: don't pause
+            GLib.source_remove(self._click_source)
+            self._click_source = 0
+        gesture.set_state(Gtk.EventSequenceState.CLAIMED)
+        offset_x, offset_y = native.get_surface_transform()
+        surface.begin_move(gesture.get_device(), gesture.get_current_button(),
+                           point.x + offset_x, point.y + offset_y,
+                           gesture.get_current_event_time())
+        gesture.reset()
 
     def _single_click(self) -> bool:
         self._click_source = 0
