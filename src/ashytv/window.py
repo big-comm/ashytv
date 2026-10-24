@@ -9,9 +9,10 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from . import APP_ID
 from .i18n import _, ngettext
-from .models import Channel, Episode, MediaType, PlayItem
+from .models import Channel, Episode, MediaType, PlayItem, Variant
 from .services import epg, http, importer, secrets
-from .services.storage import Storage
+from .services.quality import quality_label
+from .services.storage import Storage, collapse_variants
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
 from .ui.detail_dialog import DetailDialog
 from .ui.nav_sidebar import NavSidebar
@@ -277,13 +278,36 @@ class AshyTvWindow(Adw.ApplicationWindow):
         zap = page.filter_model if page is self.pages["channels"] else None
         self._play_channel(channel, zap)
 
+    def _live_channels(self) -> list[Channel]:
+        chans = self.storage.channels(MediaType.LIVE)
+        return collapse_variants(chans) if self.storage.group_variants else chans
+
+    def _live_item(self, ch: Channel, number: int) -> PlayItem:
+        """PlayItem for a live channel, with its quality variants when grouped."""
+        variants = []
+        if self.storage.group_variants:
+            variants = [Variant(label=quality_label(v.quality),
+                                url=self._resolve(v.url, v.playlist_id),
+                                user_agent=v.user_agent, referrer=v.referrer)
+                        for v in self.storage.variants(ch)]
+        title = ch.base_name if len(variants) > 1 else ch.display_name
+        return PlayItem(
+            title=title, url=self._resolve(ch.url, ch.playlist_id), key=ch.url,
+            media_type=ch.media_type, playlist_id=ch.playlist_id, logo=ch.logo,
+            tvg_id=ch.tvg_id, number=number, channel=ch,
+            user_agent=ch.user_agent, referrer=ch.referrer,
+            variants=variants if len(variants) > 1 else [])
+
     def _play_channel(self, channel: Channel, zap=None, start: float = 0) -> None:
         if channel.media_type is MediaType.LIVE and zap is None:
-            zap = self.storage.channels(MediaType.LIVE)
+            zap = self._live_channels()
         self._zap = zap if channel.media_type is MediaType.LIVE else None
         self._series_ctx = None
         self._zap_index = self._find_index(channel)
         number = self._zap_index + 1 if self._zap is not None else 0
+        if channel.media_type is MediaType.LIVE:
+            self._start(self._live_item(channel, number), can_zap=self._zap is not None)
+            return
         if channel.media_type is MediaType.MOVIE and not start:
             start = self.storage.resume_position(channel.playlist_id, channel.url)
         item = PlayItem(
@@ -382,11 +406,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return
         self._zap_index = (self._zap_index + delta) % n
         ch = self._zap_item(self._zap_index)
-        item = PlayItem(
-            title=ch.display_name, url=self._resolve(ch.url, ch.playlist_id), key=ch.url,
-            media_type=ch.media_type, playlist_id=ch.playlist_id, logo=ch.logo,
-            tvg_id=ch.tvg_id, number=self._zap_index + 1, channel=ch,
-            user_agent=ch.user_agent, referrer=ch.referrer)
+        item = self._live_item(ch, self._zap_index + 1)
         self.player.play(item, can_zap=True)
         self._record(item, 0, 0)
 
@@ -535,9 +555,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
             else:
                 on_error(exc)
             return GLib.SOURCE_REMOVE
-        self.storage.replace_episodes(series.id, eps)
-        self._fetched_series[series.id] = time.time()
-        on_done(self.storage.episodes(series.id))
+        # A playlist refresh may have replaced the row: look the series up again.
+        current = self.storage.find_channel(series.playlist_id, series.url)
+        if current is None:
+            on_done(eps)
+            return GLib.SOURCE_REMOVE
+        self.storage.replace_episodes(current.id, eps)
+        self._fetched_series[current.id] = time.time()
+        on_done(self.storage.episodes(current.id))
         return GLib.SOURCE_REMOVE
 
     def _on_show_schedule(self, _page, channel: Channel) -> None:
@@ -657,6 +682,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._next_auto_refresh()
 
     def _on_delete_requested(self, _w, playlist_id: int) -> None:
+        if self._importing:
+            # The import would write the playlist back right after deleting it.
+            self._toast(_("Please wait for the import to finish."))
+            return
+        if self.player is not None and self.player.item is not None \
+                and self.player.item.playlist_id == playlist_id:
+            self.player.close()
         prov = self._providers.get(playlist_id)
         self.storage.delete_playlist(playlist_id)
         if prov is not None and not any(
@@ -707,15 +739,20 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if url == self._epg_source:
             return
         self._epg_source = url
-        epg.fetch_guide_async(url, on_done=self._on_epg_ready,
-                              on_error=self._on_epg_error)
+        # Results of an older request (other playlist, deleted one…) are ignored.
+        epg.fetch_guide_async(url, on_done=lambda g: self._on_epg_ready(g, url),
+                              on_error=lambda e: self._on_epg_error(e, url))
 
-    def _on_epg_error(self, exc) -> bool:
-        self._epg_source = ""
-        self._toast(_("Guide (EPG) unavailable: {error}").format(error=exc))
+    def _on_epg_error(self, exc, url: str) -> bool:
+        if url == self._epg_source:
+            self._epg_source = ""
+            self._toast(_("Guide (EPG) unavailable: {error}").format(
+                error=http.describe_error(exc)))
         return GLib.SOURCE_REMOVE
 
-    def _on_epg_ready(self, guide) -> bool:
+    def _on_epg_ready(self, guide, url: str) -> bool:
+        if url != self._epg_source:
+            return GLib.SOURCE_REMOVE
         self._epg_guide = guide
         for key in ("home", "channels", "favorites", "epg"):
             self.pages[key].set_guide(guide)
@@ -729,8 +766,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         s = self.settings
         self.storage.hide_adult = bool(s.get("hide_adult"))
         s.connect("hide_adult", self._on_hide_adult)
+        self.storage.group_variants = bool(s.get("group_variants"))
+        s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
             "home", "channels", "favorites", "movies", "series", "epg"))
+
+    def _on_group_variants(self, value) -> None:
+        self.storage.group_variants = bool(value)
+        self._invalidate_pages("home", "channels", "favorites", "epg")
 
     def _on_hide_adult(self, value) -> None:
         self.storage.hide_adult = bool(value)

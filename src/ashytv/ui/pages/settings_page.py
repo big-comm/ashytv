@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shutil
+import threading
 from pathlib import Path
 
 from gi.repository import Adw, Gio, GLib, GObject, Gtk
@@ -132,6 +133,10 @@ class SettingsPage(Gtk.Box):
         self._switch(g, "autostart", _("Start with the system"),
                      _("Open AshyTV when you log in"), set_autostart)
 
+        channels = Adw.PreferencesGroup(title=_("Channels"))
+        self._switch(channels, "group_variants", _("Group qualities of the same channel"),
+                     _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
+
         g2 = Adw.PreferencesGroup(title=_("IPTV Playlists"))
         self._switch(g2, "auto_refresh", _("Reload playlists automatically"),
                      _("Updates channels and catalog when the app opens"))
@@ -144,7 +149,7 @@ class SettingsPage(Gtk.Box):
         every.connect("notify::selected", lambda r, _p: self.settings.set(
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
-        return self._page(g, g2)
+        return self._page(g, channels, g2)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))
@@ -200,6 +205,8 @@ class SettingsPage(Gtk.Box):
     def _reproducao(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Playback"),
                                  description=_("Applies from the next video you open."))
+        self._switch(g, "auto_quality", _("Automatic quality"),
+                     _("Switches between a channel's qualities to match your connection"))
         self._switch(g, "hwdec", _("Hardware acceleration"),
                      _("Decodes video on the GPU (VA-API/VDPAU/NVDEC)"))
         buf = Adw.SpinRow.new_with_range(5, 120, 5)
@@ -300,10 +307,18 @@ class SettingsPage(Gtk.Box):
     # ---- actions ---------------------------------------------------------
 
     def _update_cache_row(self) -> None:
-        size = _dir_size(http.cache_root())
+        # Walking thousands of cached logos is slow: do it off the main thread.
+        def worker():
+            size = _dir_size(http.cache_root())
+            GLib.idle_add(self._show_cache_size, size)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _show_cache_size(self, size: int) -> bool:
         self.cache_row.set_subtitle(
             _("Removes downloaded logos, covers and guide data — {size}").format(
                 size=GLib.format_size(size)))
+        return GLib.SOURCE_REMOVE
 
     def _clear_cache(self, _b) -> None:
         shutil.rmtree(http.cache_root(), ignore_errors=True)
@@ -369,9 +384,15 @@ class SettingsPage(Gtk.Box):
         if len(pin) < 4 or not pin.isdigit():
             self.emit("toast", _("The PIN must have at least 4 digits."))
             return
-        self.settings.set("parental_pin", pin)
-        row.set_text("")
-        self.emit("toast", _("PIN set."))
+        def save():
+            self.settings.set("parental_pin", pin)
+            row.set_text("")
+            self.emit("toast", _("PIN set."))
+
+        if self.settings.get("parental_pin"):
+            self._ask_pin(save)  # changing the PIN needs the current one
+        else:
+            save()
 
     def _on_pin_clear(self, _row) -> None:
         if not self.settings.get("parental_pin"):

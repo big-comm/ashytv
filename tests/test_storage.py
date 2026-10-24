@@ -116,7 +116,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 2
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 3
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -137,3 +137,42 @@ def test_stale_playlists_skip_recent_failures(tmp_path):
     assert db.stale_playlists(max_age=100, now=10_000) == [good]
     assert db.get_playlist(old)["updated_at"] == 1000  # not marked as updated
     assert db.playlist_meta(old)["refresh_failed_at"] == 9_950
+
+
+def _variants_db(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [
+        _ch("News 24 HD", "u/hd", group="News"),
+        _ch("News 24 FHD", "u/fhd", group="News"),
+        _ch("News 24 SD", "u/sd", group="News"),
+        _ch("Weather", "u/w", group="News"),
+        _ch("News 24 HD", "u/other", group="Other"),
+        _ch("Film 4K", "movie/1.mp4", MediaType.MOVIE, group="Movies"),
+    ])
+    return db
+
+
+def test_variants_are_stored_and_listed_best_first(tmp_path):
+    db = _variants_db(tmp_path)
+    hd = next(c for c in db.channels(MediaType.LIVE) if c.url == "u/hd")
+    assert (hd.quality, hd.base_name) == (2, "News 24")
+    assert [c.url for c in db.variants(hd)] == ["u/fhd", "u/hd", "u/sd"]
+    weather = next(c for c in db.channels(MediaType.LIVE) if c.url == "u/w")
+    assert db.variants(weather) == [weather]
+    movie = db.channels(MediaType.MOVIE)[0]
+    assert movie.quality == 0  # movies are not grouped
+
+
+def test_collapse_variants_keeps_one_entry_per_channel(tmp_path):
+    from ashytv.services.storage import collapse_variants
+
+    db = _variants_db(tmp_path)
+    collapsed = collapse_variants(db.channels(MediaType.LIVE))
+    assert [c.url for c in collapsed] == ["u/fhd", "u/w", "u/other"]
+    assert collapsed[0].variant_labels == ("FHD", "HD", "SD")
+    assert collapsed[1].variant_labels == ()  # no quality in the name
+    assert collapsed[2].variant_labels == ("HD",)  # single quality: badge only
+    assert db.count(MediaType.LIVE) == 5
+    assert db.count(MediaType.LIVE, collapse=True) == 3
+    assert dict(db.groups(MediaType.LIVE, collapse=True)) == {"News": 2, "Other": 1}

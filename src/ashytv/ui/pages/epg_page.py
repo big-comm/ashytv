@@ -9,6 +9,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import MediaType
+from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
 from ..timeline import ROW_HEIGHT, TimeAxis, TimelineRow
 from ._common import SearchFilter, page_header, set_logo
@@ -48,6 +49,7 @@ class EpgPage(Gtk.Box):
         self._guide = None
         self._dirty = True
         self._t0 = _now_window_start()
+        self._user_moved = False  # True after ◀ ▶ or picking another day
         self._days: list[date] = []
 
         self.append(page_header(_("Program Guide"),
@@ -140,6 +142,13 @@ class EpgPage(Gtk.Box):
         self.search.set_text(text)
 
     def refresh(self) -> None:
+        if not self._user_moved and self._guide and \
+                self._t0 != _now_window_start():
+            # Opened hours later: show what is on now, not the old window.
+            self._t0 = _now_window_start()
+            if not self._dirty:
+                self._select_day_of(self._t0)
+                self._apply_window()
         if not self._dirty:
             return
         self._dirty = False
@@ -148,7 +157,10 @@ class EpgPage(Gtk.Box):
             self.store.remove_all()
             self._update_empty()
             return
-        chans = [c for c in self.storage.channels(MediaType.LIVE)
+        live = self.storage.channels(MediaType.LIVE)
+        if self.storage.group_variants:
+            live = collapse_variants(live)
+        chans = [c for c in live
                  if c.tvg_id and guide.has_channel(c.tvg_id)]
         self.store.splice(0, self.store.get_n_items(), [ChannelObject(c) for c in chans])
         self._build_days()
@@ -190,14 +202,17 @@ class EpgPage(Gtk.Box):
             self._t0 = _now_window_start()
         else:
             self._t0 = datetime(d.year, d.month, d.day, 18).timestamp()  # prime time
+            self._user_moved = True
         self._apply_window()
 
     def _shift(self, delta: int) -> None:
+        self._user_moved = True
         self._t0 += delta
         self._select_day_of(self._t0)
         self._apply_window()
 
     def _go_now(self) -> None:
+        self._user_moved = False
         self._t0 = _now_window_start()
         self._select_day_of(self._t0)
         self._apply_window()

@@ -11,17 +11,24 @@ import json
 import sqlite3
 import time
 from collections.abc import Iterable
+from dataclasses import replace
 from pathlib import Path
 
 from gi.repository import GLib
 
 from ..models import Channel, Episode, MediaType
+from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 2
+_SCHEMA_VERSION = 3
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
+
+
+def _variant_fields(name: str) -> tuple[int, str, str]:
+    base, rank = split_quality(name)
+    return rank, base, base_key(base)
 
 
 def _data_dir() -> Path:
@@ -45,6 +52,8 @@ class Storage:
         self.db.execute("PRAGMA journal_mode = WAL")
         self.db.execute("PRAGMA synchronous = NORMAL")
         self.hide_adult = False
+        # Show "NEWS FHD/HD/SD" as one channel (pages honour it).
+        self.group_variants = True
         self._migrate()
 
     def close(self) -> None:
@@ -97,6 +106,9 @@ class Storage:
             "added": "INTEGER DEFAULT 0",
             "user_agent": "TEXT DEFAULT ''",
             "referrer": "TEXT DEFAULT ''",
+            "quality": "INTEGER DEFAULT 0",
+            "base_name": "TEXT DEFAULT ''",
+            "base_key": "TEXT DEFAULT ''",
         })
         self.db.executescript(
             """
@@ -139,6 +151,9 @@ class Storage:
                 ON channel(media_type, grp, name);
             CREATE INDEX IF NOT EXISTS idx_channel_type_num ON channel(media_type, num);
             CREATE INDEX IF NOT EXISTS idx_channel_added ON channel(media_type, added);
+            CREATE INDEX IF NOT EXISTS idx_channel_url ON channel(playlist_id, url);
+            CREATE INDEX IF NOT EXISTS idx_channel_variants
+                ON channel(playlist_id, grp, base_key);
             CREATE INDEX IF NOT EXISTS idx_episode_channel ON episode(channel_id);
             CREATE INDEX IF NOT EXISTS idx_history_time ON history(watched_at);
             """
@@ -151,6 +166,13 @@ class Storage:
             rows = self.db.execute("SELECT id, name FROM channel").fetchall()
             self.db.executemany("UPDATE channel SET name_key = ? WHERE id = ?",
                                 [(normalize(r["name"]), r["id"]) for r in rows])
+        if version < 3:
+            # Quality variants of live channels ("NEWS FHD" / "NEWS HD").
+            rows = self.db.execute(
+                "SELECT id, name FROM channel WHERE media_type = 'live'").fetchall()
+            self.db.executemany(
+                "UPDATE channel SET quality = ?, base_name = ?, base_key = ? WHERE id = ?",
+                [(*_variant_fields(r["name"]), r["id"]) for r in rows])
         self.db.execute(f"PRAGMA user_version = {_SCHEMA_VERSION}")
         self.db.commit()
 
@@ -254,32 +276,29 @@ class Storage:
         Returns the number of items written.
         """
         episodes = episodes or {}
+        insert = """INSERT INTO channel
+            (playlist_id, num, name, name_key, url, media_type, grp, tvg_id,
+             tvg_name, logo, ext_id, rating, year, plot, genre, backdrop, added,
+             user_agent, referrer, quality, base_name, base_key)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+        # Build every row before taking the write lock: the transaction then
+        # only runs the inserts, so UI writes (history, favorites) wait less.
+        rows, series_rows = [], []
+        for num, c in enumerate(channels, 1):
+            variant = (_variant_fields(c.name) if c.media_type is MediaType.LIVE
+                       else (0, "", ""))
+            row = (playlist_id, num, c.name, normalize(c.display_name), c.url,
+                   c.media_type.value, c.group, c.tvg_id, c.tvg_name, c.logo,
+                   c.ext_id, c.rating, c.year, c.plot, c.genre, c.backdrop,
+                   c.added, c.user_agent, c.referrer, *variant)
+            (series_rows if c.url in episodes else rows).append(row)
+        count = len(rows) + len(series_rows)
         with self.db:
             self.db.execute("DELETE FROM channel WHERE playlist_id = ?", (playlist_id,))
-            count = 0
             series_ids: dict[str, int] = {}
-            insert = """INSERT INTO channel
-                (playlist_id, num, name, name_key, url, media_type, grp, tvg_id,
-                 tvg_name, logo, ext_id, rating, year, plot, genre, backdrop, added,
-                 user_agent, referrer)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
-            batch = []
-            for num, c in enumerate(channels, 1):
-                row = (playlist_id, num, c.name, normalize(c.display_name), c.url,
-                       c.media_type.value, c.group, c.tvg_id, c.tvg_name, c.logo,
-                       c.ext_id, c.rating, c.year, c.plot, c.genre, c.backdrop,
-                       c.added, c.user_agent, c.referrer)
-                if c.url in episodes:
-                    cur = self.db.execute(insert, row)
-                    series_ids[c.url] = int(cur.lastrowid)
-                else:
-                    batch.append(row)
-                    if len(batch) >= 5000:
-                        self.db.executemany(insert, batch)
-                        batch.clear()
-                count += 1
-            if batch:
-                self.db.executemany(insert, batch)
+            for row in series_rows:
+                series_ids[row[4]] = int(self.db.execute(insert, row).lastrowid)
+            self.db.executemany(insert, rows)
             self.db.executemany(
                 """INSERT INTO episode (channel_id, season, episode, title, url,
                    logo, plot, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -334,34 +353,47 @@ class Storage:
         order: str = "num",
         limit: int | None = None,
         groups: list[str] | None = None,
+        min_rating: float = 0.0,
     ) -> list[Channel]:
         where, params = self._where(media_type, favorites, group, search, groups)
+        if min_rating:
+            where += (" AND " if where else " WHERE ") + "c.rating >= ?"
+            params.append(min_rating)
         order_sql = {
             "num": "c.playlist_id, c.num",
             "name": "c.name_key",
             "added": "c.added DESC, c.num",
             "favorite": "f.added_at DESC",
+            "rating": "c.rating DESC, c.year DESC",
         }[order]
         sql = f"SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}{where} ORDER BY {order_sql}"
         if limit:
             sql += f" LIMIT {int(limit)}"
         return [self._row_to_channel(r) for r in self.db.execute(sql, params)]
 
+    # One entry per channel when quality variants are grouped.
+    _VARIANT_KEY = """COUNT(DISTINCT c.playlist_id || '|' || c.grp || '|' ||
+                      CASE WHEN c.base_key = '' THEN c.url ELSE c.base_key END)"""
+
     def count(
         self,
         media_type: MediaType | None = None,
         favorites: bool = False,
         group: str | None = None,
+        collapse: bool = False,
     ) -> int:
         where, params = self._where(media_type, favorites, group, "")
-        return int(self.db.execute(f"SELECT COUNT(*) {self._FROM}{where}",
+        what = self._VARIANT_KEY if collapse else "COUNT(*)"
+        return int(self.db.execute(f"SELECT {what} {self._FROM}{where}",
                                    params).fetchone()[0])
 
-    def groups(self, media_type: MediaType) -> list[tuple[str, int]]:
+    def groups(self, media_type: MediaType,
+               collapse: bool = False) -> list[tuple[str, int]]:
         """List of (group, count) for a category, in provider order."""
         where, params = self._where(media_type, False, None, "")
+        what = self._VARIANT_KEY if collapse else "COUNT(*)"
         rows = self.db.execute(
-            f"""SELECT c.grp, COUNT(*) AS n, MIN(c.playlist_id * 10000000 + c.num) AS o
+            f"""SELECT c.grp, {what} AS n, MIN(c.playlist_id * 10000000 + c.num) AS o
                 {self._FROM}{where} {'AND' if where else 'WHERE'} c.grp <> ''
                 GROUP BY c.grp ORDER BY o""",
             params,
@@ -370,6 +402,19 @@ class Storage:
 
     def channels_in_group(self, media_type: MediaType, group: str) -> list[Channel]:
         return self.channels(media_type=media_type, group=group)
+
+    def variants(self, channel: Channel) -> list[Channel]:
+        """Quality variants of a live channel, best first (itself if none)."""
+        if channel.media_type is not MediaType.LIVE or not channel.base_name:
+            return [channel]
+        rows = self.db.execute(
+            f"""SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}
+                WHERE c.playlist_id = ? AND c.grp = ? AND c.base_key = ?
+                  AND c.media_type = 'live'
+                ORDER BY c.quality DESC, c.num""",
+            (channel.playlist_id, channel.group, base_key(channel.base_name)),
+        ).fetchall()
+        return [self._row_to_channel(r) for r in rows] or [channel]
 
     def get_channel(self, channel_id: int) -> Channel | None:
         row = self.db.execute(
@@ -440,6 +485,15 @@ class Storage:
     ) -> None:
         if not playlist_id:
             return
+        try:
+            self._write_history(playlist_id, url, media_type, title, subtitle, logo,
+                                tvg_id, position, duration, parent)
+        except sqlite3.Error:
+            # Busy (an import is writing) or the playlist is gone: skip this save.
+            self.db.rollback()
+
+    def _write_history(self, playlist_id, url, media_type, title, subtitle, logo,
+                       tvg_id, position, duration, parent) -> None:
         self.db.execute(
             """INSERT INTO history (playlist_id, url, media_type, title, subtitle,
                    logo, tvg_id, parent, position, duration, watched_at)
@@ -475,6 +529,19 @@ class Storage:
             return 0.0
         return float(row["position"])
 
+    def recent_channels(self, media_type: MediaType, limit: int = 50) -> list[Channel]:
+        """Recently watched items that still exist, most recent first."""
+        rows = self.db.execute(
+            f"""SELECT c.*, f.url IS NOT NULL AS fav
+                FROM history h
+                JOIN channel c ON c.playlist_id = h.playlist_id AND c.url = h.url
+                LEFT JOIN favorite f ON f.playlist_id = c.playlist_id AND f.url = c.url
+                WHERE h.media_type = ?
+                ORDER BY h.watched_at DESC LIMIT {int(limit)}""",
+            (media_type.value,),
+        ).fetchall()
+        return [self._row_to_channel(r) for r in rows]
+
     def recent_urls(self, media_type: MediaType, limit: int = 50) -> list[str]:
         return [r["url"] for r in self.history(limit, media_type)]
 
@@ -500,4 +567,33 @@ class Storage:
             added=int(r["added"] or 0),
             user_agent=r["user_agent"] or "",
             referrer=r["referrer"] or "",
+            quality=int(r["quality"] or 0),
+            base_name=r["base_name"] or "",
         )
+
+
+def collapse_variants(channels: Iterable[Channel]) -> list[Channel]:
+    """Keep one entry per live channel: its best quality variant.
+
+    The entry keeps the position of the first variant in the list and gets
+    `variant_labels` (e.g. ("FHD", "HD", "SD")) when there is more than one.
+    """
+    groups: dict[tuple, list[Channel]] = {}
+    for ch in channels:
+        if ch.media_type is MediaType.LIVE and ch.base_name:
+            key = (ch.playlist_id, ch.group, base_key(ch.base_name))
+        else:
+            key = (ch.playlist_id, ch.url)
+        groups.setdefault(key, []).append(ch)
+    out = []
+    for members in groups.values():
+        if len(members) == 1:
+            ch = members[0]
+            label = quality_label(ch.quality)
+            out.append(replace(ch, variant_labels=(label,)) if label else ch)
+            continue
+        members.sort(key=lambda c: -c.quality)
+        labels = tuple(dict.fromkeys(quality_label(c.quality) for c in members if c.quality))
+        out.append(replace(members[0], variant_labels=labels,
+                           favorite=any(c.favorite for c in members)))
+    return out

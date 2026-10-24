@@ -323,3 +323,12 @@ button.ashy-swatch image { color: #fff; }
 /* Series dialog */
 .ashy-series-backdrop { border-radius: 0; }
 .ashy-episode-row { padding: 8px; border-radius: 12px; }
+
+/* Quality variants badge ("FHD · HD · SD") */
+.ashy-quality {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--ashy-fg-dim);
+  background-color: var(--ashy-panel-2);
+  border-radius: 6px; padding: 1px 6px;
+}
+.ashy-chanlist > row:selected .ashy-quality { color: #fff; background-color: alpha(#fff, 0.2); }

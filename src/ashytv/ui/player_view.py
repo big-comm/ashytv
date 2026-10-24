@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 import time
 
@@ -9,6 +10,7 @@ from gi.repository import Adw, Gdk, GLib, GObject, Graphene, Gtk
 
 from ..i18n import _
 from ..models import PlayItem
+from ..services.quality import QualityController
 from ..player.mpv_widget import MpvWidget
 from .detail_dialog import fmt_time
 from .pages._common import set_logo
@@ -20,6 +22,10 @@ _SAVE_EVERY = 10          # seconds between history position saves
 _ASPECTS = [(_("Auto"), "no"), ("16:9", "16:9"), ("4:3", "4:3"),
             ("21:9", "2.33:1")]
 _SPEEDS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
+_SEEK_DELAY_MS = 150      # wait for the pointer to rest before seeking
+_QUALITY_TICK = 5         # seconds between adaptive quality checks
+_BUFFER_FULL_SECS = 8     # buffered seconds that count as a healthy stream
+_RANKS = {"4K": 4, "FHD": 3, "HD": 2, "SD": 1}
 
 
 class PlayerView(Gtk.Overlay):
@@ -53,6 +59,8 @@ class PlayerView(Gtk.Overlay):
         self._recording: str | None = None
         self._rec_started = 0.0
         self._seeking = False
+        self._seek_source = 0
+        self._quality: QualityController | None = None
 
         self.mpv = MpvWidget(hwdec=bool(settings.get("hwdec")),
                              cache_secs=int(settings.get("cache_secs")))
@@ -86,6 +94,7 @@ class PlayerView(Gtk.Overlay):
         self.video_holder.add_controller(scroll)
 
         GLib.timeout_add_seconds(30, self._refresh_epg)
+        GLib.timeout_add_seconds(_QUALITY_TICK, self._quality_tick)
 
     # ---- construction ----------------------------------------------------
 
@@ -261,7 +270,7 @@ class PlayerView(Gtk.Overlay):
         self.num_label.set_text(str(item.number) if item.number else "")
         self.num_label.set_visible(bool(item.number))
         set_logo(self.logo, item.logo, 34, "tv-symbolic" if item.is_live
-                 else "ashy-film-symbolic")
+                 else "ashy-film-symbolic", lambda: self._item is item)
         self.logo.set_visible(bool(item.logo) or item.is_live)
         self.title_label.set_text(item.title)
         for b in (self.prev_btn, self.next_btn):
@@ -273,6 +282,15 @@ class PlayerView(Gtk.Overlay):
         self.fav_btn.set_visible(item.channel is not None and bool(item.playlist_id))
         self._paint_fav()
         self._update_info()
+        self._quality = None
+        if len(item.variants) > 1:
+            self._quality = QualityController(
+                levels=len(item.variants), index=self._start_level(item),
+                auto=bool(self.settings.get("auto_quality")))
+            self._quality.start(time.monotonic())
+            variant = item.variants[self._quality.index]
+            item.url, item.user_agent, item.referrer = (
+                variant.url, variant.user_agent, variant.referrer)
         self.mpv.play(item.url, start=item.start, user_agent=item.user_agent,
                       referrer=item.referrer)
         self.play_btn.set_icon_name("media-playback-pause-symbolic")
@@ -340,6 +358,8 @@ class PlayerView(Gtk.Overlay):
     # ---- mpv state -------------------------------------------------
 
     def _on_state(self, _mpv, state: str) -> None:
+        if self._quality is not None and self._quality_event(state):
+            return  # switching to another variant
         if state in ("loading", "buffering"):
             self._show_center(loading=True,
                               title=_("Loading…") if state == "loading" else _("Buffering…"))
@@ -396,9 +416,90 @@ class PlayerView(Gtk.Overlay):
     def _on_seek(self, _scale, _scroll, value: float) -> bool:
         if self._item is None or self._item.is_live:
             return True
-        self.mpv.seek(value, relative=False)
+        # While dragging: let the bar follow the pointer and seek only once
+        # the pointer rests, instead of one HTTP range request per pixel.
+        self._seeking = True
+        if self._seek_source:
+            GLib.source_remove(self._seek_source)
+        self._seek_source = GLib.timeout_add(_SEEK_DELAY_MS, self._do_seek, value)
         self._show_controls()
         return False
+
+    def _do_seek(self, value: float) -> bool:
+        self._seek_source = 0
+        self.mpv.seek(value, relative=False)
+        GLib.timeout_add(500, self._end_seek)
+        return GLib.SOURCE_REMOVE
+
+    def _end_seek(self) -> bool:
+        if not self._seek_source:
+            self._seeking = False
+        return GLib.SOURCE_REMOVE
+
+    # ---- automatic quality ---------------------------------------
+
+    # Quality rank chosen by the last adaptive decision, shared by every
+    # channel in this session: a slow connection stays slow when zapping.
+    _rank_hint = 4
+
+    def _start_level(self, item: PlayItem) -> int:
+        if not self.settings.get("auto_quality"):
+            return 0
+        for i, variant in enumerate(item.variants):
+            if _RANKS.get(variant.label, 0) <= PlayerView._rank_hint:
+                return i
+        return len(item.variants) - 1
+
+    def _quality_event(self, state: str) -> bool:
+        """Feed playback states to the controller; True if it switched."""
+        now = time.monotonic()
+        if state == "buffering":
+            return self._apply_quality(self._quality.stall_started(now), "auto")
+        if state == "playing":
+            self._quality.stall_ended(now)
+        elif state == "error":
+            return self._apply_quality(self._quality.failed(now), "fallback")
+        return False
+
+    def _quality_tick(self) -> bool:
+        if self._quality is not None and self.mpv.state in ("playing", "buffering"):
+            full = self.mpv.cache_duration >= _BUFFER_FULL_SECS
+            self._apply_quality(self._quality.tick(time.monotonic(), full), "auto")
+        return GLib.SOURCE_CONTINUE
+
+    def _apply_quality(self, index: int | None, reason: str) -> bool:
+        item = self._item
+        if index is None or item is None:
+            return False
+        variant = item.variants[index]
+        if reason == "auto":
+            PlayerView._rank_hint = _RANKS.get(variant.label, PlayerView._rank_hint)
+        item.url, item.user_agent, item.referrer = (
+            variant.url, variant.user_agent, variant.referrer)
+        self.mpv.play(variant.url, user_agent=variant.user_agent, referrer=variant.referrer)
+        label = variant.label or str(index + 1)
+        if reason == "manual":
+            self._flash(_("Quality: {label}").format(label=label))
+        elif reason == "fallback":
+            self._flash(_("Unavailable, switching to {label}").format(label=label))
+        else:
+            self._flash(_("Quality: {label} (auto)").format(label=label))
+        return True
+
+    def _choose_quality(self, value) -> None:
+        if self._quality is None:
+            return
+        now = time.monotonic()
+        if value == "auto":
+            self._quality.set_auto(now)
+            self.settings.set("auto_quality", True)
+            self._flash(_("Automatic quality"))
+            return
+        if value != self._quality.index:
+            self._quality.select(value, now)
+            self._apply_quality(value, "manual")
+        else:
+            self._quality.auto = False
 
     # ---- EPG / info ---------------------------------------------
 
@@ -521,11 +622,14 @@ class PlayerView(Gtk.Overlay):
             return
         folder = recordings_dir()
         folder.mkdir(parents=True, exist_ok=True)
-        safe = re.sub(r"[^\w\s.-]", "", self._item.title).strip() or _("Recording")
+        title = re.sub(r"[^\w\s.-]", "", self._item.title).strip() or _("Recording")
         prog = re.sub(r"[^\w\s.-]", "", self.prog_label.get_text()).strip()
-        name = f"{safe}{' - ' + prog if prog else ''} {time.strftime('%Y-%m-%d %H-%M')}.ts"
-        path = str(folder / name)
+        stem = f"{title} - {prog}" if prog else title
+        # Keep well under the 255-byte file name limit (accents take 2 bytes).
+        stem = stem.encode()[:120].decode(errors="ignore").strip()
+        path = str(folder / f"{stem} {time.strftime('%Y-%m-%d %H-%M-%S')}.ts")
         self.mpv.record(path)
+        GLib.timeout_add_seconds(5, self._check_recording, path)
         self._recording = path
         self._rec_started = time.time()
         self.rec_btn.add_css_class("recording")
@@ -533,6 +637,15 @@ class PlayerView(Gtk.Overlay):
         self.rec_label.set_text("● REC 00:00")
         self.rec_label.set_visible(True)
         self.emit("toast", _("Recording…"))
+
+    def _check_recording(self, path: str) -> bool:
+        if self._recording == path and not os.path.exists(path):
+            self._recording = None
+            self.mpv.record(None)
+            self.rec_btn.remove_css_class("recording")
+            self.rec_label.set_visible(False)
+            self.emit("toast", _("Could not record this channel."))
+        return GLib.SOURCE_REMOVE
 
     def _stop_recording(self) -> None:
         if not self._recording:
@@ -601,6 +714,12 @@ class PlayerView(Gtk.Overlay):
 
     def _options_popover(self) -> Gtk.Popover:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        if self._quality is not None and self._item is not None:
+            q = self._quality
+            options = [(_("Automatic"), "auto", q.auto)]
+            options += [(v.label or str(i + 1), i, not q.auto and i == q.index)
+                        for i, v in enumerate(self._item.variants)]
+            box.append(self._radio_list(_("Quality"), options, self._choose_quality))
         audio = self.mpv.tracks("audio")
         if len(audio) > 1:
             box.append(self._radio_list(

@@ -9,6 +9,7 @@ from gi.repository import Adw, Gio, GLib, GObject, Gtk
 from ...i18n import _
 from ...models import Channel, MediaType
 from ...services.text import normalize
+from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
 from ._common import ChipRow, SearchFilter, page_header, set_logo
 
@@ -136,7 +137,8 @@ class ChannelsPage(Gtk.Box):
             return
         self._dirty = False
         if self.favorites_only:
-            self._load_channels(self.storage.channels(favorites=True, order="favorite"))
+            self._load_channels(self._collapse(
+                self.storage.channels(favorites=True, order="favorite")))
             return
         self._build_chips()
         self._build_groups()
@@ -174,7 +176,7 @@ class ChannelsPage(Gtk.Box):
         self._build_groups()
 
     def _chip_groups(self) -> list[tuple[str, int]]:
-        groups = self.storage.groups(self.media_type)
+        groups = self.storage.groups(self.media_type, collapse=self._grouped)
         words = next((w for k, _l, w in _KEYWORD_CHIPS if k == self._chip), None)
         if words is None:
             return groups
@@ -184,15 +186,18 @@ class ChannelsPage(Gtk.Box):
         self.group_list.remove_all()
         if self._chip == "fav":
             self._add_group_row(_("Favorites"),
-                                self.storage.count(self.media_type, favorites=True), _ALL)
+                                self.storage.count(self.media_type, favorites=True,
+                                                   collapse=self._grouped), _ALL)
         elif self._chip == "recent":
             self._add_group_row(_("Recently watched"),
-                                len(self.storage.recent_urls(self.media_type)), _ALL)
+                                len(self._collapse(self.storage.recent_channels(
+                                    self.media_type))), _ALL)
         else:
             groups = self._chip_groups()
             label = (_("All Channels") if self._chip == "all"
                      else _("All in this category"))
-            total = (self.storage.count(self.media_type) if self._chip == "all"
+            total = (self.storage.count(self.media_type, collapse=self._grouped)
+                     if self._chip == "all"
                      else sum(n for _g, n in groups))
             self._add_group_row(label, total, _ALL)
             for name, count in groups:
@@ -228,8 +233,7 @@ class ChannelsPage(Gtk.Box):
         if self._chip == "fav":
             chans = self.storage.channels(self.media_type, favorites=True)
         elif self._chip == "recent":
-            chans = [c for url in self.storage.recent_urls(self.media_type)
-                     for c in self._find_by_url(url)]
+            chans = self.storage.recent_channels(self.media_type)
         elif key != _ALL:
             chans = self.storage.channels(self.media_type, group=key)
         elif self._chip == "all":
@@ -237,15 +241,14 @@ class ChannelsPage(Gtk.Box):
         else:
             groups = [g for g, _n in self._chip_groups()]
             chans = self.storage.channels(self.media_type, groups=groups) if groups else []
-        self._load_channels(chans)
+        self._load_channels(self._collapse(chans))
 
-    def _find_by_url(self, url: str) -> list[Channel]:
-        row = self.storage.db.execute(
-            "SELECT playlist_id FROM channel WHERE url = ? LIMIT 1", (url,)).fetchone()
-        if row is None:
-            return []
-        ch = self.storage.find_channel(row[0], url)
-        return [ch] if ch else []
+    @property
+    def _grouped(self) -> bool:
+        return self.storage.group_variants
+
+    def _collapse(self, channels: list[Channel]) -> list[Channel]:
+        return collapse_variants(channels) if self._grouped else channels
 
     def _load_channels(self, channels: list[Channel]) -> None:
         self.store.splice(0, self.store.get_n_items(),
@@ -280,13 +283,18 @@ class ChannelsPage(Gtk.Box):
 
         texts = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, hexpand=True,
                         valign=Gtk.Align.CENTER, spacing=2)
+        name_row = Gtk.Box(spacing=8)
         name = Gtk.Label(xalign=0, ellipsize=3)
         name.add_css_class("ashy-chan-name")
+        qualities = Gtk.Label(xalign=0, valign=Gtk.Align.CENTER)
+        qualities.add_css_class("ashy-quality")
+        name_row.append(name)
+        name_row.append(qualities)
         prog = Gtk.Label(xalign=0, ellipsize=3)
         prog.add_css_class("ashy-chan-prog")
         bar = Gtk.ProgressBar()
         bar.add_css_class("ashy-progress-mini")
-        texts.append(name)
+        texts.append(name_row)
         texts.append(prog)
         texts.append(bar)
 
@@ -346,12 +354,17 @@ class ChannelsPage(Gtk.Box):
         logo = num.get_next_sibling()
         texts = logo.get_next_sibling()
         fav = texts.get_next_sibling()
-        name = texts.get_first_child()
-        prog = name.get_next_sibling()
+        name_row = texts.get_first_child()
+        name = name_row.get_first_child()
+        qualities = name.get_next_sibling()
+        prog = name_row.get_next_sibling()
         bar = prog.get_next_sibling()
 
         num.set_text(str(list_item.get_position() + 1))
-        name.set_text(ch.display_name)
+        grouped = bool(ch.variant_labels) and bool(ch.base_name)
+        name.set_text(ch.base_name if grouped else ch.display_name)
+        qualities.set_text(" · ".join(ch.variant_labels) if grouped else "")
+        qualities.set_visible(grouped)
         fallback = {MediaType.LIVE: "tv-symbolic", MediaType.MOVIE: "ashy-film-symbolic",
                     MediaType.SERIES: "ashy-series-symbolic"}[ch.media_type]
         set_logo(logo, ch.logo, 30, fallback, lambda: list_item.get_item() is obj)

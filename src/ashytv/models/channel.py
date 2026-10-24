@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 from ..i18n import _
@@ -52,6 +52,10 @@ class Channel:
     added: int = 0          # epoch when the provider added it
     user_agent: str = ""    # #EXTVLCOPT:http-user-agent
     referrer: str = ""      # #EXTVLCOPT:http-referrer
+    quality: int = 0        # live variants: 4=4K 3=FHD 2=HD 1=SD 0=unknown
+    base_name: str = ""     # name without the quality suffix
+    # Runtime only: quality labels of the grouped variants ("FHD", "HD"…).
+    variant_labels: tuple[str, ...] = ()
 
     @property
     def display_name(self) -> str:
@@ -77,6 +81,16 @@ class Episode:
 
 
 @dataclass(slots=True)
+class Variant:
+    """One quality of a live channel, ready to play."""
+
+    label: str              # "FHD", "HD"… ("" when unknown)
+    url: str
+    user_agent: str = ""
+    referrer: str = ""
+
+
+@dataclass(slots=True)
 class PlayItem:
     """What the player is playing (channel, movie, episode or recording)."""
 
@@ -93,6 +107,7 @@ class PlayItem:
     channel: Channel | None = None
     user_agent: str = ""
     referrer: str = ""
+    variants: list[Variant] = field(default_factory=list)  # best quality first
 
     @property
     def is_live(self) -> bool:

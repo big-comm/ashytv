@@ -8,6 +8,7 @@ from gi.repository import Adw, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
+from ...services.storage import collapse_variants
 from ._common import clear_box, set_logo, set_picture
 
 _HERO_H = 300
@@ -99,13 +100,19 @@ class HomePage(Gtk.Box):
         self._build_hero()
         self._build_continue()
         self._fill(self.live_box, self.live_row,
-                   self.storage.channels(MediaType.LIVE, limit=16), self._channel_card)
+                   self._live_channels(16), self._channel_card)
         self._fill(self.movies_box, self.movies_row,
                    self.storage.channels(MediaType.MOVIE, order="added", limit=16),
                    self._poster_card)
         series = [c for c in self.storage.channels(MediaType.SERIES, order="added",
                                                    limit=200) if c.rating >= 7][:16]
         self._fill(self.series_box, self.series_row, series, self._poster_card)
+
+    def _live_channels(self, limit: int) -> list[Channel]:
+        chans = self.storage.channels(MediaType.LIVE, limit=limit * 4)
+        if self.storage.group_variants:
+            chans = collapse_variants(chans)
+        return chans[:limit]
 
     @staticmethod
     def _fill(box, row, items, make) -> None:
