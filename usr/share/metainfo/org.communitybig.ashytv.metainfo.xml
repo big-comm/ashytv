@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.communitybig.ashytv</id>
+  <name>AshyTV</name>
+  <name xml:lang="zh">AshyTV</name>
+  <name xml:lang="uk">AshyTV</name>
+  <name xml:lang="tr">AshyTV</name>
+  <name xml:lang="sv">AshyTV</name>
+  <name xml:lang="sk">AshyTV</name>
+  <name xml:lang="ru">AshyTV</name>
+  <name xml:lang="ro">AshyTV</name>
+  <name xml:lang="pt-BR">AshyTV</name>
+  <name xml:lang="pt">AshyTV</name>
+  <name xml:lang="pl">AshyTV</name>
+  <name xml:lang="nl">AshyTV</name>
+  <name xml:lang="nb">AshyTV</name>
+  <name xml:lang="ko">AshyTV</name>
+  <name xml:lang="ja">AshyTV</name>
+  <name xml:lang="it">AshyTV</name>
+  <name xml:lang="is">AshyTV</name>
+  <name xml:lang="hu">AshyTV</name>
+  <name xml:lang="hr">AshyTV</name>
+  <name xml:lang="he">AshyTV</name>
+  <name xml:lang="fr">AshyTV</name>
+  <name xml:lang="fi">AshyTV</name>
+  <name xml:lang="et">AshyTV</name>
+  <name xml:lang="es">AshyTV</name>
+  <name xml:lang="en">AshyTV</name>
+  <name xml:lang="el">AshyTV</name>
+  <name xml:lang="de">AshyTV</name>
+  <name xml:lang="da">AshyTV</name>
+  <name xml:lang="cs">AshyTV</name>
+  <name xml:lang="bg">AshyTV</name>
+  <summary>Modern IPTV player for your own playlists</summary>
+  <summary xml:lang="zh">适用于您自己播放列表的现代 IPTV 播放器</summary>
+  <summary xml:lang="uk">Сучасний IPTV-програвач для ваших плейлистів</summary>
+  <summary xml:lang="tr">Kendi oynatma listeleriniz için modern IPTV oynatıcısı</summary>
+  <summary xml:lang="sv">Modern IPTV-spelare för dina egna spellistor</summary>
+  <summary xml:lang="sk">Moderný IPTV prehrávač pre vaše vlastné playlisty</summary>
+  <summary xml:lang="ru">Современный IPTV-плеер для ваших плейлистов</summary>
+  <summary xml:lang="ro">Player IPTV modern pentru propriile liste de redare</summary>
+  <summary xml:lang="pt-BR">Player IPTV moderno para as suas próprias playlists</summary>
+  <summary xml:lang="pt">Leitor IPTV moderno para as suas próprias playlists</summary>
+  <summary xml:lang="pl">Nowoczesny odtwarzacz IPTV dla Twoich playlist</summary>
+  <summary xml:lang="nl">Moderne IPTV-speler voor je eigen afspeellijsten</summary>
+  <summary xml:lang="nb">Moderne IPTV-spiller for dine egne spillelister</summary>
+  <summary xml:lang="ko">나만의 재생목록을 위한 최신 IPTV 플레이어</summary>
+  <summary xml:lang="ja">自分のプレイリスト向けのモダンな IPTV プレーヤー</summary>
+  <summary xml:lang="it">Lettore IPTV moderno per le tue playlist</summary>
+  <summary xml:lang="is">Nútímalegur IPTV-spilari fyrir þína eigin spilunarlista</summary>
+  <summary xml:lang="hu">Modern IPTV-lejátszó saját lejátszási listáihoz</summary>
+  <summary xml:lang="hr">Moderni IPTV reproduktor za vaše vlastite playliste</summary>
+  <summary xml:lang="he">נגן IPTV מודרני לרשימות ההשמעה שלכם</summary>
+  <summary xml:lang="fr">Lecteur IPTV moderne pour vos propres listes de lecture</summary>
+  <summary xml:lang="fi">Moderni IPTV-soitin omille soittolistoillesi</summary>
+  <summary xml:lang="et">Kaasaegne IPTV-mängija sinu enda esitusloenditele</summary>
+  <summary xml:lang="es">Reproductor IPTV moderno para sus propias listas</summary>
+  <summary xml:lang="en">Modern IPTV player for your own playlists</summary>
+  <summary xml:lang="el">Σύγχρονο πρόγραμμα αναπαραγωγής IPTV για τις δικές σας λίστες</summary>
+  <summary xml:lang="de">Moderner IPTV-Player für Ihre eigenen Playlists</summary>
+  <summary xml:lang="da">Moderne IPTV-afspiller til dine egne playlister</summary>
+  <summary xml:lang="cs">Moderní IPTV přehrávač pro vaše vlastní playlisty</summary>
+  <summary xml:lang="bg">Съвременен IPTV плейър за вашите плейлисти</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="org.communitybig">
+    <name>Community Big</name>
+    <name xml:lang="zh">Community Big</name>
+    <name xml:lang="uk">Community Big</name>
+    <name xml:lang="tr">Community Big</name>
+    <name xml:lang="sv">Community Big</name>
+    <name xml:lang="sk">Community Big</name>
+    <name xml:lang="ru">Community Big</name>
+    <name xml:lang="ro">Community Big</name>
+    <name xml:lang="pt-BR">Community Big</name>
+    <name xml:lang="pt">Community Big</name>
+    <name xml:lang="pl">Community Big</name>
+    <name xml:lang="nl">Community Big</name>
+    <name xml:lang="nb">Community Big</name>
+    <name xml:lang="ko">Community Big</name>
+    <name xml:lang="ja">Community Big</name>
+    <name xml:lang="it">Community Big</name>
+    <name xml:lang="is">Community Big</name>
+    <name xml:lang="hu">Community Big</name>
+    <name xml:lang="hr">Community Big</name>
+    <name xml:lang="he">Community Big</name>
+    <name xml:lang="fr">Community Big</name>
+    <name xml:lang="fi">Community Big</name>
+    <name xml:lang="et">Community Big</name>
+    <name xml:lang="es">Community Big</name>
+    <name xml:lang="en">Community Big</name>
+    <name xml:lang="el">Community Big</name>
+    <name xml:lang="de">Community Big</name>
+    <name xml:lang="da">Community Big</name>
+    <name xml:lang="cs">Community Big</name>
+    <name xml:lang="bg">Community Big</name>
+  </developer>
+  <description>
+    <p>
+      AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or
+      Xtream Codes account and browse live channels, an electronic program
+      guide, movies and series. AshyTV does not provide or include any content.
+    </p>
+    <p xml:lang="zh">AshyTV 是一款基于 GTK4/libadwaita 的 IPTV 播放器。导入您自己的 M3U 播放列表或 Xtream Codes 账户，即可浏览直播频道、电子节目指南、电影和剧集。AshyTV 不提供也不包含任何内容。</p>
+    <p xml:lang="uk">AshyTV — це IPTV-програвач на GTK4/libadwaita. Імпортуйте власний плейлист M3U або обліковий запис Xtream Codes і переглядайте телеканали наживо, електронну телепрограму, фільми та серіали. AshyTV не надає й не містить жодного вмісту.</p>
+    <p xml:lang="tr">AshyTV, GTK4/libadwaita tabanlı bir IPTV oynatıcısıdır. Kendi M3U oynatma listenizi veya Xtream Codes hesabınızı içe aktarın; canlı kanallara, elektronik program rehberine, filmlere ve dizilere göz atın. AshyTV hiçbir içerik sağlamaz veya barındırmaz.</p>
+    <p xml:lang="sv">AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen M3U-spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, en elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller innehåller inget innehåll.</p>
+    <p xml:lang="sk">AshyTV je IPTV prehrávač pre GTK4/libadwaita. Importujte vlastný playlist M3U alebo účet Xtream Codes a prehliadajte živé kanály, elektronického programového sprievodcu, filmy a seriály. AshyTV neposkytuje ani neobsahuje žiadny obsah.</p>
+    <p xml:lang="ru">AshyTV — это IPTV-плеер на GTK4/libadwaita. Импортируйте собственный плейлист M3U или аккаунт Xtream Codes и смотрите телеканалы в прямом эфире, электронную телепрограмму, фильмы и сериалы. AshyTV не предоставляет и не включает никакого контента.</p>
+    <p xml:lang="ro">AshyTV este un player IPTV GTK4/libadwaita. Importați propria listă de redare M3U sau un cont Xtream Codes și răsfoiți canale în direct, un ghid electronic de programe, filme și seriale. AshyTV nu oferă și nu include niciun conținut.</p>
+    <p xml:lang="pt-BR">O AshyTV é um player IPTV em GTK4/libadwaita. Importe sua própria playlist M3U ou conta Xtream Codes e navegue por canais ao vivo, guia eletrônico de programação, filmes e séries. O AshyTV não fornece nem inclui nenhum conteúdo.</p>
+    <p xml:lang="pt">O AshyTV é um leitor IPTV em GTK4/libadwaita. Importe a sua própria playlist M3U ou conta Xtream Codes e navegue por canais em direto, guia eletrónico de programação, filmes e séries. O AshyTV não fornece nem inclui qualquer conteúdo.</p>
+    <p xml:lang="pl">AshyTV to odtwarzacz IPTV oparty na GTK4/libadwaita. Zaimportuj własną playlistę M3U lub konto Xtream Codes i przeglądaj kanały na żywo, elektroniczny program TV, filmy i seriale. AshyTV nie dostarcza ani nie zawiera żadnych treści.</p>
+    <p xml:lang="nl">AshyTV is een IPTV-speler voor GTK4/libadwaita. Importeer je eigen M3U-afspeellijst of Xtream Codes-account en blader door live kanalen, een elektronische programmagids, films en series. AshyTV levert en bevat geen inhoud.</p>
+    <p xml:lang="nb">AshyTV er en IPTV-spiller i GTK4/libadwaita. Importer din egen M3U-spilleliste eller Xtream Codes-konto og bla gjennom direktekanaler, en elektronisk programguide, filmer og serier. AshyTV leverer eller inneholder ikke noe innhold.</p>
+    <p xml:lang="ko">AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 Xtream Codes 계정을 가져와 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다.</p>
+    <p xml:lang="ja">AshyTV は GTK4/libadwaita ベースの IPTV プレーヤーです。ご自身の M3U プレイリストまたは Xtream Codes アカウントをインポートして、ライブチャンネル、電子番組表、映画、シリーズを閲覧できます。AshyTV はコンテンツを提供・同梱していません。</p>
+    <p xml:lang="it">AshyTV è un lettore IPTV GTK4/libadwaita. Importa la tua playlist M3U o il tuo account Xtream Codes e sfoglia canali in diretta, una guida elettronica ai programmi, film e serie. AshyTV non fornisce né include alcun contenuto.</p>
+    <p xml:lang="is">AshyTV er IPTV-spilari byggður á GTK4/libadwaita. Fluttu inn þinn eigin M3U-spilunarlista eða Xtream Codes-reikning og skoðaðu beinar rásir, rafræna dagskrá, kvikmyndir og þætti. AshyTV býður ekkert efni og inniheldur ekkert efni.</p>
+    <p xml:lang="hu">Az AshyTV egy GTK4/libadwaita alapú IPTV-lejátszó. Importálja saját M3U-lejátszási listáját vagy Xtream Codes fiókját, és böngésszen élő csatornák, elektronikus műsorújság, filmek és sorozatok között. Az AshyTV nem biztosít és nem tartalmaz semmilyen tartalmat.</p>
+    <p xml:lang="hr">AshyTV je IPTV reproduktor za GTK4/libadwaita. Uvezite vlastitu M3U playlistu ili Xtream Codes račun i pregledavajte kanale uživo, elektronički TV vodič, filmove i serije. AshyTV ne pruža niti uključuje nikakav sadržaj.</p>
+    <p xml:lang="he">AshyTV הוא נגן IPTV מבוסס GTK4/libadwaita. ייבאו רשימת השמעה M3U או חשבון Xtream Codes משלכם וגלשו בערוצים חיים, במדריך שידורים אלקטרוני, בסרטים ובסדרות. AshyTV אינה מספקת או כוללת תוכן כלשהו.</p>
+    <p xml:lang="fr">AshyTV est un lecteur IPTV GTK4/libadwaita. Importez votre propre liste de lecture M3U ou compte Xtream Codes et parcourez les chaînes en direct, un guide électronique des programmes, des films et des séries. AshyTV ne fournit ni n’inclut aucun contenu.</p>
+    <p xml:lang="fi">AshyTV on GTK4/libadwaita-pohjainen IPTV-soitin. Tuo oma M3U-soittolistasi tai Xtream Codes -tilisi ja selaa suoria kanavia, sähköistä ohjelmaopasta, elokuvia ja sarjoja. AshyTV ei tarjoa eikä sisällä mitään sisältöä.</p>
+    <p xml:lang="et">AshyTV on GTK4/libadwaita IPTV-mängija. Impordi oma M3U-esitusloend või Xtream Codes konto ning sirvi otsekanaleid, elektroonilist teleprogrammi, filme ja seriaale. AshyTV ei paku ega sisalda sisu.</p>
+    <p xml:lang="es">AshyTV es un reproductor IPTV en GTK4/libadwaita. Importe su propia lista M3U o cuenta Xtream Codes y explore canales en directo, una guía electrónica de programación, películas y series. AshyTV no ofrece ni incluye ningún contenido.</p>
+    <p xml:lang="en">AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or Xtream Codes account and browse live channels, an electronic program guide, movies and series. AshyTV does not provide or include any content.</p>
+    <p xml:lang="el">Το AshyTV είναι ένα πρόγραμμα αναπαραγωγής IPTV GTK4/libadwaita. Εισαγάγετε τη δική σας λίστα M3U ή λογαριασμό Xtream Codes και περιηγηθείτε σε ζωντανά κανάλια, ηλεκτρονικό τηλεοπτικό οδηγό, ταινίες και σειρές. Το AshyTV δεν παρέχει ούτε περιλαμβάνει κανένα περιεχόμενο.</p>
+    <p xml:lang="de">AshyTV ist ein IPTV-Player auf Basis von GTK4/libadwaita. Importieren Sie Ihre eigene M3U-Playlist oder Ihr Xtream-Codes-Konto und stöbern Sie in Live-Sendern, einem elektronischen Programmführer, Filmen und Serien. AshyTV stellt keine Inhalte bereit und enthält keine.</p>
+    <p xml:lang="da">AshyTV er en IPTV-afspiller i GTK4/libadwaita. Importér din egen M3U-playliste eller Xtream Codes-konto, og gennemse live-kanaler, en elektronisk programguide, film og serier. AshyTV leverer eller indeholder intet indhold.</p>
+    <p xml:lang="cs">AshyTV je IPTV přehrávač pro GTK4/libadwaita. Naimportujte vlastní playlist M3U nebo účet Xtream Codes a procházejte živé kanály, elektronický programový průvodce, filmy a seriály. AshyTV neposkytuje ani neobsahuje žádný obsah.</p>
+    <p xml:lang="bg">AshyTV е IPTV плейър за GTK4/libadwaita. Импортирайте собствен M3U плейлист или акаунт в Xtream Codes и разглеждайте канали на живо, електронна програма, филми и сериали. AshyTV не предоставя и не включва никакво съдържание.</p>
+    <ul>
+      <li>Live channels with categories, favorites and now-playing info</li>
+      <li xml:lang="zh">带有分类、收藏和正在播出信息的直播频道</li>
+      <li xml:lang="uk">Телеканали з категоріями, обраним та інформацією про поточну передачу</li>
+      <li xml:lang="tr">Kategoriler, sık kullanılanlar ve yayındaki program bilgisiyle canlı kanallar</li>
+      <li xml:lang="sv">Live-kanaler med kategorier, favoriter och information om vad som visas nu</li>
+      <li xml:lang="sk">Živé kanály s kategóriami, obľúbenými a informáciami o aktuálnej relácii</li>
+      <li xml:lang="ru">Телеканалы с категориями, избранным и информацией о текущей передаче</li>
+      <li xml:lang="ro">Canale în direct cu categorii, favorite și informații despre ce rulează acum</li>
+      <li xml:lang="pt-BR">Canais ao vivo com categorias, favoritos e informações do que está passando</li>
+      <li xml:lang="pt">Canais em direto com categorias, favoritos e informação do que está a passar</li>
+      <li xml:lang="pl">Kanały na żywo z kategoriami, ulubionymi i informacją o bieżącym programie</li>
+      <li xml:lang="nl">Live kanalen met categorieën, favorieten en informatie over wat er nu op is</li>
+      <li xml:lang="nb">Direktekanaler med kategorier, favoritter og informasjon om hva som går nå</li>
+      <li xml:lang="ko">카테고리, 즐겨찾기, 현재 방송 정보를 갖춘 실시간 채널</li>
+      <li xml:lang="ja">カテゴリ、お気に入り、放送中の情報を備えたライブチャンネル</li>
+      <li xml:lang="it">Canali in diretta con categorie, preferiti e informazioni su cosa è in onda</li>
+      <li xml:lang="is">Beinar rásir með flokkum, eftirlætum og upplýsingum um hvað er í gangi núna</li>
+      <li xml:lang="hu">Élő csatornák kategóriákkal, kedvencekkel és az aktuális műsor adataival</li>
+      <li xml:lang="hr">Kanali uživo s kategorijama, favoritima i informacijama o trenutnom programu</li>
+      <li xml:lang="he">ערוצים חיים עם קטגוריות, מועדפים ומידע על מה שמשודר כעת</li>
+      <li xml:lang="fr">Chaînes en direct avec catégories, favoris et informations sur ce qui est diffusé</li>
+      <li xml:lang="fi">Suorat kanavat luokkineen, suosikkeineen ja tietoineen meneillään olevista ohjelmista</li>
+      <li xml:lang="et">Otsekanalid kategooriate, lemmikute ja praegu eetris oleva infoga</li>
+      <li xml:lang="es">Canales en directo con categorías, favoritos e información de lo que se emite</li>
+      <li xml:lang="en">Live channels with categories, favorites and now-playing info</li>
+      <li xml:lang="el">Ζωντανά κανάλια με κατηγορίες, αγαπημένα και πληροφορίες για το τρέχον πρόγραμμα</li>
+      <li xml:lang="de">Live-Sender mit Kategorien, Favoriten und Informationen zum laufenden Programm</li>
+      <li xml:lang="da">Live-kanaler med kategorier, favoritter og oplysninger om, hvad der kører nu</li>
+      <li xml:lang="cs">Živé kanály s kategoriemi, oblíbenými a informacemi o aktuálním pořadu</li>
+      <li xml:lang="bg">Канали на живо с категории, любими и информация за текущото предаване</li>
+      <li>Program guide (XMLTV) in a time grid</li>
+      <li xml:lang="zh">时间网格形式的节目指南 (XMLTV)</li>
+      <li xml:lang="uk">Телепрограма (XMLTV) у вигляді часової сітки</li>
+      <li xml:lang="tr">Zaman çizelgesi biçiminde program rehberi (XMLTV)</li>
+      <li xml:lang="sv">TV-guide (XMLTV) i ett tidsschema</li>
+      <li xml:lang="sk">Programový sprievodca (XMLTV) v časovej mriežke</li>
+      <li xml:lang="ru">Телепрограмма (XMLTV) в виде временной сетки</li>
+      <li xml:lang="ro">Ghid de programe (XMLTV) într-o grilă orară</li>
+      <li xml:lang="pt-BR">Guia de programação (XMLTV) em grade de horários</li>
+      <li xml:lang="pt">Guia de programação (XMLTV) em grade de horários</li>
+      <li xml:lang="pl">Program TV (XMLTV) w siatce czasowej</li>
+      <li xml:lang="nl">Programmagids (XMLTV) in een tijdraster</li>
+      <li xml:lang="nb">Programguide (XMLTV) i et tidsrutenett</li>
+      <li xml:lang="ko">시간 격자형 프로그램 편성표 (XMLTV)</li>
+      <li xml:lang="ja">時間軸グリッド形式の番組表 (XMLTV)</li>
+      <li xml:lang="it">Guida ai programmi (XMLTV) in una griglia oraria</li>
+      <li xml:lang="is">Dagskrá (XMLTV) í tímatöflu</li>
+      <li xml:lang="hu">Műsorújság (XMLTV) időrácsban</li>
+      <li xml:lang="hr">TV vodič (XMLTV) u vremenskoj mreži</li>
+      <li xml:lang="he">מדריך שידורים (XMLTV) בטבלת זמנים</li>
+      <li xml:lang="fr">Guide des programmes (XMLTV) en grille horaire</li>
+      <li xml:lang="fi">Ohjelmaopas (XMLTV) aikaruudukossa</li>
+      <li xml:lang="et">Teleprogramm (XMLTV) ajaruudustikus</li>
+      <li xml:lang="es">Guía de programación (XMLTV) en una cuadrícula horaria</li>
+      <li xml:lang="en">Program guide (XMLTV) in a time grid</li>
+      <li xml:lang="el">Τηλεοπτικός οδηγός (XMLTV) σε χρονικό πλέγμα</li>
+      <li xml:lang="de">Programmführer (XMLTV) in einem Zeitraster</li>
+      <li xml:lang="da">Programguide (XMLTV) i et tidsgitter</li>
+      <li xml:lang="cs">Programový průvodce (XMLTV) v časové mřížce</li>
+      <li xml:lang="bg">Телевизионна програма (XMLTV) във времева мрежа</li>
+      <li>Movies and series catalog with resume and next episode</li>
+      <li xml:lang="zh">支持继续观看和下一集的电影与剧集目录</li>
+      <li xml:lang="uk">Каталог фільмів і серіалів із продовженням перегляду та наступною серією</li>
+      <li xml:lang="tr">Kaldığı yerden devam ve sonraki bölüm özellikli film ve dizi kataloğu</li>
+      <li xml:lang="sv">Katalog över filmer och serier med återupptagning och nästa avsnitt</li>
+      <li xml:lang="sk">Katalóg filmov a seriálov s pokračovaním a ďalšou epizódou</li>
+      <li xml:lang="ru">Каталог фильмов и сериалов с продолжением просмотра и следующей серией</li>
+      <li xml:lang="ro">Catalog de filme și seriale cu reluare și episodul următor</li>
+      <li xml:lang="pt-BR">Catálogo de filmes e séries com retomada e próximo episódio</li>
+      <li xml:lang="pt">Catálogo de filmes e séries com retomada e próximo episódio</li>
+      <li xml:lang="pl">Katalog filmów i seriali z wznawianiem i następnym odcinkiem</li>
+      <li xml:lang="nl">Film- en seriecatalogus met hervatten en volgende aflevering</li>
+      <li xml:lang="nb">Katalog over filmer og serier med fortsettelse og neste episode</li>
+      <li xml:lang="ko">이어보기와 다음 에피소드를 지원하는 영화 및 시리즈 카탈로그</li>
+      <li xml:lang="ja">再開と次のエピソード機能付きの映画・シリーズカタログ</li>
+      <li xml:lang="it">Catalogo di film e serie con ripresa e episodio successivo</li>
+      <li xml:lang="is">Skrá yfir kvikmyndir og þætti með áframhaldandi áhorfi og næsta þætti</li>
+      <li xml:lang="hu">Film- és sorozatkatalógus folytatással és következő epizóddal</li>
+      <li xml:lang="hr">Katalog filmova i serija s nastavkom gledanja i sljedećom epizodom</li>
+      <li xml:lang="he">קטלוג סרטים וסדרות עם המשך צפייה והפרק הבא</li>
+      <li xml:lang="fr">Catalogue de films et séries avec reprise et épisode suivant</li>
+      <li xml:lang="fi">Elokuva- ja sarjaluettelo, jossa katselun jatkaminen ja seuraava jakso</li>
+      <li xml:lang="et">Filmide ja seriaalide kataloog vaatamise jätkamise ja järgmise episoodiga</li>
+      <li xml:lang="es">Catálogo de películas y series con reanudación y siguiente episodio</li>
+      <li xml:lang="en">Movies and series catalog with resume and next episode</li>
+      <li xml:lang="el">Κατάλογος ταινιών και σειρών με συνέχιση και επόμενο επεισόδιο</li>
+      <li xml:lang="de">Film- und Serienkatalog mit Fortsetzen und nächster Folge</li>
+      <li xml:lang="da">Katalog over film og serier med genoptagelse og næste afsnit</li>
+      <li xml:lang="cs">Katalog filmů a seriálů s pokračováním a další epizodou</li>
+      <li xml:lang="bg">Каталог с филми и сериали с продължаване и следващ епизод</li>
+      <li>libmpv playback with hardware decoding, picture-in-picture and recording</li>
+      <li xml:lang="zh">基于 libmpv 的播放，支持硬件解码、画中画和录制</li>
+      <li xml:lang="uk">Відтворення через libmpv з апаратним декодуванням, «картинкою в картинці» та записом</li>
+      <li xml:lang="tr">Donanımsal çözme, pencere içinde pencere ve kayıt destekli libmpv oynatma</li>
+      <li xml:lang="sv">Uppspelning med libmpv med hårdvaruavkodning, bild-i-bild och inspelning</li>
+      <li xml:lang="sk">Prehrávanie cez libmpv s hardvérovým dekódovaním, obrazom v obraze a nahrávaním</li>
+      <li xml:lang="ru">Воспроизведение через libmpv с аппаратным декодированием, «картинка в картинке» и записью</li>
+      <li xml:lang="ro">Redare libmpv cu decodare hardware, picture-in-picture și înregistrare</li>
+      <li xml:lang="pt-BR">Reprodução com libmpv com decodificação por hardware, picture-in-picture e gravação</li>
+      <li xml:lang="pt">Reprodução com libmpv com descodificação por hardware, imagem em imagem e gravação</li>
+      <li xml:lang="pl">Odtwarzanie przez libmpv z dekodowaniem sprzętowym, obrazem w obrazie i nagrywaniem</li>
+      <li xml:lang="nl">Afspelen met libmpv met hardwaredecodering, beeld-in-beeld en opnemen</li>
+      <li xml:lang="nb">Avspilling med libmpv med maskinvaredekoding, bilde-i-bilde og opptak</li>
+      <li xml:lang="ko">하드웨어 디코딩, 화면 속 화면, 녹화를 지원하는 libmpv 재생</li>
+      <li xml:lang="ja">ハードウェアデコード、ピクチャーインピクチャー、録画に対応した libmpv 再生</li>
+      <li xml:lang="it">Riproduzione con libmpv con decodifica hardware, picture-in-picture e registrazione</li>
+      <li xml:lang="is">Spilun með libmpv með vélbúnaðarafkóðun, mynd í mynd og upptöku</li>
+      <li xml:lang="hu">Lejátszás libmpv-vel hardveres dekódolással, kép a képben móddal és felvétellel</li>
+      <li xml:lang="hr">Reprodukcija putem libmpv-a s hardverskim dekodiranjem, slikom u slici i snimanjem</li>
+      <li xml:lang="he">ניגון באמצעות libmpv עם פענוח חומרה, תמונה בתוך תמונה והקלטה</li>
+      <li xml:lang="fr">Lecture avec libmpv, décodage matériel, image dans l’image et enregistrement</li>
+      <li xml:lang="fi">Toisto libmpv:llä laitteistopurulla, kuva kuvassa -toiminnolla ja tallennuksella</li>
+      <li xml:lang="et">Taasesitus libmpv abil riistvaralise dekodeerimise, pilt-pildis-režiimi ja salvestamisega</li>
+      <li xml:lang="es">Reproducción con libmpv con decodificación por hardware, imagen en imagen y grabación</li>
+      <li xml:lang="en">libmpv playback with hardware decoding, picture-in-picture and recording</li>
+      <li xml:lang="el">Αναπαραγωγή libmpv με αποκωδικοποίηση υλικού, εικόνα σε εικόνα και εγγραφή</li>
+      <li xml:lang="de">Wiedergabe mit libmpv, Hardware-Dekodierung, Bild-in-Bild und Aufnahme</li>
+      <li xml:lang="da">Afspilning med libmpv med hardwareafkodning, billede-i-billede og optagelse</li>
+      <li xml:lang="cs">Přehrávání přes libmpv s hardwarovým dekódováním, obrazem v obraze a nahráváním</li>
+      <li xml:lang="bg">Възпроизвеждане чрез libmpv с хардуерно декодиране, картина в картината и запис</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">org.communitybig.ashytv.desktop</launchable>
+  <url type="homepage">https://github.com/big-comm/ashytv</url>
+  <url type="bugtracker">https://github.com/big-comm/ashytv/issues</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/big-comm/ashytv/main/docs/screenshots/home.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-10-24"/>
+  </releases>
+</component>

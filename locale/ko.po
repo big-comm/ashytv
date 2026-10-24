@@ -1,0 +1,1248 @@
+# Korean translations for PACKAGE package.
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ashytv 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 01:02-0300\n"
+"PO-Revision-Date: 2026-10-24 04:07+0000\n"
+"Last-Translator: Community Big <https://communitybig.org>\n"
+"Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/ashytv/application.py:24
+msgid "Navigation"
+msgstr "탐색"
+
+#: src/ashytv/application.py:24 src/ashytv/window.py:89
+msgid "Quit"
+msgstr "종료"
+
+#: src/ashytv/application.py:24
+msgid "Search"
+msgstr "검색"
+
+#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:214
+msgid "Pause/resume"
+msgstr "일시정지/재생"
+
+#: src/ashytv/application.py:25
+msgid "Player"
+msgstr "플레이어"
+
+#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:215
+msgid "Previous/next channel"
+msgstr "이전/다음 채널"
+
+#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:216
+msgid "Fullscreen"
+msgstr "전체 화면"
+
+#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:216
+msgid "Rewind/forward 10 s"
+msgstr "10초 뒤로/앞으로"
+
+#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:217
+#: src/ashytv/ui/player_view.py:455
+msgid "Mute"
+msgstr "음소거"
+
+#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:217
+#: src/ashytv/ui/player_view.py:183
+msgid "Volume"
+msgstr "볼륨"
+
+#: src/ashytv/application.py:28
+msgid "Exit fullscreen / close the player"
+msgstr "전체 화면 종료 / 플레이어 닫기"
+
+#: src/ashytv/application.py:140
+msgid ""
+"A modern IPTV player for the Linux desktop.\n"
+"Import your own playlist — no content is provided by the app."
+msgstr ""
+"Linux 데스크톱용 최신 IPTV 플레이어.\n"
+"나만의 재생목록을 가져오세요. 앱은 어떤 콘텐츠도 제공하지 않습니다."
+
+#: src/ashytv/models/channel.py:21
+msgid "Live TV"
+msgstr "실시간 TV"
+
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:14
+#: src/ashytv/ui/pages/channels_page.py:23 src/ashytv/window.py:160
+msgid "Movies"
+msgstr "영화"
+
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:15
+#: src/ashytv/ui/pages/channels_page.py:24 src/ashytv/window.py:165
+msgid "Series"
+msgstr "시리즈"
+
+#: src/ashytv/models/channel.py:58
+msgid "Unnamed"
+msgstr "이름 없음"
+
+#: src/ashytv/models/channel.py:76
+#, python-brace-format
+msgid "S{season} • E{episode}"
+msgstr "S{season} • E{episode}"
+
+#: src/ashytv/player/mpv_widget.py:296
+#, python-brace-format
+msgid "Track {number}"
+msgstr "트랙 {number}"
+
+#: src/ashytv/services/http.py:30
+#, python-brace-format
+msgid "Unsupported URL: {url}"
+msgstr "지원되지 않는 URL: {url}"
+
+#: src/ashytv/services/importer.py:34
+msgid "Downloading playlist…"
+msgstr "재생목록 다운로드 중…"
+
+#: src/ashytv/services/importer.py:36
+msgid "Processing playlist…"
+msgstr "재생목록 처리 중…"
+
+#: src/ashytv/services/importer.py:41
+msgid "No channels found in the playlist"
+msgstr "재생목록에서 채널을 찾을 수 없습니다"
+
+#: src/ashytv/services/importer.py:46 src/ashytv/services/importer.py:78
+msgid "Saving…"
+msgstr "저장 중…"
+
+#: src/ashytv/services/importer.py:57
+msgid "Connecting to provider…"
+msgstr "제공업체에 연결하는 중…"
+
+#: src/ashytv/services/importer.py:60
+msgid "The provider returned no content"
+msgstr "제공업체가 콘텐츠를 반환하지 않았습니다"
+
+#: src/ashytv/services/settings.py:36
+msgid "Blue"
+msgstr "파랑"
+
+#: src/ashytv/services/settings.py:37
+msgid "Teal"
+msgstr "청록"
+
+#: src/ashytv/services/settings.py:38
+msgid "Green"
+msgstr "초록"
+
+#: src/ashytv/services/settings.py:39
+msgid "Yellow"
+msgstr "노랑"
+
+#: src/ashytv/services/settings.py:40
+msgid "Orange"
+msgstr "주황"
+
+#: src/ashytv/services/settings.py:41
+msgid "Red"
+msgstr "빨강"
+
+#: src/ashytv/services/settings.py:42
+msgid "Pink"
+msgstr "분홍"
+
+#: src/ashytv/services/settings.py:43
+msgid "Purple"
+msgstr "보라"
+
+#: src/ashytv/services/settings.py:44
+msgid "Slate"
+msgstr "슬레이트"
+
+#: src/ashytv/services/settings.py:45
+msgid "Emerald"
+msgstr "에메랄드"
+
+#: src/ashytv/services/text.py:26
+#, python-brace-format
+msgid "Episode {number}"
+msgstr "{number}화"
+
+#: src/ashytv/services/xtream_client.py:177
+msgid "Invalid username or password"
+msgstr "사용자 이름 또는 비밀번호가 올바르지 않습니다"
+
+#: src/ashytv/services/xtream_client.py:179
+#, python-brace-format
+msgid "Account status: {status}"
+msgstr "계정 상태: {status}"
+
+#: src/ashytv/ui/detail_dialog.py:88 src/ashytv/ui/detail_dialog.py:149
+#: src/ashytv/ui/pages/channels_page.py:328
+#: src/ashytv/ui/schedule_dialog.py:18
+msgid "Watch"
+msgstr "시청"
+
+#: src/ashytv/ui/detail_dialog.py:114
+msgid "Episodes"
+msgstr "에피소드"
+
+#: src/ashytv/ui/detail_dialog.py:129
+msgid "Could not load"
+msgstr "불러올 수 없습니다"
+
+#: src/ashytv/ui/detail_dialog.py:148
+#, python-brace-format
+msgid "Resume from {time}"
+msgstr "{time}부터 이어보기"
+
+#: src/ashytv/ui/detail_dialog.py:165
+msgid "No episodes available"
+msgstr "시청 가능한 에피소드가 없습니다"
+
+#: src/ashytv/ui/detail_dialog.py:170
+#, python-brace-format
+msgid "Season {n}"
+msgstr "시즌 {n}"
+
+#: src/ashytv/ui/detail_dialog.py:178
+#, python-brace-format
+msgid "Watch {label}"
+msgstr "{label} 시청"
+
+#: src/ashytv/ui/detail_dialog.py:218
+#, python-brace-format
+msgid "Episode {n}"
+msgstr "{n}화"
+
+#: src/ashytv/ui/detail_dialog.py:257 src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/pages/channels_page.py:329
+msgid "Remove from favorites"
+msgstr "즐겨찾기에서 제거"
+
+#: src/ashytv/ui/detail_dialog.py:258 src/ashytv/ui/pages/catalog_page.py:198
+#: src/ashytv/ui/pages/channels_page.py:329
+msgid "Add to favorites"
+msgstr "즐겨찾기에 추가"
+
+#: src/ashytv/ui/mini_player.py:32
+msgid "Back to AshyTV"
+msgstr "AshyTV로 돌아가기"
+
+#: src/ashytv/ui/mini_player.py:36
+msgid "Stop"
+msgstr "중지"
+
+#: src/ashytv/ui/nav_sidebar.py:11
+msgid "Home"
+msgstr "홈"
+
+#: src/ashytv/ui/nav_sidebar.py:12
+msgid "Channels"
+msgstr "채널"
+
+#: src/ashytv/ui/nav_sidebar.py:13
+msgid "Guide"
+msgstr "편성표"
+
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:53
+#: src/ashytv/ui/pages/channels_page.py:163
+#: src/ashytv/ui/pages/channels_page.py:186
+msgid "Favorites"
+msgstr "즐겨찾기"
+
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/recordings_page.py:25
+msgid "Recordings"
+msgstr "녹화"
+
+#: src/ashytv/ui/nav_sidebar.py:19
+msgid "Playlists"
+msgstr "재생목록"
+
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/settings_page.py:57
+msgid "Settings"
+msgstr "설정"
+
+#: src/ashytv/ui/pages/catalog_page.py:67
+msgid "Nothing found"
+msgstr "찾을 수 없음"
+
+#: src/ashytv/ui/pages/catalog_page.py:68
+msgid "Add a playlist in “Playlists” or change the filter."
+msgstr "“재생목록”에서 재생목록을 추가하거나 필터를 변경하세요."
+
+#: src/ashytv/ui/pages/catalog_page.py:87
+#: src/ashytv/ui/pages/channels_page.py:163
+msgid "All"
+msgstr "전체"
+
+#: src/ashytv/ui/pages/catalog_page.py:87
+msgid "New Releases"
+msgstr "신규 출시"
+
+#: src/ashytv/ui/pages/catalog_page.py:87
+msgid "Trending"
+msgstr "인기"
+
+#: src/ashytv/ui/pages/channels_page.py:19
+msgid "Sports"
+msgstr "스포츠"
+
+#: src/ashytv/ui/pages/channels_page.py:21
+msgid "News"
+msgstr "뉴스"
+
+#: src/ashytv/ui/pages/channels_page.py:22
+msgid "Free-to-air"
+msgstr "무료 방송"
+
+#: src/ashytv/ui/pages/channels_page.py:25
+msgid "Kids"
+msgstr "키즈"
+
+#: src/ashytv/ui/pages/channels_page.py:27
+msgid "Documentaries"
+msgstr "다큐멘터리"
+
+#: src/ashytv/ui/pages/channels_page.py:29
+msgid "Music"
+msgstr "음악"
+
+#: src/ashytv/ui/pages/channels_page.py:53
+msgid "TV Channels"
+msgstr "TV 채널"
+
+#: src/ashytv/ui/pages/channels_page.py:54
+msgid "Channels, movies and series you marked"
+msgstr "즐겨찾기한 채널, 영화, 시리즈"
+
+#: src/ashytv/ui/pages/channels_page.py:55
+msgid "All your channels organized by category"
+msgstr "카테고리별로 정리된 모든 채널"
+
+#: src/ashytv/ui/pages/channels_page.py:108
+msgid "Nothing here yet"
+msgstr "아직 아무것도 없습니다"
+
+#: src/ashytv/ui/pages/channels_page.py:109
+msgid "Tap the heart on a channel, movie or series to keep it here."
+msgstr "채널, 영화 또는 시리즈의 하트를 눌러 여기에 보관하세요."
+
+#: src/ashytv/ui/pages/channels_page.py:111
+msgid "No channels in this category."
+msgstr "이 카테고리에는 채널이 없습니다."
+
+#: src/ashytv/ui/pages/channels_page.py:163
+msgid "Recent"
+msgstr "최근"
+
+#: src/ashytv/ui/pages/channels_page.py:189
+msgid "Recently watched"
+msgstr "최근 시청"
+
+#: src/ashytv/ui/pages/channels_page.py:193
+msgid "All Channels"
+msgstr "모든 채널"
+
+#: src/ashytv/ui/pages/channels_page.py:194
+msgid "All in this category"
+msgstr "이 카테고리 전체"
+
+#: src/ashytv/ui/pages/channels_page.py:294 src/ashytv/ui/player_view.py:131
+msgid "Favorite"
+msgstr "즐겨찾기"
+
+#: src/ashytv/ui/pages/channels_page.py:301
+msgid "More options"
+msgstr "옵션 더 보기"
+
+#: src/ashytv/ui/pages/channels_page.py:332
+msgid "View schedule"
+msgstr "편성표 보기"
+
+#: src/ashytv/ui/pages/epg_page.py:25
+#, python-brace-format
+msgid "Today, {date}"
+msgstr "오늘, {date}"
+
+#: src/ashytv/ui/pages/epg_page.py:27
+#, python-brace-format
+msgid "Tomorrow, {date}"
+msgstr "내일, {date}"
+
+#: src/ashytv/ui/pages/epg_page.py:29
+#, python-brace-format
+msgid "Yesterday, {date}"
+msgstr "어제, {date}"
+
+#: src/ashytv/ui/pages/epg_page.py:53
+msgid "Program Guide"
+msgstr "프로그램 편성표"
+
+#: src/ashytv/ui/pages/epg_page.py:54
+msgid "See what's on now and what's next"
+msgstr "지금 방송 중인 프로그램과 다음 프로그램 보기"
+
+#: src/ashytv/ui/pages/epg_page.py:72
+msgid "1 hour earlier"
+msgstr "1시간 전"
+
+#: src/ashytv/ui/pages/epg_page.py:75
+msgid "1 hour later"
+msgstr "1시간 후"
+
+#: src/ashytv/ui/pages/epg_page.py:78
+msgid "Now"
+msgstr "지금"
+
+#: src/ashytv/ui/pages/epg_page.py:118
+msgid "Guide unavailable"
+msgstr "편성표를 사용할 수 없음"
+
+#: src/ashytv/ui/pages/epg_page.py:119
+msgid "The guide appears here once your provider's EPG loads."
+msgstr "제공업체의 EPG가 로드되면 여기에 편성표가 표시됩니다."
+
+#: src/ashytv/ui/pages/home_page.py:56
+msgid "Continue Watching"
+msgstr "이어서 시청하기"
+
+#: src/ashytv/ui/pages/home_page.py:57 src/ashytv/ui/welcome_view.py:62
+msgid "Live Channels"
+msgstr "실시간 채널"
+
+#: src/ashytv/ui/pages/home_page.py:58 src/ashytv/ui/pages/home_page.py:60
+#: src/ashytv/ui/pages/home_page.py:62
+msgid "See all"
+msgstr "모두 보기"
+
+#: src/ashytv/ui/pages/home_page.py:59
+msgid "Recently Added Movies"
+msgstr "최근 추가된 영화"
+
+#: src/ashytv/ui/pages/home_page.py:61
+msgid "Trending Series"
+msgstr "인기 시리즈"
+
+#: src/ashytv/ui/pages/home_page.py:140
+msgid "Welcome to AshyTV"
+msgstr "AshyTV에 오신 것을 환영합니다"
+
+#: src/ashytv/ui/pages/home_page.py:141
+msgid "Your channels, movies and series in one place"
+msgstr "채널, 영화, 시리즈를 한곳에서"
+
+#: src/ashytv/ui/pages/home_page.py:142
+msgid "View channels"
+msgstr "채널 보기"
+
+#: src/ashytv/ui/pages/home_page.py:173
+msgid "Watch now"
+msgstr "지금 시청"
+
+#: src/ashytv/ui/pages/lists_page.py:36
+msgid "Add Playlist"
+msgstr "재생목록 추가"
+
+#: src/ashytv/ui/pages/lists_page.py:37
+msgid "Add your IPTV playlist to start watching"
+msgstr "IPTV 재생목록을 추가하여 시청을 시작하세요"
+
+#: src/ashytv/ui/pages/lists_page.py:62
+msgid "M3U File"
+msgstr "M3U 파일"
+
+#: src/ashytv/ui/pages/lists_page.py:62 src/ashytv/ui/pages/lists_page.py:230
+msgid "Xtream Codes"
+msgstr "Xtream Codes"
+
+#: src/ashytv/ui/pages/lists_page.py:63
+msgid "URL"
+msgstr "URL"
+
+#: src/ashytv/ui/pages/lists_page.py:74
+msgid "Playlist name"
+msgstr "재생목록 이름"
+
+#: src/ashytv/ui/pages/lists_page.py:75 src/ashytv/ui/pages/lists_page.py:351
+#: src/ashytv/ui/pages/lists_page.py:358
+msgid "My Playlist"
+msgstr "내 재생목록"
+
+#: src/ashytv/ui/pages/lists_page.py:82
+msgid "Choose .m3u file…"
+msgstr ".m3u 파일 선택…"
+
+#: src/ashytv/ui/pages/lists_page.py:84
+msgid "No file selected"
+msgstr "선택된 파일 없음"
+
+#: src/ashytv/ui/pages/lists_page.py:90
+msgid "File"
+msgstr "파일"
+
+#: src/ashytv/ui/pages/lists_page.py:95
+msgid "Server (URL)"
+msgstr "서버 (URL)"
+
+#: src/ashytv/ui/pages/lists_page.py:98
+msgid "Username"
+msgstr "사용자 이름"
+
+#: src/ashytv/ui/pages/lists_page.py:99
+msgid "your_username"
+msgstr "your_username"
+
+#: src/ashytv/ui/pages/lists_page.py:100
+msgid "Password"
+msgstr "비밀번호"
+
+#: src/ashytv/ui/pages/lists_page.py:101
+msgid "your_password"
+msgstr "your_password"
+
+#: src/ashytv/ui/pages/lists_page.py:103
+msgid "Paste provider message"
+msgstr "제공업체 메시지 붙여넣기"
+
+#: src/ashytv/ui/pages/lists_page.py:105
+msgid ""
+"Paste the provider's welcome message: server, username and password are "
+"filled in automatically"
+msgstr "제공업체의 환영 메시지를 붙여넣으세요. 서버, 사용자 이름, 비밀번호가 자동으로 입력됩니다"
+
+#: src/ashytv/ui/pages/lists_page.py:113
+msgid "Playlist URL (M3U)"
+msgstr "재생목록 URL (M3U)"
+
+#: src/ashytv/ui/pages/lists_page.py:127
+msgid "Save and Connect"
+msgstr "저장 및 연결"
+
+#: src/ashytv/ui/pages/lists_page.py:144
+msgid "Secure Connection"
+msgstr "보안 연결"
+
+#: src/ashytv/ui/pages/lists_page.py:146
+msgid ""
+"Your information is stored only on your device. Passwords are kept in the "
+"system keyring."
+msgstr "정보는 사용자 기기에만 저장됩니다. 비밀번호는 시스템 키링에 보관됩니다."
+
+#: src/ashytv/ui/pages/lists_page.py:157
+msgid "Your Playlists"
+msgstr "내 재생목록"
+
+#: src/ashytv/ui/pages/lists_page.py:197
+msgid "No playlists added yet."
+msgstr "추가된 재생목록이 없습니다."
+
+#: src/ashytv/ui/pages/lists_page.py:230
+msgid "M3U"
+msgstr "M3U"
+
+#: src/ashytv/ui/pages/lists_page.py:231
+#, python-brace-format
+msgid "{n} item"
+msgid_plural "{n} items"
+msgstr[0] "{n}개 항목"
+
+#: src/ashytv/ui/pages/lists_page.py:233
+#, python-brace-format
+msgid "updated {when}"
+msgstr "{when} 업데이트됨"
+
+#: src/ashytv/ui/pages/lists_page.py:239
+#, python-brace-format
+msgid "expires {when}"
+msgstr "{when} 만료"
+
+#: src/ashytv/ui/pages/lists_page.py:240
+#, python-brace-format
+msgid "expired on {when}"
+msgstr "{when}에 만료됨"
+
+#: src/ashytv/ui/pages/lists_page.py:255
+msgid "Refresh playlist"
+msgstr "재생목록 새로 고침"
+
+#: src/ashytv/ui/pages/lists_page.py:259
+msgid "Remove playlist"
+msgstr "재생목록 제거"
+
+#: src/ashytv/ui/pages/lists_page.py:268
+msgid "Remove playlist?"
+msgstr "재생목록을 제거할까요?"
+
+#: src/ashytv/ui/pages/lists_page.py:269
+#, python-brace-format
+msgid ""
+"“{name}” and all its channels, favorites and history will be removed from "
+"this device."
+msgstr "“{name}” 및 해당 채널, 즐겨찾기, 기록이 이 기기에서 모두 제거됩니다."
+
+#: src/ashytv/ui/pages/lists_page.py:271
+#: src/ashytv/ui/pages/recordings_page.py:85
+#: src/ashytv/ui/pages/settings_page.py:351
+msgid "Cancel"
+msgstr "취소"
+
+#: src/ashytv/ui/pages/lists_page.py:272
+msgid "Remove"
+msgstr "제거"
+
+#: src/ashytv/ui/pages/lists_page.py:292
+msgid "Select M3U playlist"
+msgstr "M3U 재생목록 선택"
+
+#: src/ashytv/ui/pages/lists_page.py:294
+msgid "M3U Playlists"
+msgstr "M3U 재생목록"
+
+#: src/ashytv/ui/pages/lists_page.py:331
+msgid "Couldn't find server, username and password in the copied text."
+msgstr "복사한 텍스트에서 서버, 사용자 이름, 비밀번호를 찾을 수 없습니다."
+
+#: src/ashytv/ui/pages/lists_page.py:337
+msgid "Provider details filled in. Check them and click “Save and Connect”."
+msgstr "제공업체 정보가 입력되었습니다. 확인한 후 “저장 및 연결”을 클릭하세요."
+
+#: src/ashytv/ui/pages/lists_page.py:349
+msgid "Choose an .m3u file."
+msgstr ".m3u 파일을 선택하세요."
+
+#: src/ashytv/ui/pages/lists_page.py:355
+msgid "Enter a URL starting with http:// or https://."
+msgstr "http:// 또는 https://로 시작하는 URL을 입력하세요."
+
+#: src/ashytv/ui/pages/lists_page.py:364
+msgid "Fill in server, username and password."
+msgstr "서버, 사용자 이름, 비밀번호를 입력하세요."
+
+#: src/ashytv/ui/pages/lists_page.py:366
+msgid "Xtream Provider"
+msgstr "Xtream 제공업체"
+
+#: src/ashytv/ui/pages/recordings_page.py:26
+msgid "Use the ● button in the player to record what's on"
+msgstr "플레이어의 ● 버튼으로 방송 중인 프로그램을 녹화하세요"
+
+#: src/ashytv/ui/pages/recordings_page.py:29
+#: src/ashytv/ui/pages/settings_page.py:266
+msgid "Open folder"
+msgstr "폴더 열기"
+
+#: src/ashytv/ui/pages/recordings_page.py:40
+msgid "No recordings"
+msgstr "녹화 없음"
+
+#: src/ashytv/ui/pages/recordings_page.py:41
+msgid "Recordings appear here."
+msgstr "녹화 파일이 여기에 표시됩니다."
+
+#: src/ashytv/ui/pages/recordings_page.py:70
+msgid "Delete recording"
+msgstr "녹화 삭제"
+
+#: src/ashytv/ui/pages/recordings_page.py:84
+msgid "Delete recording?"
+msgstr "녹화를 삭제할까요?"
+
+#: src/ashytv/ui/pages/recordings_page.py:86
+msgid "Delete"
+msgstr "삭제"
+
+#: src/ashytv/ui/pages/settings_page.py:18
+#: src/ashytv/ui/pages/settings_page.py:131
+msgid "General"
+msgstr "일반"
+
+#: src/ashytv/ui/pages/settings_page.py:19
+#: src/ashytv/ui/pages/settings_page.py:150
+msgid "Appearance"
+msgstr "모양"
+
+#: src/ashytv/ui/pages/settings_page.py:20
+#: src/ashytv/ui/pages/settings_page.py:201
+msgid "Playback"
+msgstr "재생"
+
+#: src/ashytv/ui/pages/settings_page.py:21
+#: src/ashytv/ui/pages/settings_page.py:227
+msgid "Parental Controls"
+msgstr "자녀 보호"
+
+#: src/ashytv/ui/pages/settings_page.py:22
+#: src/ashytv/ui/pages/settings_page.py:248
+msgid "Data"
+msgstr "데이터"
+
+#: src/ashytv/ui/pages/settings_page.py:23
+#: src/ashytv/ui/pages/settings_page.py:274
+msgid "About"
+msgstr "정보"
+
+#: src/ashytv/ui/pages/settings_page.py:25
+msgid "Dark"
+msgstr "어둡게"
+
+#: src/ashytv/ui/pages/settings_page.py:25
+msgid "Follow system"
+msgstr "시스템 설정 따르기"
+
+#: src/ashytv/ui/pages/settings_page.py:25
+msgid "Light"
+msgstr "밝게"
+
+#: src/ashytv/ui/pages/settings_page.py:57
+msgid "Customize AshyTV your way"
+msgstr "나만의 방식으로 AshyTV 설정하기"
+
+#: src/ashytv/ui/pages/settings_page.py:132
+msgid "Start with the system"
+msgstr "시스템 시작 시 실행"
+
+#: src/ashytv/ui/pages/settings_page.py:133
+msgid "Open AshyTV when you log in"
+msgstr "로그인할 때 AshyTV 열기"
+
+#: src/ashytv/ui/pages/settings_page.py:135 src/ashytv/ui/welcome_view.py:64
+msgid "IPTV Playlists"
+msgstr "IPTV 재생목록"
+
+#: src/ashytv/ui/pages/settings_page.py:136
+msgid "Reload playlists automatically"
+msgstr "재생목록 자동 다시 불러오기"
+
+#: src/ashytv/ui/pages/settings_page.py:137
+msgid "Updates channels and catalog when the app opens"
+msgstr "앱을 열 때 채널과 카탈로그를 업데이트합니다"
+
+#: src/ashytv/ui/pages/settings_page.py:138
+msgid "Check every"
+msgstr "확인 주기"
+
+#: src/ashytv/ui/pages/settings_page.py:140
+#, python-brace-format
+msgid "{h} hour"
+msgid_plural "{h} hours"
+msgstr[0] "{h}시간"
+
+#: src/ashytv/ui/pages/settings_page.py:151
+msgid "Theme"
+msgstr "테마"
+
+#: src/ashytv/ui/pages/settings_page.py:161
+msgid "Accent Color"
+msgstr "강조 색상"
+
+#: src/ashytv/ui/pages/settings_page.py:162
+msgid "Choose the color used for buttons, selections and highlights."
+msgstr "버튼, 선택 항목, 강조 표시에 사용할 색상을 선택하세요."
+
+#: src/ashytv/ui/pages/settings_page.py:184
+msgid "Transparency"
+msgstr "투명도"
+
+#: src/ashytv/ui/pages/settings_page.py:185
+msgid "Makes the window background translucent (depends on the compositor)."
+msgstr "창 배경을 반투명하게 만듭니다 (컴포지터에 따라 다릅니다)."
+
+#: src/ashytv/ui/pages/settings_page.py:187
+msgid "Translucent window"
+msgstr "반투명 창"
+
+#: src/ashytv/ui/pages/settings_page.py:189
+msgid "Background opacity (%)"
+msgstr "배경 불투명도 (%)"
+
+#: src/ashytv/ui/pages/settings_page.py:195
+msgid "Content"
+msgstr "콘텐츠"
+
+#: src/ashytv/ui/pages/settings_page.py:196
+msgid "Show logos and covers"
+msgstr "로고와 커버 표시"
+
+#: src/ashytv/ui/pages/settings_page.py:197
+msgid "Turn off to save data"
+msgstr "끄면 데이터를 절약할 수 있습니다"
+
+#: src/ashytv/ui/pages/settings_page.py:202
+msgid "Applies from the next video you open."
+msgstr "다음에 여는 동영상부터 적용됩니다."
+
+#: src/ashytv/ui/pages/settings_page.py:203
+msgid "Hardware acceleration"
+msgstr "하드웨어 가속"
+
+#: src/ashytv/ui/pages/settings_page.py:204
+msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
+msgstr "GPU에서 비디오를 디코딩합니다 (VA-API/VDPAU/NVDEC)"
+
+#: src/ashytv/ui/pages/settings_page.py:206
+msgid "Network buffer (seconds)"
+msgstr "네트워크 버퍼 (초)"
+
+#: src/ashytv/ui/pages/settings_page.py:207
+msgid "More buffer = fewer stutters, but more delay when changing channels"
+msgstr "버퍼가 클수록 끊김은 줄지만 채널 변경 시 지연이 늘어납니다"
+
+#: src/ashytv/ui/pages/settings_page.py:213
+msgid "Player shortcuts"
+msgstr "플레이어 단축키"
+
+#: src/ashytv/ui/pages/settings_page.py:214
+msgid "Space"
+msgstr "Space"
+
+#: src/ashytv/ui/pages/settings_page.py:218
+msgid "Esc"
+msgstr "Esc"
+
+#: src/ashytv/ui/pages/settings_page.py:218
+msgid "Exit fullscreen / close"
+msgstr "전체 화면 종료 / 닫기"
+
+#: src/ashytv/ui/pages/settings_page.py:229
+msgid "Hide adult content"
+msgstr "성인 콘텐츠 숨기기"
+
+#: src/ashytv/ui/pages/settings_page.py:230
+msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
+msgstr "“adult”, “XXX”, “+18” 같은 용어가 포함된 카테고리를 숨깁니다"
+
+#: src/ashytv/ui/pages/settings_page.py:236
+msgid "PIN"
+msgstr "PIN"
+
+#: src/ashytv/ui/pages/settings_page.py:236
+msgid "With a PIN set, it is required to show adult content."
+msgstr "PIN을 설정하면 성인 콘텐츠를 표시할 때 PIN이 필요합니다."
+
+#: src/ashytv/ui/pages/settings_page.py:238
+msgid "New PIN (4+ digits)"
+msgstr "새 PIN (4자리 이상)"
+
+#: src/ashytv/ui/pages/settings_page.py:242
+msgid "Remove PIN"
+msgstr "PIN 제거"
+
+#: src/ashytv/ui/pages/settings_page.py:249
+msgid "Clear cache"
+msgstr "캐시 지우기"
+
+#: src/ashytv/ui/pages/settings_page.py:250
+msgid "Removes downloaded logos, covers and guide data"
+msgstr "다운로드한 로고, 커버, 편성표 데이터를 삭제합니다"
+
+#: src/ashytv/ui/pages/settings_page.py:252
+#: src/ashytv/ui/pages/settings_page.py:259
+msgid "Clear"
+msgstr "지우기"
+
+#: src/ashytv/ui/pages/settings_page.py:257
+msgid "Clear history"
+msgstr "기록 지우기"
+
+#: src/ashytv/ui/pages/settings_page.py:258
+msgid "Forgets “Continue Watching” and recent items"
+msgstr "“이어서 시청하기”와 최근 항목을 삭제합니다"
+
+#: src/ashytv/ui/pages/settings_page.py:264
+msgid "Recordings folder"
+msgstr "녹화 폴더"
+
+#: src/ashytv/ui/pages/settings_page.py:276
+#, python-brace-format
+msgid "Version {version}"
+msgstr "버전 {version}"
+
+#: src/ashytv/ui/pages/settings_page.py:279
+msgid "Disclaimer"
+msgstr "면책 조항"
+
+#: src/ashytv/ui/pages/settings_page.py:280
+msgid ""
+"AshyTV does not provide or contain any content: it only plays the playlists "
+"you add."
+msgstr "AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않으며, 사용자가 추가한 재생목록만 재생합니다."
+
+#: src/ashytv/ui/pages/settings_page.py:282
+msgid "More information"
+msgstr "추가 정보"
+
+#: src/ashytv/ui/pages/settings_page.py:305
+#, python-brace-format
+msgid "Removes downloaded logos, covers and guide data — {size}"
+msgstr "다운로드한 로고, 커버, 편성표 데이터를 삭제합니다 — {size}"
+
+#: src/ashytv/ui/pages/settings_page.py:312
+msgid "Cache cleared."
+msgstr "캐시를 지웠습니다."
+
+#: src/ashytv/ui/pages/settings_page.py:317
+msgid "History cleared."
+msgstr "기록을 지웠습니다."
+
+#: src/ashytv/ui/pages/settings_page.py:347
+msgid "Enter PIN"
+msgstr "PIN 입력"
+
+#: src/ashytv/ui/pages/settings_page.py:348
+msgid "Required to show adult content."
+msgstr "성인 콘텐츠를 표시하려면 필요합니다."
+
+#: src/ashytv/ui/pages/settings_page.py:352
+msgid "Unlock"
+msgstr "잠금 해제"
+
+#: src/ashytv/ui/pages/settings_page.py:362
+msgid "Incorrect PIN."
+msgstr "PIN이 올바르지 않습니다."
+
+#: src/ashytv/ui/pages/settings_page.py:370
+msgid "The PIN must have at least 4 digits."
+msgstr "PIN은 4자리 이상이어야 합니다."
+
+#: src/ashytv/ui/pages/settings_page.py:374
+msgid "PIN set."
+msgstr "PIN이 설정되었습니다."
+
+#: src/ashytv/ui/pages/settings_page.py:381
+msgid "PIN removed."
+msgstr "PIN이 제거되었습니다."
+
+#: src/ashytv/ui/player_view.py:19
+msgid "Auto"
+msgstr "자동"
+
+#: src/ashytv/ui/player_view.py:107
+msgid "Back (Esc)"
+msgstr "뒤로 (Esc)"
+
+#: src/ashytv/ui/player_view.py:133 src/ashytv/ui/player_view.py:534
+msgid "Record"
+msgstr "녹화"
+
+#: src/ashytv/ui/player_view.py:134
+msgid "Mini player"
+msgstr "미니 플레이어"
+
+#: src/ashytv/ui/player_view.py:136 src/ashytv/ui/player_view.py:189
+msgid "Fullscreen (F)"
+msgstr "전체 화면 (F)"
+
+#: src/ashytv/ui/player_view.py:163
+msgid "● LIVE"
+msgstr "● 실시간"
+
+#: src/ashytv/ui/player_view.py:168
+msgid "Previous (↑)"
+msgstr "이전 (↑)"
+
+#: src/ashytv/ui/player_view.py:170
+msgid "Back 10 s (←)"
+msgstr "10초 뒤로 (←)"
+
+#: src/ashytv/ui/player_view.py:172
+msgid "Pause (Space)"
+msgstr "일시정지 (Space)"
+
+#: src/ashytv/ui/player_view.py:174
+msgid "Forward 10 s (→)"
+msgstr "10초 앞으로 (→)"
+
+#: src/ashytv/ui/player_view.py:176
+msgid "Next (↓)"
+msgstr "다음 (↓)"
+
+#: src/ashytv/ui/player_view.py:185 src/ashytv/ui/player_view.py:585
+msgid "Subtitles"
+msgstr "자막"
+
+#: src/ashytv/ui/player_view.py:187
+msgid "Audio & Video"
+msgstr "오디오 및 비디오"
+
+#: src/ashytv/ui/player_view.py:213
+msgid "Try again"
+msgstr "다시 시도"
+
+#: src/ashytv/ui/player_view.py:336
+msgid "Buffering…"
+msgstr "버퍼링 중…"
+
+#: src/ashytv/ui/player_view.py:336
+msgid "Loading…"
+msgstr "로드 중…"
+
+#: src/ashytv/ui/player_view.py:338
+msgid "Could not play"
+msgstr "재생할 수 없음"
+
+#: src/ashytv/ui/player_view.py:339
+msgid "The channel may be offline or the connection dropped."
+msgstr "채널이 오프라인이거나 연결이 끊어졌을 수 있습니다."
+
+#: src/ashytv/ui/player_view.py:346
+msgid "Broadcast ended"
+msgstr "방송 종료"
+
+#: src/ashytv/ui/player_view.py:347
+msgid "The signal was interrupted."
+msgstr "신호가 중단되었습니다."
+
+#: src/ashytv/ui/player_view.py:410
+#, python-brace-format
+msgid "Up next: {title}"
+msgstr "다음 방송: {title}"
+
+#: src/ashytv/ui/player_view.py:456 src/ashytv/ui/player_view.py:463
+#, python-brace-format
+msgid "Volume {level}%"
+msgstr "볼륨 {level}%"
+
+#: src/ashytv/ui/player_view.py:515
+msgid "Recording"
+msgstr "녹화"
+
+#: src/ashytv/ui/player_view.py:523
+msgid "Stop recording"
+msgstr "녹화 중지"
+
+#: src/ashytv/ui/player_view.py:526
+msgid "Recording…"
+msgstr "녹화 중…"
+
+#: src/ashytv/ui/player_view.py:536
+msgid "Recording saved to Recordings."
+msgstr "녹화 파일이 녹화 항목에 저장되었습니다."
+
+#: src/ashytv/ui/player_view.py:548
+msgid "Mute (M)"
+msgstr "음소거 (M)"
+
+#: src/ashytv/ui/player_view.py:583
+msgid "Off"
+msgstr "끄기"
+
+#: src/ashytv/ui/player_view.py:588
+msgid "No subtitles in this video."
+msgstr "이 동영상에는 자막이 없습니다."
+
+#: src/ashytv/ui/player_view.py:598
+msgid "Audio"
+msgstr "오디오"
+
+#: src/ashytv/ui/player_view.py:601
+msgid "Aspect ratio"
+msgstr "화면 비율"
+
+#: src/ashytv/ui/player_view.py:605
+msgid "Speed"
+msgstr "속도"
+
+#: src/ashytv/ui/schedule_dialog.py:28
+msgid "No schedule"
+msgstr "편성표 없음"
+
+#: src/ashytv/ui/schedule_dialog.py:39
+msgid "Today"
+msgstr "오늘"
+
+#: src/ashytv/ui/welcome_view.py:49
+msgid "Your TV, your way"
+msgstr "나만의 TV, 나만의 방식"
+
+#: src/ashytv/ui/welcome_view.py:62
+msgid "Watch your favorite channels"
+msgstr "좋아하는 채널을 시청하세요"
+
+#: src/ashytv/ui/welcome_view.py:63
+msgid "Complete entertainment"
+msgstr "완벽한 엔터테인먼트"
+
+#: src/ashytv/ui/welcome_view.py:63
+msgid "Movies & Series"
+msgstr "영화 및 시리즈"
+
+#: src/ashytv/ui/welcome_view.py:64
+msgid "M3U and Xtream Codes support"
+msgstr "M3U 및 Xtream Codes 지원"
+
+#: src/ashytv/ui/welcome_view.py:71
+msgid "Get Started"
+msgstr "시작하기"
+
+#: src/ashytv/ui/welcome_view.py:79
+msgid "AshyTV does not provide any content — bring your own playlist."
+msgstr "AshyTV는 어떤 콘텐츠도 제공하지 않습니다. 나만의 재생목록을 준비하세요."
+
+#: src/ashytv/window.py:71
+msgid "Menu"
+msgstr "메뉴"
+
+#: src/ashytv/window.py:80
+msgid "Search…"
+msgstr "검색…"
+
+#: src/ashytv/window.py:87
+msgid "Keyboard Shortcuts"
+msgstr "키보드 단축키"
+
+#: src/ashytv/window.py:88
+msgid "About AshyTV"
+msgstr "AshyTV 정보"
+
+#: src/ashytv/window.py:91
+msgid "Main Menu"
+msgstr "메인 메뉴"
+
+#: src/ashytv/window.py:93
+msgid "Search (Ctrl+F)"
+msgstr "검색 (Ctrl+F)"
+
+#: src/ashytv/window.py:161
+msgid "The best movies for you"
+msgstr "당신을 위한 최고의 영화"
+
+#: src/ashytv/window.py:166
+msgid "Your favorite series in one place"
+msgstr "좋아하는 시리즈를 한곳에서"
+
+#: src/ashytv/window.py:351
+#, python-brace-format
+msgid "Player unavailable: install mpv and python-mpv ({error})"
+msgstr "플레이어를 사용할 수 없음: mpv와 python-mpv를 설치하세요 ({error})"
+
+#: src/ashytv/window.py:397
+msgid "Next episode…"
+msgstr "다음 에피소드…"
+
+#: src/ashytv/window.py:421
+#, python-brace-format
+msgid "Failed to open: {error}"
+msgstr "열지 못했습니다: {error}"
+
+#: src/ashytv/window.py:425
+msgid "This item is no longer in the playlist."
+msgstr "이 항목은 더 이상 재생목록에 없습니다."
+
+#: src/ashytv/window.py:456
+msgid "Added to favorites"
+msgstr "즐겨찾기에 추가됨"
+
+#: src/ashytv/window.py:456
+msgid "Removed from favorites"
+msgstr "즐겨찾기에서 제거됨"
+
+#: src/ashytv/window.py:549
+msgid "Please wait: an import is already in progress."
+msgstr "잠시만 기다려 주세요. 이미 가져오기가 진행 중입니다."
+
+#: src/ashytv/window.py:562
+msgid "Importing playlist…"
+msgstr "재생목록 가져오는 중…"
+
+#: src/ashytv/window.py:574
+msgid "Connecting to the Xtream provider…"
+msgstr "Xtream 제공업체에 연결하는 중…"
+
+#: src/ashytv/window.py:588
+msgid "Provider password not found; add the playlist again."
+msgstr "제공업체 비밀번호를 찾을 수 없습니다. 재생목록을 다시 추가하세요."
+
+#: src/ashytv/window.py:592
+msgid "Updating playlist…"
+msgstr "재생목록 업데이트 중…"
+
+#: src/ashytv/window.py:603
+#, python-brace-format
+msgid "{n} item imported."
+msgid_plural "{n} items imported."
+msgstr[0] "{n}개 항목을 가져왔습니다."
+
+#: src/ashytv/window.py:604
+#, python-brace-format
+msgid "Playlist ready: {n} item."
+msgid_plural "Playlist ready: {n} items."
+msgstr[0] "재생목록 준비 완료: {n}개 항목"
+
+#: src/ashytv/window.py:620
+#, python-brace-format
+msgid "Failed: {error}"
+msgstr "실패: {error}"
+
+#: src/ashytv/window.py:621
+#, python-brace-format
+msgid "Import failed: {error}"
+msgstr "가져오기 실패: {error}"
+
+#: src/ashytv/window.py:632
+msgid "Playlist removed."
+msgstr "재생목록이 제거되었습니다."
+
+#: src/ashytv/window.py:674
+#, python-brace-format
+msgid "Guide (EPG) unavailable: {error}"
+msgstr "편성표(EPG)를 사용할 수 없음: {error}"
+
+#: data/org.communitybig.ashytv.desktop.in:3
+#: data/org.communitybig.ashytv.metainfo.xml.in:4
+msgid "AshyTV"
+msgstr "AshyTV"
+
+#: data/org.communitybig.ashytv.desktop.in:4
+msgid "IPTV Player"
+msgstr "IPTV 플레이어"
+
+#: data/org.communitybig.ashytv.desktop.in:5
+msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
+msgstr "나만의 IPTV 재생목록 시청 (M3U 및 Xtream Codes)"
+
+#. Translators: search keywords, separated by semicolons; keep the trailing
+#. semicolon.
+#: data/org.communitybig.ashytv.desktop.in:7
+msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
+msgstr ""
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;텔레비전;실시간;채널;영화;시리즈;편성표;플레이어;"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:5
+msgid "Modern IPTV player for your own playlists"
+msgstr "나만의 재생목록을 위한 최신 IPTV 플레이어"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:9
+msgid "Community Big"
+msgstr "Community Big"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:12
+msgid ""
+"AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
+"Xtream Codes account and browse live channels, an electronic program guide, "
+"movies and series. AshyTV does not provide or include any content."
+msgstr ""
+"AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 Xtream Codes 계정을 가져와"
+" 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다."
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:18
+msgid "Live channels with categories, favorites and now-playing info"
+msgstr "카테고리, 즐겨찾기, 현재 방송 정보를 갖춘 실시간 채널"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:19
+msgid "Program guide (XMLTV) in a time grid"
+msgstr "시간 격자형 프로그램 편성표 (XMLTV)"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:20
+msgid "Movies and series catalog with resume and next episode"
+msgstr "이어보기와 다음 에피소드를 지원하는 영화 및 시리즈 카탈로그"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:21
+msgid ""
+"libmpv playback with hardware decoding, picture-in-picture and recording"
+msgstr "하드웨어 디코딩, 화면 속 화면, 녹화를 지원하는 libmpv 재생"
