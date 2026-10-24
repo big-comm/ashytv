@@ -12,6 +12,7 @@ from .i18n import _, ngettext
 from .models import Channel, Episode, MediaType, PlayItem, Variant
 from .services import epg, http, importer, secrets
 from .services.quality import quality_label
+from .services.gamepad import GamepadInput
 from .services.storage import Storage, collapse_variants
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
 from .ui.detail_dialog import DetailDialog
@@ -135,6 +136,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.add_breakpoint(bp)
 
         self._install_keys()
+        self.gamepad = GamepadInput(self.handle_remote_key)
         self.connect("close-request", self._on_close_request)
         self.connect("notify::fullscreened", self._on_fullscreen_changed)
         self._connect_settings()
@@ -876,6 +878,34 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return True
         return False
 
+    _DIRECTIONS = {Gdk.KEY_Up: Gtk.DirectionType.UP, Gdk.KEY_Down: Gtk.DirectionType.DOWN,
+                   Gdk.KEY_Left: Gtk.DirectionType.LEFT,
+                   Gdk.KEY_Right: Gtk.DirectionType.RIGHT}
+
+    def handle_remote_key(self, keyval: int) -> bool:
+        """A key from a game controller / remote: behave like the keyboard."""
+        if not self.is_active():
+            return False  # another application has the focus
+        dialog = self.get_visible_dialog()
+        if dialog is not None and keyval in (Gdk.KEY_Escape, Gdk.KEY_BackSpace):
+            dialog.close()
+            return True
+        if self._on_key(None, keyval, 0, 0):
+            return True
+        focus = self.get_focus()
+        direction = self._DIRECTIONS.get(keyval)
+        if keyval == Gdk.KEY_Right and self.nav.has_focus_within(focus):
+            return self.focus_page()  # leaving the sidebar enters the content
+        if direction is not None:
+            if focus is None:
+                return self.focus_page() or self.nav.focus_active() or True
+            if self.child_focus(direction):
+                return True
+            return self._on_nav_key(None, keyval, 0, 0)
+        if keyval in (Gdk.KEY_Return, Gdk.KEY_space) and focus is not None:
+            return activate_widget(focus)
+        return self._on_nav_key(None, keyval, 0, 0)
+
     def focus_page(self) -> bool:
         page = self.pages.get(self._current)
         if page is None:
@@ -894,3 +924,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _toast(self, text: str) -> None:
         self.toasts.add_toast(Adw.Toast(title=GLib.markup_escape_text(text), timeout=3))
 
+
+def activate_widget(widget: Gtk.Widget) -> bool:
+    """Activate the focused widget like Enter would.
+
+    Buttons, list rows and list/grid items all bind Enter to their
+    "activate" signal, so widget.activate() covers every case.
+    """
+    return widget.activate()
