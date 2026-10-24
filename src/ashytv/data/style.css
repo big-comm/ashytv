@@ -377,3 +377,15 @@ gridview.ashy-posters > child:focus-visible,
 gridview.ashy-posters > child:focus-visible .ashy-poster-img {
   box-shadow: 0 0 0 3px var(--ashy-accent-2);
 }
+
+/* ---------------- Key caps (Settings → Shortcuts) ---------------- */
+.ashy-keycap {
+  background-color: var(--ashy-panel-2);
+  border: 1px solid var(--ashy-border);
+  border-bottom-width: 2px;
+  border-radius: 7px;
+  padding: 3px 9px;
+  min-width: 14px;
+  font-size: 12px;
+  font-weight: 600;
+}

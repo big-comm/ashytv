@@ -13,12 +13,14 @@ from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, set_autostart
+from .. import shortcuts
 from ._common import page_header
 
 _CATS = [
     ("geral", _("General"), "emblem-system-symbolic"),
     ("aparencia", _("Appearance"), "applications-graphics-symbolic"),
     ("reproducao", _("Playback"), "media-playback-start-symbolic"),
+    ("atalhos", _("Shortcuts"), "input-keyboard-symbolic"),
     ("pais", _("Parental Controls"), "system-lock-screen-symbolic"),
     ("dados", _("Data"), "folder-download-symbolic"),
     ("sobre", _("About"), "dialog-information-symbolic"),
@@ -79,6 +81,7 @@ class SettingsPage(Gtk.Box):
         self.stack.add_named(self._geral(), "geral")
         self.stack.add_named(self._aparencia(), "aparencia")
         self.stack.add_named(self._reproducao(), "reproducao")
+        self.stack.add_named(self._atalhos(), "atalhos")
         self.stack.add_named(self._pais(), "pais")
         self.stack.add_named(self._dados(), "dados")
         self.stack.add_named(self._sobre(), "sobre")
@@ -224,33 +227,26 @@ class SettingsPage(Gtk.Box):
             "cache_secs", int(r.get_value())))
         g.add(buf)
 
-        keys = Adw.PreferencesGroup(title=_("Player shortcuts"))
-        for k, d in [(_("Enter"), _("Channel list")),
-                     ("↑ / ↓", _("Previous/next channel")),
-                     ("0–9", _("Type a channel number")),
-                     (_("Backspace"), _("Last watched channel")),
-                     (_("Space"), _("Pause/resume (also pauses live TV)")),
-                     ("← / →", _("Rewind/forward 10 s")), ("F", _("Fullscreen")),
-                     ("M", _("Mute")), ("+ / −", _("Volume")),
-                     (_("Esc"), _("Exit fullscreen / close"))]:
-            row = Adw.ActionRow(title=d)
-            lbl = Gtk.Label(label=k)
-            lbl.add_css_class("dim-label")
-            row.add_suffix(lbl)
-            keys.add(row)
+        return self._page(g)
+
+    def _atalhos(self) -> Gtk.Widget:
+        groups = []
+        for title, items in shortcuts.KEYBOARD:
+            group = Adw.PreferencesGroup(title=title)
+            for accels, label in items:
+                row = Adw.ActionRow(title=label)
+                row.add_suffix(shortcuts.keys_widget(accels))
+                group.add(row)
+            groups.append(group)
         pad = Adw.PreferencesGroup(
             title=_("Game controller"),
             description=_("Connect a controller to use AshyTV like a TV remote."))
-        for k, d in [(_("D-pad / stick"), _("Move")), ("A", _("Open / confirm")),
-                     ("B", _("Back")), ("X", _("Pause/resume")), ("Y", _("Channel list")),
-                     ("L1 / R1", _("Previous/next channel")),
-                     ("Select", _("Last watched channel"))]:
-            row = Adw.ActionRow(title=d)
-            lbl = Gtk.Label(label=k)
-            lbl.add_css_class("dim-label")
-            row.add_suffix(lbl)
+        for buttons, label in shortcuts.GAMEPAD:
+            row = Adw.ActionRow(title=label)
+            row.add_suffix(shortcuts.keys_widget(buttons, raw=True))
             pad.add(row)
-        return self._page(g, keys, pad)
+        groups.append(pad)
+        return self._page(*groups)
 
     def _pais(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Parental Controls"))

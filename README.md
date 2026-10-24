@@ -173,7 +173,7 @@ through libmanette.
 | <kbd>Enter</kbd> | Open the selected item |
 | <kbd>Backspace</kbd> / <kbd>Esc</kbd> | Back to the menu |
 | <kbd>Menu</kbd> on a group | Move up / down or hide the group |
-| <kbd>Ctrl</kbd>+<kbd>?</kbd> | Keyboard shortcuts |
+| <kbd>Ctrl</kbd>+<kbd>?</kbd> | Keyboard shortcuts (also in **Settings → Shortcuts**) |
 | <kbd>Ctrl</kbd>+<kbd>Q</kbd> | Quit |
 
 **While watching**

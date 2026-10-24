@@ -11,6 +11,7 @@ from .i18n import _
 from .services.logos import logo_loader
 from .services.settings import ACCENTS, Settings
 from .services.storage import Storage
+from .ui import shortcuts
 from .window import AshyTvWindow
 
 _DATA = Path(__file__).parent / "data"
@@ -20,23 +21,6 @@ _SCHEMES = {
     "light": Adw.ColorScheme.FORCE_LIGHT,
     "system": Adw.ColorScheme.DEFAULT,
 }
-_SHORTCUTS = [
-    (_("Navigation"), [("<Primary>f", _("Search (or just start typing)")),
-                       ("Left Right Up Down", _("Move between the menu and the page")),
-                       ("Return", _("Open the selected item")),
-                       ("BackSpace Escape", _("Back to the menu")),
-                       ("<Primary>q", _("Quit"))]),
-    (_("Player"), [("Return", _("Channel list")),
-                   ("Up Down", _("Previous/next channel")),
-                   ("0 1 2 3", _("Type a channel number")),
-                   ("BackSpace", _("Last watched channel")),
-                   ("space", _("Pause/resume (also pauses live TV)")),
-                   ("Left Right", _("Rewind/forward 10 s")),
-                   ("f", _("Fullscreen")), ("m", _("Mute")), ("plus minus", _("Volume")),
-                   ("Escape", _("Exit fullscreen / close the player"))]),
-]
-
-
 class AshyTvApplication(Adw.Application):
     def __init__(self):
         super().__init__(
@@ -163,9 +147,10 @@ class AshyTvApplication(Adw.Application):
 
     def _on_shortcuts(self, *_args) -> None:
         dialog = Adw.ShortcutsDialog()
-        for title, items in _SHORTCUTS:
+        for title, items in shortcuts.KEYBOARD:
             section = Adw.ShortcutsSection(title=title)
-            for accel, label in items:
-                section.add(Adw.ShortcutsItem(title=label, accelerator=accel))
+            for accels, label in items:
+                section.add(Adw.ShortcutsItem(
+                    title=label, accelerator=shortcuts.dialog_accelerator(accels)))
             dialog.add(section)
         dialog.present(self.window)
