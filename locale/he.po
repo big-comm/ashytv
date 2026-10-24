@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -246,9 +246,8 @@ msgid "No schedule"
 msgstr "אין לוח שידורים"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "צפייה"
 
@@ -606,8 +605,7 @@ msgstr "הדבקת הודעת הספק"
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
-msgstr ""
-"הדביקו את הודעת הברכה של הספק: השרת, שם המשתמש והסיסמה ימולאו אוטומטית"
+msgstr "הדביקו את הודעת הברכה של הספק: השרת, שם המשתמש והסיסמה ימולאו אוטומטית"
 
 #: src/ashytv/ui/pages/lists_page.py:117
 msgid "Playlist URL (M3U)"
@@ -1462,8 +1460,7 @@ msgstr "נגן IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "צפו ברשימות ה-IPTV שלכם (M3U ו-Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
 msgstr ""

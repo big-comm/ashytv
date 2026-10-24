@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -96,7 +96,8 @@ msgid ""
 "Import your own playlist — no content is provided by the app."
 msgstr ""
 "Un lecteur IPTV moderne pour le bureau Linux.\n"
-"Importez votre propre liste de lecture — l’application ne fournit aucun contenu."
+"Importez votre propre liste de lecture — l’application ne fournit aucun "
+"contenu."
 
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
@@ -246,9 +247,8 @@ msgid "No schedule"
 msgstr "Aucune programmation"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Regarder"
 
@@ -610,8 +610,8 @@ msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr ""
-"Collez le message de bienvenue du fournisseur : le serveur, l’identifiant et"
-" le mot de passe sont renseignés automatiquement"
+"Collez le message de bienvenue du fournisseur : le serveur, l’identifiant et "
+"le mot de passe sont renseignés automatiquement"
 
 #: src/ashytv/ui/pages/lists_page.py:117
 msgid "Playlist URL (M3U)"
@@ -715,8 +715,8 @@ msgstr ""
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
-"Informations du fournisseur renseignées. Vérifiez-les et cliquez sur « "
-"Enregistrer et se connecter »."
+"Informations du fournisseur renseignées. Vérifiez-les et cliquez sur "
+"« Enregistrer et se connecter »."
 
 #: src/ashytv/ui/pages/lists_page.py:356
 msgid "Choose an .m3u file."
@@ -877,8 +877,7 @@ msgstr "Transparence"
 
 #: src/ashytv/ui/pages/settings_page.py:197
 msgid "Makes the window background translucent (depends on the compositor)."
-msgstr ""
-"Rend l’arrière-plan de la fenêtre translucide (dépend du compositeur)."
+msgstr "Rend l’arrière-plan de la fenêtre translucide (dépend du compositeur)."
 
 #: src/ashytv/ui/pages/settings_page.py:199
 msgid "Translucent window"
@@ -1068,8 +1067,7 @@ msgstr[1] ""
 #: src/ashytv/ui/pages/settings_page.py:348
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
-msgstr ""
-"Supprime les logos, jaquettes et données du guide téléchargés — {size}"
+msgstr "Supprime les logos, jaquettes et données du guide téléchargés — {size}"
 
 #: src/ashytv/ui/pages/settings_page.py:356
 msgid "Cache cleared."
@@ -1487,12 +1485,10 @@ msgstr "Lecteur IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Regardez vos propres listes de lecture IPTV (M3U et Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lecteur;direct;chaînes;films;séries;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lecteur;direct;chaînes;films;séries;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"

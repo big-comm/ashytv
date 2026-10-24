@@ -30,7 +30,7 @@ a program guide, movies and series in a fast, good-looking app.
 - [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Getting started](#getting-started)
-- [Keyboard shortcuts](#keyboard-shortcuts)
+- [Keyboard, remote and game controller](#keyboard-remote-and-game-controller)
 - [Settings and data](#settings-and-data)
 - [Translations](#translations)
 - [Development](#development)
@@ -59,8 +59,12 @@ a program guide, movies and series in a fast, good-looking app.
   current program with its progress.
 - **One entry per channel**: "News FHD", "News HD" and "News SD" are grouped
   into a single channel, with its qualities shown as a badge.
-- **Program guide** (XMLTV) in a time grid with a "now" line, day picker and
-  hour navigation; per-channel schedule.
+- **Program guide** (XMLTV) right in the Channels page (List | Guide switch):
+  a time grid with a "now" line, day picker and hour navigation, showing the
+  selected group; per-channel schedule.
+- **Reminders**: "Remind me" on a future programme sends a notification with a
+  Watch button a minute before it starts.
+- Hide or reorder channel groups (right click or the Menu key).
 - **Movies & series** catalog with posters, ratings, years, new releases,
   trending, search and categories; series with seasons, episodes and an
   automatic next episode.
@@ -70,6 +74,12 @@ a program guide, movies and series in a fast, good-looking app.
 - **Automatic quality**: steps down to a lighter variant when playback keeps
   stalling, back up after a stable period, and falls back automatically when a
   variant is offline. Any quality can also be picked by hand.
+- **Channel list over the video** (TiviMate style): press Enter while watching
+  to browse channels with their current programme and the highlighted
+  channel's schedule — the video keeps playing.
+- **Timeshift**: pause and rewind live TV inside the buffer, see how far behind
+  live you are and jump back with **Go live**.
+- Type a channel number like on a TV remote; jump back to the last channel.
 - Hardware decoding and a configurable network buffer.
 - Channel zapping, ±10 s seeking, volume, subtitles, audio tracks, aspect
   ratio and playback speed.
@@ -79,7 +89,9 @@ a program guide, movies and series in a fast, good-looking app.
 
 **Look & feel**
 - Dark and light themes, ten accent colors and translucent panels.
-- Adaptive layout that collapses the sidebar on narrow windows.
+- Collapsible, icons-only sidebar; adaptive layout for narrow windows.
+- **Made for the couch**: everything works with the keyboard, a TV remote or a
+  game controller; just start typing to search.
 - Parental controls (hide adult categories, optional PIN).
 - Translated into 29 languages.
 
@@ -89,9 +101,9 @@ a program guide, movies and series in a fast, good-looking app.
 |:--:|:--:|
 | ![Welcome](docs/screenshots/welcome.png)<br>Welcome | ![Live channels](docs/screenshots/channels.png)<br>Live channels |
 | ![Program guide](docs/screenshots/guide.png)<br>Program guide | ![Player](docs/screenshots/player.png)<br>Player |
+| ![Channel list over the video](docs/screenshots/channel-list.png)<br>Channel list over the video | ![Settings](docs/screenshots/settings.png)<br>Settings |
 | ![Movies](docs/screenshots/movies.png)<br>Movies | ![Series](docs/screenshots/series.png)<br>Series |
 | ![Series details](docs/screenshots/series-detail.png)<br>Series details | ![Playlists](docs/screenshots/lists.png)<br>Playlists |
-| ![Settings](docs/screenshots/settings.png)<br>Settings | |
 
 ## Installation
 
@@ -117,6 +129,7 @@ Install the runtime dependencies with your distribution's package manager:
 | libmpv + python-mpv | `mpv python-mpv` | `libmpv2` + `pip install python-mpv` | `mpv-libs python3-mpv` |
 | librsvg (SVG artwork) | `librsvg` | `librsvg2-common` | `librsvg2` |
 | libsecret *(optional)* | `libsecret` | `gir1.2-secret-1` | `libsecret` |
+| libmanette *(optional, game controllers)* | `libmanette` | `gir1.2-manette-0.2` | `libmanette` |
 
 Then run it straight from the source tree:
 
@@ -145,20 +158,50 @@ password `demo`):
 python3 tools/demo/demo_server.py
 ```
 
-## Keyboard shortcuts
+## Keyboard, remote and game controller
+
+Everything can be done without a mouse. Remotes that act as a keyboard
+(USB / HDMI-CEC) work out of the box, and game controllers are supported
+through libmanette.
+
+**Anywhere**
 
 | Key | Action |
 |---|---|
-| <kbd>Space</kbd> | Play / pause |
+| *start typing* or <kbd>Ctrl</kbd>+<kbd>F</kbd> | Search the current page |
+| <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> | Move between the menu and the page |
+| <kbd>Enter</kbd> | Open the selected item |
+| <kbd>Backspace</kbd> / <kbd>Esc</kbd> | Back to the menu |
+| <kbd>Menu</kbd> on a group | Move up / down or hide the group |
+| <kbd>Ctrl</kbd>+<kbd>?</kbd> | Keyboard shortcuts |
+| <kbd>Ctrl</kbd>+<kbd>Q</kbd> | Quit |
+
+**While watching**
+
+| Key | Action |
+|---|---|
+| <kbd>Enter</kbd> | Channel list over the video |
 | <kbd>↑</kbd> / <kbd>↓</kbd> | Previous / next channel (or episode) |
-| <kbd>←</kbd> / <kbd>→</kbd> | Seek −10 s / +10 s |
+| <kbd>0</kbd>–<kbd>9</kbd> | Type a channel number |
+| <kbd>Backspace</kbd> | Last watched channel |
+| <kbd>Space</kbd> | Play / pause (also pauses live TV) |
+| <kbd>←</kbd> / <kbd>→</kbd> | Rewind / forward 10 s (inside the live buffer too) |
 | <kbd>F</kbd> or double click | Toggle fullscreen |
 | <kbd>M</kbd> | Mute |
 | <kbd>+</kbd> / <kbd>−</kbd> / mouse wheel | Volume |
-| <kbd>Esc</kbd> | Leave fullscreen, then close the player |
-| <kbd>Ctrl</kbd>+<kbd>F</kbd> | Search |
-| <kbd>Ctrl</kbd>+<kbd>?</kbd> | Keyboard shortcuts |
-| <kbd>Ctrl</kbd>+<kbd>Q</kbd> | Quit |
+| <kbd>Esc</kbd> | Close the channel list, leave fullscreen, then close the player |
+
+**Game controller**
+
+| Button | Action |
+|---|---|
+| D-pad / left stick | Move (hold to repeat) |
+| A | Open / confirm |
+| B | Back |
+| X | Play / pause |
+| Y | Channel list |
+| L1 / R1 | Previous / next channel |
+| Select | Last watched channel |
 
 ## Settings and data
 

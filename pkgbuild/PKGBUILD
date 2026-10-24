@@ -13,6 +13,7 @@ depends=(
 )
 optdepends=(
     'libsecret: store Xtream passwords in the system keyring'
+    'libmanette: use a game controller as a remote'
 )
 makedepends=(
     'git'

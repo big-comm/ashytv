@@ -38,7 +38,7 @@ import gi  # noqa: E402
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Graphene", "1.0")
-from gi.repository import Gio, GLib, Graphene, Gtk  # noqa: E402
+from gi.repository import Gdk, Gio, GLib, Graphene, Gtk  # noqa: E402
 
 import demo_server  # noqa: E402
 from ashytv.application import AshyTvApplication  # noqa: E402
@@ -173,8 +173,8 @@ def page(key: str, name: str, delay: int = 3500, before=None):
 
 page("home", "home", 5000)
 page("channels", "channels")
-page("epg", "guide")
-page("movies", "movies", 5000)
+page("channels", "guide", before=lambda: win().pages["channels"].set_view("guide"))
+page("movies", "movies", 5000, before=lambda: win().pages["channels"].set_view("list"))
 page("series", "series", 5000)
 
 
@@ -196,7 +196,12 @@ def player():
     def capture():
         w.player.mpv.set_pause(True)
         w.player._show_controls(keep=True)
-        after(1200, lambda: (shot("player"), w.player.close(), run_next()))
+        after(1200, channel_list)
+
+    def channel_list():
+        shot("player")
+        w._on_key(None, Gdk.KEY_Return, 0, 0)  # Enter: channel list over the video
+        after(1200, lambda: (shot("channel-list"), w.player.close(), run_next()))
 
     wait(lambda: w.player.mpv.state == "playing", lambda: after(3000, capture), 30)
 

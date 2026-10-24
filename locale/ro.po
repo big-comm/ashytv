@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -15,7 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
 
 #: src/ashytv/application.py:24
 msgid "Navigation"
@@ -246,9 +247,8 @@ msgid "No schedule"
 msgstr "Fără program"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Vizionează"
 
@@ -338,8 +338,7 @@ msgstr "Nu s-a găsit nimic"
 
 #: src/ashytv/ui/pages/catalog_page.py:68
 msgid "Add a playlist in “Playlists” or change the filter."
-msgstr ""
-"Adăugați o listă de redare în „Liste de redare” sau schimbați filtrul."
+msgstr "Adăugați o listă de redare în „Liste de redare” sau schimbați filtrul."
 
 #: src/ashytv/ui/pages/catalog_page.py:87
 #: src/ashytv/ui/pages/channels_page.py:207
@@ -404,8 +403,7 @@ msgstr "Încă nu este nimic aici"
 
 #: src/ashytv/ui/pages/channels_page.py:139
 msgid "Tap the heart on a channel, movie or series to keep it here."
-msgstr ""
-"Atingeți inima de pe un canal, film sau serial pentru a-l păstra aici."
+msgstr "Atingeți inima de pe un canal, film sau serial pentru a-l păstra aici."
 
 #: src/ashytv/ui/pages/channels_page.py:141
 msgid "No channels in this category."
@@ -993,8 +991,8 @@ msgstr "PIN"
 #: src/ashytv/ui/pages/settings_page.py:265
 msgid "With a PIN set, it is required to show adult content."
 msgstr ""
-"Dacă este setat un PIN, acesta este necesar pentru a afișa conținutul pentru"
-" adulți."
+"Dacă este setat un PIN, acesta este necesar pentru a afișa conținutul pentru "
+"adulți."
 
 #: src/ashytv/ui/pages/settings_page.py:267
 msgid "New PIN (4+ digits)"
@@ -1061,8 +1059,8 @@ msgstr[1] ""
 "{n} grupuri ascunse — faceți clic dreapta pe un grup din Canale pentru a-l "
 "ascunde"
 msgstr[2] ""
-"{n} de grupuri ascunse — faceți clic dreapta pe un grup din Canale pentru "
-"a-l ascunde"
+"{n} de grupuri ascunse — faceți clic dreapta pe un grup din Canale pentru a-"
+"l ascunde"
 
 #: src/ashytv/ui/pages/settings_page.py:348
 #, python-brace-format
@@ -1485,12 +1483,10 @@ msgstr "Player IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Urmăriți propriile liste IPTV (M3U și Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;televiziune;direct;canale;filme;seriale;ghid;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;televiziune;direct;canale;filme;seriale;ghid;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1527,8 +1523,7 @@ msgstr "Catalog de filme și seriale cu reluare și episodul următor"
 #: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
-msgstr ""
-"Redare libmpv cu decodare hardware, picture-in-picture și înregistrare"
+msgstr "Redare libmpv cu decodare hardware, picture-in-picture și înregistrare"
 
 #~ msgid "Search"
 #~ msgstr "Căutare"

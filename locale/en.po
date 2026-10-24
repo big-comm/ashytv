@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -247,9 +247,8 @@ msgid "No schedule"
 msgstr "No schedule"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Watch"
 
@@ -1465,8 +1464,7 @@ msgstr "IPTV Player"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Watch your own IPTV playlists (M3U and Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
 msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"

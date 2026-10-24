@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -15,7 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/ashytv/application.py:24
 msgid "Navigation"
@@ -246,9 +247,8 @@ msgid "No schedule"
 msgstr "Немає розкладу"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Дивитися"
 
@@ -607,8 +607,8 @@ msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr ""
-"Вставте вітальне повідомлення провайдера: сервер, ім’я користувача та пароль"
-" заповняться автоматично"
+"Вставте вітальне повідомлення провайдера: сервер, ім’я користувача та пароль "
+"заповняться автоматично"
 
 #: src/ashytv/ui/pages/lists_page.py:117
 msgid "Playlist URL (M3U)"
@@ -1051,11 +1051,11 @@ msgstr "Докладніше"
 msgid "{n} group hidden — right-click a group in Channels to hide it"
 msgid_plural "{n} groups hidden — right-click a group in Channels to hide it"
 msgstr[0] ""
-"Приховано {n} групу — клацніть групу правою кнопкою миші в розділі «Канали»,"
-" щоб приховати її"
+"Приховано {n} групу — клацніть групу правою кнопкою миші в розділі «Канали», "
+"щоб приховати її"
 msgstr[1] ""
-"Приховано {n} групи — клацніть групу правою кнопкою миші в розділі «Канали»,"
-" щоб приховати її"
+"Приховано {n} групи — клацніть групу правою кнопкою миші в розділі «Канали», "
+"щоб приховати її"
 msgstr[2] ""
 "Приховано {n} груп — клацніть групу правою кнопкою миші в розділі «Канали», "
 "щоб приховати її"
@@ -1063,8 +1063,7 @@ msgstr[2] ""
 #: src/ashytv/ui/pages/settings_page.py:348
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
-msgstr ""
-"Видаляє завантажені логотипи, обкладинки та дані телепрограми — {size}"
+msgstr "Видаляє завантажені логотипи, обкладинки та дані телепрограми — {size}"
 
 #: src/ashytv/ui/pages/settings_page.py:356
 msgid "Cache cleared."
@@ -1481,12 +1480,10 @@ msgstr "IPTV-програвач"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Дивіться власні IPTV-плейлисти (M3U та Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;програвач;тб;телебачення;ефір;канали;фільми;серіали;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;програвач;тб;телебачення;ефір;канали;фільми;серіали;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1524,8 +1521,8 @@ msgstr ""
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
-"Відтворення через libmpv з апаратним декодуванням, «картинкою в картинці» та"
-" записом"
+"Відтворення через libmpv з апаратним декодуванням, «картинкою в картинці» та "
+"записом"
 
 #~ msgid "Search"
 #~ msgstr "Пошук"

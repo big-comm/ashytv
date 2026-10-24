@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:08-0300\n"
+"POT-Creation-Date: 2026-10-24 19:14-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -246,9 +246,8 @@ msgid "No schedule"
 msgstr "Žiadny program"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434
-#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
-#: src/ashytv/window.py:853
+#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:847 src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Sledovať"
 
@@ -954,8 +953,7 @@ msgstr "Herný ovládač"
 
 #: src/ashytv/ui/pages/settings_page.py:243
 msgid "Connect a controller to use AshyTV like a TV remote."
-msgstr ""
-"Pripojte ovládač a používajte AshyTV ako televízne diaľkové ovládanie."
+msgstr "Pripojte ovládač a používajte AshyTV ako televízne diaľkové ovládanie."
 
 #: src/ashytv/ui/pages/settings_page.py:244
 msgid "D-pad / stick"
@@ -1481,12 +1479,10 @@ msgstr "IPTV prehrávač"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Sledujte vlastné IPTV playlisty (M3U a Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;prehrávač;televízia;naživo;kanály;filmy;seriály;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;prehrávač;televízia;naživo;kanály;filmy;seriály;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
