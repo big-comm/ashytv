@@ -21,10 +21,18 @@ _SCHEMES = {
     "system": Adw.ColorScheme.DEFAULT,
 }
 _SHORTCUTS = [
-    (_("Navigation"), [("<Primary>f", _("Search")), ("<Primary>q", _("Quit"))]),
-    (_("Player"), [("space", _("Pause/resume")), ("Up Down", _("Previous/next channel")),
-                   ("Left Right", _("Rewind/forward 10 s")), ("f", _("Fullscreen")),
-                   ("m", _("Mute")), ("plus minus", _("Volume")),
+    (_("Navigation"), [("<Primary>f", _("Search (or just start typing)")),
+                       ("Left Right Up Down", _("Move between the menu and the page")),
+                       ("Return", _("Open the selected item")),
+                       ("BackSpace Escape", _("Back to the menu")),
+                       ("<Primary>q", _("Quit"))]),
+    (_("Player"), [("Return", _("Channel list")),
+                   ("Up Down", _("Previous/next channel")),
+                   ("0 1 2 3", _("Type a channel number")),
+                   ("BackSpace", _("Last watched channel")),
+                   ("space", _("Pause/resume (also pauses live TV)")),
+                   ("Left Right", _("Rewind/forward 10 s")),
+                   ("f", _("Fullscreen")), ("m", _("Mute")), ("plus minus", _("Volume")),
                    ("Escape", _("Exit fullscreen / close the player"))]),
 ]
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:53-0300\n"
+"POT-Creation-Date: 2026-10-24 19:08-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -15,75 +15,100 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: src/ashytv/application.py:24
 msgid "Navigation"
 msgstr "Навигация"
 
-#: src/ashytv/application.py:24 src/ashytv/window.py:92
+#: src/ashytv/application.py:24
+msgid "Search (or just start typing)"
+msgstr "Поиск (или просто начните вводить)"
+
+#: src/ashytv/application.py:25
+msgid "Move between the menu and the page"
+msgstr "Переключение между меню и страницей"
+
+#: src/ashytv/application.py:26
+msgid "Open the selected item"
+msgstr "Открыть выбранный элемент"
+
+#: src/ashytv/application.py:27
+msgid "Back to the menu"
+msgstr "Назад в меню"
+
+#: src/ashytv/application.py:28 src/ashytv/window.py:95
 msgid "Quit"
 msgstr "Выход"
 
-#: src/ashytv/application.py:24
-msgid "Search"
-msgstr "Поиск"
+#: src/ashytv/application.py:29 src/ashytv/ui/pages/settings_page.py:228
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Channel list"
+msgstr "Список каналов"
 
-#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:221
-msgid "Pause/resume"
-msgstr "Пауза/продолжить"
-
-#: src/ashytv/application.py:25
+#: src/ashytv/application.py:29
 msgid "Player"
 msgstr "Плеер"
 
-#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:222
+#: src/ashytv/application.py:30 src/ashytv/ui/pages/settings_page.py:229
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Previous/next channel"
 msgstr "Предыдущий/следующий канал"
 
-#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:223
-msgid "Fullscreen"
-msgstr "Полноэкранный режим"
+#: src/ashytv/application.py:31 src/ashytv/ui/pages/settings_page.py:230
+msgid "Type a channel number"
+msgstr "Введите номер канала"
 
-#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:223
+#: src/ashytv/application.py:32 src/ashytv/ui/pages/settings_page.py:231
+#: src/ashytv/ui/pages/settings_page.py:247
+msgid "Last watched channel"
+msgstr "Последний просмотренный канал"
+
+#: src/ashytv/application.py:33 src/ashytv/ui/pages/settings_page.py:232
+msgid "Pause/resume (also pauses live TV)"
+msgstr "Пауза/продолжить (также ставит на паузу прямой эфир)"
+
+#: src/ashytv/application.py:34 src/ashytv/ui/pages/settings_page.py:233
 msgid "Rewind/forward 10 s"
 msgstr "Перемотка назад/вперёд на 10 с"
 
-#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:224
-#: src/ashytv/ui/player_view.py:565
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:233
+msgid "Fullscreen"
+msgstr "Полноэкранный режим"
+
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/player_view.py:701
 msgid "Mute"
 msgstr "Без звука"
 
-#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:224
-#: src/ashytv/ui/player_view.py:200
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/player_view.py:221
 msgid "Volume"
 msgstr "Громкость"
 
-#: src/ashytv/application.py:28
+#: src/ashytv/application.py:36
 msgid "Exit fullscreen / close the player"
 msgstr "Выйти из полноэкранного режима / закрыть плеер"
 
-#: src/ashytv/application.py:140
+#: src/ashytv/application.py:157
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
 msgstr ""
 "Современный IPTV-плеер для рабочего стола Linux.\n"
-"Импортируйте собственный плейлист — приложение не предоставляет никакого "
-"контента."
+"Импортируйте собственный плейлист — приложение не предоставляет никакого контента."
 
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
 msgstr "Прямой эфир"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:14
-#: src/ashytv/ui/pages/channels_page.py:24 src/ashytv/window.py:163
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:13
+#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:174
 msgid "Movies"
 msgstr "Фильмы"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:15
-#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:168
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:14
+#: src/ashytv/ui/pages/channels_page.py:26 src/ashytv/window.py:179
 msgid "Series"
 msgstr "Сериалы"
 
@@ -96,7 +121,7 @@ msgstr "Без названия"
 msgid "S{season} • E{episode}"
 msgstr "С{season} • Э{episode}"
 
-#: src/ashytv/player/mpv_widget.py:330
+#: src/ashytv/player/mpv_widget.py:354
 #, python-brace-format
 msgid "Track {number}"
 msgstr "Дорожка {number}"
@@ -112,8 +137,8 @@ msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
 "or the login may be invalid."
 msgstr ""
-"Сервер отклонил запрос (HTTP {code}). Возможно, срок действия аккаунта истёк "
-"или данные для входа недействительны."
+"Сервер отклонил запрос (HTTP {code}). Возможно, срок действия аккаунта истёк"
+" или данные для входа недействительны."
 
 #: src/ashytv/services/http.py:53
 #, python-brace-format
@@ -153,43 +178,43 @@ msgstr "Подключение к провайдеру…"
 msgid "The provider returned no content"
 msgstr "Провайдер не вернул содержимое"
 
-#: src/ashytv/services/settings.py:38
+#: src/ashytv/services/settings.py:42
 msgid "Blue"
 msgstr "Синий"
 
-#: src/ashytv/services/settings.py:39
+#: src/ashytv/services/settings.py:43
 msgid "Teal"
 msgstr "Бирюзовый"
 
-#: src/ashytv/services/settings.py:40
+#: src/ashytv/services/settings.py:44
 msgid "Green"
 msgstr "Зелёный"
 
-#: src/ashytv/services/settings.py:41
+#: src/ashytv/services/settings.py:45
 msgid "Yellow"
 msgstr "Жёлтый"
 
-#: src/ashytv/services/settings.py:42
+#: src/ashytv/services/settings.py:46
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: src/ashytv/services/settings.py:43
+#: src/ashytv/services/settings.py:47
 msgid "Red"
 msgstr "Красный"
 
-#: src/ashytv/services/settings.py:44
+#: src/ashytv/services/settings.py:48
 msgid "Pink"
 msgstr "Розовый"
 
-#: src/ashytv/services/settings.py:45
+#: src/ashytv/services/settings.py:49
 msgid "Purple"
 msgstr "Фиолетовый"
 
-#: src/ashytv/services/settings.py:46
+#: src/ashytv/services/settings.py:50
 msgid "Slate"
 msgstr "Сланцевый"
 
-#: src/ashytv/services/settings.py:47
+#: src/ashytv/services/settings.py:51
 msgid "Emerald"
 msgstr "Изумрудный"
 
@@ -207,8 +232,23 @@ msgstr "Неверное имя пользователя или пароль"
 msgid "Account status: {status}"
 msgstr "Статус аккаунта: {status}"
 
+#: src/ashytv/ui/channel_overlay.py:40 src/ashytv/ui/nav_sidebar.py:12
+#: src/ashytv/ui/pages/settings_page.py:136
+msgid "Channels"
+msgstr "Каналы"
+
+#: src/ashytv/ui/channel_overlay.py:42
+msgid "Enter: watch  •  Esc: close"
+msgstr "Enter: смотреть  •  Esc: закрыть"
+
+#: src/ashytv/ui/channel_overlay.py:149 src/ashytv/ui/schedule_dialog.py:28
+msgid "No schedule"
+msgstr "Нет расписания"
+
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:434
+#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
+#: src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Смотреть"
 
@@ -245,12 +285,12 @@ msgid "Episode {n}"
 msgstr "Серия {n}"
 
 #: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:195
-#: src/ashytv/ui/pages/channels_page.py:337
+#: src/ashytv/ui/pages/channels_page.py:435
 msgid "Remove from favorites"
 msgstr "Удалить из избранного"
 
 #: src/ashytv/ui/detail_dialog.py:262 src/ashytv/ui/pages/catalog_page.py:196
-#: src/ashytv/ui/pages/channels_page.py:337
+#: src/ashytv/ui/pages/channels_page.py:435
 msgid "Add to favorites"
 msgstr "Добавить в избранное"
 
@@ -266,31 +306,31 @@ msgstr "Стоп"
 msgid "Home"
 msgstr "Главная"
 
-#: src/ashytv/ui/nav_sidebar.py:12 src/ashytv/ui/pages/settings_page.py:136
-msgid "Channels"
-msgstr "Каналы"
-
-#: src/ashytv/ui/nav_sidebar.py:13
-msgid "Guide"
-msgstr "Телепрограмма"
-
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:54
-#: src/ashytv/ui/pages/channels_page.py:165
-#: src/ashytv/ui/pages/channels_page.py:188
+#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:58
+#: src/ashytv/ui/pages/channels_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:230
 msgid "Favorites"
 msgstr "Избранное"
 
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/recordings_page.py:25
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/recordings_page.py:25
 msgid "Recordings"
 msgstr "Записи"
 
-#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/lists_page.py:36
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:36
 msgid "Playlists"
 msgstr "Плейлисты"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/settings_page.py:58
+#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:58
 msgid "Settings"
 msgstr "Параметры"
+
+#: src/ashytv/ui/nav_sidebar.py:56 src/ashytv/ui/nav_sidebar.py:92
+msgid "Collapse menu"
+msgstr "Свернуть меню"
+
+#: src/ashytv/ui/nav_sidebar.py:92
+msgid "Expand menu"
+msgstr "Развернуть меню"
 
 #: src/ashytv/ui/pages/catalog_page.py:67
 msgid "Nothing found"
@@ -301,7 +341,7 @@ msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Добавьте плейлист в разделе «Плейлисты» или измените фильтр."
 
 #: src/ashytv/ui/pages/catalog_page.py:87
-#: src/ashytv/ui/pages/channels_page.py:165
+#: src/ashytv/ui/pages/channels_page.py:207
 msgid "All"
 msgstr "Все"
 
@@ -313,80 +353,100 @@ msgstr "Новинки"
 msgid "Trending"
 msgstr "В тренде"
 
-#: src/ashytv/ui/pages/channels_page.py:20
+#: src/ashytv/ui/pages/channels_page.py:21
 msgid "Sports"
 msgstr "Спорт"
 
-#: src/ashytv/ui/pages/channels_page.py:22
+#: src/ashytv/ui/pages/channels_page.py:23
 msgid "News"
 msgstr "Новости"
 
-#: src/ashytv/ui/pages/channels_page.py:23
+#: src/ashytv/ui/pages/channels_page.py:24
 msgid "Free-to-air"
 msgstr "Эфирные"
 
-#: src/ashytv/ui/pages/channels_page.py:26
+#: src/ashytv/ui/pages/channels_page.py:27
 msgid "Kids"
 msgstr "Детские"
 
-#: src/ashytv/ui/pages/channels_page.py:28
+#: src/ashytv/ui/pages/channels_page.py:29
 msgid "Documentaries"
 msgstr "Документальные"
 
-#: src/ashytv/ui/pages/channels_page.py:30
+#: src/ashytv/ui/pages/channels_page.py:31
 msgid "Music"
 msgstr "Музыка"
 
-#: src/ashytv/ui/pages/channels_page.py:54
+#: src/ashytv/ui/pages/channels_page.py:58
 msgid "TV Channels"
 msgstr "ТВ-каналы"
 
-#: src/ashytv/ui/pages/channels_page.py:55
+#: src/ashytv/ui/pages/channels_page.py:59
 msgid "Channels, movies and series you marked"
 msgstr "Отмеченные вами каналы, фильмы и сериалы"
 
-#: src/ashytv/ui/pages/channels_page.py:56
+#: src/ashytv/ui/pages/channels_page.py:60
 msgid "All your channels organized by category"
 msgstr "Все ваши каналы по категориям"
 
-#: src/ashytv/ui/pages/channels_page.py:109
+#: src/ashytv/ui/pages/channels_page.py:72
+msgid "List"
+msgstr "Список"
+
+#: src/ashytv/ui/pages/channels_page.py:73
+msgid "Guide"
+msgstr "Телепрограмма"
+
+#: src/ashytv/ui/pages/channels_page.py:138
 msgid "Nothing here yet"
 msgstr "Пока здесь пусто"
 
-#: src/ashytv/ui/pages/channels_page.py:110
+#: src/ashytv/ui/pages/channels_page.py:139
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr ""
 "Нажмите на сердечко у канала, фильма или сериала, чтобы сохранить его здесь."
 
-#: src/ashytv/ui/pages/channels_page.py:112
+#: src/ashytv/ui/pages/channels_page.py:141
 msgid "No channels in this category."
 msgstr "В этой категории нет каналов."
 
-#: src/ashytv/ui/pages/channels_page.py:165
+#: src/ashytv/ui/pages/channels_page.py:207
 msgid "Recent"
 msgstr "Недавние"
 
-#: src/ashytv/ui/pages/channels_page.py:192
+#: src/ashytv/ui/pages/channels_page.py:234
 msgid "Recently watched"
 msgstr "Недавно просмотренные"
 
-#: src/ashytv/ui/pages/channels_page.py:197
+#: src/ashytv/ui/pages/channels_page.py:239
 msgid "All Channels"
 msgstr "Все каналы"
 
-#: src/ashytv/ui/pages/channels_page.py:198
+#: src/ashytv/ui/pages/channels_page.py:240
 msgid "All in this category"
 msgstr "Всё в этой категории"
 
-#: src/ashytv/ui/pages/channels_page.py:302 src/ashytv/ui/player_view.py:146
+#: src/ashytv/ui/pages/channels_page.py:296
+msgid "Move up"
+msgstr "Переместить вверх"
+
+#: src/ashytv/ui/pages/channels_page.py:297
+msgid "Move down"
+msgstr "Переместить вниз"
+
+#: src/ashytv/ui/pages/channels_page.py:298
+msgid "Hide group"
+msgstr "Скрыть группу"
+
+#: src/ashytv/ui/pages/channels_page.py:400 src/ashytv/ui/player_view.py:159
 msgid "Favorite"
 msgstr "Избранное"
 
-#: src/ashytv/ui/pages/channels_page.py:309
+#: src/ashytv/ui/pages/channels_page.py:407
 msgid "More options"
 msgstr "Дополнительно"
 
-#: src/ashytv/ui/pages/channels_page.py:340
+#: src/ashytv/ui/pages/channels_page.py:438
 msgid "View schedule"
 msgstr "Показать расписание"
 
@@ -405,33 +465,41 @@ msgstr "Завтра, {date}"
 msgid "Yesterday, {date}"
 msgstr "Вчера, {date}"
 
-#: src/ashytv/ui/pages/epg_page.py:55
+#: src/ashytv/ui/pages/epg_page.py:62
 msgid "Program Guide"
 msgstr "Телепрограмма"
 
-#: src/ashytv/ui/pages/epg_page.py:56
+#: src/ashytv/ui/pages/epg_page.py:63
 msgid "See what's on now and what's next"
 msgstr "Что идёт сейчас и что дальше"
 
-#: src/ashytv/ui/pages/epg_page.py:74
+#: src/ashytv/ui/pages/epg_page.py:83
 msgid "1 hour earlier"
 msgstr "На 1 час раньше"
 
-#: src/ashytv/ui/pages/epg_page.py:77
+#: src/ashytv/ui/pages/epg_page.py:86
 msgid "1 hour later"
 msgstr "На 1 час позже"
 
-#: src/ashytv/ui/pages/epg_page.py:80
+#: src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Сейчас"
 
-#: src/ashytv/ui/pages/epg_page.py:120
+#: src/ashytv/ui/pages/epg_page.py:129
 msgid "Guide unavailable"
 msgstr "Телепрограмма недоступна"
 
-#: src/ashytv/ui/pages/epg_page.py:121
+#: src/ashytv/ui/pages/epg_page.py:130
 msgid "The guide appears here once your provider's EPG loads."
 msgstr "Телепрограмма появится после загрузки EPG от вашего провайдера."
+
+#: src/ashytv/ui/pages/epg_page.py:350
+msgid "Cancel reminder"
+msgstr "Отменить напоминание"
+
+#: src/ashytv/ui/pages/epg_page.py:350
+msgid "Remind me"
+msgstr "Напомнить"
 
 #: src/ashytv/ui/pages/home_page.py:57
 msgid "Continue Watching"
@@ -560,8 +628,8 @@ msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
 msgstr ""
-"Ваши данные хранятся только на вашем устройстве. Пароли хранятся в системной "
-"связке ключей."
+"Ваши данные хранятся только на вашем устройстве. Пароли хранятся в системной"
+" связке ключей."
 
 #: src/ashytv/ui/pages/lists_page.py:162
 msgid "Your Playlists"
@@ -621,7 +689,7 @@ msgstr ""
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
-#: src/ashytv/ui/pages/settings_page.py:366
+#: src/ashytv/ui/pages/settings_page.py:395
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -669,7 +737,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "Используйте кнопку ● в плеере, чтобы записать текущую передачу"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:273
+#: src/ashytv/ui/pages/settings_page.py:295
 msgid "Open folder"
 msgstr "Открыть папку"
 
@@ -699,27 +767,27 @@ msgid "General"
 msgstr "Общие"
 
 #: src/ashytv/ui/pages/settings_page.py:20
-#: src/ashytv/ui/pages/settings_page.py:155
+#: src/ashytv/ui/pages/settings_page.py:162
 msgid "Appearance"
 msgstr "Оформление"
 
 #: src/ashytv/ui/pages/settings_page.py:21
-#: src/ashytv/ui/pages/settings_page.py:206
+#: src/ashytv/ui/pages/settings_page.py:213
 msgid "Playback"
 msgstr "Воспроизведение"
 
 #: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Parental Controls"
 msgstr "Родительский контроль"
 
 #: src/ashytv/ui/pages/settings_page.py:23
-#: src/ashytv/ui/pages/settings_page.py:255
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Data"
 msgstr "Данные"
 
 #: src/ashytv/ui/pages/settings_page.py:24
-#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:303
 msgid "About"
 msgstr "О приложении"
 
@@ -755,23 +823,31 @@ msgstr "Объединять качества одного канала"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "Показывает «News FHD», «News HD» и «News SD» как один канал"
 
-#: src/ashytv/ui/pages/settings_page.py:140 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:139
+msgid "Hidden groups"
+msgstr "Скрытые группы"
+
+#: src/ashytv/ui/pages/settings_page.py:140
+msgid "Show all"
+msgstr "Показать все"
+
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV-плейлисты"
 
-#: src/ashytv/ui/pages/settings_page.py:141
+#: src/ashytv/ui/pages/settings_page.py:148
 msgid "Reload playlists automatically"
 msgstr "Автоматически перезагружать плейлисты"
 
-#: src/ashytv/ui/pages/settings_page.py:142
+#: src/ashytv/ui/pages/settings_page.py:149
 msgid "Updates channels and catalog when the app opens"
 msgstr "Обновляет каналы и каталог при запуске приложения"
 
-#: src/ashytv/ui/pages/settings_page.py:143
+#: src/ashytv/ui/pages/settings_page.py:150
 msgid "Check every"
 msgstr "Проверять каждые"
 
-#: src/ashytv/ui/pages/settings_page.py:145
+#: src/ashytv/ui/pages/settings_page.py:152
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
@@ -779,149 +855,185 @@ msgstr[0] "{h} час"
 msgstr[1] "{h} часа"
 msgstr[2] "{h} часов"
 
-#: src/ashytv/ui/pages/settings_page.py:156
+#: src/ashytv/ui/pages/settings_page.py:163
 msgid "Theme"
 msgstr "Тема"
 
-#: src/ashytv/ui/pages/settings_page.py:166
+#: src/ashytv/ui/pages/settings_page.py:173
 msgid "Accent Color"
 msgstr "Цвет акцента"
 
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:174
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "Выберите цвет для кнопок, выделения и акцентов."
 
-#: src/ashytv/ui/pages/settings_page.py:189
+#: src/ashytv/ui/pages/settings_page.py:196
 msgid "Transparency"
 msgstr "Прозрачность"
 
-#: src/ashytv/ui/pages/settings_page.py:190
+#: src/ashytv/ui/pages/settings_page.py:197
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "Делает фон окна полупрозрачным (зависит от композитора)."
 
-#: src/ashytv/ui/pages/settings_page.py:192
+#: src/ashytv/ui/pages/settings_page.py:199
 msgid "Translucent window"
 msgstr "Полупрозрачное окно"
 
-#: src/ashytv/ui/pages/settings_page.py:194
+#: src/ashytv/ui/pages/settings_page.py:201
 msgid "Background opacity (%)"
 msgstr "Непрозрачность фона (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:200
+#: src/ashytv/ui/pages/settings_page.py:207
 msgid "Content"
 msgstr "Содержимое"
 
-#: src/ashytv/ui/pages/settings_page.py:201
+#: src/ashytv/ui/pages/settings_page.py:208
 msgid "Show logos and covers"
 msgstr "Показывать логотипы и обложки"
 
-#: src/ashytv/ui/pages/settings_page.py:202
+#: src/ashytv/ui/pages/settings_page.py:209
 msgid "Turn off to save data"
 msgstr "Отключите для экономии трафика"
 
-#: src/ashytv/ui/pages/settings_page.py:207
+#: src/ashytv/ui/pages/settings_page.py:214
 msgid "Applies from the next video you open."
 msgstr "Применяется со следующего открытого видео."
 
-#: src/ashytv/ui/pages/settings_page.py:208 src/ashytv/ui/player_view.py:496
+#: src/ashytv/ui/pages/settings_page.py:215 src/ashytv/ui/player_view.py:632
 msgid "Automatic quality"
 msgstr "Автоматическое качество"
 
-#: src/ashytv/ui/pages/settings_page.py:209
+#: src/ashytv/ui/pages/settings_page.py:216
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "Переключает качество канала в соответствии с вашим подключением"
 
-#: src/ashytv/ui/pages/settings_page.py:210
+#: src/ashytv/ui/pages/settings_page.py:217
 msgid "Hardware acceleration"
 msgstr "Аппаратное ускорение"
 
-#: src/ashytv/ui/pages/settings_page.py:211
+#: src/ashytv/ui/pages/settings_page.py:218
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "Декодирует видео на GPU (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:213
+#: src/ashytv/ui/pages/settings_page.py:220
 msgid "Network buffer (seconds)"
 msgstr "Сетевой буфер (секунды)"
 
-#: src/ashytv/ui/pages/settings_page.py:214
+#: src/ashytv/ui/pages/settings_page.py:221
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr "Больше буфер — меньше рывков, но дольше задержка при смене канала"
 
-#: src/ashytv/ui/pages/settings_page.py:220
+#: src/ashytv/ui/pages/settings_page.py:227
 msgid "Player shortcuts"
 msgstr "Горячие клавиши плеера"
 
-#: src/ashytv/ui/pages/settings_page.py:221
+#: src/ashytv/ui/pages/settings_page.py:228
+msgid "Enter"
+msgstr "Enter"
+
+#: src/ashytv/ui/pages/settings_page.py:231
+msgid "Backspace"
+msgstr "Backspace"
+
+#: src/ashytv/ui/pages/settings_page.py:232
 msgid "Space"
 msgstr "Пробел"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Esc"
 msgstr "Esc"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Exit fullscreen / close"
 msgstr "Выйти из полноэкранного режима / закрыть"
 
-#: src/ashytv/ui/pages/settings_page.py:236
+#: src/ashytv/ui/pages/settings_page.py:242
+msgid "Game controller"
+msgstr "Геймпад"
+
+#: src/ashytv/ui/pages/settings_page.py:243
+msgid "Connect a controller to use AshyTV like a TV remote."
+msgstr "Подключите геймпад, чтобы управлять AshyTV как телевизионным пультом."
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "D-pad / stick"
+msgstr "Крестовина / стик"
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "Move"
+msgstr "Перемещение"
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "Open / confirm"
+msgstr "Открыть / подтвердить"
+
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Back"
+msgstr "Назад"
+
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Pause/resume"
+msgstr "Пауза/продолжить"
+
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Hide adult content"
 msgstr "Скрывать контент для взрослых"
 
-#: src/ashytv/ui/pages/settings_page.py:237
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "Скрывает категории со словами «adult», «XXX», «+18»"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "With a PIN set, it is required to show adult content."
 msgstr "Если задан PIN-код, он потребуется для показа контента для взрослых."
 
-#: src/ashytv/ui/pages/settings_page.py:245
+#: src/ashytv/ui/pages/settings_page.py:267
 msgid "New PIN (4+ digits)"
 msgstr "Новый PIN (от 4 цифр)"
 
-#: src/ashytv/ui/pages/settings_page.py:249
+#: src/ashytv/ui/pages/settings_page.py:271
 msgid "Remove PIN"
 msgstr "Удалить PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Clear cache"
 msgstr "Очистить кэш"
 
-#: src/ashytv/ui/pages/settings_page.py:257
+#: src/ashytv/ui/pages/settings_page.py:279
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "Удаляет загруженные логотипы, обложки и данные телепрограммы"
 
-#: src/ashytv/ui/pages/settings_page.py:259
-#: src/ashytv/ui/pages/settings_page.py:266
+#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:288
 msgid "Clear"
 msgstr "Очистить"
 
-#: src/ashytv/ui/pages/settings_page.py:264
+#: src/ashytv/ui/pages/settings_page.py:286
 msgid "Clear history"
 msgstr "Очистить историю"
 
-#: src/ashytv/ui/pages/settings_page.py:265
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "Сбрасывает «Продолжить просмотр» и недавние элементы"
 
-#: src/ashytv/ui/pages/settings_page.py:271
+#: src/ashytv/ui/pages/settings_page.py:293
 msgid "Recordings folder"
 msgstr "Папка записей"
 
-#: src/ashytv/ui/pages/settings_page.py:283
+#: src/ashytv/ui/pages/settings_page.py:305
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Версия {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Disclaimer"
 msgstr "Отказ от ответственности"
 
-#: src/ashytv/ui/pages/settings_page.py:287
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -929,211 +1041,231 @@ msgstr ""
 "AshyTV не предоставляет и не содержит никакого контента: он лишь "
 "воспроизводит добавленные вами плейлисты."
 
-#: src/ashytv/ui/pages/settings_page.py:289
+#: src/ashytv/ui/pages/settings_page.py:311
 msgid "More information"
 msgstr "Подробнее"
 
-#: src/ashytv/ui/pages/settings_page.py:319
+#: src/ashytv/ui/pages/settings_page.py:334
+#, python-brace-format
+msgid "{n} group hidden — right-click a group in Channels to hide it"
+msgid_plural "{n} groups hidden — right-click a group in Channels to hide it"
+msgstr[0] ""
+"Скрыта {n} группа — щёлкните группу правой кнопкой мыши в разделе «Каналы», "
+"чтобы скрыть её"
+msgstr[1] ""
+"Скрыто {n} группы — щёлкните группу правой кнопкой мыши в разделе «Каналы», "
+"чтобы скрыть её"
+msgstr[2] ""
+"Скрыто {n} групп — щёлкните группу правой кнопкой мыши в разделе «Каналы», "
+"чтобы скрыть её"
+
+#: src/ashytv/ui/pages/settings_page.py:348
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Удаляет загруженные логотипы, обложки и данные телепрограммы — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:327
+#: src/ashytv/ui/pages/settings_page.py:356
 msgid "Cache cleared."
 msgstr "Кэш очищен."
 
-#: src/ashytv/ui/pages/settings_page.py:332
+#: src/ashytv/ui/pages/settings_page.py:361
 msgid "History cleared."
 msgstr "История очищена."
 
-#: src/ashytv/ui/pages/settings_page.py:362
+#: src/ashytv/ui/pages/settings_page.py:391
 msgid "Enter PIN"
 msgstr "Введите PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:363
+#: src/ashytv/ui/pages/settings_page.py:392
 msgid "Required to show adult content."
 msgstr "Требуется для показа контента для взрослых."
 
-#: src/ashytv/ui/pages/settings_page.py:367
+#: src/ashytv/ui/pages/settings_page.py:396
 msgid "Unlock"
 msgstr "Разблокировать"
 
-#: src/ashytv/ui/pages/settings_page.py:377
+#: src/ashytv/ui/pages/settings_page.py:406
 msgid "Incorrect PIN."
 msgstr "Неверный PIN."
 
-#: src/ashytv/ui/pages/settings_page.py:385
+#: src/ashytv/ui/pages/settings_page.py:414
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN должен состоять не менее чем из 4 цифр."
 
-#: src/ashytv/ui/pages/settings_page.py:390
+#: src/ashytv/ui/pages/settings_page.py:419
 msgid "PIN set."
 msgstr "PIN задан."
 
-#: src/ashytv/ui/pages/settings_page.py:402
+#: src/ashytv/ui/pages/settings_page.py:431
 msgid "PIN removed."
 msgstr "PIN удалён."
 
-#: src/ashytv/ui/player_view.py:22
+#: src/ashytv/ui/player_view.py:23
 msgid "Auto"
 msgstr "Авто"
 
-#: src/ashytv/ui/player_view.py:122
+#: src/ashytv/ui/player_view.py:135
 msgid "Back (Esc)"
 msgstr "Назад (Esc)"
 
-#: src/ashytv/ui/player_view.py:148 src/ashytv/ui/player_view.py:656
+#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:800
 msgid "Record"
 msgstr "Запись"
 
-#: src/ashytv/ui/player_view.py:149
+#: src/ashytv/ui/player_view.py:162
 msgid "Mini player"
 msgstr "Мини-плеер"
 
-#: src/ashytv/ui/player_view.py:151 src/ashytv/ui/player_view.py:206
+#: src/ashytv/ui/player_view.py:164 src/ashytv/ui/player_view.py:227
 msgid "Fullscreen (F)"
 msgstr "Полноэкранный режим (F)"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:193 src/ashytv/ui/player_view.py:384
+#: src/ashytv/ui/player_view.py:548 src/ashytv/ui/player_view.py:562
+#: src/ashytv/ui/player_view.py:568
 msgid "● LIVE"
 msgstr "● ПРЯМОЙ ЭФИР"
 
-#: src/ashytv/ui/player_view.py:185
+#: src/ashytv/ui/player_view.py:195
+msgid "Go live"
+msgstr "В прямой эфир"
+
+#: src/ashytv/ui/player_view.py:196
+msgid "Back to live"
+msgstr "Назад в прямой эфир"
+
+#: src/ashytv/ui/player_view.py:206
 msgid "Previous (↑)"
 msgstr "Предыдущий (↑)"
 
-#: src/ashytv/ui/player_view.py:187
+#: src/ashytv/ui/player_view.py:208
 msgid "Back 10 s (←)"
 msgstr "Назад на 10 с (←)"
 
-#: src/ashytv/ui/player_view.py:189
+#: src/ashytv/ui/player_view.py:210
 msgid "Pause (Space)"
 msgstr "Пауза (Пробел)"
 
-#: src/ashytv/ui/player_view.py:191
+#: src/ashytv/ui/player_view.py:212
 msgid "Forward 10 s (→)"
 msgstr "Вперёд на 10 с (→)"
 
-#: src/ashytv/ui/player_view.py:193
+#: src/ashytv/ui/player_view.py:214
 msgid "Next (↓)"
 msgstr "Следующий (↓)"
 
-#: src/ashytv/ui/player_view.py:202 src/ashytv/ui/player_view.py:707
+#: src/ashytv/ui/player_view.py:223 src/ashytv/ui/player_view.py:851
 msgid "Subtitles"
 msgstr "Субтитры"
 
-#: src/ashytv/ui/player_view.py:204
+#: src/ashytv/ui/player_view.py:225
 msgid "Audio & Video"
 msgstr "Звук и видео"
 
-#: src/ashytv/ui/player_view.py:231
+#: src/ashytv/ui/player_view.py:252
 msgid "Try again"
 msgstr "Повторить"
 
-#: src/ashytv/ui/player_view.py:365
+#: src/ashytv/ui/player_view.py:419
 msgid "Buffering…"
 msgstr "Буферизация…"
 
-#: src/ashytv/ui/player_view.py:365
+#: src/ashytv/ui/player_view.py:419
 msgid "Loading…"
 msgstr "Загрузка…"
 
-#: src/ashytv/ui/player_view.py:367
+#: src/ashytv/ui/player_view.py:421
 msgid "Could not play"
 msgstr "Не удалось воспроизвести"
 
-#: src/ashytv/ui/player_view.py:368
+#: src/ashytv/ui/player_view.py:422
 msgid "The channel may be offline or the connection dropped."
 msgstr "Возможно, канал не работает или соединение прервано."
 
-#: src/ashytv/ui/player_view.py:375
+#: src/ashytv/ui/player_view.py:429
 msgid "Broadcast ended"
 msgstr "Трансляция завершена"
 
-#: src/ashytv/ui/player_view.py:376
+#: src/ashytv/ui/player_view.py:430
 msgid "The signal was interrupted."
 msgstr "Сигнал прерван."
 
-#: src/ashytv/ui/player_view.py:482
+#: src/ashytv/ui/player_view.py:618
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Качество: {label}"
 
-#: src/ashytv/ui/player_view.py:484
+#: src/ashytv/ui/player_view.py:620
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Недоступно, переключение на {label}"
 
-#: src/ashytv/ui/player_view.py:486
+#: src/ashytv/ui/player_view.py:622
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Качество: {label} (авто)"
 
-#: src/ashytv/ui/player_view.py:520
+#: src/ashytv/ui/player_view.py:656
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Далее: {title}"
 
-#: src/ashytv/ui/player_view.py:566 src/ashytv/ui/player_view.py:573
+#: src/ashytv/ui/player_view.py:702 src/ashytv/ui/player_view.py:709
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Громкость {level}%"
 
-#: src/ashytv/ui/player_view.py:625
+#: src/ashytv/ui/player_view.py:769
 msgid "Recording"
 msgstr "Запись"
 
-#: src/ashytv/ui/player_view.py:636
+#: src/ashytv/ui/player_view.py:780
 msgid "Stop recording"
 msgstr "Остановить запись"
 
-#: src/ashytv/ui/player_view.py:639
+#: src/ashytv/ui/player_view.py:783
 msgid "Recording…"
 msgstr "Запись…"
 
-#: src/ashytv/ui/player_view.py:647
+#: src/ashytv/ui/player_view.py:791
 msgid "Could not record this channel."
 msgstr "Не удалось записать этот канал."
 
-#: src/ashytv/ui/player_view.py:658
+#: src/ashytv/ui/player_view.py:802
 msgid "Recording saved to Recordings."
 msgstr "Запись сохранена в «Записи»."
 
-#: src/ashytv/ui/player_view.py:670
+#: src/ashytv/ui/player_view.py:814
 msgid "Mute (M)"
 msgstr "Без звука (M)"
 
-#: src/ashytv/ui/player_view.py:705
+#: src/ashytv/ui/player_view.py:849
 msgid "Off"
 msgstr "Выкл."
 
-#: src/ashytv/ui/player_view.py:710
+#: src/ashytv/ui/player_view.py:854
 msgid "No subtitles in this video."
 msgstr "В этом видео нет субтитров."
 
-#: src/ashytv/ui/player_view.py:719
+#: src/ashytv/ui/player_view.py:863
 msgid "Automatic"
 msgstr "Автоматически"
 
-#: src/ashytv/ui/player_view.py:722
+#: src/ashytv/ui/player_view.py:866
 msgid "Quality"
 msgstr "Качество"
 
-#: src/ashytv/ui/player_view.py:726
+#: src/ashytv/ui/player_view.py:870
 msgid "Audio"
 msgstr "Звук"
 
-#: src/ashytv/ui/player_view.py:729
+#: src/ashytv/ui/player_view.py:873
 msgid "Aspect ratio"
 msgstr "Соотношение сторон"
 
-#: src/ashytv/ui/player_view.py:733
+#: src/ashytv/ui/player_view.py:877
 msgid "Speed"
 msgstr "Скорость"
-
-#: src/ashytv/ui/schedule_dialog.py:28
-msgid "No schedule"
-msgstr "Нет расписания"
 
 #: src/ashytv/ui/schedule_dialog.py:39
 msgid "Today"
@@ -1166,92 +1298,98 @@ msgstr "Начать"
 #: src/ashytv/ui/welcome_view.py:79
 msgid "AshyTV does not provide any content — bring your own playlist."
 msgstr ""
-"AshyTV не предоставляет никакого контента — используйте собственный плейлист."
+"AshyTV не предоставляет никакого контента — используйте собственный "
+"плейлист."
 
-#: src/ashytv/window.py:74
+#: src/ashytv/window.py:77
 msgid "Menu"
 msgstr "Меню"
 
-#: src/ashytv/window.py:83
+#: src/ashytv/window.py:86
 msgid "Search…"
 msgstr "Поиск…"
 
-#: src/ashytv/window.py:90
+#: src/ashytv/window.py:93
 msgid "Keyboard Shortcuts"
 msgstr "Клавиатурные сочетания"
 
-#: src/ashytv/window.py:91
+#: src/ashytv/window.py:94
 msgid "About AshyTV"
 msgstr "О программе AshyTV"
 
-#: src/ashytv/window.py:94
+#: src/ashytv/window.py:97
 msgid "Main Menu"
 msgstr "Главное меню"
 
-#: src/ashytv/window.py:96
+#: src/ashytv/window.py:99
 msgid "Search (Ctrl+F)"
 msgstr "Поиск (Ctrl+F)"
 
-#: src/ashytv/window.py:164
+#: src/ashytv/window.py:175
 msgid "The best movies for you"
 msgstr "Лучшие фильмы для вас"
 
-#: src/ashytv/window.py:169
+#: src/ashytv/window.py:180
 msgid "Your favorite series in one place"
 msgstr "Ваши любимые сериалы в одном месте"
 
-#: src/ashytv/window.py:377
+#: src/ashytv/window.py:395
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Плеер недоступен: установите mpv и python-mpv ({error})"
 
-#: src/ashytv/window.py:419
+#: src/ashytv/window.py:433
+#, python-brace-format
+msgid "No channel {number}"
+msgstr "Нет канала {number}"
+
+#: src/ashytv/window.py:459
 msgid "Next episode…"
 msgstr "Следующая серия…"
 
-#: src/ashytv/window.py:443
+#: src/ashytv/window.py:483
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Не удалось открыть: {error}"
 
-#: src/ashytv/window.py:447
+#: src/ashytv/window.py:487
 msgid "This item is no longer in the playlist."
 msgstr "Этого элемента больше нет в плейлисте."
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:518
 msgid "Added to favorites"
 msgstr "Добавлено в избранное"
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:518
 msgid "Removed from favorites"
 msgstr "Удалено из избранного"
 
-#: src/ashytv/window.py:579
+#: src/ashytv/window.py:619
 msgid "Please wait: an import is already in progress."
 msgstr "Подождите: импорт уже выполняется."
 
-#: src/ashytv/window.py:596
+#: src/ashytv/window.py:636
 msgid "Importing playlist…"
 msgstr "Импорт плейлиста…"
 
-#: src/ashytv/window.py:609
+#: src/ashytv/window.py:649
 msgid "Connecting to the Xtream provider…"
 msgstr "Подключение к провайдеру Xtream…"
 
-#: src/ashytv/window.py:626
+#: src/ashytv/window.py:666
 msgid "Provider password not found; add the playlist again."
 msgstr "Пароль провайдера не найден; добавьте плейлист заново."
 
-#: src/ashytv/window.py:630
+#: src/ashytv/window.py:670
 msgid "Updating playlist…"
 msgstr "Обновление плейлиста…"
 
-#: src/ashytv/window.py:650
+#: src/ashytv/window.py:690
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Плейлист «{name}» обновлён."
 
-#: src/ashytv/window.py:654
+#: src/ashytv/window.py:694
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
@@ -1259,7 +1397,7 @@ msgstr[0] "Импортирован {n} элемент."
 msgstr[1] "Импортировано {n} элемента."
 msgstr[2] "Импортировано {n} элементов."
 
-#: src/ashytv/window.py:655
+#: src/ashytv/window.py:695
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
@@ -1267,33 +1405,68 @@ msgstr[0] "Плейлист готов: {n} элемент."
 msgstr[1] "Плейлист готов: {n} элемента."
 msgstr[2] "Плейлист готов: {n} элементов."
 
-#: src/ashytv/window.py:676
+#: src/ashytv/window.py:716
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Не удалось обновить «{name}»: {error}"
 
-#: src/ashytv/window.py:680
+#: src/ashytv/window.py:720
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Ошибка: {error}"
 
-#: src/ashytv/window.py:681
+#: src/ashytv/window.py:721
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Ошибка импорта: {error}"
 
-#: src/ashytv/window.py:687
+#: src/ashytv/window.py:727
 msgid "Please wait for the import to finish."
 msgstr "Дождитесь завершения импорта."
 
-#: src/ashytv/window.py:700
+#: src/ashytv/window.py:740
 msgid "Playlist removed."
 msgstr "Плейлист удалён."
 
-#: src/ashytv/window.py:749
+#: src/ashytv/window.py:789
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Телепрограмма (EPG) недоступна: {error}"
+
+#: src/ashytv/window.py:824
+msgid "Programme"
+msgstr "Передача"
+
+#: src/ashytv/window.py:828
+#, python-brace-format
+msgid "You will be reminded of “{title}” at {time}"
+msgstr "Вам напомнят о «{title}» в {time}"
+
+#: src/ashytv/window.py:829
+msgid "Reminder cancelled"
+msgstr "Напоминание отменено"
+
+#: src/ashytv/window.py:841
+#, python-brace-format
+msgid "“{title}” starts soon on {channel}"
+msgstr "«{title}» скоро начнётся на канале {channel}"
+
+#: src/ashytv/window.py:843
+msgid "AshyTV reminder"
+msgstr "Напоминание AshyTV"
+
+#: src/ashytv/window.py:862
+msgid "This channel is no longer in your playlists."
+msgstr "Этого канала больше нет в ваших плейлистах."
+
+#: src/ashytv/window.py:877
+#, python-brace-format
+msgid "Group “{name}” hidden"
+msgstr "Группа «{name}» скрыта"
+
+#: src/ashytv/window.py:878
+msgid "Undo"
+msgstr "Отменить"
 
 #: data/org.communitybig.ashytv.desktop.in:3
 #: data/org.communitybig.ashytv.metainfo.xml.in:4
@@ -1308,10 +1481,12 @@ msgstr "IPTV-плеер"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Смотрите свои IPTV-плейлисты (M3U и Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing
+#. semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;плеер;тв;телевидение;эфир;каналы;фильмы;сериалы;"
+msgstr ""
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;плеер;тв;телевидение;эфир;каналы;фильмы;сериалы;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1342,7 +1517,8 @@ msgstr "Телепрограмма (XMLTV) в виде временной сет
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:20
 msgid "Movies and series catalog with resume and next episode"
-msgstr "Каталог фильмов и сериалов с продолжением просмотра и следующей серией"
+msgstr ""
+"Каталог фильмов и сериалов с продолжением просмотра и следующей серией"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid ""
@@ -1350,6 +1526,9 @@ msgid ""
 msgstr ""
 "Воспроизведение через libmpv с аппаратным декодированием, «картинка в "
 "картинке» и записью"
+
+#~ msgid "Search"
+#~ msgstr "Поиск"
 
 #~ msgid "Add your IPTV playlist to start watching"
 #~ msgstr "Добавьте свой IPTV-плейлист, чтобы начать просмотр"

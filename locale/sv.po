@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:53-0300\n"
+"POT-Creation-Date: 2026-10-24 19:08-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -21,49 +21,76 @@ msgstr ""
 msgid "Navigation"
 msgstr "Navigering"
 
-#: src/ashytv/application.py:24 src/ashytv/window.py:92
+#: src/ashytv/application.py:24
+msgid "Search (or just start typing)"
+msgstr "Sök (eller börja bara skriva)"
+
+#: src/ashytv/application.py:25
+msgid "Move between the menu and the page"
+msgstr "Växla mellan menyn och sidan"
+
+#: src/ashytv/application.py:26
+msgid "Open the selected item"
+msgstr "Öppna det markerade objektet"
+
+#: src/ashytv/application.py:27
+msgid "Back to the menu"
+msgstr "Tillbaka till menyn"
+
+#: src/ashytv/application.py:28 src/ashytv/window.py:95
 msgid "Quit"
 msgstr "Avsluta"
 
-#: src/ashytv/application.py:24
-msgid "Search"
-msgstr "Sök"
+#: src/ashytv/application.py:29 src/ashytv/ui/pages/settings_page.py:228
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Channel list"
+msgstr "Kanallista"
 
-#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:221
-msgid "Pause/resume"
-msgstr "Pausa/återuppta"
-
-#: src/ashytv/application.py:25
+#: src/ashytv/application.py:29
 msgid "Player"
 msgstr "Spelare"
 
-#: src/ashytv/application.py:25 src/ashytv/ui/pages/settings_page.py:222
+#: src/ashytv/application.py:30 src/ashytv/ui/pages/settings_page.py:229
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Previous/next channel"
 msgstr "Föregående/nästa kanal"
 
-#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:223
-msgid "Fullscreen"
-msgstr "Helskärm"
+#: src/ashytv/application.py:31 src/ashytv/ui/pages/settings_page.py:230
+msgid "Type a channel number"
+msgstr "Ange ett kanalnummer"
 
-#: src/ashytv/application.py:26 src/ashytv/ui/pages/settings_page.py:223
+#: src/ashytv/application.py:32 src/ashytv/ui/pages/settings_page.py:231
+#: src/ashytv/ui/pages/settings_page.py:247
+msgid "Last watched channel"
+msgstr "Senast tittade kanal"
+
+#: src/ashytv/application.py:33 src/ashytv/ui/pages/settings_page.py:232
+msgid "Pause/resume (also pauses live TV)"
+msgstr "Pausa/återuppta (pausar även live-tv)"
+
+#: src/ashytv/application.py:34 src/ashytv/ui/pages/settings_page.py:233
 msgid "Rewind/forward 10 s"
 msgstr "Spola 10 s bakåt/framåt"
 
-#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:224
-#: src/ashytv/ui/player_view.py:565
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:233
+msgid "Fullscreen"
+msgstr "Helskärm"
+
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/player_view.py:701
 msgid "Mute"
 msgstr "Ljud av"
 
-#: src/ashytv/application.py:27 src/ashytv/ui/pages/settings_page.py:224
-#: src/ashytv/ui/player_view.py:200
+#: src/ashytv/application.py:35 src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/player_view.py:221
 msgid "Volume"
 msgstr "Volym"
 
-#: src/ashytv/application.py:28
+#: src/ashytv/application.py:36
 msgid "Exit fullscreen / close the player"
 msgstr "Lämna helskärm / stäng spelaren"
 
-#: src/ashytv/application.py:140
+#: src/ashytv/application.py:157
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -75,13 +102,13 @@ msgstr ""
 msgid "Live TV"
 msgstr "Live-TV"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:14
-#: src/ashytv/ui/pages/channels_page.py:24 src/ashytv/window.py:163
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:13
+#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:174
 msgid "Movies"
 msgstr "Filmer"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:15
-#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:168
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:14
+#: src/ashytv/ui/pages/channels_page.py:26 src/ashytv/window.py:179
 msgid "Series"
 msgstr "Serier"
 
@@ -94,7 +121,7 @@ msgstr "Namnlös"
 msgid "S{season} • E{episode}"
 msgstr "S{season} • E{episode}"
 
-#: src/ashytv/player/mpv_widget.py:330
+#: src/ashytv/player/mpv_widget.py:354
 #, python-brace-format
 msgid "Track {number}"
 msgstr "Spår {number}"
@@ -151,43 +178,43 @@ msgstr "Ansluter till leverantören…"
 msgid "The provider returned no content"
 msgstr "Leverantören returnerade inget innehåll"
 
-#: src/ashytv/services/settings.py:38
+#: src/ashytv/services/settings.py:42
 msgid "Blue"
 msgstr "Blå"
 
-#: src/ashytv/services/settings.py:39
+#: src/ashytv/services/settings.py:43
 msgid "Teal"
 msgstr "Blågrön"
 
-#: src/ashytv/services/settings.py:40
+#: src/ashytv/services/settings.py:44
 msgid "Green"
 msgstr "Grön"
 
-#: src/ashytv/services/settings.py:41
+#: src/ashytv/services/settings.py:45
 msgid "Yellow"
 msgstr "Gul"
 
-#: src/ashytv/services/settings.py:42
+#: src/ashytv/services/settings.py:46
 msgid "Orange"
 msgstr "Orange"
 
-#: src/ashytv/services/settings.py:43
+#: src/ashytv/services/settings.py:47
 msgid "Red"
 msgstr "Röd"
 
-#: src/ashytv/services/settings.py:44
+#: src/ashytv/services/settings.py:48
 msgid "Pink"
 msgstr "Rosa"
 
-#: src/ashytv/services/settings.py:45
+#: src/ashytv/services/settings.py:49
 msgid "Purple"
 msgstr "Lila"
 
-#: src/ashytv/services/settings.py:46
+#: src/ashytv/services/settings.py:50
 msgid "Slate"
 msgstr "Skiffergrå"
 
-#: src/ashytv/services/settings.py:47
+#: src/ashytv/services/settings.py:51
 msgid "Emerald"
 msgstr "Smaragd"
 
@@ -205,8 +232,23 @@ msgstr "Ogiltigt användarnamn eller lösenord"
 msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
+#: src/ashytv/ui/channel_overlay.py:40 src/ashytv/ui/nav_sidebar.py:12
+#: src/ashytv/ui/pages/settings_page.py:136
+msgid "Channels"
+msgstr "Kanaler"
+
+#: src/ashytv/ui/channel_overlay.py:42
+msgid "Enter: watch  •  Esc: close"
+msgstr "Enter: titta  •  Esc: stäng"
+
+#: src/ashytv/ui/channel_overlay.py:149 src/ashytv/ui/schedule_dialog.py:28
+msgid "No schedule"
+msgstr "Ingen tablå"
+
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:434
+#: src/ashytv/ui/schedule_dialog.py:18 src/ashytv/window.py:847
+#: src/ashytv/window.py:853
 msgid "Watch"
 msgstr "Titta"
 
@@ -243,12 +285,12 @@ msgid "Episode {n}"
 msgstr "Avsnitt {n}"
 
 #: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:195
-#: src/ashytv/ui/pages/channels_page.py:337
+#: src/ashytv/ui/pages/channels_page.py:435
 msgid "Remove from favorites"
 msgstr "Ta bort från favoriter"
 
 #: src/ashytv/ui/detail_dialog.py:262 src/ashytv/ui/pages/catalog_page.py:196
-#: src/ashytv/ui/pages/channels_page.py:337
+#: src/ashytv/ui/pages/channels_page.py:435
 msgid "Add to favorites"
 msgstr "Lägg till i favoriter"
 
@@ -264,31 +306,31 @@ msgstr "Stoppa"
 msgid "Home"
 msgstr "Start"
 
-#: src/ashytv/ui/nav_sidebar.py:12 src/ashytv/ui/pages/settings_page.py:136
-msgid "Channels"
-msgstr "Kanaler"
-
-#: src/ashytv/ui/nav_sidebar.py:13
-msgid "Guide"
-msgstr "Guide"
-
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:54
-#: src/ashytv/ui/pages/channels_page.py:165
-#: src/ashytv/ui/pages/channels_page.py:188
+#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:58
+#: src/ashytv/ui/pages/channels_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:230
 msgid "Favorites"
 msgstr "Favoriter"
 
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/recordings_page.py:25
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/recordings_page.py:25
 msgid "Recordings"
 msgstr "Inspelningar"
 
-#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/lists_page.py:36
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:36
 msgid "Playlists"
 msgstr "Spellistor"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/settings_page.py:58
+#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:58
 msgid "Settings"
 msgstr "Inställningar"
+
+#: src/ashytv/ui/nav_sidebar.py:56 src/ashytv/ui/nav_sidebar.py:92
+msgid "Collapse menu"
+msgstr "Fäll ihop menyn"
+
+#: src/ashytv/ui/nav_sidebar.py:92
+msgid "Expand menu"
+msgstr "Fäll ut menyn"
 
 #: src/ashytv/ui/pages/catalog_page.py:67
 msgid "Nothing found"
@@ -299,7 +341,7 @@ msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Lägg till en spellista under ”Spellistor” eller ändra filtret."
 
 #: src/ashytv/ui/pages/catalog_page.py:87
-#: src/ashytv/ui/pages/channels_page.py:165
+#: src/ashytv/ui/pages/channels_page.py:207
 msgid "All"
 msgstr "Alla"
 
@@ -311,80 +353,100 @@ msgstr "Nya släpp"
 msgid "Trending"
 msgstr "Trendar"
 
-#: src/ashytv/ui/pages/channels_page.py:20
+#: src/ashytv/ui/pages/channels_page.py:21
 msgid "Sports"
 msgstr "Sport"
 
-#: src/ashytv/ui/pages/channels_page.py:22
+#: src/ashytv/ui/pages/channels_page.py:23
 msgid "News"
 msgstr "Nyheter"
 
-#: src/ashytv/ui/pages/channels_page.py:23
+#: src/ashytv/ui/pages/channels_page.py:24
 msgid "Free-to-air"
 msgstr "Fri-tv"
 
-#: src/ashytv/ui/pages/channels_page.py:26
+#: src/ashytv/ui/pages/channels_page.py:27
 msgid "Kids"
 msgstr "Barn"
 
-#: src/ashytv/ui/pages/channels_page.py:28
+#: src/ashytv/ui/pages/channels_page.py:29
 msgid "Documentaries"
 msgstr "Dokumentärer"
 
-#: src/ashytv/ui/pages/channels_page.py:30
+#: src/ashytv/ui/pages/channels_page.py:31
 msgid "Music"
 msgstr "Musik"
 
-#: src/ashytv/ui/pages/channels_page.py:54
+#: src/ashytv/ui/pages/channels_page.py:58
 msgid "TV Channels"
 msgstr "TV-kanaler"
 
-#: src/ashytv/ui/pages/channels_page.py:55
+#: src/ashytv/ui/pages/channels_page.py:59
 msgid "Channels, movies and series you marked"
 msgstr "Kanaler, filmer och serier som du har markerat"
 
-#: src/ashytv/ui/pages/channels_page.py:56
+#: src/ashytv/ui/pages/channels_page.py:60
 msgid "All your channels organized by category"
 msgstr "Alla dina kanaler ordnade efter kategori"
 
-#: src/ashytv/ui/pages/channels_page.py:109
+#: src/ashytv/ui/pages/channels_page.py:72
+msgid "List"
+msgstr "Lista"
+
+#: src/ashytv/ui/pages/channels_page.py:73
+msgid "Guide"
+msgstr "Guide"
+
+#: src/ashytv/ui/pages/channels_page.py:138
 msgid "Nothing here yet"
 msgstr "Inget här ännu"
 
-#: src/ashytv/ui/pages/channels_page.py:110
+#: src/ashytv/ui/pages/channels_page.py:139
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr ""
 "Tryck på hjärtat på en kanal, film eller serie för att behålla den här."
 
-#: src/ashytv/ui/pages/channels_page.py:112
+#: src/ashytv/ui/pages/channels_page.py:141
 msgid "No channels in this category."
 msgstr "Inga kanaler i den här kategorin."
 
-#: src/ashytv/ui/pages/channels_page.py:165
+#: src/ashytv/ui/pages/channels_page.py:207
 msgid "Recent"
 msgstr "Senaste"
 
-#: src/ashytv/ui/pages/channels_page.py:192
+#: src/ashytv/ui/pages/channels_page.py:234
 msgid "Recently watched"
 msgstr "Nyligen tittat på"
 
-#: src/ashytv/ui/pages/channels_page.py:197
+#: src/ashytv/ui/pages/channels_page.py:239
 msgid "All Channels"
 msgstr "Alla kanaler"
 
-#: src/ashytv/ui/pages/channels_page.py:198
+#: src/ashytv/ui/pages/channels_page.py:240
 msgid "All in this category"
 msgstr "Alla i den här kategorin"
 
-#: src/ashytv/ui/pages/channels_page.py:302 src/ashytv/ui/player_view.py:146
+#: src/ashytv/ui/pages/channels_page.py:296
+msgid "Move up"
+msgstr "Flytta upp"
+
+#: src/ashytv/ui/pages/channels_page.py:297
+msgid "Move down"
+msgstr "Flytta ned"
+
+#: src/ashytv/ui/pages/channels_page.py:298
+msgid "Hide group"
+msgstr "Dölj grupp"
+
+#: src/ashytv/ui/pages/channels_page.py:400 src/ashytv/ui/player_view.py:159
 msgid "Favorite"
 msgstr "Favorit"
 
-#: src/ashytv/ui/pages/channels_page.py:309
+#: src/ashytv/ui/pages/channels_page.py:407
 msgid "More options"
 msgstr "Fler alternativ"
 
-#: src/ashytv/ui/pages/channels_page.py:340
+#: src/ashytv/ui/pages/channels_page.py:438
 msgid "View schedule"
 msgstr "Visa tablå"
 
@@ -403,33 +465,41 @@ msgstr "Imorgon, {date}"
 msgid "Yesterday, {date}"
 msgstr "Igår, {date}"
 
-#: src/ashytv/ui/pages/epg_page.py:55
+#: src/ashytv/ui/pages/epg_page.py:62
 msgid "Program Guide"
 msgstr "TV-guide"
 
-#: src/ashytv/ui/pages/epg_page.py:56
+#: src/ashytv/ui/pages/epg_page.py:63
 msgid "See what's on now and what's next"
 msgstr "Se vad som visas nu och vad som kommer härnäst"
 
-#: src/ashytv/ui/pages/epg_page.py:74
+#: src/ashytv/ui/pages/epg_page.py:83
 msgid "1 hour earlier"
 msgstr "1 timme tidigare"
 
-#: src/ashytv/ui/pages/epg_page.py:77
+#: src/ashytv/ui/pages/epg_page.py:86
 msgid "1 hour later"
 msgstr "1 timme senare"
 
-#: src/ashytv/ui/pages/epg_page.py:80
+#: src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Nu"
 
-#: src/ashytv/ui/pages/epg_page.py:120
+#: src/ashytv/ui/pages/epg_page.py:129
 msgid "Guide unavailable"
 msgstr "Guiden är inte tillgänglig"
 
-#: src/ashytv/ui/pages/epg_page.py:121
+#: src/ashytv/ui/pages/epg_page.py:130
 msgid "The guide appears here once your provider's EPG loads."
 msgstr "Guiden visas här när leverantörens EPG har lästs in."
+
+#: src/ashytv/ui/pages/epg_page.py:350
+msgid "Cancel reminder"
+msgstr "Avbryt påminnelse"
+
+#: src/ashytv/ui/pages/epg_page.py:350
+msgid "Remind me"
+msgstr "Påminn mig"
 
 #: src/ashytv/ui/pages/home_page.py:57
 msgid "Continue Watching"
@@ -613,12 +683,12 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här "
-"enheten."
+"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här"
+" enheten."
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
-#: src/ashytv/ui/pages/settings_page.py:366
+#: src/ashytv/ui/pages/settings_page.py:395
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -636,7 +706,8 @@ msgstr "M3U-spellistor"
 
 #: src/ashytv/ui/pages/lists_page.py:338
 msgid "Couldn't find server, username and password in the copied text."
-msgstr "Hittade inte server, användarnamn och lösenord i den kopierade texten."
+msgstr ""
+"Hittade inte server, användarnamn och lösenord i den kopierade texten."
 
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -665,7 +736,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "Använd knappen ● i spelaren för att spela in det som visas"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:273
+#: src/ashytv/ui/pages/settings_page.py:295
 msgid "Open folder"
 msgstr "Öppna mapp"
 
@@ -695,27 +766,27 @@ msgid "General"
 msgstr "Allmänt"
 
 #: src/ashytv/ui/pages/settings_page.py:20
-#: src/ashytv/ui/pages/settings_page.py:155
+#: src/ashytv/ui/pages/settings_page.py:162
 msgid "Appearance"
 msgstr "Utseende"
 
 #: src/ashytv/ui/pages/settings_page.py:21
-#: src/ashytv/ui/pages/settings_page.py:206
+#: src/ashytv/ui/pages/settings_page.py:213
 msgid "Playback"
 msgstr "Uppspelning"
 
 #: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Parental Controls"
 msgstr "Föräldrakontroll"
 
 #: src/ashytv/ui/pages/settings_page.py:23
-#: src/ashytv/ui/pages/settings_page.py:255
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Data"
 msgstr "Data"
 
 #: src/ashytv/ui/pages/settings_page.py:24
-#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:303
 msgid "About"
 msgstr "Om"
 
@@ -751,172 +822,217 @@ msgstr "Gruppera kvaliteter för samma kanal"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "Visar ”News FHD”, ”News HD” och ”News SD” som en enda kanal"
 
-#: src/ashytv/ui/pages/settings_page.py:140 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:139
+msgid "Hidden groups"
+msgstr "Dolda grupper"
+
+#: src/ashytv/ui/pages/settings_page.py:140
+msgid "Show all"
+msgstr "Visa alla"
+
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV-spellistor"
 
-#: src/ashytv/ui/pages/settings_page.py:141
+#: src/ashytv/ui/pages/settings_page.py:148
 msgid "Reload playlists automatically"
 msgstr "Läs in spellistor automatiskt igen"
 
-#: src/ashytv/ui/pages/settings_page.py:142
+#: src/ashytv/ui/pages/settings_page.py:149
 msgid "Updates channels and catalog when the app opens"
 msgstr "Uppdaterar kanaler och katalog när appen öppnas"
 
-#: src/ashytv/ui/pages/settings_page.py:143
+#: src/ashytv/ui/pages/settings_page.py:150
 msgid "Check every"
 msgstr "Kontrollera var"
 
-#: src/ashytv/ui/pages/settings_page.py:145
+#: src/ashytv/ui/pages/settings_page.py:152
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
 msgstr[0] "{h} timme"
 msgstr[1] "{h} timmar"
 
-#: src/ashytv/ui/pages/settings_page.py:156
+#: src/ashytv/ui/pages/settings_page.py:163
 msgid "Theme"
 msgstr "Tema"
 
-#: src/ashytv/ui/pages/settings_page.py:166
+#: src/ashytv/ui/pages/settings_page.py:173
 msgid "Accent Color"
 msgstr "Dekorfärg"
 
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:174
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "Välj färgen som används för knappar, markeringar och accenter."
 
-#: src/ashytv/ui/pages/settings_page.py:189
+#: src/ashytv/ui/pages/settings_page.py:196
 msgid "Transparency"
 msgstr "Transparens"
 
-#: src/ashytv/ui/pages/settings_page.py:190
+#: src/ashytv/ui/pages/settings_page.py:197
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "Gör fönstrets bakgrund genomskinlig (beror på kompositören)."
 
-#: src/ashytv/ui/pages/settings_page.py:192
+#: src/ashytv/ui/pages/settings_page.py:199
 msgid "Translucent window"
 msgstr "Genomskinligt fönster"
 
-#: src/ashytv/ui/pages/settings_page.py:194
+#: src/ashytv/ui/pages/settings_page.py:201
 msgid "Background opacity (%)"
 msgstr "Bakgrundens opacitet (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:200
+#: src/ashytv/ui/pages/settings_page.py:207
 msgid "Content"
 msgstr "Innehåll"
 
-#: src/ashytv/ui/pages/settings_page.py:201
+#: src/ashytv/ui/pages/settings_page.py:208
 msgid "Show logos and covers"
 msgstr "Visa logotyper och omslag"
 
-#: src/ashytv/ui/pages/settings_page.py:202
+#: src/ashytv/ui/pages/settings_page.py:209
 msgid "Turn off to save data"
 msgstr "Stäng av för att spara data"
 
-#: src/ashytv/ui/pages/settings_page.py:207
+#: src/ashytv/ui/pages/settings_page.py:214
 msgid "Applies from the next video you open."
 msgstr "Gäller från nästa video du öppnar."
 
-#: src/ashytv/ui/pages/settings_page.py:208 src/ashytv/ui/player_view.py:496
+#: src/ashytv/ui/pages/settings_page.py:215 src/ashytv/ui/player_view.py:632
 msgid "Automatic quality"
 msgstr "Automatisk kvalitet"
 
-#: src/ashytv/ui/pages/settings_page.py:209
+#: src/ashytv/ui/pages/settings_page.py:216
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "Växlar mellan en kanals kvaliteter efter din anslutning"
 
-#: src/ashytv/ui/pages/settings_page.py:210
+#: src/ashytv/ui/pages/settings_page.py:217
 msgid "Hardware acceleration"
 msgstr "Hårdvaruacceleration"
 
-#: src/ashytv/ui/pages/settings_page.py:211
+#: src/ashytv/ui/pages/settings_page.py:218
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "Avkodar video på GPU:n (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:213
+#: src/ashytv/ui/pages/settings_page.py:220
 msgid "Network buffer (seconds)"
 msgstr "Nätverksbuffert (sekunder)"
 
-#: src/ashytv/ui/pages/settings_page.py:214
+#: src/ashytv/ui/pages/settings_page.py:221
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr "Mer buffert = färre hack, men längre fördröjning vid kanalbyte"
 
-#: src/ashytv/ui/pages/settings_page.py:220
+#: src/ashytv/ui/pages/settings_page.py:227
 msgid "Player shortcuts"
 msgstr "Spelargenvägar"
 
-#: src/ashytv/ui/pages/settings_page.py:221
+#: src/ashytv/ui/pages/settings_page.py:228
+msgid "Enter"
+msgstr "Enter"
+
+#: src/ashytv/ui/pages/settings_page.py:231
+msgid "Backspace"
+msgstr "Backspace"
+
+#: src/ashytv/ui/pages/settings_page.py:232
 msgid "Space"
 msgstr "Blanksteg"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Esc"
 msgstr "Esc"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Exit fullscreen / close"
 msgstr "Lämna helskärm / stäng"
 
-#: src/ashytv/ui/pages/settings_page.py:236
+#: src/ashytv/ui/pages/settings_page.py:242
+msgid "Game controller"
+msgstr "Spelkontroll"
+
+#: src/ashytv/ui/pages/settings_page.py:243
+msgid "Connect a controller to use AshyTV like a TV remote."
+msgstr ""
+"Anslut en handkontroll för att använda AshyTV som en tv-fjärrkontroll."
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "D-pad / stick"
+msgstr "Styrkors / spak"
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "Move"
+msgstr "Flytta"
+
+#: src/ashytv/ui/pages/settings_page.py:244
+msgid "Open / confirm"
+msgstr "Öppna / bekräfta"
+
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Back"
+msgstr "Tillbaka"
+
+#: src/ashytv/ui/pages/settings_page.py:245
+msgid "Pause/resume"
+msgstr "Pausa/återuppta"
+
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Hide adult content"
 msgstr "Dölj vuxeninnehåll"
 
-#: src/ashytv/ui/pages/settings_page.py:237
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "Döljer kategorier med termer som ”adult”, ”XXX”, ”+18”"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "With a PIN set, it is required to show adult content."
 msgstr "När en PIN är angiven krävs den för att visa vuxeninnehåll."
 
-#: src/ashytv/ui/pages/settings_page.py:245
+#: src/ashytv/ui/pages/settings_page.py:267
 msgid "New PIN (4+ digits)"
 msgstr "Ny PIN (minst 4 siffror)"
 
-#: src/ashytv/ui/pages/settings_page.py:249
+#: src/ashytv/ui/pages/settings_page.py:271
 msgid "Remove PIN"
 msgstr "Ta bort PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Clear cache"
 msgstr "Rensa cache"
 
-#: src/ashytv/ui/pages/settings_page.py:257
+#: src/ashytv/ui/pages/settings_page.py:279
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "Tar bort nedladdade logotyper, omslag och guidedata"
 
-#: src/ashytv/ui/pages/settings_page.py:259
-#: src/ashytv/ui/pages/settings_page.py:266
+#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:288
 msgid "Clear"
 msgstr "Rensa"
 
-#: src/ashytv/ui/pages/settings_page.py:264
+#: src/ashytv/ui/pages/settings_page.py:286
 msgid "Clear history"
 msgstr "Rensa historik"
 
-#: src/ashytv/ui/pages/settings_page.py:265
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "Glömmer ”Fortsätt titta” och senaste objekt"
 
-#: src/ashytv/ui/pages/settings_page.py:271
+#: src/ashytv/ui/pages/settings_page.py:293
 msgid "Recordings folder"
 msgstr "Mapp för inspelningar"
 
-#: src/ashytv/ui/pages/settings_page.py:283
+#: src/ashytv/ui/pages/settings_page.py:305
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Version {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Disclaimer"
 msgstr "Ansvarsfriskrivning"
 
-#: src/ashytv/ui/pages/settings_page.py:287
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -924,211 +1040,226 @@ msgstr ""
 "AshyTV tillhandahåller eller innehåller inget innehåll: den spelar bara upp "
 "de spellistor du lägger till."
 
-#: src/ashytv/ui/pages/settings_page.py:289
+#: src/ashytv/ui/pages/settings_page.py:311
 msgid "More information"
 msgstr "Mer information"
 
-#: src/ashytv/ui/pages/settings_page.py:319
+#: src/ashytv/ui/pages/settings_page.py:334
+#, python-brace-format
+msgid "{n} group hidden — right-click a group in Channels to hide it"
+msgid_plural "{n} groups hidden — right-click a group in Channels to hide it"
+msgstr[0] ""
+"{n} grupp dold — högerklicka på en grupp under Kanaler för att dölja den"
+msgstr[1] ""
+"{n} grupper dolda — högerklicka på en grupp under Kanaler för att dölja den"
+
+#: src/ashytv/ui/pages/settings_page.py:348
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Tar bort nedladdade logotyper, omslag och guidedata — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:327
+#: src/ashytv/ui/pages/settings_page.py:356
 msgid "Cache cleared."
 msgstr "Cachen har rensats."
 
-#: src/ashytv/ui/pages/settings_page.py:332
+#: src/ashytv/ui/pages/settings_page.py:361
 msgid "History cleared."
 msgstr "Historiken har rensats."
 
-#: src/ashytv/ui/pages/settings_page.py:362
+#: src/ashytv/ui/pages/settings_page.py:391
 msgid "Enter PIN"
 msgstr "Ange PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:363
+#: src/ashytv/ui/pages/settings_page.py:392
 msgid "Required to show adult content."
 msgstr "Krävs för att visa vuxeninnehåll."
 
-#: src/ashytv/ui/pages/settings_page.py:367
+#: src/ashytv/ui/pages/settings_page.py:396
 msgid "Unlock"
 msgstr "Lås upp"
 
-#: src/ashytv/ui/pages/settings_page.py:377
+#: src/ashytv/ui/pages/settings_page.py:406
 msgid "Incorrect PIN."
 msgstr "Fel PIN."
 
-#: src/ashytv/ui/pages/settings_page.py:385
+#: src/ashytv/ui/pages/settings_page.py:414
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN måste ha minst 4 siffror."
 
-#: src/ashytv/ui/pages/settings_page.py:390
+#: src/ashytv/ui/pages/settings_page.py:419
 msgid "PIN set."
 msgstr "PIN har angetts."
 
-#: src/ashytv/ui/pages/settings_page.py:402
+#: src/ashytv/ui/pages/settings_page.py:431
 msgid "PIN removed."
 msgstr "PIN har tagits bort."
 
-#: src/ashytv/ui/player_view.py:22
+#: src/ashytv/ui/player_view.py:23
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ashytv/ui/player_view.py:122
+#: src/ashytv/ui/player_view.py:135
 msgid "Back (Esc)"
 msgstr "Tillbaka (Esc)"
 
-#: src/ashytv/ui/player_view.py:148 src/ashytv/ui/player_view.py:656
+#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:800
 msgid "Record"
 msgstr "Spela in"
 
-#: src/ashytv/ui/player_view.py:149
+#: src/ashytv/ui/player_view.py:162
 msgid "Mini player"
 msgstr "Minispelare"
 
-#: src/ashytv/ui/player_view.py:151 src/ashytv/ui/player_view.py:206
+#: src/ashytv/ui/player_view.py:164 src/ashytv/ui/player_view.py:227
 msgid "Fullscreen (F)"
 msgstr "Helskärm (F)"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:193 src/ashytv/ui/player_view.py:384
+#: src/ashytv/ui/player_view.py:548 src/ashytv/ui/player_view.py:562
+#: src/ashytv/ui/player_view.py:568
 msgid "● LIVE"
 msgstr "● LIVE"
 
-#: src/ashytv/ui/player_view.py:185
+#: src/ashytv/ui/player_view.py:195
+msgid "Go live"
+msgstr "Gå till live"
+
+#: src/ashytv/ui/player_view.py:196
+msgid "Back to live"
+msgstr "Tillbaka till live"
+
+#: src/ashytv/ui/player_view.py:206
 msgid "Previous (↑)"
 msgstr "Föregående (↑)"
 
-#: src/ashytv/ui/player_view.py:187
+#: src/ashytv/ui/player_view.py:208
 msgid "Back 10 s (←)"
 msgstr "10 s bakåt (←)"
 
-#: src/ashytv/ui/player_view.py:189
+#: src/ashytv/ui/player_view.py:210
 msgid "Pause (Space)"
 msgstr "Pausa (blanksteg)"
 
-#: src/ashytv/ui/player_view.py:191
+#: src/ashytv/ui/player_view.py:212
 msgid "Forward 10 s (→)"
 msgstr "10 s framåt (→)"
 
-#: src/ashytv/ui/player_view.py:193
+#: src/ashytv/ui/player_view.py:214
 msgid "Next (↓)"
 msgstr "Nästa (↓)"
 
-#: src/ashytv/ui/player_view.py:202 src/ashytv/ui/player_view.py:707
+#: src/ashytv/ui/player_view.py:223 src/ashytv/ui/player_view.py:851
 msgid "Subtitles"
 msgstr "Undertexter"
 
-#: src/ashytv/ui/player_view.py:204
+#: src/ashytv/ui/player_view.py:225
 msgid "Audio & Video"
 msgstr "Ljud och video"
 
-#: src/ashytv/ui/player_view.py:231
+#: src/ashytv/ui/player_view.py:252
 msgid "Try again"
 msgstr "Försök igen"
 
-#: src/ashytv/ui/player_view.py:365
+#: src/ashytv/ui/player_view.py:419
 msgid "Buffering…"
 msgstr "Buffrar…"
 
-#: src/ashytv/ui/player_view.py:365
+#: src/ashytv/ui/player_view.py:419
 msgid "Loading…"
 msgstr "Läser in…"
 
-#: src/ashytv/ui/player_view.py:367
+#: src/ashytv/ui/player_view.py:421
 msgid "Could not play"
 msgstr "Det gick inte att spela upp"
 
-#: src/ashytv/ui/player_view.py:368
+#: src/ashytv/ui/player_view.py:422
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanalen kan vara offline eller så bröts anslutningen."
 
-#: src/ashytv/ui/player_view.py:375
+#: src/ashytv/ui/player_view.py:429
 msgid "Broadcast ended"
 msgstr "Sändningen är slut"
 
-#: src/ashytv/ui/player_view.py:376
+#: src/ashytv/ui/player_view.py:430
 msgid "The signal was interrupted."
 msgstr "Signalen avbröts."
 
-#: src/ashytv/ui/player_view.py:482
+#: src/ashytv/ui/player_view.py:618
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Kvalitet: {label}"
 
-#: src/ashytv/ui/player_view.py:484
+#: src/ashytv/ui/player_view.py:620
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Inte tillgänglig, byter till {label}"
 
-#: src/ashytv/ui/player_view.py:486
+#: src/ashytv/ui/player_view.py:622
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Kvalitet: {label} (auto)"
 
-#: src/ashytv/ui/player_view.py:520
+#: src/ashytv/ui/player_view.py:656
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Nästa: {title}"
 
-#: src/ashytv/ui/player_view.py:566 src/ashytv/ui/player_view.py:573
+#: src/ashytv/ui/player_view.py:702 src/ashytv/ui/player_view.py:709
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Volym {level} %"
 
-#: src/ashytv/ui/player_view.py:625
+#: src/ashytv/ui/player_view.py:769
 msgid "Recording"
 msgstr "Inspelning"
 
-#: src/ashytv/ui/player_view.py:636
+#: src/ashytv/ui/player_view.py:780
 msgid "Stop recording"
 msgstr "Stoppa inspelning"
 
-#: src/ashytv/ui/player_view.py:639
+#: src/ashytv/ui/player_view.py:783
 msgid "Recording…"
 msgstr "Spelar in…"
 
-#: src/ashytv/ui/player_view.py:647
+#: src/ashytv/ui/player_view.py:791
 msgid "Could not record this channel."
 msgstr "Det gick inte att spela in den här kanalen."
 
-#: src/ashytv/ui/player_view.py:658
+#: src/ashytv/ui/player_view.py:802
 msgid "Recording saved to Recordings."
 msgstr "Inspelningen har sparats i Inspelningar."
 
-#: src/ashytv/ui/player_view.py:670
+#: src/ashytv/ui/player_view.py:814
 msgid "Mute (M)"
 msgstr "Ljud av (M)"
 
-#: src/ashytv/ui/player_view.py:705
+#: src/ashytv/ui/player_view.py:849
 msgid "Off"
 msgstr "Av"
 
-#: src/ashytv/ui/player_view.py:710
+#: src/ashytv/ui/player_view.py:854
 msgid "No subtitles in this video."
 msgstr "Inga undertexter i den här videon."
 
-#: src/ashytv/ui/player_view.py:719
+#: src/ashytv/ui/player_view.py:863
 msgid "Automatic"
 msgstr "Automatisk"
 
-#: src/ashytv/ui/player_view.py:722
+#: src/ashytv/ui/player_view.py:866
 msgid "Quality"
 msgstr "Kvalitet"
 
-#: src/ashytv/ui/player_view.py:726
+#: src/ashytv/ui/player_view.py:870
 msgid "Audio"
 msgstr "Ljud"
 
-#: src/ashytv/ui/player_view.py:729
+#: src/ashytv/ui/player_view.py:873
 msgid "Aspect ratio"
 msgstr "Bildformat"
 
-#: src/ashytv/ui/player_view.py:733
+#: src/ashytv/ui/player_view.py:877
 msgid "Speed"
 msgstr "Hastighet"
-
-#: src/ashytv/ui/schedule_dialog.py:28
-msgid "No schedule"
-msgstr "Ingen tablå"
 
 #: src/ashytv/ui/schedule_dialog.py:39
 msgid "Today"
@@ -1162,130 +1293,170 @@ msgstr "Kom igång"
 msgid "AshyTV does not provide any content — bring your own playlist."
 msgstr "AshyTV tillhandahåller inget innehåll — ta med din egen spellista."
 
-#: src/ashytv/window.py:74
+#: src/ashytv/window.py:77
 msgid "Menu"
 msgstr "Meny"
 
-#: src/ashytv/window.py:83
+#: src/ashytv/window.py:86
 msgid "Search…"
 msgstr "Sök…"
 
-#: src/ashytv/window.py:90
+#: src/ashytv/window.py:93
 msgid "Keyboard Shortcuts"
 msgstr "Kortkommandon"
 
-#: src/ashytv/window.py:91
+#: src/ashytv/window.py:94
 msgid "About AshyTV"
 msgstr "Om AshyTV"
 
-#: src/ashytv/window.py:94
+#: src/ashytv/window.py:97
 msgid "Main Menu"
 msgstr "Huvudmeny"
 
-#: src/ashytv/window.py:96
+#: src/ashytv/window.py:99
 msgid "Search (Ctrl+F)"
 msgstr "Sök (Ctrl+F)"
 
-#: src/ashytv/window.py:164
+#: src/ashytv/window.py:175
 msgid "The best movies for you"
 msgstr "De bästa filmerna för dig"
 
-#: src/ashytv/window.py:169
+#: src/ashytv/window.py:180
 msgid "Your favorite series in one place"
 msgstr "Dina favoritserier på ett ställe"
 
-#: src/ashytv/window.py:377
+#: src/ashytv/window.py:395
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Spelaren är inte tillgänglig: installera mpv och python-mpv ({error})"
 
-#: src/ashytv/window.py:419
+#: src/ashytv/window.py:433
+#, python-brace-format
+msgid "No channel {number}"
+msgstr "Ingen kanal {number}"
+
+#: src/ashytv/window.py:459
 msgid "Next episode…"
 msgstr "Nästa avsnitt…"
 
-#: src/ashytv/window.py:443
+#: src/ashytv/window.py:483
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Det gick inte att öppna: {error}"
 
-#: src/ashytv/window.py:447
+#: src/ashytv/window.py:487
 msgid "This item is no longer in the playlist."
 msgstr "Det här objektet finns inte längre i spellistan."
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:518
 msgid "Added to favorites"
 msgstr "Tillagd i favoriter"
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:518
 msgid "Removed from favorites"
 msgstr "Borttagen från favoriter"
 
-#: src/ashytv/window.py:579
+#: src/ashytv/window.py:619
 msgid "Please wait: an import is already in progress."
 msgstr "Vänta: en import pågår redan."
 
-#: src/ashytv/window.py:596
+#: src/ashytv/window.py:636
 msgid "Importing playlist…"
 msgstr "Importerar spellista…"
 
-#: src/ashytv/window.py:609
+#: src/ashytv/window.py:649
 msgid "Connecting to the Xtream provider…"
 msgstr "Ansluter till Xtream-leverantören…"
 
-#: src/ashytv/window.py:626
+#: src/ashytv/window.py:666
 msgid "Provider password not found; add the playlist again."
 msgstr "Leverantörens lösenord hittades inte; lägg till spellistan igen."
 
-#: src/ashytv/window.py:630
+#: src/ashytv/window.py:670
 msgid "Updating playlist…"
 msgstr "Uppdaterar spellista…"
 
-#: src/ashytv/window.py:650
+#: src/ashytv/window.py:690
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Spellistan ”{name}” har uppdaterats."
 
-#: src/ashytv/window.py:654
+#: src/ashytv/window.py:694
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} objekt importerat."
 msgstr[1] "{n} objekt importerade."
 
-#: src/ashytv/window.py:655
+#: src/ashytv/window.py:695
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Spellistan är klar: {n} objekt."
 msgstr[1] "Spellistan är klar: {n} objekt."
 
-#: src/ashytv/window.py:676
+#: src/ashytv/window.py:716
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Det gick inte att uppdatera ”{name}”: {error}"
 
-#: src/ashytv/window.py:680
+#: src/ashytv/window.py:720
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Misslyckades: {error}"
 
-#: src/ashytv/window.py:681
+#: src/ashytv/window.py:721
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Importen misslyckades: {error}"
 
-#: src/ashytv/window.py:687
+#: src/ashytv/window.py:727
 msgid "Please wait for the import to finish."
 msgstr "Vänta tills importen är klar."
 
-#: src/ashytv/window.py:700
+#: src/ashytv/window.py:740
 msgid "Playlist removed."
 msgstr "Spellistan har tagits bort."
 
-#: src/ashytv/window.py:749
+#: src/ashytv/window.py:789
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Guiden (EPG) är inte tillgänglig: {error}"
+
+#: src/ashytv/window.py:824
+msgid "Programme"
+msgstr "Program"
+
+#: src/ashytv/window.py:828
+#, python-brace-format
+msgid "You will be reminded of “{title}” at {time}"
+msgstr "Du får en påminnelse om ”{title}” kl. {time}"
+
+#: src/ashytv/window.py:829
+msgid "Reminder cancelled"
+msgstr "Påminnelse avbruten"
+
+#: src/ashytv/window.py:841
+#, python-brace-format
+msgid "“{title}” starts soon on {channel}"
+msgstr "”{title}” börjar snart på {channel}"
+
+#: src/ashytv/window.py:843
+msgid "AshyTV reminder"
+msgstr "AshyTV-påminnelse"
+
+#: src/ashytv/window.py:862
+msgid "This channel is no longer in your playlists."
+msgstr "Den här kanalen finns inte längre i dina spellistor."
+
+#: src/ashytv/window.py:877
+#, python-brace-format
+msgid "Group “{name}” hidden"
+msgstr "Gruppen ”{name}” är dold"
+
+#: src/ashytv/window.py:878
+msgid "Undo"
+msgstr "Ångra"
 
 #: data/org.communitybig.ashytv.desktop.in:3
 #: data/org.communitybig.ashytv.metainfo.xml.in:4
@@ -1300,10 +1471,12 @@ msgstr "IPTV-spelare"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Titta på dina egna IPTV-spellistor (M3U och Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing
+#. semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
+msgstr ""
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1319,9 +1492,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen M3U-"
-"spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, en "
-"elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
+"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen "
+"M3U-spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, "
+"en elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
 "innehåller inget innehåll."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
@@ -1342,6 +1515,9 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Uppspelning med libmpv med hårdvaruavkodning, bild-i-bild och inspelning"
+
+#~ msgid "Search"
+#~ msgstr "Sök"
 
 #~ msgid "Add your IPTV playlist to start watching"
 #~ msgstr "Lägg till din IPTV-spellista för att börja titta"
