@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Se"
 
@@ -538,8 +537,8 @@ msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr ""
-"Indsæt udbyderens velkomstbesked: server, brugernavn og adgangskode udfyldes"
-" automatisk"
+"Indsæt udbyderens velkomstbesked: server, brugernavn og adgangskode udfyldes "
+"automatisk"
 
 #: src/ashytv/ui/pages/lists_page.py:117
 msgid "Playlist URL (M3U)"
@@ -558,8 +557,8 @@ msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
 msgstr ""
-"Dine oplysninger gemmes kun på din enhed. Adgangskoder opbevares i systemets"
-" nøglering."
+"Dine oplysninger gemmes kun på din enhed. Adgangskoder opbevares i systemets "
+"nøglering."
 
 #: src/ashytv/ui/pages/lists_page.py:162
 msgid "Your Playlists"
@@ -1301,12 +1300,10 @@ msgstr "IPTV-afspiller"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Se dine egne IPTV-playlister (M3U og Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;afspiller;kanaler;film;serier;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;afspiller;kanaler;film;serier;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1322,10 +1319,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV er en IPTV-afspiller i GTK4/libadwaita. Importér din egen "
-"M3U-playliste eller Xtream Codes-konto, og gennemse live-kanaler, en "
-"elektronisk programguide, film og serier. AshyTV leverer eller indeholder "
-"intet indhold."
+"AshyTV er en IPTV-afspiller i GTK4/libadwaita. Importér din egen M3U-"
+"playliste eller Xtream Codes-konto, og gennemse live-kanaler, en elektronisk "
+"programguide, film og serier. AshyTV leverer eller indeholder intet indhold."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Titta"
 
@@ -614,8 +613,8 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här"
-" enheten."
+"”{name}” och alla dess kanaler, favoriter och historik tas bort från den här "
+"enheten."
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -637,8 +636,7 @@ msgstr "M3U-spellistor"
 
 #: src/ashytv/ui/pages/lists_page.py:338
 msgid "Couldn't find server, username and password in the copied text."
-msgstr ""
-"Hittade inte server, användarnamn och lösenord i den kopierade texten."
+msgstr "Hittade inte server, användarnamn och lösenord i den kopierade texten."
 
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -1302,12 +1300,10 @@ msgstr "IPTV-spelare"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Titta på dina egna IPTV-spellistor (M3U och Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spelare;kanaler;filmer;serier;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1323,9 +1319,9 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen "
-"M3U-spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, "
-"en elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
+"AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen M3U-"
+"spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, en "
+"elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller "
 "innehåller inget innehåll."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18

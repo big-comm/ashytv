@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -69,7 +69,8 @@ msgid ""
 "Import your own playlist — no content is provided by the app."
 msgstr ""
 "Съвременен IPTV плейър за настолен Linux.\n"
-"Импортирайте собствен плейлист — приложението не предоставя никакво съдържание."
+"Импортирайте собствен плейлист — приложението не предоставя никакво "
+"съдържание."
 
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
@@ -206,8 +207,7 @@ msgid "Account status: {status}"
 msgstr "Състояние на акаунта: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Гледане"
 
@@ -841,8 +841,7 @@ msgstr "Мрежов буфер (секунди)"
 #: src/ashytv/ui/pages/settings_page.py:214
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr ""
-"По-голям буфер = по-малко засичане, но по-голямо забавяне при смяна на "
-"канала"
+"По-голям буфер = по-малко засичане, но по-голямо забавяне при смяна на канала"
 
 #: src/ashytv/ui/pages/settings_page.py:220
 msgid "Player shortcuts"
@@ -1303,13 +1302,12 @@ msgstr "IPTV плейър"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Гледайте собствените си IPTV плейлисти (M3U и Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
 msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;плейър;телевизия;тв;на"
-" живо;канали;филми;сериали;"
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;плейър;телевизия;тв;на "
+"живо;канали;филми;сериали;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -110,8 +110,8 @@ msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
 "or the login may be invalid."
 msgstr ""
-"Il server ha rifiutato la richiesta (HTTP {code}). L’account potrebbe essere"
-" scaduto o le credenziali non essere valide."
+"Il server ha rifiutato la richiesta (HTTP {code}). L’account potrebbe essere "
+"scaduto o le credenziali non essere valide."
 
 #: src/ashytv/services/http.py:53
 #, python-brace-format
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Stato dell’account: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Guarda"
 
@@ -429,8 +428,7 @@ msgstr "Guida non disponibile"
 
 #: src/ashytv/ui/pages/epg_page.py:121
 msgid "The guide appears here once your provider's EPG loads."
-msgstr ""
-"La guida apparirà qui non appena l’EPG del tuo provider sarà caricato."
+msgstr "La guida apparirà qui non appena l’EPG del tuo provider sarà caricato."
 
 #: src/ashytv/ui/pages/home_page.py:57
 msgid "Continue Watching"
@@ -824,8 +822,7 @@ msgstr "Qualità automatica"
 
 #: src/ashytv/ui/pages/settings_page.py:209
 msgid "Switches between a channel's qualities to match your connection"
-msgstr ""
-"Passa da una qualità all’altra del canale in base alla tua connessione"
+msgstr "Passa da una qualità all’altra del canale in base alla tua connessione"
 
 #: src/ashytv/ui/pages/settings_page.py:210
 msgid "Hardware acceleration"
@@ -873,8 +870,7 @@ msgstr "PIN"
 
 #: src/ashytv/ui/pages/settings_page.py:243
 msgid "With a PIN set, it is required to show adult content."
-msgstr ""
-"Con un PIN impostato, è richiesto per mostrare i contenuti per adulti."
+msgstr "Con un PIN impostato, è richiesto per mostrare i contenuti per adulti."
 
 #: src/ashytv/ui/pages/settings_page.py:245
 msgid "New PIN (4+ digits)"
@@ -1302,12 +1298,10 @@ msgstr "Lettore IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Guarda le tue playlist IPTV (M3U e Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lettore;diretta;canali;film;serie;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lettore;diretta;canali;film;serie;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"

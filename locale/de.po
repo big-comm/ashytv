@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Ansehen"
 
@@ -356,8 +355,8 @@ msgstr "Noch nichts vorhanden"
 #: src/ashytv/ui/pages/channels_page.py:110
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr ""
-"Tippen Sie auf das Herz bei einem Sender, Film oder einer Serie, um ihn hier"
-" zu behalten."
+"Tippen Sie auf das Herz bei einem Sender, Film oder einer Serie, um ihn hier "
+"zu behalten."
 
 #: src/ashytv/ui/pages/channels_page.py:112
 msgid "No channels in this category."
@@ -801,8 +800,7 @@ msgstr "Transparenz"
 
 #: src/ashytv/ui/pages/settings_page.py:190
 msgid "Makes the window background translucent (depends on the compositor)."
-msgstr ""
-"Macht den Fensterhintergrund durchscheinend (abhängig vom Compositor)."
+msgstr "Macht den Fensterhintergrund durchscheinend (abhängig vom Compositor)."
 
 #: src/ashytv/ui/pages/settings_page.py:192
 msgid "Translucent window"
@@ -1055,8 +1053,7 @@ msgstr "Wiedergabe nicht möglich"
 #: src/ashytv/ui/player_view.py:368
 msgid "The channel may be offline or the connection dropped."
 msgstr ""
-"Der Sender ist möglicherweise offline oder die Verbindung wurde "
-"unterbrochen."
+"Der Sender ist möglicherweise offline oder die Verbindung wurde unterbrochen."
 
 #: src/ashytv/ui/player_view.py:375
 msgid "Broadcast ended"
@@ -1319,12 +1316,10 @@ msgstr "IPTV-Player"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Sehen Sie Ihre eigenen IPTV-Playlists (M3U und Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;fernsehen;sender;filme;serien;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;fernsehen;sender;filme;serien;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1341,9 +1336,9 @@ msgid ""
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
 "AshyTV ist ein IPTV-Player auf Basis von GTK4/libadwaita. Importieren Sie "
-"Ihre eigene M3U-Playlist oder Ihr Xtream-Codes-Konto und stöbern Sie in "
-"Live-Sendern, einem elektronischen Programmführer, Filmen und Serien. AshyTV"
-" stellt keine Inhalte bereit und enthält keine."
+"Ihre eigene M3U-Playlist oder Ihr Xtream-Codes-Konto und stöbern Sie in Live-"
+"Sendern, einem elektronischen Programmführer, Filmen und Serien. AshyTV "
+"stellt keine Inhalte bereit und enthält keine."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"
@@ -1362,8 +1357,7 @@ msgstr "Film- und Serienkatalog mit Fortsetzen und nächster Folge"
 #: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
-msgstr ""
-"Wiedergabe mit libmpv, Hardware-Dekodierung, Bild-in-Bild und Aufnahme"
+msgstr "Wiedergabe mit libmpv, Hardware-Dekodierung, Bild-in-Bild und Aufnahme"
 
 #~ msgid "Add your IPTV playlist to start watching"
 #~ msgstr "Fügen Sie Ihre IPTV-Playlist hinzu, um mit dem Ansehen zu beginnen"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -110,8 +110,8 @@ msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
 "or the login may be invalid."
 msgstr ""
-"De server heeft het verzoek geweigerd (HTTP {code}). Het account is mogelijk"
-" verlopen of de inloggegevens zijn ongeldig."
+"De server heeft het verzoek geweigerd (HTTP {code}). Het account is mogelijk "
+"verlopen of de inloggegevens zijn ongeldig."
 
 #: src/ashytv/services/http.py:53
 #, python-brace-format
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Accountstatus: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Kijken"
 
@@ -614,8 +613,8 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"“{name}” en alle bijbehorende kanalen, favorieten en geschiedenis worden van"
-" dit apparaat verwijderd."
+"“{name}” en alle bijbehorende kanalen, favorieten en geschiedenis worden van "
+"dit apparaat verwijderd."
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -638,8 +637,7 @@ msgstr "M3U-afspeellijsten"
 #: src/ashytv/ui/pages/lists_page.py:338
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
-"Kon server, gebruikersnaam en wachtwoord niet vinden in de gekopieerde "
-"tekst."
+"Kon server, gebruikersnaam en wachtwoord niet vinden in de gekopieerde tekst."
 
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -1310,12 +1308,10 @@ msgstr "IPTV-speler"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Bekijk je eigen IPTV-afspeellijsten (M3U en Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;speler;kanalen;films;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;speler;kanalen;films;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1331,8 +1327,8 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV is een IPTV-speler voor GTK4/libadwaita. Importeer je eigen "
-"M3U-afspeellijst of Xtream Codes-account en blader door live kanalen, een "
+"AshyTV is een IPTV-speler voor GTK4/libadwaita. Importeer je eigen M3U-"
+"afspeellijst of Xtream Codes-account en blader door live kanalen, een "
 "elektronische programmagids, films en series. AshyTV levert en bevat geen "
 "inhoud."
 

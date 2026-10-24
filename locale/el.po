@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -69,7 +69,8 @@ msgid ""
 "Import your own playlist — no content is provided by the app."
 msgstr ""
 "Ένα σύγχρονο πρόγραμμα αναπαραγωγής IPTV για την επιφάνεια εργασίας Linux.\n"
-"Εισαγάγετε τη δική σας λίστα αναπαραγωγής — η εφαρμογή δεν παρέχει κανένα περιεχόμενο."
+"Εισαγάγετε τη δική σας λίστα αναπαραγωγής — η εφαρμογή δεν παρέχει κανένα "
+"περιεχόμενο."
 
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
@@ -206,8 +207,7 @@ msgid "Account status: {status}"
 msgstr "Κατάσταση λογαριασμού: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Παρακολούθηση"
 
@@ -357,8 +357,8 @@ msgstr "Τίποτα ακόμη εδώ"
 #: src/ashytv/ui/pages/channels_page.py:110
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr ""
-"Πατήστε την καρδιά σε ένα κανάλι, μια ταινία ή μια σειρά για να το κρατήσετε"
-" εδώ."
+"Πατήστε την καρδιά σε ένα κανάλι, μια ταινία ή μια σειρά για να το κρατήσετε "
+"εδώ."
 
 #: src/ashytv/ui/pages/channels_page.py:112
 msgid "No channels in this category."
@@ -883,8 +883,7 @@ msgstr "PIN"
 #: src/ashytv/ui/pages/settings_page.py:243
 msgid "With a PIN set, it is required to show adult content."
 msgstr ""
-"Όταν έχει οριστεί PIN, απαιτείται για την εμφάνιση περιεχομένου για "
-"ενήλικες."
+"Όταν έχει οριστεί PIN, απαιτείται για την εμφάνιση περιεχομένου για ενήλικες."
 
 #: src/ashytv/ui/pages/settings_page.py:245
 msgid "New PIN (4+ digits)"
@@ -1317,12 +1316,10 @@ msgstr "Πρόγραμμα αναπαραγωγής IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Παρακολουθήστε τις δικές σας λίστες IPTV (M3U και Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;τηλεόραση;ζωντανά;κανάλια;ταινίες;σειρές;οδηγός;αναπαραγωγή;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;τηλεόραση;ζωντανά;κανάλια;ταινίες;σειρές;οδηγός;αναπαραγωγή;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Fiókállapot: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Megtekintés"
 
@@ -639,8 +638,7 @@ msgstr "M3U lejátszási listák"
 
 #: src/ashytv/ui/pages/lists_page.py:338
 msgid "Couldn't find server, username and password in the copied text."
-msgstr ""
-"A másolt szövegben nem található kiszolgáló, felhasználónév és jelszó."
+msgstr "A másolt szövegben nem található kiszolgáló, felhasználónév és jelszó."
 
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -846,8 +844,7 @@ msgstr "Hálózati puffer (másodperc)"
 
 #: src/ashytv/ui/pages/settings_page.py:214
 msgid "More buffer = fewer stutters, but more delay when changing channels"
-msgstr ""
-"Nagyobb puffer = kevesebb akadozás, de nagyobb késés csatornaváltáskor"
+msgstr "Nagyobb puffer = kevesebb akadozás, de nagyobb késés csatornaváltáskor"
 
 #: src/ashytv/ui/pages/settings_page.py:220
 msgid "Player shortcuts"
@@ -872,8 +869,8 @@ msgstr "Felnőtt tartalom elrejtése"
 #: src/ashytv/ui/pages/settings_page.py:237
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr ""
-"Elrejti az olyan kifejezéseket tartalmazó kategóriákat, mint „adult”, „XXX”,"
-" „+18”"
+"Elrejti az olyan kifejezéseket tartalmazó kategóriákat, mint „adult”, „XXX”, "
+"„+18”"
 
 #: src/ashytv/ui/pages/settings_page.py:243
 msgid "PIN"
@@ -882,8 +879,7 @@ msgstr "PIN"
 #: src/ashytv/ui/pages/settings_page.py:243
 msgid "With a PIN set, it is required to show adult content."
 msgstr ""
-"PIN-kód beállítása esetén a felnőtt tartalom megjelenítéséhez szükség van "
-"rá."
+"PIN-kód beállítása esetén a felnőtt tartalom megjelenítéséhez szükség van rá."
 
 #: src/ashytv/ui/pages/settings_page.py:245
 msgid "New PIN (4+ digits)"
@@ -1314,12 +1310,10 @@ msgstr "IPTV-lejátszó"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Nézze saját IPTV-lejátszási listáit (M3U és Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lejátszó;csatornák;filmek;sorozatok;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;lejátszó;csatornák;filmek;sorozatok;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1335,10 +1329,10 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"Az AshyTV egy GTK4/libadwaita alapú IPTV-lejátszó. Importálja saját "
-"M3U-lejátszási listáját vagy Xtream Codes fiókját, és böngésszen élő "
-"csatornák, elektronikus műsorújság, filmek és sorozatok között. Az AshyTV "
-"nem biztosít és nem tartalmaz semmilyen tartalmat."
+"Az AshyTV egy GTK4/libadwaita alapú IPTV-lejátszó. Importálja saját M3U-"
+"lejátszási listáját vagy Xtream Codes fiókját, és böngésszen élő csatornák, "
+"elektronikus műsorújság, filmek és sorozatok között. Az AshyTV nem biztosít "
+"és nem tartalmaz semmilyen tartalmat."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"

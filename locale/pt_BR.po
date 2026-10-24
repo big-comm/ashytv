@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -111,8 +111,8 @@ msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
 "or the login may be invalid."
 msgstr ""
-"O servidor recusou a solicitação (HTTP {code}). A conta pode ter expirado ou"
-" o login pode ser inválido."
+"O servidor recusou a solicitação (HTTP {code}). A conta pode ter expirado ou "
+"o login pode ser inválido."
 
 #: src/ashytv/services/http.py:53
 #, python-brace-format
@@ -207,8 +207,7 @@ msgid "Account status: {status}"
 msgstr "Status da conta: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Assistir"
 
@@ -614,8 +613,8 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"“{name}” e todos os seus canais, favoritos e histórico serão removidos deste"
-" dispositivo."
+"“{name}” e todos os seus canais, favoritos e histórico serão removidos deste "
+"dispositivo."
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -637,8 +636,7 @@ msgstr "Playlists M3U"
 
 #: src/ashytv/ui/pages/lists_page.py:338
 msgid "Couldn't find server, username and password in the copied text."
-msgstr ""
-"Não foi possível encontrar servidor, usuário e senha no texto copiado."
+msgstr "Não foi possível encontrar servidor, usuário e senha no texto copiado."
 
 #: src/ashytv/ui/pages/lists_page.py:344
 msgid "Provider details filled in. Check them and click “Save and Connect”."
@@ -1301,8 +1299,7 @@ msgstr "Player IPTV"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Assista às suas próprias playlists IPTV (M3U e Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
 msgstr ""

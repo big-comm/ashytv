@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 17:41-0300\n"
+"POT-Creation-Date: 2026-10-24 17:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -206,8 +206,7 @@ msgid "Account status: {status}"
 msgstr "Staða reiknings: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:336
-#: src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:336 src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "Horfa"
 
@@ -613,8 +612,7 @@ msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr ""
-"„{name}“ og allar rásir hans, eftirlæti og saga verða fjarlægð úr þessu "
-"tæki."
+"„{name}“ og allar rásir hans, eftirlæti og saga verða fjarlægð úr þessu tæki."
 
 #: src/ashytv/ui/pages/lists_page.py:278
 #: src/ashytv/ui/pages/recordings_page.py:85
@@ -1300,12 +1298,10 @@ msgstr "IPTV-spilari"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Horfðu á þína eigin IPTV-spilunarlista (M3U og Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing
-#. semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr ""
-"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spilari;rásir;kvikmyndir;þættir;"
+msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;spilari;rásir;kvikmyndir;þættir;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1321,10 +1317,10 @@ msgid ""
 "Xtream Codes account and browse live channels, an electronic program guide, "
 "movies and series. AshyTV does not provide or include any content."
 msgstr ""
-"AshyTV er IPTV-spilari byggður á GTK4/libadwaita. Fluttu inn þinn eigin "
-"M3U-spilunarlista eða Xtream Codes-reikning og skoðaðu beinar rásir, rafræna"
-" dagskrá, kvikmyndir og þætti. AshyTV býður ekkert efni og inniheldur ekkert"
-" efni."
+"AshyTV er IPTV-spilari byggður á GTK4/libadwaita. Fluttu inn þinn eigin M3U-"
+"spilunarlista eða Xtream Codes-reikning og skoðaðu beinar rásir, rafræna "
+"dagskrá, kvikmyndir og þætti. AshyTV býður ekkert efni og inniheldur ekkert "
+"efni."
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"
