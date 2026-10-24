@@ -12,6 +12,7 @@ from ..i18n import _
 from ..models import PlayItem
 from ..services.quality import QualityController
 from ..player.mpv_widget import MpvWidget
+from .channel_overlay import ChannelOverlay
 from .detail_dialog import fmt_time
 from .pages._common import set_logo
 from .pages.settings_page import recordings_dir
@@ -26,6 +27,10 @@ _SEEK_DELAY_MS = 150      # wait for the pointer to rest before seeking
 _QUALITY_TICK = 5         # seconds between adaptive quality checks
 _BUFFER_FULL_SECS = 8     # buffered seconds that count as a healthy stream
 _RANKS = {"4K": 4, "FHD": 3, "HD": 2, "SD": 1}
+_DIGIT_DELAY_MS = 1500    # wait after the last digit before tuning
+_LIVE_EDGE_SECS = 8       # closer than this to the live edge counts as live
+_DIGITS = {**{getattr(Gdk, f"KEY_{n}"): n for n in range(10)},
+           **{getattr(Gdk, f"KEY_KP_{n}"): n for n in range(10)}}
 
 
 class PlayerView(Gtk.Overlay):
@@ -41,6 +46,9 @@ class PlayerView(Gtk.Overlay):
         "progress": (GObject.SignalFlags.RUN_FIRST, None, (object, float, float)),
         "ended": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "channel-list": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "zap-to": (GObject.SignalFlags.RUN_FIRST, None, (int,)),  # index (0-based)
+        "zap-previous": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, settings):
@@ -73,7 +81,12 @@ class PlayerView(Gtk.Overlay):
         self.add_overlay(self._build_top_bar())
         self.add_overlay(self._build_bottom_bar())
         self.add_overlay(self._build_center())
+        self.channel_overlay = ChannelOverlay()
+        self.channel_overlay.connect("play", self._on_overlay_play)
+        self.add_overlay(self.channel_overlay)
         self.add_overlay(self._build_osd())
+        self._digits = ""
+        self._digit_source = 0
 
         motion = Gtk.EventControllerMotion()
         motion.connect("motion", self._on_motion)
@@ -178,8 +191,16 @@ class PlayerView(Gtk.Overlay):
 
         controls = Gtk.CenterBox()
         self.live_badge = Gtk.Label(label=_("● LIVE"), valign=Gtk.Align.CENTER)
+        # Timeshift: shows how far behind live you are and jumps back to it.
+        self.go_live_btn = Gtk.Button(label=_("Go live"), valign=Gtk.Align.CENTER,
+                                      visible=False, tooltip_text=_("Back to live"))
+        self.go_live_btn.add_css_class("ashy-go-live")
+        self.go_live_btn.connect("clicked", lambda *_: self._go_live())
+        live_box = Gtk.Box(spacing=10)
+        live_box.append(self.live_badge)
+        live_box.append(self.go_live_btn)
         self.live_badge.add_css_class("ashy-rec-dot")
-        controls.set_start_widget(self.live_badge)
+        controls.set_start_widget(live_box)
 
         center = Gtk.Box(spacing=18)
         self.prev_btn = self._btn("media-skip-backward-symbolic", _("Previous (↑)"),
@@ -262,6 +283,7 @@ class PlayerView(Gtk.Overlay):
         return self._item
 
     def play(self, item: PlayItem, can_zap: bool = False) -> None:
+        self.channel_overlay.hide()
         self._save_progress()
         self._stop_recording()
         self._item = item
@@ -325,7 +347,26 @@ class PlayerView(Gtk.Overlay):
 
     def handle_key(self, keyval: int, state) -> bool:
         k = keyval
-        if k in (Gdk.KEY_space, Gdk.KEY_k, Gdk.KEY_K, Gdk.KEY_AudioPlay):
+        if self.channel_overlay.get_visible():
+            if k in (Gdk.KEY_Escape, Gdk.KEY_Left, Gdk.KEY_BackSpace):
+                self.channel_overlay.hide()
+                self._show_controls()
+                return True
+            return False  # arrows and Enter move/choose in the channel list
+        live = self._item is not None and self._item.is_live
+        digit = _DIGITS.get(k)
+        if digit is not None and live and self._can_zap:
+            self._type_digit(digit)
+            return True
+        if k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter, Gdk.KEY_ISO_Enter, Gdk.KEY_Menu) \
+                and live and self._can_zap:
+            self.emit("channel-list")
+            return True
+        if k == Gdk.KEY_BackSpace and live and self._can_zap:
+            self.emit("zap-previous")
+        elif k in (Gdk.KEY_i, Gdk.KEY_I):
+            pass  # just show the info/controls (below)
+        elif k in (Gdk.KEY_space, Gdk.KEY_k, Gdk.KEY_K, Gdk.KEY_AudioPlay):
             self._toggle_pause()
         elif k in (Gdk.KEY_f, Gdk.KEY_F, Gdk.KEY_F11):
             self.emit("toggle-fullscreen")
@@ -335,18 +376,31 @@ class PlayerView(Gtk.Overlay):
             self.emit("zap", -1)
         elif k in (Gdk.KEY_Down, Gdk.KEY_Page_Down, Gdk.KEY_AudioNext) and self._can_zap:
             self.emit("zap", 1)
-        elif k == Gdk.KEY_Left and self._item and not self._item.is_live:
-            self.mpv.seek(-10)
-            self._flash(f"⏪ {fmt_time(self.mpv.position)}")
-        elif k == Gdk.KEY_Right and self._item and not self._item.is_live:
-            self.mpv.seek(10)
-            self._flash(f"⏩ {fmt_time(self.mpv.position)}")
+        elif k == Gdk.KEY_Left and self._item:
+            self.mpv.seek(-10)  # live: rewinds inside the timeshift buffer
+            self._flash(f"⏪ {self._position_text()}")
+        elif k == Gdk.KEY_Right and self._item:
+            if live and self._behind_live() < _LIVE_EDGE_SECS:
+                self._flash(_("● LIVE"))
+            elif live:
+                # Stay inside the seekable buffer: going past it would reopen
+                # the stream from the start instead of moving forward.
+                end = self.mpv.seekable_end
+                target = min(self.mpv.position + 10, end - 0.5) if end else 0
+                if target > self.mpv.position:
+                    self.mpv.seek(target, relative=False)
+                self._flash(f"⏩ {self._position_text()}")
+            else:
+                self.mpv.seek(10)
+                self._flash(f"⏩ {self._position_text()}")
         elif k in (Gdk.KEY_plus, Gdk.KEY_equal, Gdk.KEY_KP_Add, Gdk.KEY_AudioRaiseVolume):
             self._change_volume(5)
         elif k in (Gdk.KEY_minus, Gdk.KEY_KP_Subtract, Gdk.KEY_AudioLowerVolume):
             self._change_volume(-5)
         elif k == Gdk.KEY_Escape:
-            if self._fullscreen:
+            if self._digits:
+                self._cancel_digits()
+            elif self._fullscreen:
                 self.emit("toggle-fullscreen")
             else:
                 self.close()
@@ -402,6 +456,8 @@ class PlayerView(Gtk.Overlay):
     def _on_time(self, _mpv, pos: float, dur: float) -> None:
         if self._item is None:
             return
+        if self._item.is_live:
+            self._update_live_badge()
         if not self._item.is_live and dur > 0:
             if not self._seeking:
                 self.scale.set_range(0, dur)
@@ -435,6 +491,86 @@ class PlayerView(Gtk.Overlay):
         if not self._seek_source:
             self._seeking = False
         return GLib.SOURCE_REMOVE
+
+    # ---- channel list, numbers, previous channel ---------------------
+
+    def show_channel_list(self, channels, current: int, guide) -> None:
+        # Like TiviMate: the list replaces the control bars over the video.
+        if self._hide_source:
+            GLib.source_remove(self._hide_source)
+            self._hide_source = 0
+        self.top_bar.set_reveal_child(False)
+        self.bottom_bar.set_reveal_child(False)
+        self.set_cursor(None)
+        self.channel_overlay.show_channels(channels, current, guide)
+
+    def _on_overlay_play(self, _overlay, index: int) -> None:
+        self.channel_overlay.hide()
+        self.emit("zap-to", index)
+
+    def _type_digit(self, digit: int) -> None:
+        """Type a channel number like on a TV remote: 1, 2, 3 -> channel 123."""
+        if len(self._digits) >= 5:
+            self._digits = ""
+        self._digits += str(digit)
+        self._flash(self._digits + "_", sticky=True)
+        if self._digit_source:
+            GLib.source_remove(self._digit_source)
+        self._digit_source = GLib.timeout_add(_DIGIT_DELAY_MS, self._commit_digits)
+
+    def _commit_digits(self) -> bool:
+        self._digit_source = 0
+        number, self._digits = int(self._digits or 0), ""
+        self._hide_osd()
+        if number > 0:
+            self.emit("zap-to", number - 1)
+        return GLib.SOURCE_REMOVE
+
+    def _cancel_digits(self) -> None:
+        if self._digit_source:
+            GLib.source_remove(self._digit_source)
+            self._digit_source = 0
+        self._digits = ""
+        self._hide_osd()
+
+    # ---- timeshift ---------------------------------------------------
+
+    def _behind_live(self) -> float:
+        """Seconds between the live edge (end of the buffer) and the picture."""
+        edge, pos = self.mpv.cache_time, self.mpv.position
+        return max(0.0, edge - pos) if edge > 0 and pos > 0 else 0.0
+
+    def _go_live(self) -> None:
+        end = self.mpv.seekable_end
+        if end > 0:
+            self.mpv.seek(max(0.0, end - 0.5), relative=False)
+        self.mpv.set_pause(False)
+        self._flash(_("● LIVE"))
+        # mpv can only seek up to slightly behind the newest data; if that is
+        # still far from live, reopen the stream, which starts at the live edge.
+        GLib.timeout_add(1200, self._ensure_live, self._item)
+
+    def _ensure_live(self, item) -> bool:
+        if item is self._item and item is not None and \
+                self._behind_live() >= _LIVE_EDGE_SECS:
+            self.mpv.play(item.url, user_agent=item.user_agent, referrer=item.referrer)
+        return GLib.SOURCE_REMOVE
+
+    def _position_text(self) -> str:
+        if self._item is not None and self._item.is_live:
+            behind = self._behind_live()
+            return f"−{fmt_time(behind)}" if behind >= _LIVE_EDGE_SECS else _("● LIVE")
+        return fmt_time(self.mpv.position)
+
+    def _update_live_badge(self) -> None:
+        behind = self._behind_live()
+        shifted = behind >= _LIVE_EDGE_SECS
+        self.live_badge.set_text(f"−{fmt_time(behind)}" if shifted else _("● LIVE"))
+        if shifted:
+            self.live_badge.add_css_class("ashy-behind")
+        else:
+            self.live_badge.remove_css_class("ashy-behind")
+        self.go_live_btn.set_visible(shifted)
 
     # ---- automatic quality ---------------------------------------
 
@@ -585,14 +721,22 @@ class PlayerView(Gtk.Overlay):
         self._show_controls()
         return True
 
-    def _flash(self, text: str) -> None:
+    def flash(self, text: str) -> None:
+        """Short on-screen message over the video."""
+        self._flash(text)
+
+    def _flash(self, text: str, sticky: bool = False) -> None:
         self.osd.set_text(text)
         self.osd.set_visible(True)
         if self._osd_source:
             GLib.source_remove(self._osd_source)
-        self._osd_source = GLib.timeout_add(1200, self._hide_osd)
+            self._osd_source = 0
+        if not sticky:
+            self._osd_source = GLib.timeout_add(1200, self._hide_osd)
 
     def _hide_osd(self) -> bool:
+        if self._osd_source:
+            GLib.source_remove(self._osd_source)
         self.osd.set_visible(False)
         self._osd_source = 0
         return GLib.SOURCE_REMOVE
@@ -783,6 +927,8 @@ class PlayerView(Gtk.Overlay):
         return GLib.SOURCE_REMOVE
 
     def _show_controls(self, keep: bool = False) -> None:
+        if self.channel_overlay.get_visible():
+            return  # the channel list is on screen instead of the bars
         self.top_bar.set_reveal_child(True)
         self.bottom_bar.set_reveal_child(True)
         self.set_cursor(None)
@@ -796,7 +942,8 @@ class PlayerView(Gtk.Overlay):
         self._hide_source = 0
         if self.mpv.state not in ("playing", "buffering"):
             return GLib.SOURCE_REMOVE
-        if any(b.get_active() for b in (self.vol_btn, self.cc_btn, self.opts_btn)):
+        if self.channel_overlay.get_visible() or any(
+                b.get_active() for b in (self.vol_btn, self.cc_btn, self.opts_btn)):
             self._show_controls()  # popover open: wait
             return GLib.SOURCE_REMOVE
         self.top_bar.set_reveal_child(False)

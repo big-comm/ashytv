@@ -15,10 +15,9 @@ from .services.quality import quality_label
 from .services.storage import Storage, collapse_variants
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
 from .ui.detail_dialog import DetailDialog
-from .ui.nav_sidebar import NavSidebar
+from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
-from .ui.pages.epg_page import EpgPage
 from .ui.pages.home_page import HomePage
 from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
@@ -26,7 +25,7 @@ from .ui.pages.settings_page import SettingsPage
 from .ui.schedule_dialog import schedule_dialog
 from .ui.welcome_view import WelcomeView
 
-_SEARCHABLE = {"channels", "movies", "series", "favorites", "epg"}
+_SEARCHABLE = {"channels", "movies", "series", "favorites"}
 _EPISODE_CACHE_SECS = 6 * 3600
 
 
@@ -50,6 +49,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._providers: dict[int, XtreamProvider] = {}
         self._zap: list | Gio.ListModel | None = None
         self._zap_index = 0
+        self._prev_zap_index: int | None = None
         self._series_ctx: tuple[Channel, list[Episode]] | None = None
         self._importing = False
         self._quiet_id = 0
@@ -67,6 +67,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         # ---- sidebar ----
         self.nav = NavSidebar()
         self.nav.connect("navigate", lambda _w, key: self.navigate(key))
+        self.nav.connect("compact-changed", self._on_nav_compact)
 
         # ---- header (spans the full width, as in the mockup) ----
         header = Adw.HeaderBar()
@@ -104,13 +105,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.page_stack.set_vexpand(True)
 
         self.split = Adw.OverlaySplitView(show_sidebar=True, sidebar_width_fraction=0.18,
-                                          min_sidebar_width=200, max_sidebar_width=240)
+                                          min_sidebar_width=FULL_WIDTH,
+                                          max_sidebar_width=FULL_WIDTH)
         self.split.set_sidebar(self.nav)
         self.split.set_content(content)
         self.split.bind_property("show-sidebar", self.sidebar_btn, "active",
                                  GObject.BindingFlags.BIDIRECTIONAL
                                  | GObject.BindingFlags.SYNC_CREATE)
         self.split.connect("notify::collapsed", self._on_collapsed)
+        self.nav.set_compact(bool(self.settings.get("sidebar_compact")))
 
         shell = Adw.ToolbarView()
         shell.add_top_bar(header)
@@ -157,8 +160,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("favorite-changed", self._on_favorite_changed)
         channels.connect("show-schedule", self._on_show_schedule)
 
-        epg_page = EpgPage(self.storage)
-        epg_page.connect("play", self._on_play)
 
         movies = CatalogPage(self.storage, MediaType.MOVIE, _("Movies"),
                              _("The best movies for you"))
@@ -189,7 +190,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         settings.connect("history-cleared", lambda *_: self.pages["home"].invalidate())
 
         self.pages = {
-            "home": home, "channels": channels, "epg": epg_page,
+            "home": home, "channels": channels,
             "movies": movies, "series": series, "favorites": favorites,
             "recordings": recordings, "lists": lists, "settings": settings,
         }
@@ -220,6 +221,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_start(self, _w) -> None:
         self.root_stack.set_visible_child_name("shell")
         self.navigate("lists" if not self.storage.has_playlists() else "home")
+
+    def _on_nav_compact(self, _nav, compact: bool) -> None:
+        width = COMPACT_WIDTH if compact else FULL_WIDTH
+        self.split.set_min_sidebar_width(width)
+        self.split.set_max_sidebar_width(width)
+        self.settings.set("sidebar_compact", compact)
 
     def _on_collapsed(self, split, _p) -> None:
         collapsed = split.get_collapsed()
@@ -304,6 +311,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._zap = zap if channel.media_type is MediaType.LIVE else None
         self._series_ctx = None
         self._zap_index = self._find_index(channel)
+        self._prev_zap_index = None
         number = self._zap_index + 1 if self._zap is not None else 0
         if channel.media_type is MediaType.LIVE:
             self._start(self._live_item(channel, number), can_zap=self._zap is not None)
@@ -386,6 +394,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
                             self._record(item, pos, dur))
         self.player.connect("ended", self._on_ended)
         self.player.connect("pip-requested", self._on_pip)
+        self.player.connect("channel-list", self._on_channel_list)
+        self.player.connect("zap-to", lambda _p, index: self._zap_to(index))
+        self.player.connect("zap-previous", lambda *_: self._zap_previous())
         self.player.connect("toast", lambda _p, msg: self._toast(msg))
         if self._epg_guide is not None:
             self.player.set_guide(self._epg_guide)
@@ -402,13 +413,32 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 self._play_episode(series, episodes[nxt], episodes)
             return
         n = self._zap_len()
-        if not n:
+        if n:
+            self._zap_to((self._zap_index + delta) % n)
+
+    def _zap_to(self, index: int) -> None:
+        """Tune the channel at `index` of the zapping list (0-based)."""
+        n = self._zap_len()
+        if not 0 <= index < n:
+            self.player.flash(_("No channel {number}").format(number=index + 1))
             return
-        self._zap_index = (self._zap_index + delta) % n
-        ch = self._zap_item(self._zap_index)
-        item = self._live_item(ch, self._zap_index + 1)
+        if index == self._zap_index and self.player.item is not None:
+            return
+        self._prev_zap_index = self._zap_index
+        self._zap_index = index
+        item = self._live_item(self._zap_item(index), index + 1)
         self.player.play(item, can_zap=True)
         self._record(item, 0, 0)
+
+    def _zap_previous(self) -> None:
+        if self._prev_zap_index is not None:
+            self._zap_to(self._prev_zap_index)
+
+    def _on_channel_list(self, _p) -> None:
+        n = self._zap_len()
+        if n:
+            channels = [self._zap_item(i) for i in range(n)]
+            self.player.show_channel_list(channels, self._zap_index, self._epg_guide)
 
     def _on_ended(self, _p, item: PlayItem) -> None:
         if self._series_ctx is None:
@@ -754,7 +784,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if url != self._epg_source:
             return GLib.SOURCE_REMOVE
         self._epg_guide = guide
-        for key in ("home", "channels", "favorites", "epg"):
+        for key in ("home", "channels", "favorites"):
             self.pages[key].set_guide(guide)
         if self.player is not None:
             self.player.set_guide(guide)
@@ -769,11 +799,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.storage.group_variants = bool(s.get("group_variants"))
         s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
-            "home", "channels", "favorites", "movies", "series", "epg"))
+            "home", "channels", "favorites", "movies", "series"))
 
     def _on_group_variants(self, value) -> None:
         self.storage.group_variants = bool(value)
-        self._invalidate_pages("home", "channels", "favorites", "epg")
+        self._invalidate_pages("home", "channels", "favorites")
 
     def _on_hide_adult(self, value) -> None:
         self.storage.hide_adult = bool(value)
@@ -786,6 +816,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self._on_key)
         self.add_controller(keys)
+        # Bubble phase: only keys no widget used (e.g. ← at the left edge).
+        nav_keys = Gtk.EventControllerKey()
+        nav_keys.connect("key-pressed", self._on_nav_key)
+        self.add_controller(nav_keys)
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
         if self.root_stack.get_visible_child_name() == "player" and self.player:
@@ -800,7 +834,55 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if keyval == Gdk.KEY_Escape and self.search_btn.get_active():
             self.search_btn.set_active(False)
             return True
+        return self._type_to_search(keyval, state)
+
+    def _focus_is_editable(self) -> bool:
+        focus = self.get_focus()
+        return focus is not None and (isinstance(focus, Gtk.Editable)
+                                      or focus.get_ancestor(Gtk.Editable) is not None)
+
+    def _type_to_search(self, keyval: int, state) -> bool:
+        """Typing on a searchable page starts searching right away."""
+        if (state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK
+                     | Gdk.ModifierType.SUPER_MASK)
+                or self.root_stack.get_visible_child_name() != "shell"
+                or not self.search_btn.get_visible() or self._focus_is_editable()):
+            return False
+        char = chr(Gdk.keyval_to_unicode(keyval) or 0)
+        if not char.isprintable() or char.isspace() or char == "\0":
+            return False
+        if not self.search_btn.get_active():
+            self.search_btn.set_active(True)
+        self.search.grab_focus()
+        self.search.insert_text(char, -1)
+        self.search.set_position(-1)
+        return True
+
+    def _on_nav_key(self, _c, keyval, _code, state) -> bool:
+        """Remote-style movement between the sidebar and the page."""
+        if (self.root_stack.get_visible_child_name() != "shell"
+                or state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK)):
+            return False
+        focus = self.get_focus()
+        in_nav = self.nav.has_focus_within(focus)
+        if in_nav and keyval == Gdk.KEY_Right:
+            return self.focus_page()
+        if not in_nav and keyval in (Gdk.KEY_Left, Gdk.KEY_BackSpace, Gdk.KEY_Escape):
+            if keyval == Gdk.KEY_BackSpace and self._focus_is_editable():
+                return False
+            if self.split.get_collapsed():
+                self.split.set_show_sidebar(True)
+            self.nav.focus_active()
+            return True
         return False
+
+    def focus_page(self) -> bool:
+        page = self.pages.get(self._current)
+        if page is None:
+            return False
+        if hasattr(page, "focus_content") and page.focus_content():
+            return True
+        return page.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _on_close_request(self, _w) -> bool:
         if self.mini is not None:

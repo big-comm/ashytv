@@ -263,6 +263,9 @@ def build_xmltv() -> bytes:
 
 # ---- media ------------------------------------------------------------------
 
+VIDEO_SECONDS = 60
+
+
 def ensure_video() -> Path:
     """Generate (once) a synthetic 60 s video with ffmpeg."""
     MEDIA.mkdir(parents=True, exist_ok=True)
@@ -280,8 +283,8 @@ def ensure_video() -> Path:
     subprocess.run([
         "ffmpeg", "-y", "-loglevel", "error",
         "-f", "lavfi", "-i",
-        "gradients=s=1280x720:c0=0x0b1430:c1=0x1c56d6:c2=0x7c4dff:n=3:speed=0.02:d=60:r=25",
-        "-f", "lavfi", "-i", "sine=frequency=220:sample_rate=48000:d=60",
+        f"gradients=s=1280x720:c0=0x0b1430:c1=0x1c56d6:c2=0x7c4dff:n=3:speed=0.02:d={VIDEO_SECONDS}:r=25",
+        "-f", "lavfi", "-i", f"sine=frequency=220:sample_rate=48000:d={VIDEO_SECONDS}",
         "-vf", draw, "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "64k", "-af", "volume=0.05", "-f", "mpegts", str(path),
     ], check=True)
@@ -326,7 +329,7 @@ class Handler(BaseHTTPRequestHandler):
             offline = os.environ.get("ASHYTV_DEMO_OFFLINE", "").split(",")
             if parts[3].split(".")[0] in offline:
                 return self._send(b"offline", "text/plain", 404)
-            return self._stream()
+            return self._live() if parts[0] == "live" else self._stream()
         self._send(b"not found", "text/plain", 404)
 
     def _api(self, qs: dict) -> None:
@@ -361,6 +364,29 @@ class Handler(BaseHTTPRequestHandler):
             return poster_svg(item["name"], item["year"])
         item = next(s for s in self.catalog["series"] if str(s["series_id"]) == ident[1:])
         return poster_svg(item["name"], item["genre"], wide=(kind == "backdrop"))
+
+    def _live(self) -> None:
+        """Live channels are sent in real time, like a broadcast: a short
+        burst, then only as fast as the video plays (no Content-Length)."""
+        data = self.video.read_bytes()
+        rate = len(data) / VIDEO_SECONDS          # bytes per second of video
+        self.send_response(200)
+        self.send_header("Content-Type", "video/mp2t")
+        self.send_header("Connection", "close")
+        self.end_headers()
+        chunk = 16 * 1024
+        sent = int(rate * 2)                       # ~2 s burst to start quickly
+        try:
+            self.wfile.write(data[:sent])
+            started = time.monotonic()
+            while sent < len(data):
+                self.wfile.write(data[sent:sent + chunk])
+                sent += chunk
+                ahead = sent / rate - 2 - (time.monotonic() - started)
+                if ahead > 0:
+                    time.sleep(ahead)
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # the player switched channel or closed
 
     def _stream(self) -> None:
         data = self.video.read_bytes()

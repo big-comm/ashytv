@@ -11,6 +11,7 @@ from ...models import Channel, MediaType
 from ...services.text import normalize
 from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
+from .epg_page import EpgPage
 from ._common import ChipRow, SearchFilter, page_header, set_logo
 
 _ALL = "__all__"
@@ -54,7 +55,32 @@ class ChannelsPage(Gtk.Box):
         title = _("Favorites") if favorites_only else _("TV Channels")
         sub = (_("Channels, movies and series you marked") if favorites_only
                else _("All your channels organized by category"))
-        self.append(page_header(title, sub))
+        header = page_header(title, sub)
+        header.set_hexpand(True)
+        top = Gtk.Box()
+        top.append(header)
+        self.guide: EpgPage | None = None
+        if not favorites_only:
+            # List | Guide: the same channels as a list or as a time grid.
+            switch = Gtk.Box(valign=Gtk.Align.CENTER, margin_end=28, margin_top=8)
+            switch.add_css_class("ashy-tabs")
+            self._view_buttons: dict[str, Gtk.ToggleButton] = {}
+            first = None
+            for key, label, icon in (("list", _("List"), "view-list-symbolic"),
+                                     ("guide", _("Guide"), "x-office-calendar-symbolic")):
+                content = Gtk.Box(spacing=6)
+                content.append(Gtk.Image(icon_name=icon))
+                content.append(Gtk.Label(label=label))
+                btn = Gtk.ToggleButton(child=content, tooltip_text=label)
+                if first is None:
+                    first = btn
+                else:
+                    btn.set_group(first)
+                btn.connect("toggled", self._on_view_toggled, key)
+                self._view_buttons[key] = btn
+                switch.append(btn)
+            top.append(switch)
+        self.append(top)
 
         self.chips = ChipRow(self._on_chip)
         if not favorites_only:
@@ -119,7 +145,15 @@ class ChannelsPage(Gtk.Box):
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
-        body.append(cpanel)
+        self.view_stack = Gtk.Stack(hexpand=True,
+                                    transition_type=Gtk.StackTransitionType.CROSSFADE)
+        self.view_stack.add_named(cpanel, "list")
+        if not favorites_only:
+            self.guide = EpgPage(storage, embedded=True)
+            self.guide.connect("play", lambda _g, ch: self.emit("play", ch))
+            self.view_stack.add_named(self.guide, "guide")
+            self._view_buttons["list"].set_active(True)
+        body.append(self.view_stack)
         self.append(body)
 
         # Refresh "now playing" every minute (visible rows only).
@@ -145,10 +179,14 @@ class ChannelsPage(Gtk.Box):
 
     def set_guide(self, guide) -> None:
         self._guide = guide
+        if self.guide is not None:
+            self.guide.set_guide(guide)
         self._rebind_visible()
 
     def set_search(self, text: str) -> None:
         self.search.set_text(text)
+        if self.guide is not None:
+            self.guide.set_search(text)
 
     def focus_channel(self, channel: Channel) -> None:
         for i in range(self.filter_model.get_n_items()):
@@ -254,6 +292,30 @@ class ChannelsPage(Gtk.Box):
         self.store.splice(0, self.store.get_n_items(),
                           [ChannelObject(c) for c in channels])
         self._update_empty()
+        if self.guide is not None:
+            self.guide.set_channels(channels)
+
+    # ---- list / guide view -------------------------------------------
+
+    @property
+    def view(self) -> str:
+        return self.view_stack.get_visible_child_name()
+
+    def set_view(self, view: str) -> None:
+        if self.guide is not None and view in self._view_buttons:
+            self._view_buttons[view].set_active(True)
+
+    def _on_view_toggled(self, button: Gtk.ToggleButton, key: str) -> None:
+        if not button.get_active():
+            return
+        self.view_stack.set_visible_child_name(key)
+        if key == "guide" and self.guide is not None:
+            self.guide.refresh()
+
+    def focus_content(self) -> bool:
+        if self.view == "guide" and self.guide is not None:
+            return self.guide.focus_content()
+        return self.listview.grab_focus()
 
     def _update_empty(self) -> None:
         empty = self.filter_model.get_n_items() == 0

@@ -30,6 +30,7 @@ DEFAULTS: dict = {
     "auto_refresh": True,
     "refresh_hours": 12,
     "autostart": False,
+    "sidebar_compact": False,   # sidebar shows icons only
 }
 
 

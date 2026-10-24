@@ -92,7 +92,11 @@ class MpvWidget(Gtk.GLArea):
             cache="yes",
             cache_secs=str(cache_secs),
             demuxer_max_bytes="64MiB",
-            demuxer_max_back_bytes="16MiB",
+            # Timeshift: keep what was already watched so live TV can be
+            # paused and rewound inside the buffer.
+            demuxer_max_back_bytes="256MiB",
+            demuxer_seekable_cache="yes",
+            force_seekable="yes",
             network_timeout="20",
             user_agent="AshyTV",
         )
@@ -293,10 +297,30 @@ class MpvWidget(Gtk.GLArea):
             return 0.0
 
     @property
+    def cache_time(self) -> float:
+        """Timestamp of the newest buffered packet (the live edge)."""
+        try:
+            # Attribute access reads the *property*; mpv["…"] would read the
+            # option of the same name, which does not exist.
+            return float(self._mpv.demuxer_cache_time or 0)
+        except Exception:  # not available yet
+            return 0.0
+
+    @property
+    def seekable_end(self) -> float:
+        """End of the buffered range mpv can seek into (slightly behind the
+        newest data). Seeking past it would reopen a live stream from scratch."""
+        try:
+            ranges = (self._mpv.demuxer_cache_state or {}).get("seekable-ranges") or []
+            return float(ranges[-1]["end"]) if ranges else 0.0
+        except Exception:  # not available yet
+            return 0.0
+
+    @property
     def cache_duration(self) -> float:
         """Seconds of media buffered ahead of the playback position."""
         try:
-            return float(self._mpv["demuxer-cache-duration"] or 0)
+            return float(self._mpv.demuxer_cache_duration or 0)
         except Exception:  # not available yet
             return 0.0
 
