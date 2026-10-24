@@ -41,6 +41,8 @@ class EpgPage(Gtk.Box):
 
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # channel, programme: toggle a reminder for a future programme
+        "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
     }
 
     def __init__(self, storage, embedded: bool = False):
@@ -49,6 +51,7 @@ class EpgPage(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.storage = storage
         self._channels: list[Channel] | None = None
+        self.reminders = None  # ReminderBook, set by the window
         self._guide = None
         self._dirty = True
         self._t0 = _now_window_start()
@@ -342,7 +345,15 @@ class EpgPage(Gtk.Box):
         if prog.desc:
             d = Gtk.Label(label=prog.desc, xalign=0, wrap=True, max_width_chars=50)
             box.append(d)
+        is_set = bool(self.reminders and self.reminders.has(
+            channel.playlist_id, channel.url, int(prog.start)))
+        remind = Gtk.Button(label=_("Cancel reminder") if is_set else _("Remind me"),
+                            halign=Gtk.Align.START, margin_top=6)
+        remind.add_css_class("pill-accent")
+        box.append(remind)
         pop = Gtk.Popover(child=box)
+        remind.connect("clicked", lambda *_: (pop.popdown(),
+                                             self.emit("remind", channel, prog)))
         pop.set_parent(button)
         pop.connect("closed", lambda p: GLib.idle_add(p.unparent))
         pop.popup()

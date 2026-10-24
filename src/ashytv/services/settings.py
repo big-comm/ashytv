@@ -31,6 +31,9 @@ DEFAULTS: dict = {
     "refresh_hours": 12,
     "autostart": False,
     "sidebar_compact": False,   # sidebar shows icons only
+    "hidden_groups": [],        # channel group names the user hid
+    "group_order": [],          # channel group names in the user's order
+    "reminders": [],            # programme reminders (see services/reminders.py)
 }
 
 

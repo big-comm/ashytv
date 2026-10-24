@@ -13,6 +13,7 @@ from .models import Channel, Episode, MediaType, PlayItem, Variant
 from .services import epg, http, importer, secrets
 from .services.quality import quality_label
 from .services.gamepad import GamepadInput
+from .services.reminders import Reminder, ReminderBook
 from .services.storage import Storage, collapse_variants
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
 from .ui.detail_dialog import DetailDialog
@@ -137,6 +138,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
         self._install_keys()
         self.gamepad = GamepadInput(self.handle_remote_key)
+        self.reminders = ReminderBook(self.settings.get("reminders"))
+        if self.pages["channels"].guide is not None:
+            self.pages["channels"].guide.reminders = self.reminders
+        GLib.timeout_add_seconds(20, self._check_reminders)
         self.connect("close-request", self._on_close_request)
         self.connect("notify::fullscreened", self._on_fullscreen_changed)
         self._connect_settings()
@@ -161,6 +166,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("play", self._on_play)
         channels.connect("favorite-changed", self._on_favorite_changed)
         channels.connect("show-schedule", self._on_show_schedule)
+        channels.connect("hide-group", self._on_hide_group)
+        channels.connect("remind", self._on_remind)
+        channels.connect("move-group", self._on_move_group)
 
 
         movies = CatalogPage(self.storage, MediaType.MOVIE, _("Movies"),
@@ -799,9 +807,87 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.storage.hide_adult = bool(s.get("hide_adult"))
         s.connect("hide_adult", self._on_hide_adult)
         self.storage.group_variants = bool(s.get("group_variants"))
+        self.storage.hidden_groups = set(s.get("hidden_groups") or [])
+        self.storage.group_order = list(s.get("group_order") or [])
+        s.connect("hidden_groups", self._on_groups_setting)
+        s.connect("group_order", self._on_groups_setting)
         s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
             "home", "channels", "favorites", "movies", "series"))
+
+    # ---- reminders ---------------------------------------------------
+
+    def _on_remind(self, _page, channel: Channel, prog) -> None:
+        reminder = Reminder(playlist_id=channel.playlist_id, channel_url=channel.url,
+                            channel_name=channel.base_name if channel.variant_labels
+                            else channel.display_name,
+                            title=prog.title or _("Programme"), start=int(prog.start))
+        is_set = self.reminders.toggle(reminder)
+        self.settings.set("reminders", self.reminders.to_list())
+        when = GLib.DateTime.new_from_unix_local(reminder.start).format("%R")
+        self._toast(_("You will be reminded of “{title}” at {time}").format(
+            title=reminder.title, time=when) if is_set else _("Reminder cancelled"))
+
+    def _check_reminders(self) -> bool:
+        now = time.time()
+        due = self.reminders.due(now)
+        if due or self.reminders.prune(now):
+            self.settings.set("reminders", self.reminders.to_list())
+        for r in due:
+            self._announce(r)
+        return GLib.SOURCE_CONTINUE
+
+    def _announce(self, r: Reminder) -> None:
+        text = _("“{title}” starts soon on {channel}").format(title=r.title,
+                                                               channel=r.channel_name)
+        notification = Gio.Notification.new(_("AshyTV reminder"))
+        notification.set_body(text)
+        notification.set_default_action_and_target("app.watch-reminder",
+                                                   GLib.Variant("s", r.key))
+        notification.add_button_with_target(_("Watch"), "app.watch-reminder",
+                                            GLib.Variant("s", r.key))
+        app = self.get_application()
+        if app is not None:
+            app.send_notification(f"reminder-{r.key}", notification)
+        toast = Adw.Toast(title=GLib.markup_escape_text(text), timeout=10,
+                          button_label=_("Watch"))
+        toast.connect("button-clicked", lambda *_: self.watch_reminder(r.key))
+        self.toasts.add_toast(toast)
+
+    def watch_reminder(self, key: str) -> None:
+        playlist_id, _sep, rest = key.partition("|")
+        url = rest.rsplit("|", 1)[0]
+        channel = self.storage.find_channel(int(playlist_id or 0), url)
+        if channel is None:
+            self._toast(_("This channel is no longer in your playlists."))
+            return
+        self.present()
+        self._play_channel(channel)
+
+    def _on_groups_setting(self, _value) -> None:
+        self.storage.hidden_groups = set(self.settings.get("hidden_groups") or [])
+        self.storage.group_order = list(self.settings.get("group_order") or [])
+        self._invalidate_pages("home", "channels", "favorites")
+
+    def _on_hide_group(self, _page, group: str) -> None:
+        hidden = list(self.settings.get("hidden_groups") or [])
+        if group not in hidden:
+            self.settings.set("hidden_groups", [*hidden, group])
+        toast = Adw.Toast(title=GLib.markup_escape_text(
+            _("Group “{name}” hidden").format(name=group)), timeout=5,
+            button_label=_("Undo"))
+        toast.connect("button-clicked", lambda *_: self.settings.set(
+            "hidden_groups", [g for g in self.settings.get("hidden_groups") if g != group]))
+        self.toasts.add_toast(toast)
+
+    def _on_move_group(self, _page, group: str, delta: int) -> None:
+        order = [g for g, _n in self.storage.groups(MediaType.LIVE)]
+        if group not in order:
+            return
+        i = order.index(group)
+        j = max(0, min(len(order) - 1, i + delta))
+        order.insert(j, order.pop(i))
+        self.settings.set("group_order", order)
 
     def _on_group_variants(self, value) -> None:
         self.storage.group_variants = bool(value)

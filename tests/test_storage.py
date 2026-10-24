@@ -176,3 +176,17 @@ def test_collapse_variants_keeps_one_entry_per_channel(tmp_path):
     assert db.count(MediaType.LIVE) == 5
     assert db.count(MediaType.LIVE, collapse=True) == 3
     assert dict(db.groups(MediaType.LIVE, collapse=True)) == {"News": 2, "Other": 1}
+
+
+def test_hidden_and_reordered_groups(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("1", "u/1", group="News"), _ch("2", "u/2", group="Sports"),
+                              _ch("3", "u/3", group="Kids")])
+    db.hidden_groups = {"Sports"}
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == ["News", "Kids"]
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["1", "3"]
+    # Opening a hidden group explicitly still lists its channels.
+    assert [c.name for c in db.channels(MediaType.LIVE, group="Sports")] == ["2"]
+    db.group_order = ["Kids"]
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == ["Kids", "News"]

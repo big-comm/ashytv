@@ -54,6 +54,9 @@ class Storage:
         self.hide_adult = False
         # Show "NEWS FHD/HD/SD" as one channel (pages honour it).
         self.group_variants = True
+        # Channel groups the user hid / reordered (names), set by the window.
+        self.hidden_groups: set[str] = set()
+        self.group_order: list[str] = []
         self._migrate()
 
     def close(self) -> None:
@@ -338,6 +341,9 @@ class Storage:
             for kw in ADULT_KEYWORDS:
                 clauses.append("lower(c.grp) NOT LIKE ?")
                 params.append(f"%{kw}%")
+        if self.hidden_groups and group is None:
+            clauses.append(f"c.grp NOT IN ({','.join('?' * len(self.hidden_groups))})")
+            params.extend(sorted(self.hidden_groups))
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return where, params
 
@@ -398,7 +404,13 @@ class Storage:
                 GROUP BY c.grp ORDER BY o""",
             params,
         ).fetchall()
-        return [(r["grp"], r["n"]) for r in rows]
+        result = [(r["grp"], r["n"]) for r in rows]
+        if self.group_order:
+            # Groups the user moved come first, in their order; the rest
+            # keep the provider order.
+            rank = {g: i for i, g in enumerate(self.group_order)}
+            result.sort(key=lambda gn: rank.get(gn[0], len(rank)))
+        return result
 
     def channels_in_group(self, media_type: MediaType, group: str) -> list[Channel]:
         return self.channels(media_type=media_type, group=group)

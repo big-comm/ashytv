@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import time
 
-from gi.repository import Adw, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
@@ -39,6 +39,9 @@ class ChannelsPage(Gtk.Box):
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "show-schedule": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
+        "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
     }
 
     def __init__(self, storage, media_type: MediaType = MediaType.LIVE,
@@ -151,6 +154,7 @@ class ChannelsPage(Gtk.Box):
         if not favorites_only:
             self.guide = EpgPage(storage, embedded=True)
             self.guide.connect("play", lambda _g, ch: self.emit("play", ch))
+            self.guide.connect("remind", lambda _g, ch, prog: self.emit("remind", ch, prog))
             self.view_stack.add_named(self.guide, "guide")
             self._view_buttons["list"].set_active(True)
         body.append(self.view_stack)
@@ -262,6 +266,38 @@ class ChannelsPage(Gtk.Box):
         box.append(c)
         row.set_child(box)
         self.group_list.append(row)
+        if key != _ALL and not self.favorites_only:
+            # Right click or the Menu key: hide / reorder this group.
+            click = Gtk.GestureClick(button=3)
+            click.connect("pressed", lambda *_: self._group_menu(row, key))
+            row.add_controller(click)
+            keys = Gtk.EventControllerKey()
+            keys.connect("key-pressed", self._on_group_key, row, key)
+            row.add_controller(keys)
+
+    def _on_group_key(self, _c, keyval, _code, _state, row, key) -> bool:
+        if keyval == Gdk.KEY_Menu:
+            self._group_menu(row, key)
+            return True
+        return False
+
+    def _group_menu(self, row: Gtk.ListBoxRow, group: str) -> None:
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        popover = Gtk.Popover(child=box)
+        popover.set_parent(row)
+
+        def item(label, callback):
+            b = Gtk.Button(label=label)
+            b.add_css_class("flat")
+            b.get_child().set_xalign(0)
+            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
+            box.append(b)
+
+        item(_("Move up"), lambda: self.emit("move-group", group, -1))
+        item(_("Move down"), lambda: self.emit("move-group", group, 1))
+        item(_("Hide group"), lambda: self.emit("hide-group", group))
+        popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
+        popover.popup()
 
     def _on_group_selected(self, _list, row) -> None:
         if row is None:

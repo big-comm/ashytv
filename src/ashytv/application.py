@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gi.repository import Adw, Gdk, Gio, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from . import APP_ID, APP_VERSION
 from .i18n import _
@@ -63,6 +63,10 @@ class AshyTvApplication(Adw.Application):
             self.settings.connect(key, lambda _v: self._apply_dynamic_css())
         self.settings.connect("show_logos", self._on_show_logos)
 
+        watch = Gio.SimpleAction.new("watch-reminder", GLib.VariantType.new("s"))
+        watch.connect("activate", self._on_watch_reminder)
+        self.add_action(watch)
+
         for name, callback, accels in (
             ("about", self._on_about, []),
             ("shortcuts", self._on_shortcuts, ["<Primary>question"]),
@@ -86,6 +90,11 @@ class AshyTvApplication(Adw.Application):
         if self.storage is not None:
             self.storage.close()
         Adw.Application.do_shutdown(self)
+
+    def _on_watch_reminder(self, _action, key) -> None:
+        self.activate()  # make sure the window exists (e.g. started from the notification)
+        if self.window is not None:
+            self.window.watch_reminder(key.get_string())
 
     def _quit(self) -> None:
         if self.window is not None:
