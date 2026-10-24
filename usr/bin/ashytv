@@ -1,3 +1,5 @@
 #!/bin/sh
 # AshyTV launcher (installed by the package into /usr/bin).
+# Never write __pycache__ into the system site-packages.
+export PYTHONDONTWRITEBYTECODE=1
 exec python3 -m ashytv "$@"
