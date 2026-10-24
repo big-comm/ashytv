@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 01:25-0300\n"
+"POT-Creation-Date: 2026-10-24 01:50-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Navigation"
 msgstr "Gezinme"
 
-#: src/ashytv/application.py:24 src/ashytv/window.py:89
+#: src/ashytv/application.py:24 src/ashytv/window.py:91
 msgid "Quit"
 msgstr "Çık"
 
@@ -76,12 +76,12 @@ msgid "Live TV"
 msgstr "Canlı TV"
 
 #: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:14
-#: src/ashytv/ui/pages/channels_page.py:23 src/ashytv/window.py:160
+#: src/ashytv/ui/pages/channels_page.py:23 src/ashytv/window.py:162
 msgid "Movies"
 msgstr "Filmler"
 
 #: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:15
-#: src/ashytv/ui/pages/channels_page.py:24 src/ashytv/window.py:165
+#: src/ashytv/ui/pages/channels_page.py:24 src/ashytv/window.py:167
 msgid "Series"
 msgstr "Diziler"
 
@@ -99,10 +99,33 @@ msgstr "S{season} • E{episode}"
 msgid "Track {number}"
 msgstr "Parça {number}"
 
-#: src/ashytv/services/http.py:30
+#: src/ashytv/services/http.py:32
 #, python-brace-format
 msgid "Unsupported URL: {url}"
 msgstr "Desteklenmeyen URL: {url}"
+
+#: src/ashytv/services/http.py:51
+#, python-brace-format
+msgid ""
+"The server refused the request (HTTP {code}). The account may have expired "
+"or the login may be invalid."
+msgstr ""
+"Sunucu isteği reddetti (HTTP {code}). Hesabın süresi dolmuş veya oturum "
+"bilgileri geçersiz olabilir."
+
+#: src/ashytv/services/http.py:53
+#, python-brace-format
+msgid "The server returned an error (HTTP {code})."
+msgstr "Sunucu bir hata döndürdü (HTTP {code})."
+
+#: src/ashytv/services/http.py:55
+msgid "The server took too long to respond."
+msgstr "Sunucunun yanıt vermesi çok uzun sürdü."
+
+#: src/ashytv/services/http.py:57
+#, python-brace-format
+msgid "Could not reach the server: {reason}"
+msgstr "Sunucuya ulaşılamadı: {reason}"
 
 #: src/ashytv/services/importer.py:34
 msgid "Downloading playlist…"
@@ -183,7 +206,8 @@ msgid "Account status: {status}"
 msgstr "Hesap durumu: {status}"
 
 #: src/ashytv/ui/detail_dialog.py:91 src/ashytv/ui/detail_dialog.py:152
-#: src/ashytv/ui/pages/channels_page.py:328 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:328
+#: src/ashytv/ui/schedule_dialog.py:18
 msgid "Watch"
 msgstr "İzle"
 
@@ -259,7 +283,7 @@ msgstr "Sık Kullanılanlar"
 msgid "Recordings"
 msgstr "Kayıtlar"
 
-#: src/ashytv/ui/nav_sidebar.py:19
+#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/lists_page.py:36
 msgid "Playlists"
 msgstr "Oynatma Listeleri"
 
@@ -446,72 +470,72 @@ msgstr "Kanalları gör"
 msgid "Watch now"
 msgstr "Şimdi izle"
 
-#: src/ashytv/ui/pages/lists_page.py:36
+#: src/ashytv/ui/pages/lists_page.py:37
+msgid "Manage your playlists or add a new one"
+msgstr "Oynatma listelerinizi yönetin veya yeni bir tane ekleyin"
+
+#: src/ashytv/ui/pages/lists_page.py:45 src/ashytv/ui/pages/lists_page.py:210
 msgid "Add Playlist"
 msgstr "Oynatma Listesi Ekle"
 
-#: src/ashytv/ui/pages/lists_page.py:37
-msgid "Add your IPTV playlist to start watching"
-msgstr "İzlemeye başlamak için IPTV oynatma listenizi ekleyin"
-
-#: src/ashytv/ui/pages/lists_page.py:62
+#: src/ashytv/ui/pages/lists_page.py:66
 msgid "M3U File"
 msgstr "M3U Dosyası"
 
-#: src/ashytv/ui/pages/lists_page.py:62 src/ashytv/ui/pages/lists_page.py:230
+#: src/ashytv/ui/pages/lists_page.py:66 src/ashytv/ui/pages/lists_page.py:229
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:63
+#: src/ashytv/ui/pages/lists_page.py:67
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:74
+#: src/ashytv/ui/pages/lists_page.py:78
 msgid "Playlist name"
 msgstr "Oynatma listesi adı"
 
-#: src/ashytv/ui/pages/lists_page.py:75 src/ashytv/ui/pages/lists_page.py:351
-#: src/ashytv/ui/pages/lists_page.py:358
+#: src/ashytv/ui/pages/lists_page.py:79 src/ashytv/ui/pages/lists_page.py:350
+#: src/ashytv/ui/pages/lists_page.py:357
 msgid "My Playlist"
 msgstr "Oynatma Listem"
 
-#: src/ashytv/ui/pages/lists_page.py:82
+#: src/ashytv/ui/pages/lists_page.py:86
 msgid "Choose .m3u file…"
 msgstr ".m3u dosyası seç…"
 
-#: src/ashytv/ui/pages/lists_page.py:84
+#: src/ashytv/ui/pages/lists_page.py:88
 msgid "No file selected"
 msgstr "Dosya seçilmedi"
 
-#: src/ashytv/ui/pages/lists_page.py:90
+#: src/ashytv/ui/pages/lists_page.py:94
 msgid "File"
 msgstr "Dosya"
 
-#: src/ashytv/ui/pages/lists_page.py:95
+#: src/ashytv/ui/pages/lists_page.py:99
 msgid "Server (URL)"
 msgstr "Sunucu (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:98
+#: src/ashytv/ui/pages/lists_page.py:102
 msgid "Username"
 msgstr "Kullanıcı adı"
 
-#: src/ashytv/ui/pages/lists_page.py:99
+#: src/ashytv/ui/pages/lists_page.py:103
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:100
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "Password"
 msgstr "Parola"
 
-#: src/ashytv/ui/pages/lists_page.py:101
+#: src/ashytv/ui/pages/lists_page.py:105
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "Paste provider message"
 msgstr "Sağlayıcı mesajını yapıştır"
 
-#: src/ashytv/ui/pages/lists_page.py:105
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -519,19 +543,19 @@ msgstr ""
 "Sağlayıcının karşılama mesajını yapıştırın: sunucu, kullanıcı adı ve parola "
 "otomatik doldurulur"
 
-#: src/ashytv/ui/pages/lists_page.py:113
+#: src/ashytv/ui/pages/lists_page.py:117
 msgid "Playlist URL (M3U)"
 msgstr "Oynatma listesi URL'si (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:127
+#: src/ashytv/ui/pages/lists_page.py:131
 msgid "Save and Connect"
 msgstr "Kaydet ve Bağlan"
 
-#: src/ashytv/ui/pages/lists_page.py:144
+#: src/ashytv/ui/pages/lists_page.py:148
 msgid "Secure Connection"
 msgstr "Güvenli Bağlantı"
 
-#: src/ashytv/ui/pages/lists_page.py:146
+#: src/ashytv/ui/pages/lists_page.py:150
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -539,53 +563,53 @@ msgstr ""
 "Bilgileriniz yalnızca cihazınızda saklanır. Parolalar sistem anahtarlığında "
 "tutulur."
 
-#: src/ashytv/ui/pages/lists_page.py:157
+#: src/ashytv/ui/pages/lists_page.py:162
 msgid "Your Playlists"
 msgstr "Oynatma Listeleriniz"
 
-#: src/ashytv/ui/pages/lists_page.py:197
-msgid "No playlists added yet."
-msgstr "Henüz oynatma listesi eklenmedi."
+#: src/ashytv/ui/pages/lists_page.py:210
+msgid "Add Another Playlist"
+msgstr "Başka Bir Oynatma Listesi Ekle"
 
-#: src/ashytv/ui/pages/lists_page.py:230
+#: src/ashytv/ui/pages/lists_page.py:229
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:231
+#: src/ashytv/ui/pages/lists_page.py:230
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} öğe"
 msgstr[1] "{n} öğe"
 
-#: src/ashytv/ui/pages/lists_page.py:233
+#: src/ashytv/ui/pages/lists_page.py:232
 #, python-brace-format
 msgid "updated {when}"
 msgstr "{when} güncellendi"
 
-#: src/ashytv/ui/pages/lists_page.py:239
+#: src/ashytv/ui/pages/lists_page.py:238
 #, python-brace-format
 msgid "expires {when}"
 msgstr "{when} sona erecek"
 
-#: src/ashytv/ui/pages/lists_page.py:240
+#: src/ashytv/ui/pages/lists_page.py:239
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "{when} tarihinde sona erdi"
 
-#: src/ashytv/ui/pages/lists_page.py:255
+#: src/ashytv/ui/pages/lists_page.py:254
 msgid "Refresh playlist"
 msgstr "Oynatma listesini yenile"
 
-#: src/ashytv/ui/pages/lists_page.py:259
+#: src/ashytv/ui/pages/lists_page.py:258
 msgid "Remove playlist"
 msgstr "Oynatma listesini kaldır"
 
-#: src/ashytv/ui/pages/lists_page.py:268
+#: src/ashytv/ui/pages/lists_page.py:267
 msgid "Remove playlist?"
 msgstr "Oynatma listesi kaldırılsın mı?"
 
-#: src/ashytv/ui/pages/lists_page.py:269
+#: src/ashytv/ui/pages/lists_page.py:268
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -594,46 +618,47 @@ msgstr ""
 "“{name}” ve tüm kanalları, sık kullanılanları ve geçmişi bu cihazdan "
 "kaldırılacak."
 
-#: src/ashytv/ui/pages/lists_page.py:271
+#: src/ashytv/ui/pages/lists_page.py:270
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:351
 msgid "Cancel"
 msgstr "İptal"
 
-#: src/ashytv/ui/pages/lists_page.py:272
+#: src/ashytv/ui/pages/lists_page.py:271
 msgid "Remove"
 msgstr "Kaldır"
 
-#: src/ashytv/ui/pages/lists_page.py:292
+#: src/ashytv/ui/pages/lists_page.py:291
 msgid "Select M3U playlist"
 msgstr "M3U oynatma listesi seç"
 
-#: src/ashytv/ui/pages/lists_page.py:294
+#: src/ashytv/ui/pages/lists_page.py:293
 msgid "M3U Playlists"
 msgstr "M3U Oynatma Listeleri"
 
-#: src/ashytv/ui/pages/lists_page.py:331
+#: src/ashytv/ui/pages/lists_page.py:330
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "Kopyalanan metinde sunucu, kullanıcı adı ve parola bulunamadı."
 
-#: src/ashytv/ui/pages/lists_page.py:337
+#: src/ashytv/ui/pages/lists_page.py:336
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
-"Sağlayıcı bilgileri dolduruldu. Kontrol edin ve “Kaydet ve Bağlan”a tıklayın."
+"Sağlayıcı bilgileri dolduruldu. Kontrol edin ve “Kaydet ve Bağlan”a "
+"tıklayın."
 
-#: src/ashytv/ui/pages/lists_page.py:349
+#: src/ashytv/ui/pages/lists_page.py:348
 msgid "Choose an .m3u file."
 msgstr "Bir .m3u dosyası seçin."
 
-#: src/ashytv/ui/pages/lists_page.py:355
+#: src/ashytv/ui/pages/lists_page.py:354
 msgid "Enter a URL starting with http:// or https://."
 msgstr "http:// veya https:// ile başlayan bir URL girin."
 
-#: src/ashytv/ui/pages/lists_page.py:364
+#: src/ashytv/ui/pages/lists_page.py:363
 msgid "Fill in server, username and password."
 msgstr "Sunucu, kullanıcı adı ve parolayı doldurun."
 
-#: src/ashytv/ui/pages/lists_page.py:366
+#: src/ashytv/ui/pages/lists_page.py:365
 msgid "Xtream Provider"
 msgstr "Xtream Sağlayıcısı"
 
@@ -1099,113 +1124,123 @@ msgstr "Başlayın"
 msgid "AshyTV does not provide any content — bring your own playlist."
 msgstr "AshyTV hiçbir içerik sağlamaz — kendi oynatma listenizi getirin."
 
-#: src/ashytv/window.py:71
+#: src/ashytv/window.py:73
 msgid "Menu"
 msgstr "Menü"
 
-#: src/ashytv/window.py:80
+#: src/ashytv/window.py:82
 msgid "Search…"
 msgstr "Ara…"
 
-#: src/ashytv/window.py:87
+#: src/ashytv/window.py:89
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: src/ashytv/window.py:88
+#: src/ashytv/window.py:90
 msgid "About AshyTV"
 msgstr "AshyTV Hakkında"
 
-#: src/ashytv/window.py:91
+#: src/ashytv/window.py:93
 msgid "Main Menu"
 msgstr "Ana Menü"
 
-#: src/ashytv/window.py:93
+#: src/ashytv/window.py:95
 msgid "Search (Ctrl+F)"
 msgstr "Ara (Ctrl+F)"
 
-#: src/ashytv/window.py:161
+#: src/ashytv/window.py:163
 msgid "The best movies for you"
 msgstr "Sizin için en iyi filmler"
 
-#: src/ashytv/window.py:166
+#: src/ashytv/window.py:168
 msgid "Your favorite series in one place"
 msgstr "Favori dizileriniz tek bir yerde"
 
-#: src/ashytv/window.py:351
+#: src/ashytv/window.py:353
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Oynatıcı kullanılamıyor: mpv ve python-mpv kurun ({error})"
 
-#: src/ashytv/window.py:397
+#: src/ashytv/window.py:399
 msgid "Next episode…"
 msgstr "Sonraki bölüm…"
 
-#: src/ashytv/window.py:421
+#: src/ashytv/window.py:423
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Açılamadı: {error}"
 
-#: src/ashytv/window.py:425
+#: src/ashytv/window.py:427
 msgid "This item is no longer in the playlist."
 msgstr "Bu öğe artık oynatma listesinde yok."
 
-#: src/ashytv/window.py:456
+#: src/ashytv/window.py:458
 msgid "Added to favorites"
 msgstr "Sık kullanılanlara eklendi"
 
-#: src/ashytv/window.py:456
+#: src/ashytv/window.py:458
 msgid "Removed from favorites"
 msgstr "Sık kullanılanlardan kaldırıldı"
 
-#: src/ashytv/window.py:549
+#: src/ashytv/window.py:554
 msgid "Please wait: an import is already in progress."
 msgstr "Lütfen bekleyin: zaten bir içe aktarma sürüyor."
 
-#: src/ashytv/window.py:562
+#: src/ashytv/window.py:571
 msgid "Importing playlist…"
 msgstr "Oynatma listesi içe aktarılıyor…"
 
-#: src/ashytv/window.py:574
+#: src/ashytv/window.py:584
 msgid "Connecting to the Xtream provider…"
 msgstr "Xtream sağlayıcısına bağlanılıyor…"
 
-#: src/ashytv/window.py:588
+#: src/ashytv/window.py:601
 msgid "Provider password not found; add the playlist again."
 msgstr "Sağlayıcı parolası bulunamadı; oynatma listesini yeniden ekleyin."
 
-#: src/ashytv/window.py:592
+#: src/ashytv/window.py:605
 msgid "Updating playlist…"
 msgstr "Oynatma listesi güncelleniyor…"
 
-#: src/ashytv/window.py:603
+#: src/ashytv/window.py:625
+#, python-brace-format
+msgid "Playlist “{name}” updated."
+msgstr "“{name}” oynatma listesi güncellendi."
+
+#: src/ashytv/window.py:629
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} öğe içe aktarıldı."
 msgstr[1] "{n} öğe içe aktarıldı."
 
-#: src/ashytv/window.py:604
+#: src/ashytv/window.py:630
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Oynatma listesi hazır: {n} öğe."
 msgstr[1] "Oynatma listesi hazır: {n} öğe."
 
-#: src/ashytv/window.py:620
+#: src/ashytv/window.py:650
+#, python-brace-format
+msgid "Could not update “{name}”: {error}"
+msgstr "“{name}” güncellenemedi: {error}"
+
+#: src/ashytv/window.py:654
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Başarısız: {error}"
 
-#: src/ashytv/window.py:621
+#: src/ashytv/window.py:655
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "İçe aktarma başarısız: {error}"
 
-#: src/ashytv/window.py:632
+#: src/ashytv/window.py:667
 msgid "Playlist removed."
 msgstr "Oynatma listesi kaldırıldı."
 
-#: src/ashytv/window.py:674
+#: src/ashytv/window.py:714
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Rehber (EPG) kullanılamıyor: {error}"
@@ -1223,10 +1258,12 @@ msgstr "IPTV Oynatıcı"
 msgid "Watch your own IPTV playlists (M3U and Xtream Codes)"
 msgstr "Kendi IPTV oynatma listelerinizi izleyin (M3U ve Xtream Codes)"
 
-#. Translators: search keywords, separated by semicolons; keep the trailing semicolon.
+#. Translators: search keywords, separated by semicolons; keep the trailing
+#. semicolon.
 #: data/org.communitybig.ashytv.desktop.in:7
 msgid "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;"
-msgstr "iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;televizyon;canlı;kanallar;filmler;diziler;rehber;oynatıcı;"
+msgstr ""
+"iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;televizyon;canlı;kanallar;filmler;diziler;rehber;oynatıcı;"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:5
 msgid "Modern IPTV player for your own playlists"
@@ -1250,7 +1287,8 @@ msgstr ""
 #: data/org.communitybig.ashytv.metainfo.xml.in:18
 msgid "Live channels with categories, favorites and now-playing info"
 msgstr ""
-"Kategoriler, sık kullanılanlar ve yayındaki program bilgisiyle canlı kanallar"
+"Kategoriler, sık kullanılanlar ve yayındaki program bilgisiyle canlı "
+"kanallar"
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:19
 msgid "Program guide (XMLTV) in a time grid"
@@ -1265,3 +1303,9 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Donanımsal çözme, pencere içinde pencere ve kayıt destekli libmpv oynatma"
+
+#~ msgid "Add your IPTV playlist to start watching"
+#~ msgstr "İzlemeye başlamak için IPTV oynatma listenizi ekleyin"
+
+#~ msgid "No playlists added yet."
+#~ msgstr "Henüz oynatma listesi eklenmedi."

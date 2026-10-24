@@ -144,3 +144,18 @@ def test_decode_gives_up_after_attempts(monkeypatch, tmp_path):
     monkeypatch.setattr(logos.time, "sleep", lambda _s: None)
     with pytest.raises(logos.GLib.Error):
         logos._decode(tmp_path / "x.png", 40)
+
+
+def test_describe_error_is_user_friendly():
+    import urllib.error
+
+    from ashytv.services import http
+
+    not_found = urllib.error.HTTPError("http://x", 404, "Not Found", {}, None)
+    assert "HTTP 404" in http.describe_error(not_found)
+    assert "expired" in http.describe_error(not_found)
+    assert "HTTP 500" in http.describe_error(
+        urllib.error.HTTPError("http://x", 500, "Oops", {}, None))
+    assert "reach the server" in http.describe_error(urllib.error.URLError("no route"))
+    assert http.describe_error(TimeoutError()) == "The server took too long to respond."
+    assert http.describe_error(ValueError("plain")) == "plain"

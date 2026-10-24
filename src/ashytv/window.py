@@ -10,7 +10,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 from . import APP_ID
 from .i18n import _, ngettext
 from .models import Channel, Episode, MediaType, PlayItem
-from .services import epg, importer, secrets
+from .services import epg, http, importer, secrets
 from .services.storage import Storage
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
 from .ui.detail_dialog import DetailDialog
@@ -51,6 +51,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._zap_index = 0
         self._series_ctx: tuple[Channel, list[Episode]] | None = None
         self._importing = False
+        self._quiet_id = 0
+        self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
 
         self._load_providers()
@@ -544,17 +546,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     # ---- playlist import ---------------------------------------------
 
-    def _begin_import(self, message: str) -> bool:
+    def _begin_import(self, message: str, quiet_id: int = 0) -> bool:
+        """Start an import. `quiet_id` marks an automatic background refresh
+        of that playlist: no banner or form status, only a toast at the end."""
         if self._importing:
-            self._toast(_("Please wait: an import is already in progress."))
+            if not quiet_id:
+                self._toast(_("Please wait: an import is already in progress."))
             return False
         self._importing = True
-        self.pages["lists"].set_busy(True, message)
-        self.banner.set_title(message)
-        self.banner.set_revealed(True)
+        self._quiet_id = quiet_id
+        self.pages["lists"].set_busy(True, "" if quiet_id else message)
+        if not quiet_id:
+            self.banner.set_title(message)
+            self.banner.set_revealed(True)
         return True
 
     def _import_progress(self, message: str) -> None:
+        if self._quiet_id:
+            return
         self.pages["lists"].set_status(message)
         self.banner.set_title(message)
 
@@ -570,55 +579,82 @@ class AshyTvWindow(Adw.ApplicationWindow):
         provider = XtreamProvider(host=normalize_host(host), username=user, password=pwd)
         self._run_xtream_import(name, provider)
 
-    def _run_xtream_import(self, name: str, provider: XtreamProvider) -> None:
-        if not self._begin_import(_("Connecting to the Xtream provider…")):
+    def _run_xtream_import(self, name: str, provider: XtreamProvider,
+                           quiet_id: int = 0) -> None:
+        if not self._begin_import(_("Connecting to the Xtream provider…"), quiet_id):
             return
         db_path = self.storage.path
         importer.run_async(
             lambda progress: importer.import_xtream(db_path, name, provider, progress),
             self._import_done, self._import_error, self._import_progress)
 
-    def _refresh_playlist(self, playlist_id: int) -> None:
+    def _refresh_playlist(self, playlist_id: int, quiet: bool = False) -> bool:
+        """Refresh a playlist; returns False when it could not be started."""
         row = self.storage.get_playlist(playlist_id)
         if row is None:
-            return
+            return False
+        quiet_id = playlist_id if quiet else 0
         if row["kind"] == "xtream":
             prov = self._providers.get(playlist_id)
             if prov is None or not prov.password:
-                self._toast(_("Provider password not found; add the playlist again."))
-                return
-            self._run_xtream_import(row["name"], prov)
+                if not quiet:
+                    self._toast(_("Provider password not found; add the playlist again."))
+                return False
+            self._run_xtream_import(row["name"], prov, quiet_id)
         else:
-            if not self._begin_import(_("Updating playlist…")):
-                return
+            if not self._begin_import(_("Updating playlist…"), quiet_id):
+                return False
             db_path, name, source = self.storage.path, row["name"], row["source"]
             importer.run_async(
                 lambda progress: importer.import_m3u(db_path, name, source, progress),
                 self._import_done, self._import_error, self._import_progress)
+        return True
 
     def _import_done(self, result) -> None:
+        quiet_id, self._quiet_id = self._quiet_id, 0
         self._importing = False
         self.banner.set_revealed(False)
-        self.pages["lists"].set_busy(False, ngettext(
-            "{n} item imported.", "{n} items imported.", result.count).format(n=result.count))
-        self._toast(ngettext("Playlist ready: {n} item.", "Playlist ready: {n} items.",
-                             result.count).format(n=result.count))
         self._load_providers()
         self._invalidate_pages()
         self._epg_source = ""
         self._autoload_epg(force_id=result.playlist_id)
+        if quiet_id:
+            self.pages["lists"].set_busy(False)
+            row = self.storage.get_playlist(quiet_id)
+            if row is not None:
+                self._toast(_("Playlist “{name}” updated.").format(name=row["name"]))
+            self._next_auto_refresh()
+            return
+        self.pages["lists"].set_busy(False, ngettext(
+            "{n} item imported.", "{n} items imported.", result.count).format(n=result.count))
+        self._toast(ngettext("Playlist ready: {n} item.", "Playlist ready: {n} items.",
+                             result.count).format(n=result.count))
+        self.pages["lists"].clear_form()
         if self.root_stack.get_visible_child_name() != "player":
             self.root_stack.set_visible_child_name("shell")
         if self._current == "lists":
             self.navigate("channels")
+        self._next_auto_refresh()
 
     def _import_error(self, exc: Exception) -> None:
+        quiet_id, self._quiet_id = self._quiet_id, 0
         self._importing = False
         self.banner.set_revealed(False)
-        msg = str(exc) or exc.__class__.__name__
+        msg = http.describe_error(exc)
         self.pages["lists"].set_busy(False)
+        if quiet_id:
+            # Background refresh: keep the old data, don't retry until the
+            # next interval and don't put the error in the "add" form.
+            row = self.storage.get_playlist(quiet_id)
+            if row is not None:
+                self.storage.update_playlist_meta(quiet_id, refresh_failed_at=int(time.time()))
+                self._toast(_("Could not update “{name}”: {error}").format(
+                    name=row["name"], error=msg))
+            self._next_auto_refresh()
+            return
         self.pages["lists"].set_status(_("Failed: {error}").format(error=msg), error=True)
         self._toast(_("Import failed: {error}").format(error=msg))
+        self._next_auto_refresh()
 
     def _on_delete_requested(self, _w, playlist_id: int) -> None:
         prov = self._providers.get(playlist_id)
@@ -636,14 +672,19 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self.root_stack.set_visible_child_name("welcome")
 
     def _auto_refresh(self) -> bool:
-        if not self.settings.get("auto_refresh"):
-            return GLib.SOURCE_REMOVE
-        max_age = int(self.settings.get("refresh_hours")) * 3600
-        for row in self.storage.list_playlists():
-            if time.time() - (row["updated_at"] or 0) > max_age:
-                self._refresh_playlist(int(row["id"]))
-                break  # one at a time; the others on the next launch
+        if self.settings.get("auto_refresh"):
+            max_age = int(self.settings.get("refresh_hours")) * 3600
+            self._refresh_queue = self.storage.stale_playlists(max_age)
+            self._next_auto_refresh()
         return GLib.SOURCE_REMOVE
+
+    def _next_auto_refresh(self) -> None:
+        """Refresh the queued playlists one after another, quietly."""
+        while self._refresh_queue:
+            if self._importing:
+                return  # a manual import is running; resumes when it ends
+            if self._refresh_playlist(self._refresh_queue.pop(0), quiet=True):
+                return
 
     # ---- automatic EPG -----------------------------------------------
 

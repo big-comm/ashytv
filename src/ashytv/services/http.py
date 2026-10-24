@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import socket
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -40,3 +42,17 @@ def fetch_bytes(url: str, timeout: float = 30) -> bytes:
 
 def fetch_json(url: str, timeout: float = 60):
     return json.loads(fetch_bytes(url, timeout).decode("utf-8", errors="replace"))
+
+
+def describe_error(exc: BaseException) -> str:
+    """User-facing description of a download/connection error."""
+    if isinstance(exc, urllib.error.HTTPError):
+        if exc.code in (401, 403, 404):
+            return _("The server refused the request (HTTP {code}). The account may have "
+                     "expired or the login may be invalid.").format(code=exc.code)
+        return _("The server returned an error (HTTP {code}).").format(code=exc.code)
+    if isinstance(exc, (TimeoutError, socket.timeout)):
+        return _("The server took too long to respond.")
+    if isinstance(exc, urllib.error.URLError):
+        return _("Could not reach the server: {reason}").format(reason=exc.reason)
+    return str(exc) or exc.__class__.__name__

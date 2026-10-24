@@ -122,3 +122,18 @@ def test_migration_from_v1(tmp_path):
     assert db.channels(search="acao")[0].name == "Canal Ação"
     db.close()
     Storage(path).close()  # reopening does not migrate again
+
+
+def test_stale_playlists_skip_recent_failures(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    old = db.add_playlist("Expired", "a")
+    good = db.add_playlist("Good", "b")
+    db.db.execute("UPDATE playlist SET updated_at = 1000 WHERE id = ?", (old,))
+    db.db.execute("UPDATE playlist SET updated_at = 2000 WHERE id = ?", (good,))
+    db.db.commit()
+    assert db.stale_playlists(max_age=100, now=10_000) == [old, good]
+    # A failed automatic refresh pushes the playlist back by one interval.
+    db.update_playlist_meta(old, refresh_failed_at=9_950)
+    assert db.stale_playlists(max_age=100, now=10_000) == [good]
+    assert db.get_playlist(old)["updated_at"] == 1000  # not marked as updated
+    assert db.playlist_meta(old)["refresh_failed_at"] == 9_950

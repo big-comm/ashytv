@@ -33,14 +33,18 @@ class ListsPage(Gtk.Box):
         self._file_path = ""
         self._busy = False
 
-        self.append(page_header(_("Add Playlist"),
-                                _("Add your IPTV playlist to start watching")))
+        self.append(page_header(_("Playlists"),
+                                _("Manage your playlists or add a new one")))
 
         outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=22)
         outer.set_margin_start(28)
         outer.set_margin_end(28)
         outer.set_margin_bottom(24)
 
+        # The saved playlists come first; the form to add another one below.
+        self.add_head = Gtk.Label(label=_("Add Playlist"), xalign=0)
+        self.add_head.add_css_class("ashy-section-title")
+        outer.append(self.add_head)
         top = Gtk.Box(spacing=18)
         outer.append(top)
 
@@ -153,14 +157,15 @@ class ListsPage(Gtk.Box):
         secure.append(sin)
         top.append(secure)
 
-        # ---- existing playlists ----
+        # ---- existing playlists (on top) ----
+        self.existing_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         head = Gtk.Label(label=_("Your Playlists"), xalign=0)
         head.add_css_class("ashy-section-title")
-        outer.append(head)
+        self.existing_box.append(head)
         self.existing = Gtk.ListBox(selection_mode=Gtk.SelectionMode.NONE)
         self.existing.add_css_class("boxed-list")
-        self.existing.set_placeholder(self._placeholder())
-        outer.append(self.existing)
+        self.existing_box.append(self.existing)
+        outer.prepend(self.existing_box)
 
         clamp = Adw.Clamp(maximum_size=980, tightening_threshold=700)
         clamp.set_child(outer)
@@ -193,22 +198,24 @@ class ListsPage(Gtk.Box):
         row.append(col)
         parent.append(row)
 
-    def _placeholder(self) -> Gtk.Widget:
-        lbl = Gtk.Label(label=_("No playlists added yet."))
-        lbl.add_css_class("ashy-faint")
-        lbl.set_margin_top(18)
-        lbl.set_margin_bottom(18)
-        return lbl
-
-    # ---- API -----------------------------------------------------------
-
     def invalidate(self) -> None:
         self.refresh()
 
     def refresh(self) -> None:
         self.existing.remove_all()
-        for pl in self.storage.list_playlists():
+        playlists = self.storage.list_playlists()
+        for pl in playlists:
             self.existing.append(self._playlist_row(pl))
+        self.existing_box.set_visible(bool(playlists))
+        self.add_head.set_label(_("Add Another Playlist") if playlists else _("Add Playlist"))
+
+    def clear_form(self) -> None:
+        """Empty the "add" form after a playlist was saved."""
+        for entry in (self.name_entry, self.host_entry, self.user_entry,
+                      self.pass_entry, self.url_entry):
+            entry.set_text("")
+        self._file_path = ""
+        self.file_label.set_text(_("No file selected"))
 
     def set_busy(self, busy: bool, message: str = "") -> None:
         self._busy = busy

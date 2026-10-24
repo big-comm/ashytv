@@ -205,6 +205,30 @@ class Storage:
         )
         self.db.commit()
 
+    def update_playlist_meta(self, playlist_id: int, **values) -> None:
+        """Merge keys into the playlist metadata without touching updated_at."""
+        meta = self.playlist_meta(playlist_id)
+        meta.update(values)
+        self.db.execute("UPDATE playlist SET meta = ? WHERE id = ?",
+                        (json.dumps(meta), playlist_id))
+        self.db.commit()
+
+    def stale_playlists(self, max_age: int, now: float | None = None) -> list[int]:
+        """Playlists due for an automatic refresh, oldest first.
+
+        A playlist whose last automatic refresh failed (e.g. an expired
+        account) waits a full interval before being tried again, so it never
+        blocks the others.
+        """
+        now = now or time.time()
+        due = []
+        for row in self.list_playlists():
+            meta = self.playlist_meta(int(row["id"]))
+            last = max(row["updated_at"] or 0, int(meta.get("refresh_failed_at", 0)))
+            if now - last > max_age:
+                due.append((last, int(row["id"])))
+        return [pid for _last, pid in sorted(due)]
+
     def has_playlists(self) -> bool:
         return self.db.execute("SELECT 1 FROM playlist LIMIT 1").fetchone() is not None
 
