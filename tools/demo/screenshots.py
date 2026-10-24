@@ -38,7 +38,7 @@ import gi  # noqa: E402
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 gi.require_version("Graphene", "1.0")
-from gi.repository import GLib, Graphene, Gtk  # noqa: E402
+from gi.repository import Gio, GLib, Graphene, Gtk  # noqa: E402
 
 import demo_server  # noqa: E402
 from ashytv.application import AshyTvApplication  # noqa: E402
@@ -49,6 +49,8 @@ from ashytv.services import secrets  # noqa: E402
 secrets.store_password = lambda *_a: False
 
 app = AshyTvApplication()
+# Separate instance: never talk to an AshyTV the user already has open.
+app.set_flags(app.get_flags() | Gio.ApplicationFlags.NON_UNIQUE)
 steps: list = []
 
 
