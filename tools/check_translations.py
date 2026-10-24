@@ -26,7 +26,7 @@ def _unquote(lines: list[str]) -> str:
 
 def parse(path: Path) -> list[dict]:
     entries, cur, field = [], None, None
-    for raw in path.read_text(encoding="utf-8").splitlines() + [""]:
+    for raw in [*path.read_text(encoding="utf-8").splitlines(), ""]:
         line = raw.strip()
         if not line:
             if cur:
@@ -69,7 +69,7 @@ def check(path: Path) -> list[str]:
         if "fuzzy" in e["flags"]:
             problems.append(f"fuzzy: {msgid!r}")
         expected = set(PLACEHOLDER.findall(msgid + _unquote(e["msgid_plural"])))
-        for idx, lines in e["msgstr"].items():
+        for lines in e["msgstr"].values():
             text = _unquote(lines)
             if not text:
                 problems.append(f"untranslated: {msgid!r}")
