@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1226"/>
+      <stop offset=".35" stop-color="#1c2550"/>
+      <stop offset=".55" stop-color="#5a3a6e"/>
+      <stop offset=".68" stop-color="#c0605a"/>
+      <stop offset=".76" stop-color="#f09a5a"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".72" r=".35">
+      <stop offset="0" stop-color="#ffd59a" stop-opacity=".9"/>
+      <stop offset=".4" stop-color="#ff9a5a" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3360"/><stop offset="1" stop-color="#241f44"/>
+    </linearGradient>
+    <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d1a3a"/><stop offset="1" stop-color="#121329"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b2d4f"/><stop offset=".3" stop-color="#1a1d38"/>
+      <stop offset="1" stop-color="#0a0f1f"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1020" stop-opacity=".1"/>
+      <stop offset=".6" stop-color="#0a1020" stop-opacity="0"/>
+      <stop offset="1" stop-color="#0a1020" stop-opacity=".85"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <rect width="1600" height="1000" fill="url(#sun)"/>
+  <g fill="#ffffff" opacity=".55">
+    <circle cx="210" cy="90" r="1.4"/><circle cx="420" cy="160" r="1"/><circle cx="640" cy="60" r="1.2"/>
+    <circle cx="980" cy="120" r="1"/><circle cx="1230" cy="70" r="1.5"/><circle cx="1420" cy="190" r="1"/>
+    <circle cx="820" cy="200" r=".9"/><circle cx="90" cy="230" r="1"/><circle cx="1520" cy="40" r="1.1"/>
+  </g>
+  <path d="M0 640 L120 560 L220 600 L360 470 L470 560 L560 520 L700 610 L760 600 L900 500 L1010 580 L1120 530 L1250 600 L1380 470 L1500 560 L1600 520 L1600 760 L0 760 Z" fill="url(#m1)"/>
+  <path d="M0 700 L90 650 L200 690 L330 610 L450 690 L540 660 L640 720 L760 700 L870 640 L980 700 L1090 680 L1200 720 L1330 640 L1460 700 L1600 660 L1600 780 L0 780 Z" fill="url(#m2)"/>
+  <rect y="760" width="1600" height="240" fill="url(#water)"/>
+  <rect x="640" y="770" width="320" height="4" rx="2" fill="#ffb27a" opacity=".45"/>
+  <rect x="700" y="790" width="200" height="3" rx="1.5" fill="#ffb27a" opacity=".3"/>
+  <rect x="740" y="810" width="120" height="2" rx="1" fill="#ffb27a" opacity=".2"/>
+  <rect width="1600" height="1000" fill="url(#fade)"/>
+</svg>

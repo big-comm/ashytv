@@ -1,0 +1,312 @@
+"""Xtream Codes provider support.
+
+Lets the user paste the provider's welcome message (or host/username/password),
+derive the playlist (m3u_plus), EPG (xmltv.php) and stream URLs, and read the
+native catalog through `player_api.php` (channels, movies, series and episodes).
+"""
+
+from __future__ import annotations
+
+import json
+import re
+from dataclasses import dataclass
+from urllib.parse import parse_qs, quote, urlencode, urlparse
+
+from ..i18n import _
+from ..models import Channel, Episode, MediaType
+from . import http
+from .text import episode_title
+
+# get.php?username=...&password=... — the most reliable way to extract everything.
+_GETPHP_RE = re.compile(
+    r"(https?://[^\s/]+)/get\.php\?([^\s\"'>]+)", re.IGNORECASE
+)
+_HOST_RE = re.compile(r"https?://[^\s\"'>`]+", re.IGNORECASE)
+_USER_RE = re.compile(r"(?:Usu[aá]rio|username)\s*[:=]?\s*`?([A-Za-z0-9_.-]+)`?", re.I)
+_PASS_RE = re.compile(r"(?:Senha|password)\s*[:=]?\s*`?([A-Za-z0-9_.-]+)`?", re.I)
+_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
+
+
+@dataclass(slots=True)
+class XtreamProvider:
+    host: str          # e.g. http://server.example:8080
+    username: str
+    password: str
+
+    def _base(self, path: str, **params: str) -> str:
+        query = urlencode({"username": self.username, "password": self.password,
+                           **params})
+        return f"{self.host}/{path}?{query}"
+
+    def m3u_url(self) -> str:
+        return self._base("get.php", type="m3u_plus", output="ts")
+
+    def xmltv_url(self) -> str:
+        return self._base("xmltv.php")
+
+    def api_url(self, action: str = "", **params: str) -> str:
+        if action:
+            params = {"action": action, **params}
+        return self._base("player_api.php", **params)
+
+    def stream_url(self, path: str) -> str:
+        """'live/560.ts' -> http://host/live/<user>/<password>/560.ts"""
+        kind, _sep, rest = path.partition("/")
+        user = quote(self.username, safe="")
+        pwd = quote(self.password, safe="")
+        return f"{self.host}/{kind}/{user}/{pwd}/{rest}"
+
+    def to_json(self, include_password: bool = True) -> str:
+        data = {"host": self.host, "username": self.username}
+        if include_password:
+            data["password"] = self.password
+        return json.dumps(data, sort_keys=True)
+
+    @classmethod
+    def from_json(cls, data: str, password: str | None = None) -> XtreamProvider:
+        d = json.loads(data)
+        pwd = password if password is not None else d.get("password", "")
+        return cls(host=d["host"], username=d["username"], password=pwd)
+
+    @staticmethod
+    def source_key(data: str) -> str:
+        """Source without password — identifies the playlist in the database."""
+        d = json.loads(data)
+        return json.dumps({"host": d["host"], "username": d["username"]},
+                          sort_keys=True)
+
+
+def normalize_host(host: str) -> str:
+    host = host.strip().rstrip("/")
+    if host and not host.startswith(("http://", "https://")):
+        host = "http://" + host
+    return host
+
+
+def parse_provider(text: str) -> XtreamProvider | None:
+    """Extract host/username/password from text pasted from the provider.
+
+    Strategy: first try a get.php URL (which already carries everything); if
+    there is none, combine the first http host with the username/password lines.
+    """
+    text = text.strip()
+
+    m = _GETPHP_RE.search(text)
+    if m:
+        host = m.group(1).rstrip("/")
+        qs = parse_qs(m.group(2))
+        user = (qs.get("username") or [""])[0]
+        pwd = (qs.get("password") or [""])[0]
+        if host and user and pwd:
+            return XtreamProvider(host=host, username=user, password=pwd)
+
+    # Fallback: host (ignoring checkout/app URLs) + loose username/password.
+    host = _pick_host(text)
+    um = _USER_RE.search(text)
+    pm = _PASS_RE.search(text)
+    if host and um and pm:
+        return XtreamProvider(
+            host=host.rstrip("/"), username=um.group(1), password=pm.group(1)
+        )
+    return None
+
+
+# Lines that usually announce the server in a provider message.
+_SERVER_LINE_RE = re.compile(r"(dns|servidor|server|host|portal|url)", re.I)
+
+
+def _pick_host(text: str) -> str | None:
+    """Pick the server host from free text.
+
+    Preference: a URL on a line that mentions DNS/server; then the first
+    "domain-only" URL (no path), which is how servers are advertised.
+    URLs with a path (stores, payment pages, downloads) are ignored.
+    """
+    candidates: list[tuple[int, str]] = []
+    for line in text.splitlines():
+        for url in _HOST_RE.findall(line):
+            parsed = urlparse(url)
+            bare = parsed.path in ("", "/") and not parsed.query
+            if not bare:
+                continue
+            rank = 0 if _SERVER_LINE_RE.search(line) else 1
+            candidates.append((rank, f"{parsed.scheme}://{parsed.netloc.lower()}"))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda c: c[0])
+    return candidates[0][1]
+
+
+# ---- player_api.php ----------------------------------------------------
+
+class XtreamError(Exception):
+    pass
+
+
+def _float(value) -> float:
+    try:
+        return float(value or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _int(value) -> int:
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _year(item: dict, name: str) -> str:
+    year = str(item.get("year") or "").strip()
+    if year.isdigit():
+        return year
+    for key in ("releaseDate", "release_date"):
+        value = str(item.get(key) or "")
+        if value[:4].isdigit():
+            return value[:4]
+    m = _YEAR_RE.search(name)
+    return m.group(1) if m else ""
+
+
+def account_info(provider: XtreamProvider) -> dict:
+    """user_info + server_info. Raises XtreamError if the account is invalid."""
+    data = http.fetch_json(provider.api_url(), timeout=30)
+    info = data.get("user_info") if isinstance(data, dict) else None
+    if not info or str(info.get("auth")) != "1":
+        raise XtreamError(_("Invalid username or password"))
+    if str(info.get("status", "Active")).lower() not in ("active", ""):
+        raise XtreamError(_("Account status: {status}").format(status=info.get("status")))
+    return data
+
+
+def _categories(provider: XtreamProvider, action: str) -> dict[str, str]:
+    data = http.fetch_json(provider.api_url(action), timeout=60) or []
+    return {str(c.get("category_id")): str(c.get("category_name") or "")
+            for c in data if isinstance(c, dict)}
+
+
+def live_channels(items: list, cats: dict[str, str]) -> list[Channel]:
+    out = []
+    for it in items:
+        sid = it.get("stream_id")
+        if sid is None:
+            continue
+        out.append(Channel(
+            name=str(it.get("name") or "").strip(),
+            url=f"live/{sid}.ts",
+            media_type=MediaType.LIVE,
+            group=cats.get(str(it.get("category_id")), ""),
+            tvg_id=str(it.get("epg_channel_id") or ""),
+            logo=str(it.get("stream_icon") or ""),
+            ext_id=str(sid),
+            added=_int(it.get("added")),
+        ))
+    return out
+
+
+def movies(items: list, cats: dict[str, str]) -> list[Channel]:
+    out = []
+    for it in items:
+        sid = it.get("stream_id")
+        if sid is None:
+            continue
+        name = str(it.get("name") or "").strip()
+        ext = str(it.get("container_extension") or "mp4")
+        out.append(Channel(
+            name=name,
+            url=f"movie/{sid}.{ext}",
+            media_type=MediaType.MOVIE,
+            group=cats.get(str(it.get("category_id")), ""),
+            logo=str(it.get("stream_icon") or ""),
+            ext_id=str(sid),
+            rating=_float(it.get("rating")),
+            year=_year(it, name),
+            plot=str(it.get("plot") or ""),
+            genre=str(it.get("genre") or ""),
+            added=_int(it.get("added")),
+        ))
+    return out
+
+
+def series(items: list, cats: dict[str, str]) -> list[Channel]:
+    out = []
+    for it in items:
+        sid = it.get("series_id")
+        if sid is None:
+            continue
+        name = str(it.get("name") or "").strip()
+        backdrop = it.get("backdrop_path") or ""
+        if isinstance(backdrop, list):
+            backdrop = backdrop[0] if backdrop else ""
+        out.append(Channel(
+            name=name,
+            url=f"series/{sid}",
+            media_type=MediaType.SERIES,
+            group=cats.get(str(it.get("category_id")), ""),
+            logo=str(it.get("cover") or ""),
+            ext_id=str(sid),
+            rating=_float(it.get("rating")),
+            year=_year(it, name),
+            plot=str(it.get("plot") or ""),
+            genre=str(it.get("genre") or ""),
+            backdrop=str(backdrop or ""),
+            added=_int(it.get("last_modified")),
+        ))
+    return out
+
+
+def load_catalog(provider: XtreamProvider) -> tuple[list[Channel], dict]:
+    """Download the full catalog (live + movies + series) and account data."""
+    info = account_info(provider)
+    result: list[Channel] = []
+    for cat_action, action, convert in (
+        ("get_live_categories", "get_live_streams", live_channels),
+        ("get_vod_categories", "get_vod_streams", movies),
+        ("get_series_categories", "get_series", series),
+    ):
+        cats = _categories(provider, cat_action)
+        items = http.fetch_json(provider.api_url(action), timeout=180) or []
+        if isinstance(items, list):
+            result.extend(convert(items, cats))
+    user = info.get("user_info", {})
+    meta = {
+        "status": user.get("status", ""),
+        "exp_date": _int(user.get("exp_date")),
+        "max_connections": _int(user.get("max_connections")),
+        "is_trial": str(user.get("is_trial", "0")) == "1",
+    }
+    return result, meta
+
+
+def parse_series_info(data: dict) -> list[Episode]:
+    episodes: list[Episode] = []
+    seasons = data.get("episodes") if isinstance(data, dict) else None
+    info_block = data.get("info") if isinstance(data, dict) else None
+    series_name = str((info_block or {}).get("name") or "") if isinstance(info_block, dict) else ""
+    if isinstance(seasons, list):  # some servers send a list of lists
+        seasons = {str(i + 1): eps for i, eps in enumerate(seasons)}
+    for season_key, items in (seasons or {}).items():
+        for it in items or []:
+            info = it.get("info") or {}
+            if not isinstance(info, dict):
+                info = {}
+            ext = str(it.get("container_extension") or "mp4")
+            episodes.append(Episode(
+                season=_int(it.get("season") or season_key) or 1,
+                episode=_int(it.get("episode_num")),
+                title=episode_title(str(it.get("title") or ""), series_name,
+                                    _int(it.get("episode_num"))),
+                url=f"series/{it.get('id')}.{ext}",
+                logo=str(info.get("movie_image") or info.get("cover_big") or ""),
+                plot=str(info.get("plot") or info.get("description") or ""),
+                duration=_int(info.get("duration_secs")),
+            ))
+    episodes.sort(key=lambda e: (e.season, e.episode))
+    return episodes
+
+
+def series_episodes(provider: XtreamProvider, series_id: str) -> list[Episode]:
+    data = http.fetch_json(provider.api_url("get_series_info", series_id=series_id),
+                           timeout=60)
+    return parse_series_info(data)
