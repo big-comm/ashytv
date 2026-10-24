@@ -112,14 +112,18 @@ class LogoLoader:
         # Different sizes of the same logo don't download in parallel.
         with self._locks_guard:
             lock = self._url_locks.setdefault(url, threading.Lock())
-        with lock:
-            if not path.exists():
-                data = http.fetch_bytes(url, timeout=20)
-                tmp = path.with_name(path.name + f".{threading.get_ident()}.part")
-                tmp.write_bytes(data)
-                tmp.replace(path)  # atomic write: never leaves a half-written file
-        with self._locks_guard:
-            self._url_locks.pop(url, None)
+        try:
+            with lock:
+                if not path.exists():
+                    data = http.fetch_bytes(url, timeout=20)
+                    # The folder may have been removed by "Clear cache".
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    tmp = path.with_name(path.name + f".{threading.get_ident()}.part")
+                    tmp.write_bytes(data)
+                    tmp.replace(path)  # atomic write: never leaves a half-written file
+        finally:
+            with self._locks_guard:
+                self._url_locks.pop(url, None)
         return path
 
     def _fail(self, url: str, size: int) -> bool:

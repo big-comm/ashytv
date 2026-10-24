@@ -159,3 +159,15 @@ def test_describe_error_is_user_friendly():
     assert "reach the server" in http.describe_error(urllib.error.URLError("no route"))
     assert http.describe_error(TimeoutError()) == "The server took too long to respond."
     assert http.describe_error(ValueError("plain")) == "plain"
+
+
+def test_logo_download_survives_cleared_cache(loader, monkeypatch, tmp_path):
+    import shutil
+
+    monkeypatch.setattr(logos.http, "fetch_bytes", lambda url, timeout=0: b"data")
+    loader._dir = tmp_path / "logos"
+    loader._dir.mkdir()
+    shutil.rmtree(loader._dir)  # "Clear cache" removed the folder
+    path = loader._ensure_file("http://logo/1.png")
+    assert path.read_bytes() == b"data"
+    assert loader._url_locks == {}  # the per-URL lock is always released

@@ -45,6 +45,7 @@ class _TimeLayout(Gtk.Widget):
 
     def do_dispose(self) -> None:
         self.clear()
+        super().do_dispose()
 
     def do_get_request_mode(self) -> Gtk.SizeRequestMode:
         return Gtk.SizeRequestMode.CONSTANT_SIZE

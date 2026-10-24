@@ -7,6 +7,7 @@ from collections.abc import Callable
 from gi.repository import Adw, GLib, GObject, Gtk
 
 from ..i18n import _
+from ..services import http
 from ..models import Channel, Episode, MediaType
 from .pages._common import set_picture
 
@@ -181,7 +182,7 @@ class DetailDialog(Adw.Dialog):
             self.play_btn.set_label(_("Watch {label}").format(label=nxt.label))
 
     def _episodes_failed(self, exc: Exception) -> None:
-        self.ep_error.set_description(str(exc))
+        self.ep_error.set_description(GLib.markup_escape_text(http.describe_error(exc)))
         self.ep_stack.set_visible_child_name("error")
 
     def _next_episode(self) -> Episode | None:
