@@ -99,7 +99,12 @@ def wait(cond, then, timeout: float = 120) -> None:
     start = time.time()
 
     def poll():
-        if cond() or time.time() - start > timeout:
+        try:
+            done = cond()
+        except Exception as exc:  # keep polling: an exception would stop the loop
+            print("wait condition failed:", exc)
+            done = False
+        if done or time.time() - start > timeout:
             then()
             return False
         return True

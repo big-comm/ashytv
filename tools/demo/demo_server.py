@@ -16,6 +16,7 @@ import argparse
 import colorsys
 import hashlib
 import json
+import os
 import random
 import shutil
 import subprocess
@@ -173,13 +174,24 @@ def _cats(names):
             for i, n in enumerate(names)]
 
 
+# Quality variants published per channel (cycled over CHANNELS).
+QUALITIES = [("FHD", "HD", "SD"), ("HD",), ("FHD", "HD"), ("",)]
+
+
 def build_catalog(base: str) -> dict:
     now = int(time.time())
-    live = [{"num": i + 1, "name": name, "stream_type": "live", "stream_id": 100 + i,
-             "stream_icon": f"{base}/img/logo/{100 + i}.svg",
-             "epg_channel_id": f"ch{100 + i}.demo",
-             "category_id": str(LIVE_GROUPS.index(group) + 1), "added": str(now)}
-            for i, (name, group) in enumerate(CHANNELS)]
+    live = []
+    for i, (name, group) in enumerate(CHANNELS):
+        # Like real providers, some channels come in several qualities
+        # ("NAME FHD", "NAME HD", "NAME SD"); AshyTV groups them.
+        qualities = QUALITIES[i % len(QUALITIES)]
+        for q, quality in enumerate(qualities):
+            live.append({
+                "num": len(live) + 1, "name": f"{name} {quality}".strip(),
+                "stream_type": "live", "stream_id": 1000 + i * 10 + q,
+                "stream_icon": f"{base}/img/logo/{100 + i}.svg",
+                "epg_channel_id": f"ch{100 + i}.demo",
+                "category_id": str(LIVE_GROUPS.index(group) + 1), "added": str(now)})
     movies = []
     for i, title in enumerate(MOVIES):
         rng = _rng(title)
@@ -310,6 +322,10 @@ class Handler(BaseHTTPRequestHandler):
         if parts[0] in ("live", "movie", "series") and len(parts) == 4:
             if parts[1] != USER or parts[2] != PASSWORD:
                 return self._send(b"forbidden", "text/plain", 403)
+            # ASHYTV_DEMO_OFFLINE=1000,1011 simulates offline streams (fallback test).
+            offline = os.environ.get("ASHYTV_DEMO_OFFLINE", "").split(",")
+            if parts[3].split(".")[0] in offline:
+                return self._send(b"offline", "text/plain", 404)
             return self._stream()
         self._send(b"not found", "text/plain", 404)
 

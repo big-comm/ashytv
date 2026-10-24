@@ -57,6 +57,8 @@ a program guide, movies and series in a fast, good-looking app.
 **Watching**
 - **Live TV** with category chips, groups, favorites, recently watched and the
   current program with its progress.
+- **One entry per channel**: "News FHD", "News HD" and "News SD" are grouped
+  into a single channel, with its qualities shown as a badge.
 - **Program guide** (XMLTV) in a time grid with a "now" line, day picker and
   hour navigation; per-channel schedule.
 - **Movies & series** catalog with posters, ratings, years, new releases,
@@ -65,6 +67,9 @@ a program guide, movies and series in a fast, good-looking app.
 - **Continue watching**: movies and episodes resume where you stopped.
 
 **Player** (libmpv)
+- **Automatic quality**: steps down to a lighter variant when playback keeps
+  stalling, back up after a stable period, and falls back automatically when a
+  variant is offline. Any quality can also be picked by hand.
 - Hardware decoding and a configurable network buffer.
 - Channel zapping, ±10 s seeking, volume, subtitles, audio tracks, aspect
   ratio and playback speed.
