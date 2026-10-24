@@ -1,0 +1,146 @@
+"""Importer, preferences and logo loader (no network)."""
+
+from pathlib import Path
+
+import pytest
+
+from ashytv.models import Channel, MediaType
+from ashytv.services import importer, logos
+from ashytv.services.settings import ACCENTS, DEFAULTS, Settings
+from ashytv.services.storage import Storage
+from ashytv.services.xtream_client import XtreamProvider
+
+SAMPLE = Path(__file__).parent / "sample.m3u"
+
+
+def test_import_m3u_twice_keeps_one_playlist(tmp_path):
+    db_path = tmp_path / "t.db"
+    r1 = importer.import_m3u(db_path, "List", str(SAMPLE))
+    r2 = importer.import_m3u(db_path, "List", str(SAMPLE))
+    assert r1.playlist_id == r2.playlist_id
+    db = Storage(db_path)
+    assert len(db.list_playlists()) == 1
+    assert db.count() == r2.count == 5
+
+
+def test_import_empty_m3u_fails(tmp_path):
+    empty = tmp_path / "empty.m3u"
+    empty.write_text("#EXTM3U\n")
+    with pytest.raises(ValueError):
+        importer.import_m3u(tmp_path / "t.db", "Empty", str(empty))
+
+
+def test_import_xtream_without_keyring_stores_password(tmp_path, monkeypatch):
+    items = [Channel(name="A", url="live/1.ts"),
+             Channel(name="B", url="movie/2.mp4", media_type=MediaType.MOVIE)]
+    monkeypatch.setattr(importer, "load_catalog", lambda _p: (items, {"exp_date": 1}))
+    monkeypatch.setattr(importer.secrets, "store_password", lambda *_a: False)
+    prov = XtreamProvider("http://h", "u", "p")
+    r = importer.import_xtream(tmp_path / "t.db", "X", prov)
+    db = Storage(tmp_path / "t.db")
+    row = db.get_playlist(r.playlist_id)
+    assert XtreamProvider.from_json(row["source"]).password == "p"
+    assert db.playlist_meta(r.playlist_id) == {"exp_date": 1}
+
+
+def test_import_xtream_with_keyring_hides_password(tmp_path, monkeypatch):
+    monkeypatch.setattr(importer, "load_catalog",
+                        lambda _p: ([Channel(name="A", url="live/1.ts")], {}))
+    monkeypatch.setattr(importer.secrets, "store_password", lambda *_a: True)
+    prov = XtreamProvider("http://h", "u", "secret")
+    r1 = importer.import_xtream(tmp_path / "t.db", "X", prov)
+    r2 = importer.import_xtream(tmp_path / "t.db", "X", prov)
+    db = Storage(tmp_path / "t.db")
+    assert r1.playlist_id == r2.playlist_id and len(db.list_playlists()) == 1
+    assert "secret" not in db.get_playlist(r1.playlist_id)["source"]
+
+
+def test_settings_persist_and_notify(tmp_path):
+    path = tmp_path / "s.json"
+    s = Settings(path)
+    assert s.get("theme") == DEFAULTS["theme"]
+    seen = []
+    s.connect("accent", seen.append)
+    s.set("accent", "purple")
+    s.set("accent", "purple")  # no change: does not notify again
+    assert seen == ["purple"]
+    assert Settings(path).get("accent") == "purple"
+    assert "purple" in ACCENTS and len(ACCENTS) == 10
+
+
+def test_settings_ignore_corrupt_file(tmp_path):
+    path = tmp_path / "s.json"
+    path.write_text("{not json")
+    assert Settings(path).get("volume") == DEFAULTS["volume"]
+
+
+@pytest.fixture
+def loader(monkeypatch, tmp_path):
+    monkeypatch.setattr(logos.GLib, "idle_add", lambda fn, *a: fn(*a))
+    monkeypatch.setattr(logos.http, "cache_dir", lambda _sub: tmp_path)
+    ld = logos.LogoLoader()
+    # No threads: run the work immediately.
+    monkeypatch.setattr(ld, "_run", lambda: None)
+    return ld
+
+
+def test_logo_callbacks_for_same_url_are_all_called(loader, monkeypatch):
+    monkeypatch.setattr(loader, "_ensure_file", lambda url: Path("/x"))
+    monkeypatch.setattr(logos.GdkPixbuf.Pixbuf, "new_from_file_at_scale",
+                        lambda *_a: "pixbuf")
+    monkeypatch.setattr(logos, "_texture_from_pixbuf", lambda p: f"tex:{p}")
+    got = []
+    loader.load("http://logo", got.append, 40)
+    loader.load("http://logo", got.append, 40)  # same logo on another channel
+    assert got == []  # still queued
+    key = loader._queue.pop()
+    loader._work(*key)
+    assert got == ["tex:pixbuf", "tex:pixbuf"]
+    # Afterwards it comes straight from the in-memory cache.
+    loader.load("http://logo", got.append, 40)
+    assert len(got) == 3
+
+
+def test_failed_logo_is_not_retried_immediately(loader, monkeypatch):
+    calls = []
+
+    def boom(url):
+        calls.append(url)
+        raise OSError("404")
+
+    monkeypatch.setattr(loader, "_ensure_file", boom)
+    loader.load("http://bad", lambda _t: None, 40)
+    loader._work(*loader._queue.pop())
+    loader.load("http://bad", lambda _t: None, 40)
+    assert not loader._queue and calls == ["http://bad"]
+
+
+def test_logo_queue_is_lifo(loader):
+    for n in range(3):
+        loader.load(f"http://l/{n}", lambda _t: None, 40)
+    assert loader._queue.pop()[0] == "http://l/2"  # most recent first
+
+
+def test_decode_retries_transient_loader_errors(monkeypatch, tmp_path):
+    calls = []
+
+    def flaky(path, w, h, keep):
+        calls.append(path)
+        if len(calls) < 2:
+            raise logos.GLib.Error("loader i/o error")
+        return "pixbuf"
+
+    monkeypatch.setattr(logos.GdkPixbuf.Pixbuf, "new_from_file_at_scale", flaky)
+    monkeypatch.setattr(logos.time, "sleep", lambda _s: None)
+    assert logos._decode(tmp_path / "x.png", 40) == "pixbuf"
+    assert len(calls) == 2
+
+
+def test_decode_gives_up_after_attempts(monkeypatch, tmp_path):
+    def broken(*_a):
+        raise logos.GLib.Error("corrupt")
+
+    monkeypatch.setattr(logos.GdkPixbuf.Pixbuf, "new_from_file_at_scale", broken)
+    monkeypatch.setattr(logos.time, "sleep", lambda _s: None)
+    with pytest.raises(logos.GLib.Error):
+        logos._decode(tmp_path / "x.png", 40)
