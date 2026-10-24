@@ -1,0 +1,3 @@
+#!/bin/sh
+# AshyTV launcher (installed by the package into /usr/bin).
+exec python3 -m ashytv "$@"

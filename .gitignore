@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Local data — never commit playlists, credentials or databases
+*.db
+*.db-*
+*.m3u
+*.m3u8
+!tests/*.m3u
+*.xml.gz
+.env
+credentials*
+secrets*
+!src/ashytv/services/secrets.py
+
+# Generated demo media (recreated by tools/demo)
+tools/demo/media/

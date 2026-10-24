@@ -1,0 +1,58 @@
+[project]
+name = "ashytv"
+description = "Modern GTK4/libadwaita IPTV player for your own M3U and Xtream Codes playlists."
+dynamic = ["version"]
+authors = [
+    { name = "Tales A. Mendonça", email = "talesam@gmail.com" },
+]
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PyGObject",
+    "python-mpv",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: X11 Applications :: GTK",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Video :: Display",
+]
+
+[project.urls]
+Homepage = "https://github.com/big-comm/ashytv"
+Issues = "https://github.com/big-comm/ashytv/issues"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/ashytv/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ashytv"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"usr/share" = "share"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003", "RUF012", "SIM105", "UP042"]
+
+[tool.ruff.lint.per-file-ignores]
+# Inline SVG templates in the demo server are clearer as long lines.
+"tools/demo/demo_server.py" = ["E501"]

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.communitybig.ashytv</id>
+  <name>AshyTV</name>
+  <summary>Modern IPTV player for your own playlists</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="org.communitybig">
+    <name>Community Big</name>
+  </developer>
+  <description>
+    <p>
+      AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or
+      Xtream Codes account and browse live channels, an electronic program
+      guide, movies and series. AshyTV does not provide or include any content.
+    </p>
+    <ul>
+      <li>Live channels with categories, favorites and now-playing info</li>
+      <li>Program guide (XMLTV) in a time grid</li>
+      <li>Movies and series catalog with resume and next episode</li>
+      <li>libmpv playback with hardware decoding, picture-in-picture and recording</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">org.communitybig.ashytv.desktop</launchable>
+  <url type="homepage">https://github.com/big-comm/ashytv</url>
+  <url type="bugtracker">https://github.com/big-comm/ashytv/issues</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/big-comm/ashytv/main/docs/screenshots/home.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-10-24"/>
+  </releases>
+</component>

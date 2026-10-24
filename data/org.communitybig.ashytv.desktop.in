@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=AshyTV
+GenericName=IPTV Player
+Comment=Watch your own IPTV playlists (M3U and Xtream Codes)
+# Translators: search keywords, separated by semicolons; keep the trailing semicolon.
+Keywords=iptv;tv;m3u;xtream;epg;player;live;channels;movies;series;
+Exec=ashytv
+Icon=org.communitybig.ashytv
+Terminal=false
+Categories=AudioVideo;Video;Player;TV;GTK;
+StartupNotify=true
+StartupWMClass=org.communitybig.ashytv
