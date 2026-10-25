@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:29-0300\n"
+"POT-Creation-Date: 2026-10-24 23:35-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -54,11 +54,47 @@ msgstr "S{season} • E{episode}"
 msgid "Track {number}"
 msgstr "Zapis {number}"
 
-#: src/ashytv/services/free_tv.py:178 src/ashytv/ui/pages/lists_page.py:192
+#: src/ashytv/services/free_tv.py:150
+msgid "Open TV"
+msgstr "Slobodna TV"
+
+#: src/ashytv/services/free_tv.py:151
+msgid "Blender Studio"
+msgstr "Blender Studio"
+
+#: src/ashytv/services/free_tv.py:152
+msgid "Classics"
+msgstr "Klasici"
+
+#: src/ashytv/services/free_tv.py:153
+msgid "Cartoons"
+msgstr "Crtići"
+
+#: src/ashytv/services/free_tv.py:156
+msgid "Business"
+msgstr "Poslovanje"
+
+#: src/ashytv/services/free_tv.py:156 src/ashytv/ui/pages/channels_page.py:23
+msgid "News"
+msgstr "Vijesti"
+
+#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:29
+msgid "Documentaries"
+msgstr "Dokumentarci"
+
+#: src/ashytv/services/free_tv.py:157
+msgid "Weather"
+msgstr "Vrijeme"
+
+#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:31
+msgid "Music"
+msgstr "Glazba"
+
+#: src/ashytv/services/free_tv.py:221 src/ashytv/ui/pages/lists_page.py:192
 msgid "All countries"
 msgstr "Sve zemlje"
 
-#: src/ashytv/services/free_tv.py:180
+#: src/ashytv/services/free_tv.py:223
 #, python-brace-format
 msgid "Free TV – {where}"
 msgstr "Besplatna TV – {where}"
@@ -99,19 +135,19 @@ msgstr "Preuzimanje playliste…"
 msgid "Processing playlist…"
 msgstr "Obrada playliste…"
 
-#: src/ashytv/services/importer.py:42
+#: src/ashytv/services/importer.py:44
 msgid "No channels found in the playlist"
 msgstr "U playlisti nisu pronađeni kanali"
 
-#: src/ashytv/services/importer.py:47 src/ashytv/services/importer.py:79
+#: src/ashytv/services/importer.py:49 src/ashytv/services/importer.py:81
 msgid "Saving…"
 msgstr "Spremanje…"
 
-#: src/ashytv/services/importer.py:58
+#: src/ashytv/services/importer.py:60
 msgid "Connecting to provider…"
 msgstr "Povezivanje s pružateljem…"
 
-#: src/ashytv/services/importer.py:61
+#: src/ashytv/services/importer.py:63
 msgid "The provider returned no content"
 msgstr "Pružatelj nije vratio sadržaj"
 
@@ -293,10 +329,6 @@ msgstr "U trendu"
 msgid "Sports"
 msgstr "Sport"
 
-#: src/ashytv/ui/pages/channels_page.py:23
-msgid "News"
-msgstr "Vijesti"
-
 #: src/ashytv/ui/pages/channels_page.py:24
 msgid "Free-to-air"
 msgstr "Slobodni program"
@@ -304,14 +336,6 @@ msgstr "Slobodni program"
 #: src/ashytv/ui/pages/channels_page.py:27
 msgid "Kids"
 msgstr "Za djecu"
-
-#: src/ashytv/ui/pages/channels_page.py:29
-msgid "Documentaries"
-msgstr "Dokumentarci"
-
-#: src/ashytv/ui/pages/channels_page.py:31
-msgid "Music"
-msgstr "Glazba"
 
 #: src/ashytv/ui/pages/channels_page.py:58
 msgid "TV Channels"
@@ -457,19 +481,19 @@ msgstr "Nedavno dodani filmovi"
 msgid "Trending Series"
 msgstr "Serije u trendu"
 
-#: src/ashytv/ui/pages/home_page.py:147
+#: src/ashytv/ui/pages/home_page.py:148
 msgid "Welcome to AshyTV"
 msgstr "Dobro došli u AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:148
+#: src/ashytv/ui/pages/home_page.py:149
 msgid "Your channels, movies and series in one place"
 msgstr "Vaši kanali, filmovi i serije na jednom mjestu"
 
-#: src/ashytv/ui/pages/home_page.py:149
+#: src/ashytv/ui/pages/home_page.py:150
 msgid "View channels"
 msgstr "Prikaži kanale"
 
-#: src/ashytv/ui/pages/home_page.py:180
+#: src/ashytv/ui/pages/home_page.py:181
 msgid "Watch now"
 msgstr "Gledaj sada"
 

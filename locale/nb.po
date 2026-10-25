@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:29-0300\n"
+"POT-Creation-Date: 2026-10-24 23:35-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -53,11 +53,47 @@ msgstr "S{season} • E{episode}"
 msgid "Track {number}"
 msgstr "Spor {number}"
 
-#: src/ashytv/services/free_tv.py:178 src/ashytv/ui/pages/lists_page.py:192
+#: src/ashytv/services/free_tv.py:150
+msgid "Open TV"
+msgstr "Fri TV"
+
+#: src/ashytv/services/free_tv.py:151
+msgid "Blender Studio"
+msgstr "Blender Studio"
+
+#: src/ashytv/services/free_tv.py:152
+msgid "Classics"
+msgstr "Klassikere"
+
+#: src/ashytv/services/free_tv.py:153
+msgid "Cartoons"
+msgstr "Tegnefilm"
+
+#: src/ashytv/services/free_tv.py:156
+msgid "Business"
+msgstr "Næringsliv"
+
+#: src/ashytv/services/free_tv.py:156 src/ashytv/ui/pages/channels_page.py:23
+msgid "News"
+msgstr "Nyheter"
+
+#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:29
+msgid "Documentaries"
+msgstr "Dokumentarer"
+
+#: src/ashytv/services/free_tv.py:157
+msgid "Weather"
+msgstr "Vær"
+
+#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:31
+msgid "Music"
+msgstr "Musikk"
+
+#: src/ashytv/services/free_tv.py:221 src/ashytv/ui/pages/lists_page.py:192
 msgid "All countries"
 msgstr "Alle land"
 
-#: src/ashytv/services/free_tv.py:180
+#: src/ashytv/services/free_tv.py:223
 #, python-brace-format
 msgid "Free TV – {where}"
 msgstr "Gratis-TV – {where}"
@@ -98,19 +134,19 @@ msgstr "Laster ned spilleliste…"
 msgid "Processing playlist…"
 msgstr "Behandler spilleliste…"
 
-#: src/ashytv/services/importer.py:42
+#: src/ashytv/services/importer.py:44
 msgid "No channels found in the playlist"
 msgstr "Fant ingen kanaler i spillelisten"
 
-#: src/ashytv/services/importer.py:47 src/ashytv/services/importer.py:79
+#: src/ashytv/services/importer.py:49 src/ashytv/services/importer.py:81
 msgid "Saving…"
 msgstr "Lagrer…"
 
-#: src/ashytv/services/importer.py:58
+#: src/ashytv/services/importer.py:60
 msgid "Connecting to provider…"
 msgstr "Kobler til leverandør…"
 
-#: src/ashytv/services/importer.py:61
+#: src/ashytv/services/importer.py:63
 msgid "The provider returned no content"
 msgstr "Leverandøren returnerte ikke noe innhold"
 
@@ -292,10 +328,6 @@ msgstr "Populært"
 msgid "Sports"
 msgstr "Sport"
 
-#: src/ashytv/ui/pages/channels_page.py:23
-msgid "News"
-msgstr "Nyheter"
-
 #: src/ashytv/ui/pages/channels_page.py:24
 msgid "Free-to-air"
 msgstr "Åpne kanaler"
@@ -303,14 +335,6 @@ msgstr "Åpne kanaler"
 #: src/ashytv/ui/pages/channels_page.py:27
 msgid "Kids"
 msgstr "Barn"
-
-#: src/ashytv/ui/pages/channels_page.py:29
-msgid "Documentaries"
-msgstr "Dokumentarer"
-
-#: src/ashytv/ui/pages/channels_page.py:31
-msgid "Music"
-msgstr "Musikk"
 
 #: src/ashytv/ui/pages/channels_page.py:58
 msgid "TV Channels"
@@ -456,19 +480,19 @@ msgstr "Nylig lagt til filmer"
 msgid "Trending Series"
 msgstr "Populære serier"
 
-#: src/ashytv/ui/pages/home_page.py:147
+#: src/ashytv/ui/pages/home_page.py:148
 msgid "Welcome to AshyTV"
 msgstr "Velkommen til AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:148
+#: src/ashytv/ui/pages/home_page.py:149
 msgid "Your channels, movies and series in one place"
 msgstr "Kanalene, filmene og seriene dine på ett sted"
 
-#: src/ashytv/ui/pages/home_page.py:149
+#: src/ashytv/ui/pages/home_page.py:150
 msgid "View channels"
 msgstr "Se kanaler"
 
-#: src/ashytv/ui/pages/home_page.py:180
+#: src/ashytv/ui/pages/home_page.py:181
 msgid "Watch now"
 msgstr "Se nå"
 

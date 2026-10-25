@@ -37,6 +37,8 @@ def import_m3u(db_path: Path, name: str, source: str,
     progress(_("Processing playlist…"))
     epg_url = header_epg_url(text)
     channels = list(iter_m3u(text))
+    if free_tv.is_free_tv(source):
+        free_tv.localize_groups(channels)
     del text
     if not channels:
         raise ValueError(_("No channels found in the playlist"))

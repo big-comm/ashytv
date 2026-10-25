@@ -75,7 +75,8 @@ class HomePage(Gtk.Box):
             btn.connect("clicked", lambda *_: self.emit("navigate", target))
             head.append(btn)
         box.append(head)
-        row = Gtk.Box(spacing=14)
+        # Room under the cards for the overlay scrollbar, so it never covers them.
+        row = Gtk.Box(spacing=14, margin_bottom=10)
         sw = Gtk.ScrolledWindow(vscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(row)
         box.append(sw)

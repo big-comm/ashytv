@@ -144,6 +144,49 @@ def build_playlist(source: str, read: Callable[[str], str]) -> str:
     return "\n".join(lines) + "\n"
 
 
+# ---- group names ----------------------------------------------------------------
+
+_CATALOG_GROUPS = {
+    "Open TV": lambda: _("Open TV"),
+    "Movies – Blender Studio": lambda: _("Blender Studio"),
+    "Movies – Classics": lambda: _("Classics"),
+    "Series – Cartoons": lambda: _("Cartoons"),
+}
+_THEMES = {
+    "News": lambda: _("News"), "Business": lambda: _("Business"),
+    "Weather": lambda: _("Weather"), "Documentaries": lambda: _("Documentaries"),
+    "Music": lambda: _("Music"),
+}
+_GROUP_SLUGS = {"uk": "uk", "usa": "usa", "日本 / japan": "japan"}
+
+
+def localize_groups(channels: list) -> None:
+    """Group names in the user's language ("Brazil" -> "Brasil").
+
+    Runs after parsing, so the media type is still detected from the original
+    English group ("Movies – …").
+    """
+    names = country_names()
+    cache: dict[str, str] = {}
+    for ch in channels:
+        if ch.group not in cache:
+            cache[ch.group] = _group_name(ch.group, names)
+        ch.group = cache[ch.group]
+
+
+def _group_name(group: str, names: dict[str, str]) -> str:
+    if group in _CATALOG_GROUPS:
+        return _CATALOG_GROUPS[group]()
+    key = group.casefold()
+    slug = _GROUP_SLUGS.get(key, key.replace(" ", "_"))
+    if slug in names:
+        return names[slug]
+    theme, _sep, suffix = group.partition(" (")  # "News (AR)"
+    if theme in _THEMES:
+        return _THEMES[theme]() + (f" ({suffix}" if suffix else "")
+    return group
+
+
 # ---- names --------------------------------------------------------------------
 
 _ISO_JSON = Path("/usr/share/iso-codes/json/iso_3166-1.json")

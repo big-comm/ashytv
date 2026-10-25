@@ -80,3 +80,15 @@ def test_country_names_and_default(monkeypatch):
     assert free_tv.default_country() == "brazil"
     monkeypatch.setenv("LANG", "en_GB.UTF-8")
     assert free_tv.default_country() == "uk"
+
+
+def test_groups_are_localized_after_classification(monkeypatch):
+    monkeypatch.setattr(free_tv, "country_names", lambda: {"brazil": "Brasil", "uk": "Reino Unido"})
+    chans = parse_m3u('#EXTM3U\n'
+                      '#EXTINF:-1 group-title="Movies – Classics",Film (1940)\nhttps://a/1.mp4\n'
+                      '#EXTINF:-1 group-title="Brazil",TV\nhttps://a/2.m3u8\n'
+                      '#EXTINF:-1 group-title="UK",TV2\nhttps://a/3.m3u8\n'
+                      '#EXTINF:-1 group-title="News (AR)",N\nhttps://a/4.m3u8\n')
+    free_tv.localize_groups(chans)
+    assert [c.group for c in chans] == ["Classics", "Brasil", "Reino Unido", "News (AR)"]
+    assert chans[0].media_type is MediaType.MOVIE
