@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:52-0300\n"
+"POT-Creation-Date: 2026-10-24 21:56-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -52,10 +52,6 @@ msgstr "S{season} • E{episode}"
 #, python-brace-format
 msgid "Track {number}"
 msgstr "트랙 {number}"
-
-#: src/ashytv/services/free_tv.py:64
-msgid "International"
-msgstr "국제"
 
 #: src/ashytv/services/http.py:32
 #, python-brace-format
@@ -246,7 +242,7 @@ msgstr "즐겨찾기"
 msgid "Recordings"
 msgstr "녹화"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:40
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
 msgid "Playlists"
 msgstr "재생목록"
 
@@ -467,76 +463,72 @@ msgstr "채널 보기"
 msgid "Watch now"
 msgstr "지금 시청"
 
-#: src/ashytv/ui/pages/lists_page.py:41
+#: src/ashytv/ui/pages/lists_page.py:39
 msgid "Manage your playlists or add a new one"
 msgstr "재생목록을 관리하거나 새로 추가하세요"
 
-#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Playlist"
 msgstr "재생목록 추가"
 
-#: src/ashytv/ui/pages/lists_page.py:70
+#: src/ashytv/ui/pages/lists_page.py:68
 msgid "M3U File"
 msgstr "M3U 파일"
 
-#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:280
+#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:239
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:280
-msgid "Free TV"
-msgstr "무료 TV"
-
-#: src/ashytv/ui/pages/lists_page.py:71
+#: src/ashytv/ui/pages/lists_page.py:69
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:82
+#: src/ashytv/ui/pages/lists_page.py:80
 msgid "Playlist name"
 msgstr "재생목록 이름"
 
-#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:351
-#: src/ashytv/ui/pages/lists_page.py:415 src/ashytv/ui/pages/lists_page.py:422
+#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:378
 msgid "My Playlist"
 msgstr "내 재생목록"
 
-#: src/ashytv/ui/pages/lists_page.py:90
+#: src/ashytv/ui/pages/lists_page.py:88
 msgid "Choose .m3u file…"
 msgstr ".m3u 파일 선택…"
 
-#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:260
+#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:220
 msgid "No file selected"
 msgstr "선택된 파일 없음"
 
-#: src/ashytv/ui/pages/lists_page.py:98
+#: src/ashytv/ui/pages/lists_page.py:96
 msgid "File"
 msgstr "파일"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:101
 msgid "Server (URL)"
 msgstr "서버 (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:106
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "Username"
 msgstr "사용자 이름"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:105
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:108
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Password"
 msgstr "비밀번호"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:111
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "Paste provider message"
 msgstr "제공업체 메시지 붙여넣기"
 
-#: src/ashytv/ui/pages/lists_page.py:113
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -544,155 +536,124 @@ msgstr ""
 "제공업체의 환영 메시지를 붙여넣으세요. 서버, 사용자 이름, 비밀번호가 자동으"
 "로 입력됩니다"
 
-#: src/ashytv/ui/pages/lists_page.py:121
+#: src/ashytv/ui/pages/lists_page.py:119
 msgid "Playlist URL (M3U)"
 msgstr "재생목록 URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:133
 msgid "Save and Connect"
 msgstr "저장 및 연결"
 
-#: src/ashytv/ui/pages/lists_page.py:155
+#: src/ashytv/ui/pages/lists_page.py:150
 msgid "Secure Connection"
 msgstr "보안 연결"
 
-#: src/ashytv/ui/pages/lists_page.py:157
+#: src/ashytv/ui/pages/lists_page.py:152
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
 msgstr ""
 "정보는 사용자 기기에만 저장됩니다. 비밀번호는 시스템 키링에 보관됩니다."
 
-#: src/ashytv/ui/pages/lists_page.py:169
+#: src/ashytv/ui/pages/lists_page.py:164
 msgid "Your Playlists"
 msgstr "내 재생목록"
 
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries"
-msgstr "모든 국가"
-
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries, grouped by category"
-msgstr "모든 국가, 카테고리별"
-
-#: src/ashytv/ui/pages/lists_page.py:200
-msgid "Channels from"
-msgstr "채널 국가"
-
-#: src/ashytv/ui/pages/lists_page.py:203
-msgid ""
-"Free channels from iptv-org, a community list of streams that broadcasters "
-"make publicly available. AshyTV does not host or control them, and some may "
-"be offline."
-msgstr ""
-"방송사가 공개적으로 제공하는 스트림을 커뮤니티가 정리한 목록인 iptv-org의 무"
-"료 채널입니다. AshyTV는 이 채널들을 호스팅하거나 관리하지 않으며 일부는 오프"
-"라인일 수 있습니다."
-
-#: src/ashytv/ui/pages/lists_page.py:209
-msgid "About iptv-org"
-msgstr "iptv-org 정보"
-
-#: src/ashytv/ui/pages/lists_page.py:215
-#, python-brace-format
-msgid "Free TV – {where}"
-msgstr "무료 TV – {where}"
-
-#: src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Another Playlist"
 msgstr "다른 재생목록 추가"
 
-#: src/ashytv/ui/pages/lists_page.py:281
+#: src/ashytv/ui/pages/lists_page.py:239
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:282
+#: src/ashytv/ui/pages/lists_page.py:240
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n}개 항목"
 
-#: src/ashytv/ui/pages/lists_page.py:285
+#: src/ashytv/ui/pages/lists_page.py:243
 msgid "Disabled"
 msgstr "사용 안 함"
 
-#: src/ashytv/ui/pages/lists_page.py:287
+#: src/ashytv/ui/pages/lists_page.py:245
 #, python-brace-format
 msgid "updated {when}"
 msgstr "{when} 업데이트됨"
 
-#: src/ashytv/ui/pages/lists_page.py:293
+#: src/ashytv/ui/pages/lists_page.py:251
 #, python-brace-format
 msgid "expires {when}"
 msgstr "{when} 만료"
 
-#: src/ashytv/ui/pages/lists_page.py:294
+#: src/ashytv/ui/pages/lists_page.py:252
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "{when}에 만료됨"
 
-#: src/ashytv/ui/pages/lists_page.py:312
+#: src/ashytv/ui/pages/lists_page.py:270
 msgid "Show this playlist's channels"
 msgstr "이 재생 목록의 채널 표시"
 
-#: src/ashytv/ui/pages/lists_page.py:316
+#: src/ashytv/ui/pages/lists_page.py:274
 msgid "Refresh playlist"
 msgstr "재생목록 새로 고침"
 
-#: src/ashytv/ui/pages/lists_page.py:320
+#: src/ashytv/ui/pages/lists_page.py:278
 msgid "Remove playlist"
 msgstr "재생목록 제거"
 
-#: src/ashytv/ui/pages/lists_page.py:330
+#: src/ashytv/ui/pages/lists_page.py:288
 msgid "Remove playlist?"
 msgstr "재생목록을 제거할까요?"
 
-#: src/ashytv/ui/pages/lists_page.py:331
+#: src/ashytv/ui/pages/lists_page.py:289
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr "“{name}” 및 해당 채널, 즐겨찾기, 기록이 이 기기에서 모두 제거됩니다."
 
-#: src/ashytv/ui/pages/lists_page.py:333
+#: src/ashytv/ui/pages/lists_page.py:291
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "취소"
 
-#: src/ashytv/ui/pages/lists_page.py:334
+#: src/ashytv/ui/pages/lists_page.py:292
 msgid "Remove"
 msgstr "제거"
 
-#: src/ashytv/ui/pages/lists_page.py:356
+#: src/ashytv/ui/pages/lists_page.py:312
 msgid "Select M3U playlist"
 msgstr "M3U 재생목록 선택"
 
-#: src/ashytv/ui/pages/lists_page.py:358
+#: src/ashytv/ui/pages/lists_page.py:314
 msgid "M3U Playlists"
 msgstr "M3U 재생목록"
 
-#: src/ashytv/ui/pages/lists_page.py:395
+#: src/ashytv/ui/pages/lists_page.py:351
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "복사한 텍스트에서 서버, 사용자 이름, 비밀번호를 찾을 수 없습니다."
 
-#: src/ashytv/ui/pages/lists_page.py:401
+#: src/ashytv/ui/pages/lists_page.py:357
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr "제공업체 정보가 입력되었습니다. 확인한 후 “저장 및 연결”을 클릭하세요."
 
-#: src/ashytv/ui/pages/lists_page.py:413
+#: src/ashytv/ui/pages/lists_page.py:369
 msgid "Choose an .m3u file."
 msgstr ".m3u 파일을 선택하세요."
 
-#: src/ashytv/ui/pages/lists_page.py:419
+#: src/ashytv/ui/pages/lists_page.py:375
 msgid "Enter a URL starting with http:// or https://."
 msgstr "http:// 또는 https://로 시작하는 URL을 입력하세요."
 
-#: src/ashytv/ui/pages/lists_page.py:432
+#: src/ashytv/ui/pages/lists_page.py:384
 msgid "Fill in server, username and password."
 msgstr "서버, 사용자 이름, 비밀번호를 입력하세요."
 
-#: src/ashytv/ui/pages/lists_page.py:434
+#: src/ashytv/ui/pages/lists_page.py:386
 msgid "Xtream Provider"
 msgstr "Xtream 제공업체"
 
@@ -1537,33 +1498,3 @@ msgstr "이어보기와 다음 에피소드를 지원하는 영화 및 시리즈
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "하드웨어 디코딩, 화면 속 화면, 녹화를 지원하는 libmpv 재생"
-
-#~ msgid "Player"
-#~ msgstr "플레이어"
-
-#~ msgid "Player shortcuts"
-#~ msgstr "플레이어 단축키"
-
-#~ msgid "Enter"
-#~ msgstr "Enter"
-
-#~ msgid "Space"
-#~ msgstr "Space"
-
-#~ msgid "Esc"
-#~ msgstr "Esc"
-
-#~ msgid "Exit fullscreen / close"
-#~ msgstr "전체 화면 종료 / 닫기"
-
-#~ msgid "D-pad / stick"
-#~ msgstr "방향 패드 / 스틱"
-
-#~ msgid "Search"
-#~ msgstr "검색"
-
-#~ msgid "Add your IPTV playlist to start watching"
-#~ msgstr "IPTV 재생목록을 추가하여 시청을 시작하세요"
-
-#~ msgid "No playlists added yet."
-#~ msgstr "추가된 재생목록이 없습니다."

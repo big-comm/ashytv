@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:52-0300\n"
+"POT-Creation-Date: 2026-10-24 21:56-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -53,10 +53,6 @@ msgstr "S{season} • E{episode}"
 #, python-brace-format
 msgid "Track {number}"
 msgstr "トラック {number}"
-
-#: src/ashytv/services/free_tv.py:64
-msgid "International"
-msgstr "国際"
 
 #: src/ashytv/services/http.py:32
 #, python-brace-format
@@ -247,7 +243,7 @@ msgstr "お気に入り"
 msgid "Recordings"
 msgstr "録画"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:40
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
 msgid "Playlists"
 msgstr "プレイリスト"
 
@@ -469,76 +465,72 @@ msgstr "チャンネルを見る"
 msgid "Watch now"
 msgstr "今すぐ視聴"
 
-#: src/ashytv/ui/pages/lists_page.py:41
+#: src/ashytv/ui/pages/lists_page.py:39
 msgid "Manage your playlists or add a new one"
 msgstr "プレイリストの管理や新規追加ができます"
 
-#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Playlist"
 msgstr "プレイリストを追加"
 
-#: src/ashytv/ui/pages/lists_page.py:70
+#: src/ashytv/ui/pages/lists_page.py:68
 msgid "M3U File"
 msgstr "M3U ファイル"
 
-#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:280
+#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:239
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:280
-msgid "Free TV"
-msgstr "無料テレビ"
-
-#: src/ashytv/ui/pages/lists_page.py:71
+#: src/ashytv/ui/pages/lists_page.py:69
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:82
+#: src/ashytv/ui/pages/lists_page.py:80
 msgid "Playlist name"
 msgstr "プレイリスト名"
 
-#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:351
-#: src/ashytv/ui/pages/lists_page.py:415 src/ashytv/ui/pages/lists_page.py:422
+#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:378
 msgid "My Playlist"
 msgstr "マイプレイリスト"
 
-#: src/ashytv/ui/pages/lists_page.py:90
+#: src/ashytv/ui/pages/lists_page.py:88
 msgid "Choose .m3u file…"
 msgstr ".m3u ファイルを選択…"
 
-#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:260
+#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:220
 msgid "No file selected"
 msgstr "ファイルが選択されていません"
 
-#: src/ashytv/ui/pages/lists_page.py:98
+#: src/ashytv/ui/pages/lists_page.py:96
 msgid "File"
 msgstr "ファイル"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:101
 msgid "Server (URL)"
 msgstr "サーバー (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:106
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "Username"
 msgstr "ユーザー名"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:105
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:108
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Password"
 msgstr "パスワード"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:111
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "Paste provider message"
 msgstr "プロバイダーのメッセージを貼り付け"
 
-#: src/ashytv/ui/pages/lists_page.py:113
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -546,19 +538,19 @@ msgstr ""
 "プロバイダーのウェルカムメッセージを貼り付けてください。サーバー、ユーザー"
 "名、パスワードが自動的に入力されます"
 
-#: src/ashytv/ui/pages/lists_page.py:121
+#: src/ashytv/ui/pages/lists_page.py:119
 msgid "Playlist URL (M3U)"
 msgstr "プレイリスト URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:133
 msgid "Save and Connect"
 msgstr "保存して接続"
 
-#: src/ashytv/ui/pages/lists_page.py:155
+#: src/ashytv/ui/pages/lists_page.py:150
 msgid "Secure Connection"
 msgstr "安全な接続"
 
-#: src/ashytv/ui/pages/lists_page.py:157
+#: src/ashytv/ui/pages/lists_page.py:152
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -566,91 +558,60 @@ msgstr ""
 "情報はお使いのデバイスにのみ保存されます。パスワードはシステムのキーリングに"
 "保管されます。"
 
-#: src/ashytv/ui/pages/lists_page.py:169
+#: src/ashytv/ui/pages/lists_page.py:164
 msgid "Your Playlists"
 msgstr "あなたのプレイリスト"
 
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries"
-msgstr "すべての国"
-
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries, grouped by category"
-msgstr "すべての国（カテゴリ別）"
-
-#: src/ashytv/ui/pages/lists_page.py:200
-msgid "Channels from"
-msgstr "チャンネルの国"
-
-#: src/ashytv/ui/pages/lists_page.py:203
-msgid ""
-"Free channels from iptv-org, a community list of streams that broadcasters "
-"make publicly available. AshyTV does not host or control them, and some may "
-"be offline."
-msgstr ""
-"iptv-org の無料チャンネルです。放送局が一般公開しているストリームをコミュニ"
-"ティがまとめたリストです。AshyTV はこれらをホストも管理もしておらず、一部は視"
-"聴できない場合があります。"
-
-#: src/ashytv/ui/pages/lists_page.py:209
-msgid "About iptv-org"
-msgstr "iptv-org について"
-
-#: src/ashytv/ui/pages/lists_page.py:215
-#, python-brace-format
-msgid "Free TV – {where}"
-msgstr "無料テレビ – {where}"
-
-#: src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Another Playlist"
 msgstr "別のプレイリストを追加"
 
-#: src/ashytv/ui/pages/lists_page.py:281
+#: src/ashytv/ui/pages/lists_page.py:239
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:282
+#: src/ashytv/ui/pages/lists_page.py:240
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} 件"
 
-#: src/ashytv/ui/pages/lists_page.py:285
+#: src/ashytv/ui/pages/lists_page.py:243
 msgid "Disabled"
 msgstr "無効"
 
-#: src/ashytv/ui/pages/lists_page.py:287
+#: src/ashytv/ui/pages/lists_page.py:245
 #, python-brace-format
 msgid "updated {when}"
 msgstr "{when} に更新"
 
-#: src/ashytv/ui/pages/lists_page.py:293
+#: src/ashytv/ui/pages/lists_page.py:251
 #, python-brace-format
 msgid "expires {when}"
 msgstr "{when} に期限切れ"
 
-#: src/ashytv/ui/pages/lists_page.py:294
+#: src/ashytv/ui/pages/lists_page.py:252
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "{when} に期限切れになりました"
 
-#: src/ashytv/ui/pages/lists_page.py:312
+#: src/ashytv/ui/pages/lists_page.py:270
 msgid "Show this playlist's channels"
 msgstr "このプレイリストのチャンネルを表示"
 
-#: src/ashytv/ui/pages/lists_page.py:316
+#: src/ashytv/ui/pages/lists_page.py:274
 msgid "Refresh playlist"
 msgstr "プレイリストを更新"
 
-#: src/ashytv/ui/pages/lists_page.py:320
+#: src/ashytv/ui/pages/lists_page.py:278
 msgid "Remove playlist"
 msgstr "プレイリストを削除"
 
-#: src/ashytv/ui/pages/lists_page.py:330
+#: src/ashytv/ui/pages/lists_page.py:288
 msgid "Remove playlist?"
 msgstr "プレイリストを削除しますか?"
 
-#: src/ashytv/ui/pages/lists_page.py:331
+#: src/ashytv/ui/pages/lists_page.py:289
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -659,48 +620,48 @@ msgstr ""
 "「{name}」と、そのすべてのチャンネル、お気に入り、履歴がこのデバイスから削除"
 "されます。"
 
-#: src/ashytv/ui/pages/lists_page.py:333
+#: src/ashytv/ui/pages/lists_page.py:291
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/ashytv/ui/pages/lists_page.py:334
+#: src/ashytv/ui/pages/lists_page.py:292
 msgid "Remove"
 msgstr "削除"
 
-#: src/ashytv/ui/pages/lists_page.py:356
+#: src/ashytv/ui/pages/lists_page.py:312
 msgid "Select M3U playlist"
 msgstr "M3U プレイリストを選択"
 
-#: src/ashytv/ui/pages/lists_page.py:358
+#: src/ashytv/ui/pages/lists_page.py:314
 msgid "M3U Playlists"
 msgstr "M3U プレイリスト"
 
-#: src/ashytv/ui/pages/lists_page.py:395
+#: src/ashytv/ui/pages/lists_page.py:351
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "コピーしたテキストにサーバー、ユーザー名、パスワードが見つかりませんでした。"
 
-#: src/ashytv/ui/pages/lists_page.py:401
+#: src/ashytv/ui/pages/lists_page.py:357
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "プロバイダーの詳細を入力しました。内容を確認して「保存して接続」をクリックし"
 "てください。"
 
-#: src/ashytv/ui/pages/lists_page.py:413
+#: src/ashytv/ui/pages/lists_page.py:369
 msgid "Choose an .m3u file."
 msgstr ".m3u ファイルを選択してください。"
 
-#: src/ashytv/ui/pages/lists_page.py:419
+#: src/ashytv/ui/pages/lists_page.py:375
 msgid "Enter a URL starting with http:// or https://."
 msgstr "http:// または https:// で始まる URL を入力してください。"
 
-#: src/ashytv/ui/pages/lists_page.py:432
+#: src/ashytv/ui/pages/lists_page.py:384
 msgid "Fill in server, username and password."
 msgstr "サーバー、ユーザー名、パスワードを入力してください。"
 
-#: src/ashytv/ui/pages/lists_page.py:434
+#: src/ashytv/ui/pages/lists_page.py:386
 msgid "Xtream Provider"
 msgstr "Xtream プロバイダー"
 
@@ -1554,33 +1515,3 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "ハードウェアデコード、ピクチャーインピクチャー、録画に対応した libmpv 再生"
-
-#~ msgid "Player"
-#~ msgstr "プレーヤー"
-
-#~ msgid "Player shortcuts"
-#~ msgstr "プレーヤーのショートカット"
-
-#~ msgid "Enter"
-#~ msgstr "Enter"
-
-#~ msgid "Space"
-#~ msgstr "スペース"
-
-#~ msgid "Esc"
-#~ msgstr "Esc"
-
-#~ msgid "Exit fullscreen / close"
-#~ msgstr "全画面表示を終了 / 閉じる"
-
-#~ msgid "D-pad / stick"
-#~ msgstr "十字キー / スティック"
-
-#~ msgid "Search"
-#~ msgstr "検索"
-
-#~ msgid "Add your IPTV playlist to start watching"
-#~ msgstr "IPTV プレイリストを追加して視聴を始めましょう"
-
-#~ msgid "No playlists added yet."
-#~ msgstr "プレイリストはまだ追加されていません。"

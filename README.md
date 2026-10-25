@@ -35,7 +35,6 @@ a program guide, movies and series in a fast, good-looking app.
 - [Translations](#translations)
 - [Development](#development)
 - [Project layout](#project-layout)
-- [Free TV](#free-tv)
 - [Privacy](#privacy)
 - [Credits](#credits)
 - [License](#license)
@@ -44,9 +43,6 @@ a program guide, movies and series in a fast, good-looking app.
 
 **Playlists**
 - M3U / M3U8 from a local file or URL, and **Xtream Codes** accounts.
-- **Free TV**: no playlist yet? Pick a country and get the free-to-air
-  channels listed by the [iptv-org](https://github.com/iptv-org/iptv)
-  community (see [Free TV](#free-tv) below).
 - Paste the welcome message from your provider — server, username and
   password are detected automatically.
 - Xtream catalogs are loaded through `player_api.php` (live, movies, series,
@@ -151,8 +147,7 @@ cd ashytv
    - **M3U File** — pick a `.m3u` / `.m3u8` file;
    - **Xtream Codes** — enter server, username and password, or use
      **Paste provider message** to fill them in from the text you received;
-   - **URL** — the address of an M3U playlist;
-   - **Free TV** — choose a country (yours is preselected) or all countries.
+   - **URL** — the address of an M3U playlist.
 3. Click **Save and Connect**. Channels, movies, series and the program guide
    are loaded in the background.
 
@@ -276,23 +271,12 @@ usr/                    # launcher, desktop entry, icons, metainfo, .mo files
 pkgbuild/               # Arch Linux package
 ```
 
-## Free TV
-
-The **Free TV** option imports the public playlists of
-[iptv-org](https://github.com/iptv-org/iptv), a community project that
-collects links to streams broadcasters make freely available. The lists are
-released into the public domain (Unlicense); the channels themselves belong to
-their broadcasters. AshyTV does not host, select or control any of them, so
-some channels may be offline or blocked in your region. To report a link,
-use the [iptv-org issue tracker](https://github.com/iptv-org/iptv/issues).
-
 ## Privacy
 
 - Everything stays on your computer: playlists, favorites and history are
   stored locally, and Xtream passwords go to the system keyring when available.
 - AshyTV only talks to the servers in the playlists you add (and to the image
-  hosts they reference); the Free TV lists come from `iptv-org.github.io`.
-  There is no telemetry.
+  hosts they reference). There is no telemetry.
 
 ## Credits
 

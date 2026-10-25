@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-import locale
 import time
 
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _, ngettext
-from ...services import free_tv
 from ...services.xtream_client import XtreamProvider, parse_provider
 from ._common import page_header
 
@@ -68,7 +66,7 @@ class ListsPage(Gtk.Box):
         self._tabs: dict[str, Gtk.ToggleButton] = {}
         first = None
         for key, label in [("file", _("M3U File")), ("xtream", _("Xtream Codes")),
-                           ("url", _("URL")), ("free", _("Free TV"))]:
+                           ("url", _("URL"))]:
             btn = Gtk.ToggleButton(label=label)
             if first is None:
                 first = btn
@@ -122,9 +120,6 @@ class ListsPage(Gtk.Box):
                                      Gtk.Entry(placeholder_text="http://…/playlist.m3u",
                                                input_purpose=Gtk.InputPurpose.URL))
         self.stack.add_named(ubox, "url")
-
-        # free TV (iptv-org)
-        self.stack.add_named(self._free_tv_box(), "free")
         inner.append(self.stack)
 
         self.status = Gtk.Label(xalign=0, wrap=True, visible=False)
@@ -182,41 +177,6 @@ class ListsPage(Gtk.Box):
         self.append(sw)
 
         self._tabs["xtream"].set_active(True)
-
-    def _free_tv_box(self) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
-        names = free_tv.country_names()
-        countries = sorted(names, key=lambda c: locale.strxfrm(names[c]))
-        self._free_codes = [free_tv.ALL_BY_COUNTRY, free_tv.ALL_BY_CATEGORY, *countries]
-        labels = [_("All countries"), _("All countries, grouped by category"),
-                  *(names[c] for c in countries)]
-        self._free_labels = dict(zip(self._free_codes, labels, strict=True))
-        self.free_drop = Gtk.DropDown(
-            model=Gtk.StringList.new(labels), enable_search=True,
-            expression=Gtk.PropertyExpression.new(Gtk.StringObject, None, "string"))
-        default = free_tv.default_country() or free_tv.ALL_BY_COUNTRY
-        self.free_drop.connect("notify::selected", self._on_free_country)
-        self.free_drop.set_selected(self._free_codes.index(default))
-        self._field_widget(box, _("Channels from"), "tv-symbolic",
-                           self.free_drop)
-        note = Gtk.Label(
-            label=_("Free channels from iptv-org, a community list of streams that "
-                    "broadcasters make publicly available. AshyTV does not host or "
-                    "control them, and some may be offline."),
-            xalign=0, wrap=True)
-        note.add_css_class("ashy-faint")
-        box.append(note)
-        box.append(Gtk.LinkButton(uri=free_tv.PROJECT_URL, label=_("About iptv-org"),
-                                  halign=Gtk.Align.START))
-        return box
-
-    def _free_tv_name(self) -> str:
-        code = self._free_codes[self.free_drop.get_selected()]
-        return _("Free TV – {where}").format(where=self._free_labels[code])
-
-    def _on_free_country(self, *_a) -> None:
-        if self.stack.get_visible_child_name() == "free":
-            self.name_entry.set_placeholder_text(self._free_tv_name())
 
     # ---- fields with icon (as in the mockup) -----------------------------
 
@@ -276,9 +236,7 @@ class ListsPage(Gtk.Box):
     def _playlist_row(self, pl) -> Gtk.Widget:
         kind = pl["kind"]
         count = self.storage.count_channels(pl["id"])
-        free = kind == "m3u" and free_tv.is_free_tv(pl["source"])
-        parts = [_("Xtream Codes") if kind == "xtream" else _("Free TV") if free
-                 else _("M3U"),
+        parts = [_("Xtream Codes") if kind == "xtream" else _("M3U"),
                  ngettext("{n} item", "{n} items", count).format(n=count)]
         enabled = bool(pl["enabled"])
         if not enabled:
@@ -302,7 +260,7 @@ class ListsPage(Gtk.Box):
             except (ValueError, KeyError):
                 pass
         icon = Gtk.Image(icon_name="network-server-symbolic" if kind == "xtream"
-                         else "tv-symbolic" if free else "view-list-symbolic",
+                         else "view-list-symbolic",
                          valign=Gtk.Align.CENTER)
         icon.add_css_class("ashy-field-icon")
         row.add_prefix(icon)
@@ -347,8 +305,6 @@ class ListsPage(Gtk.Box):
         if button.get_active():
             self.stack.set_visible_child_name(key)
             self.set_status("")
-            self.name_entry.set_placeholder_text(
-                self._free_tv_name() if key == "free" else _("My Playlist"))
 
     # ---- file -------------------------------------------------------
 
@@ -420,10 +376,6 @@ class ListsPage(Gtk.Box):
                                 error=True)
                 return
             self.emit("import-requested", name or _("My Playlist"), url)
-        elif key == "free":
-            code = self._free_codes[self.free_drop.get_selected()]
-            self.emit("import-requested", name or self._free_tv_name(),
-                      free_tv.playlist_url(code))
         elif key == "xtream":
             host = self.host_entry.get_text().strip()
             user = self.user_entry.get_text().strip()

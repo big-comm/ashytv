@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:52-0300\n"
+"POT-Creation-Date: 2026-10-24 21:56-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -52,10 +52,6 @@ msgstr "S{season} • E{episode}"
 #, python-brace-format
 msgid "Track {number}"
 msgstr "Spor {number}"
-
-#: src/ashytv/services/free_tv.py:64
-msgid "International"
-msgstr "International"
 
 #: src/ashytv/services/http.py:32
 #, python-brace-format
@@ -246,7 +242,7 @@ msgstr "Favoritter"
 msgid "Recordings"
 msgstr "Optagelser"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:40
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
 msgid "Playlists"
 msgstr "Playlister"
 
@@ -467,76 +463,72 @@ msgstr "Se kanaler"
 msgid "Watch now"
 msgstr "Se nu"
 
-#: src/ashytv/ui/pages/lists_page.py:41
+#: src/ashytv/ui/pages/lists_page.py:39
 msgid "Manage your playlists or add a new one"
 msgstr "Administrer dine playlister, eller tilføj en ny"
 
-#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Playlist"
 msgstr "Tilføj playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:70
+#: src/ashytv/ui/pages/lists_page.py:68
 msgid "M3U File"
 msgstr "M3U-fil"
 
-#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:280
+#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:239
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:280
-msgid "Free TV"
-msgstr "Gratis tv"
-
-#: src/ashytv/ui/pages/lists_page.py:71
+#: src/ashytv/ui/pages/lists_page.py:69
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:82
+#: src/ashytv/ui/pages/lists_page.py:80
 msgid "Playlist name"
 msgstr "Navn på playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:351
-#: src/ashytv/ui/pages/lists_page.py:415 src/ashytv/ui/pages/lists_page.py:422
+#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:378
 msgid "My Playlist"
 msgstr "Min playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:90
+#: src/ashytv/ui/pages/lists_page.py:88
 msgid "Choose .m3u file…"
 msgstr "Vælg .m3u-fil…"
 
-#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:260
+#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:220
 msgid "No file selected"
 msgstr "Ingen fil valgt"
 
-#: src/ashytv/ui/pages/lists_page.py:98
+#: src/ashytv/ui/pages/lists_page.py:96
 msgid "File"
 msgstr "Fil"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:101
 msgid "Server (URL)"
 msgstr "Server (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:106
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "Username"
 msgstr "Brugernavn"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:105
 msgid "your_username"
 msgstr "dit_brugernavn"
 
-#: src/ashytv/ui/pages/lists_page.py:108
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Password"
 msgstr "Adgangskode"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_password"
 msgstr "din_adgangskode"
 
-#: src/ashytv/ui/pages/lists_page.py:111
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "Paste provider message"
 msgstr "Indsæt udbyderens besked"
 
-#: src/ashytv/ui/pages/lists_page.py:113
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -544,19 +536,19 @@ msgstr ""
 "Indsæt udbyderens velkomstbesked: server, brugernavn og adgangskode udfyldes "
 "automatisk"
 
-#: src/ashytv/ui/pages/lists_page.py:121
+#: src/ashytv/ui/pages/lists_page.py:119
 msgid "Playlist URL (M3U)"
 msgstr "Playliste-URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:133
 msgid "Save and Connect"
 msgstr "Gem og opret forbindelse"
 
-#: src/ashytv/ui/pages/lists_page.py:155
+#: src/ashytv/ui/pages/lists_page.py:150
 msgid "Secure Connection"
 msgstr "Sikker forbindelse"
 
-#: src/ashytv/ui/pages/lists_page.py:157
+#: src/ashytv/ui/pages/lists_page.py:152
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -564,92 +556,61 @@ msgstr ""
 "Dine oplysninger gemmes kun på din enhed. Adgangskoder opbevares i systemets "
 "nøglering."
 
-#: src/ashytv/ui/pages/lists_page.py:169
+#: src/ashytv/ui/pages/lists_page.py:164
 msgid "Your Playlists"
 msgstr "Dine playlister"
 
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries"
-msgstr "Alle lande"
-
-#: src/ashytv/ui/pages/lists_page.py:191
-msgid "All countries, grouped by category"
-msgstr "Alle lande, efter kategori"
-
-#: src/ashytv/ui/pages/lists_page.py:200
-msgid "Channels from"
-msgstr "Kanaler fra"
-
-#: src/ashytv/ui/pages/lists_page.py:203
-msgid ""
-"Free channels from iptv-org, a community list of streams that broadcasters "
-"make publicly available. AshyTV does not host or control them, and some may "
-"be offline."
-msgstr ""
-"Gratis kanaler fra iptv-org, en fællesskabsliste over streams, som tv-"
-"stationer gør offentligt tilgængelige. AshyTV hoster eller styrer dem ikke, "
-"og nogle kan være offline."
-
-#: src/ashytv/ui/pages/lists_page.py:209
-msgid "About iptv-org"
-msgstr "Om iptv-org"
-
-#: src/ashytv/ui/pages/lists_page.py:215
-#, python-brace-format
-msgid "Free TV – {where}"
-msgstr "Gratis tv – {where}"
-
-#: src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:212
 msgid "Add Another Playlist"
 msgstr "Tilføj endnu en playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:281
+#: src/ashytv/ui/pages/lists_page.py:239
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:282
+#: src/ashytv/ui/pages/lists_page.py:240
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} element"
 msgstr[1] "{n} elementer"
 
-#: src/ashytv/ui/pages/lists_page.py:285
+#: src/ashytv/ui/pages/lists_page.py:243
 msgid "Disabled"
 msgstr "Deaktiveret"
 
-#: src/ashytv/ui/pages/lists_page.py:287
+#: src/ashytv/ui/pages/lists_page.py:245
 #, python-brace-format
 msgid "updated {when}"
 msgstr "opdateret {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:293
+#: src/ashytv/ui/pages/lists_page.py:251
 #, python-brace-format
 msgid "expires {when}"
 msgstr "udløber {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:294
+#: src/ashytv/ui/pages/lists_page.py:252
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "udløb {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:312
+#: src/ashytv/ui/pages/lists_page.py:270
 msgid "Show this playlist's channels"
 msgstr "Vis kanalerne fra denne playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:316
+#: src/ashytv/ui/pages/lists_page.py:274
 msgid "Refresh playlist"
 msgstr "Opdater playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:320
+#: src/ashytv/ui/pages/lists_page.py:278
 msgid "Remove playlist"
 msgstr "Fjern playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:330
+#: src/ashytv/ui/pages/lists_page.py:288
 msgid "Remove playlist?"
 msgstr "Fjern playliste?"
 
-#: src/ashytv/ui/pages/lists_page.py:331
+#: src/ashytv/ui/pages/lists_page.py:289
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -658,48 +619,48 @@ msgstr ""
 "“{name}” og alle dens kanaler, favoritter og historik fjernes fra denne "
 "enhed."
 
-#: src/ashytv/ui/pages/lists_page.py:333
+#: src/ashytv/ui/pages/lists_page.py:291
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "Annuller"
 
-#: src/ashytv/ui/pages/lists_page.py:334
+#: src/ashytv/ui/pages/lists_page.py:292
 msgid "Remove"
 msgstr "Fjern"
 
-#: src/ashytv/ui/pages/lists_page.py:356
+#: src/ashytv/ui/pages/lists_page.py:312
 msgid "Select M3U playlist"
 msgstr "Vælg M3U-playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:358
+#: src/ashytv/ui/pages/lists_page.py:314
 msgid "M3U Playlists"
 msgstr "M3U-playlister"
 
-#: src/ashytv/ui/pages/lists_page.py:395
+#: src/ashytv/ui/pages/lists_page.py:351
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "Kunne ikke finde server, brugernavn og adgangskode i den kopierede tekst."
 
-#: src/ashytv/ui/pages/lists_page.py:401
+#: src/ashytv/ui/pages/lists_page.py:357
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Udbyderens oplysninger er udfyldt. Tjek dem, og klik på “Gem og opret "
 "forbindelse”."
 
-#: src/ashytv/ui/pages/lists_page.py:413
+#: src/ashytv/ui/pages/lists_page.py:369
 msgid "Choose an .m3u file."
 msgstr "Vælg en .m3u-fil."
 
-#: src/ashytv/ui/pages/lists_page.py:419
+#: src/ashytv/ui/pages/lists_page.py:375
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Angiv en URL, der starter med http:// eller https://."
 
-#: src/ashytv/ui/pages/lists_page.py:432
+#: src/ashytv/ui/pages/lists_page.py:384
 msgid "Fill in server, username and password."
 msgstr "Udfyld server, brugernavn og adgangskode."
 
-#: src/ashytv/ui/pages/lists_page.py:434
+#: src/ashytv/ui/pages/lists_page.py:386
 msgid "Xtream Provider"
 msgstr "Xtream-udbyder"
 
@@ -1547,33 +1508,3 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Afspilning med libmpv med hardwareafkodning, billede-i-billede og optagelse"
-
-#~ msgid "Player"
-#~ msgstr "Afspiller"
-
-#~ msgid "Player shortcuts"
-#~ msgstr "Afspillergenveje"
-
-#~ msgid "Enter"
-#~ msgstr "Enter"
-
-#~ msgid "Space"
-#~ msgstr "Mellemrum"
-
-#~ msgid "Esc"
-#~ msgstr "Esc"
-
-#~ msgid "Exit fullscreen / close"
-#~ msgstr "Afslut fuldskærm / luk"
-
-#~ msgid "D-pad / stick"
-#~ msgstr "D-pad / stick"
-
-#~ msgid "Search"
-#~ msgstr "Søg"
-
-#~ msgid "Add your IPTV playlist to start watching"
-#~ msgstr "Tilføj din IPTV-playliste for at begynde at se"
-
-#~ msgid "No playlists added yet."
-#~ msgstr "Ingen playlister tilføjet endnu."

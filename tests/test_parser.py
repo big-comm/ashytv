@@ -86,3 +86,9 @@ def test_episode_title_cleanup():
 
 def test_normalize_removes_accents():
     assert normalize("Séries Ação") == "series acao"
+
+
+def test_several_categories_keep_the_first():
+    text = ('#EXTM3U\n#EXTINF:-1 group-title="Entertainment;Music",Demo\n'
+            "https://example.com/demo.m3u8\n")
+    assert parse_m3u(text)[0].group == "Entertainment"
