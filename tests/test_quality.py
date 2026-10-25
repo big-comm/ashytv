@@ -19,6 +19,7 @@ def test_split_quality():
     assert split_quality("STATION -  CITY FHD") == ("STATION - CITY", 3)
     assert split_quality("Music 24H") == ("Music 24H", 0)  # 24H is not a quality
     assert split_quality("HD") == ("HD", 2)  # never returns an empty name
+    assert split_quality("News One (720p) [Not 24/7]") == ("News One [Not 24/7]", 2)
     assert base_key("Estação  Ação") == base_key("ESTACAO ACAO")
 
 

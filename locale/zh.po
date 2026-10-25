@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 19:29-0300\n"
+"POT-Creation-Date: 2026-10-24 21:41-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -52,6 +52,10 @@ msgstr "S{season} • E{episode}"
 #, python-brace-format
 msgid "Track {number}"
 msgstr "音轨 {number}"
+
+#: src/ashytv/services/free_tv.py:64
+msgid "International"
+msgstr "国际"
 
 #: src/ashytv/services/http.py:32
 #, python-brace-format
@@ -240,7 +244,7 @@ msgstr "收藏"
 msgid "Recordings"
 msgstr "录制"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:36
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
 msgid "Playlists"
 msgstr "播放列表"
 
@@ -461,186 +465,220 @@ msgstr "查看频道"
 msgid "Watch now"
 msgstr "立即观看"
 
-#: src/ashytv/ui/pages/lists_page.py:37
+#: src/ashytv/ui/pages/lists_page.py:39
 msgid "Manage your playlists or add a new one"
 msgstr "管理您的播放列表或添加新的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:45 src/ashytv/ui/pages/lists_page.py:210
+#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:250
 msgid "Add Playlist"
 msgstr "添加播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:66
+#: src/ashytv/ui/pages/lists_page.py:68
 msgid "M3U File"
 msgstr "M3U 文件"
 
-#: src/ashytv/ui/pages/lists_page.py:66 src/ashytv/ui/pages/lists_page.py:237
+#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:278
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:67
+#: src/ashytv/ui/pages/lists_page.py:69 src/ashytv/ui/pages/lists_page.py:278
+msgid "Free TV"
+msgstr "免费电视"
+
+#: src/ashytv/ui/pages/lists_page.py:69
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:78
+#: src/ashytv/ui/pages/lists_page.py:80
 msgid "Playlist name"
 msgstr "播放列表名称"
 
-#: src/ashytv/ui/pages/lists_page.py:79 src/ashytv/ui/pages/lists_page.py:358
-#: src/ashytv/ui/pages/lists_page.py:365
+#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:338
+#: src/ashytv/ui/pages/lists_page.py:402 src/ashytv/ui/pages/lists_page.py:409
 msgid "My Playlist"
 msgstr "我的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:86
+#: src/ashytv/ui/pages/lists_page.py:88
 msgid "Choose .m3u file…"
 msgstr "选择 .m3u 文件…"
 
-#: src/ashytv/ui/pages/lists_page.py:88 src/ashytv/ui/pages/lists_page.py:218
+#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:258
 msgid "No file selected"
 msgstr "未选择文件"
 
-#: src/ashytv/ui/pages/lists_page.py:94
+#: src/ashytv/ui/pages/lists_page.py:96
 msgid "File"
 msgstr "文件"
 
-#: src/ashytv/ui/pages/lists_page.py:99
+#: src/ashytv/ui/pages/lists_page.py:101
 msgid "Server (URL)"
 msgstr "服务器 (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:102
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "Username"
 msgstr "用户名"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:105
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:104
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Password"
 msgstr "密码"
 
-#: src/ashytv/ui/pages/lists_page.py:105
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "Paste provider message"
 msgstr "粘贴提供商消息"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr "粘贴提供商的欢迎消息：服务器、用户名和密码将自动填写"
 
-#: src/ashytv/ui/pages/lists_page.py:117
+#: src/ashytv/ui/pages/lists_page.py:119
 msgid "Playlist URL (M3U)"
 msgstr "播放列表 URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:131
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "Save and Connect"
 msgstr "保存并连接"
 
-#: src/ashytv/ui/pages/lists_page.py:148
+#: src/ashytv/ui/pages/lists_page.py:153
 msgid "Secure Connection"
 msgstr "安全连接"
 
-#: src/ashytv/ui/pages/lists_page.py:150
+#: src/ashytv/ui/pages/lists_page.py:155
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
 msgstr "您的信息仅存储在您的设备上。密码保存在系统密钥环中。"
 
-#: src/ashytv/ui/pages/lists_page.py:162
+#: src/ashytv/ui/pages/lists_page.py:167
 msgid "Your Playlists"
 msgstr "您的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:210
+#: src/ashytv/ui/pages/lists_page.py:189
+msgid "All countries"
+msgstr "所有国家"
+
+#: src/ashytv/ui/pages/lists_page.py:189
+msgid "All countries, grouped by category"
+msgstr "所有国家（按类别）"
+
+#: src/ashytv/ui/pages/lists_page.py:198
+msgid "Channels from"
+msgstr "频道来源"
+
+#: src/ashytv/ui/pages/lists_page.py:201
+msgid ""
+"Free channels from iptv-org, a community list of streams that broadcasters "
+"make publicly available. AshyTV does not host or control them, and some may "
+"be offline."
+msgstr ""
+"来自 iptv-org 的免费频道，这是一个由社区维护的、广播机构公开提供的直播流列"
+"表。AshyTV 不托管也不控制这些频道，部分频道可能无法播放。"
+
+#: src/ashytv/ui/pages/lists_page.py:207
+msgid "About iptv-org"
+msgstr "关于 iptv-org"
+
+#: src/ashytv/ui/pages/lists_page.py:213
+#, python-brace-format
+msgid "Free TV – {where}"
+msgstr "免费电视 – {where}"
+
+#: src/ashytv/ui/pages/lists_page.py:250
 msgid "Add Another Playlist"
 msgstr "添加另一个播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:237
+#: src/ashytv/ui/pages/lists_page.py:279
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:238
+#: src/ashytv/ui/pages/lists_page.py:280
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} 项"
 
-#: src/ashytv/ui/pages/lists_page.py:240
+#: src/ashytv/ui/pages/lists_page.py:282
 #, python-brace-format
 msgid "updated {when}"
 msgstr "更新于 {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:246
+#: src/ashytv/ui/pages/lists_page.py:288
 #, python-brace-format
 msgid "expires {when}"
 msgstr "{when} 到期"
 
-#: src/ashytv/ui/pages/lists_page.py:247
+#: src/ashytv/ui/pages/lists_page.py:289
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "已于 {when} 过期"
 
-#: src/ashytv/ui/pages/lists_page.py:262
+#: src/ashytv/ui/pages/lists_page.py:304
 msgid "Refresh playlist"
 msgstr "刷新播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:266
+#: src/ashytv/ui/pages/lists_page.py:308
 msgid "Remove playlist"
 msgstr "移除播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:275
+#: src/ashytv/ui/pages/lists_page.py:317
 msgid "Remove playlist?"
 msgstr "要移除播放列表吗？"
 
-#: src/ashytv/ui/pages/lists_page.py:276
+#: src/ashytv/ui/pages/lists_page.py:318
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr "“{name}”及其所有频道、收藏和历史记录将从此设备中移除。"
 
-#: src/ashytv/ui/pages/lists_page.py:278
+#: src/ashytv/ui/pages/lists_page.py:320
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "取消"
 
-#: src/ashytv/ui/pages/lists_page.py:279
+#: src/ashytv/ui/pages/lists_page.py:321
 msgid "Remove"
 msgstr "移除"
 
-#: src/ashytv/ui/pages/lists_page.py:299
+#: src/ashytv/ui/pages/lists_page.py:343
 msgid "Select M3U playlist"
 msgstr "选择 M3U 播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:301
+#: src/ashytv/ui/pages/lists_page.py:345
 msgid "M3U Playlists"
 msgstr "M3U 播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:338
+#: src/ashytv/ui/pages/lists_page.py:382
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "在复制的文本中未找到服务器、用户名和密码。"
 
-#: src/ashytv/ui/pages/lists_page.py:344
+#: src/ashytv/ui/pages/lists_page.py:388
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr "已填写提供商信息。请检查后点击“保存并连接”。"
 
-#: src/ashytv/ui/pages/lists_page.py:356
+#: src/ashytv/ui/pages/lists_page.py:400
 msgid "Choose an .m3u file."
 msgstr "请选择 .m3u 文件。"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:406
 msgid "Enter a URL starting with http:// or https://."
 msgstr "请输入以 http:// 或 https:// 开头的 URL。"
 
-#: src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:419
 msgid "Fill in server, username and password."
 msgstr "请填写服务器、用户名和密码。"
 
-#: src/ashytv/ui/pages/lists_page.py:373
+#: src/ashytv/ui/pages/lists_page.py:421
 msgid "Xtream Provider"
 msgstr "Xtream 提供商"
 

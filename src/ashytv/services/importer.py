@@ -14,7 +14,7 @@ from pathlib import Path
 from gi.repository import GLib
 
 from ..i18n import _
-from . import secrets
+from . import free_tv, secrets
 from .downloader import read_source
 from .m3u_parser import group_series, header_epg_url, iter_m3u
 from .storage import Storage
@@ -35,7 +35,7 @@ def import_m3u(db_path: Path, name: str, source: str,
     text = read_source(source)
     progress(_("Processing playlist…"))
     epg_url = header_epg_url(text)
-    channels = list(iter_m3u(text))
+    channels = list(iter_m3u(text, live_only=free_tv.is_free_tv(source)))
     del text
     if not channels:
         raise ValueError(_("No channels found in the playlist"))

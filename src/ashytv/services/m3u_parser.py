@@ -52,7 +52,9 @@ def parse_m3u(text: str) -> list[Channel]:
     return list(iter_m3u(text))
 
 
-def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
+def iter_m3u(text: str | Iterable[str], live_only: bool = False) -> Iterator[Channel]:
+    """Channels of an M3U playlist; `live_only` for lists of TV channels only,
+    whose "Movies"/"Series" groups are channels, not on-demand titles."""
     lines = text.splitlines() if isinstance(text, str) else text
     pending: dict | None = None
     for raw in lines:
@@ -78,11 +80,12 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
             # Stream URL.
             if pending is None:
                 pending = {"name": line, "group": ""}
-            group = pending.get("group", "")
+            # "Entertainment;Movies": several categories, keep the first.
+            group = pending.get("group", "").split(";", 1)[0].strip()
             yield Channel(
                 name=pending.get("name", ""),
                 url=line,
-                media_type=_classify(group, line),
+                media_type=MediaType.LIVE if live_only else _classify(group, line),
                 group=group,
                 tvg_id=pending.get("tvg-id", ""),
                 tvg_name=pending.get("tvg-name", ""),

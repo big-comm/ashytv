@@ -39,6 +39,7 @@ def split_quality(name: str) -> tuple[str, int]:
             rank = max(rank, value)
             base = pattern.sub(" ", base)
     base = _NOISE_RE.sub(" ", base)
+    base = re.sub(r"[\[(]\s*[\])]", " ", base)  # "News (720p)" left "News ( )"
     base = re.sub(r"\s+", " ", base).strip(_TRIM).strip()
     if not base:  # the whole name was a quality token: keep it as is
         return name.strip(), rank
