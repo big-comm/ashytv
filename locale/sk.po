@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:21-0300\n"
+"POT-Creation-Date: 2026-10-24 23:29-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1080,7 +1080,7 @@ msgstr "Vpred o 10 s (→)"
 msgid "Next (↓)"
 msgstr "Ďalší (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
 msgid "Volume"
 msgstr "Hlasitosť"
 
@@ -1144,7 +1144,7 @@ msgstr "Kvalita: {label} (auto)"
 msgid "Up next: {title}"
 msgstr "Nasleduje: {title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
 msgid "Mute"
 msgstr "Stlmiť"
 
@@ -1245,63 +1245,67 @@ msgstr "Ukončiť"
 msgid "While watching"
 msgstr "Počas sledovania"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
 msgid "Channel list"
 msgstr "Zoznam kanálov"
 
-#: src/ashytv/ui/shortcuts.py:29 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:29
+msgid "Show programme info and controls"
+msgstr "Zobraziť informácie o relácii a ovládanie"
+
+#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
 msgid "Previous/next channel"
 msgstr "Predchádzajúci/ďalší kanál"
 
-#: src/ashytv/ui/shortcuts.py:30
+#: src/ashytv/ui/shortcuts.py:31
 msgid "Type a channel number"
 msgstr "Zadajte číslo kanála"
 
-#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
 msgid "Last watched channel"
 msgstr "Naposledy sledovaný kanál"
 
-#: src/ashytv/ui/shortcuts.py:32
+#: src/ashytv/ui/shortcuts.py:33
 msgid "Pause/resume (also pauses live TV)"
 msgstr "Pozastaviť/pokračovať (pozastaví aj živé vysielanie)"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Rewind/forward 10 s"
 msgstr "Pretočiť späť/vpred o 10 s"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/shortcuts.py:38
 msgid "Exit fullscreen / close the player"
 msgstr "Ukončiť celú obrazovku / zavrieť prehrávač"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "D-pad"
 msgstr "Smerový ovládač"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Move"
 msgstr "Pohyb"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Stick"
 msgstr "Páčka"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Open / confirm"
 msgstr "Otvoriť / potvrdiť"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Back"
 msgstr "Späť"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Pause/resume"
 msgstr "Pozastaviť/pokračovať"
 
-#: src/ashytv/ui/shortcuts.py:62
+#: src/ashytv/ui/shortcuts.py:63
 msgid "Backspace"
 msgstr "Backspace"
 

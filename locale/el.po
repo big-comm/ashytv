@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:21-0300\n"
+"POT-Creation-Date: 2026-10-24 23:29-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1086,7 +1086,7 @@ msgstr "10 δ μπροστά (→)"
 msgid "Next (↓)"
 msgstr "Επόμενο (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
 msgid "Volume"
 msgstr "Ένταση ήχου"
 
@@ -1150,7 +1150,7 @@ msgstr "Ποιότητα: {label} (αυτόματα)"
 msgid "Up next: {title}"
 msgstr "Επόμενο: {title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
 msgid "Mute"
 msgstr "Σίγαση"
 
@@ -1251,63 +1251,67 @@ msgstr "Έξοδος"
 msgid "While watching"
 msgstr "Κατά την παρακολούθηση"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
 msgid "Channel list"
 msgstr "Λίστα καναλιών"
 
-#: src/ashytv/ui/shortcuts.py:29 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:29
+msgid "Show programme info and controls"
+msgstr "Εμφάνιση πληροφοριών εκπομπής και χειριστηρίων"
+
+#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
 msgid "Previous/next channel"
 msgstr "Προηγούμενο/επόμενο κανάλι"
 
-#: src/ashytv/ui/shortcuts.py:30
+#: src/ashytv/ui/shortcuts.py:31
 msgid "Type a channel number"
 msgstr "Πληκτρολογήστε αριθμό καναλιού"
 
-#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
 msgid "Last watched channel"
 msgstr "Τελευταίο κανάλι που παρακολουθήσατε"
 
-#: src/ashytv/ui/shortcuts.py:32
+#: src/ashytv/ui/shortcuts.py:33
 msgid "Pause/resume (also pauses live TV)"
 msgstr "Παύση/συνέχιση (θέτει σε παύση και την ζωντανή τηλεόραση)"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Rewind/forward 10 s"
 msgstr "Επαναφορά/προώθηση 10 δ"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Fullscreen"
 msgstr "Πλήρης οθόνη"
 
-#: src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/shortcuts.py:38
 msgid "Exit fullscreen / close the player"
 msgstr "Έξοδος από πλήρη οθόνη / κλείσιμο αναπαραγωγής"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "D-pad"
 msgstr "D-pad"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Stick"
 msgstr "Stick"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Open / confirm"
 msgstr "Άνοιγμα / επιβεβαίωση"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Back"
 msgstr "Πίσω"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Pause/resume"
 msgstr "Παύση/συνέχιση"
 
-#: src/ashytv/ui/shortcuts.py:62
+#: src/ashytv/ui/shortcuts.py:63
 msgid "Backspace"
 msgstr "Backspace"
 

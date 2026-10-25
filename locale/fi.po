@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:21-0300\n"
+"POT-Creation-Date: 2026-10-24 23:29-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1078,7 +1078,7 @@ msgstr "10 s eteen (→)"
 msgid "Next (↓)"
 msgstr "Seuraava (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
 msgid "Volume"
 msgstr "Äänenvoimakkuus"
 
@@ -1142,7 +1142,7 @@ msgstr "Laatu: {label} (automaattinen)"
 msgid "Up next: {title}"
 msgstr "Seuraavaksi: {title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
 msgid "Mute"
 msgstr "Mykistä"
 
@@ -1243,63 +1243,67 @@ msgstr "Lopeta"
 msgid "While watching"
 msgstr "Katselun aikana"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
 msgid "Channel list"
 msgstr "Kanavaluettelo"
 
-#: src/ashytv/ui/shortcuts.py:29 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:29
+msgid "Show programme info and controls"
+msgstr "Näytä ohjelman tiedot ja säätimet"
+
+#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
 msgid "Previous/next channel"
 msgstr "Edellinen/seuraava kanava"
 
-#: src/ashytv/ui/shortcuts.py:30
+#: src/ashytv/ui/shortcuts.py:31
 msgid "Type a channel number"
 msgstr "Kirjoita kanavan numero"
 
-#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
 msgid "Last watched channel"
 msgstr "Viimeksi katsottu kanava"
 
-#: src/ashytv/ui/shortcuts.py:32
+#: src/ashytv/ui/shortcuts.py:33
 msgid "Pause/resume (also pauses live TV)"
 msgstr "Tauko/jatka (keskeyttää myös suoran TV:n)"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Rewind/forward 10 s"
 msgstr "Kelaa 10 s taakse/eteen"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Fullscreen"
 msgstr "Koko näyttö"
 
-#: src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/shortcuts.py:38
 msgid "Exit fullscreen / close the player"
 msgstr "Poistu koko näytön tilasta / sulje soitin"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "D-pad"
 msgstr "Suuntapad"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Move"
 msgstr "Siirry"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Stick"
 msgstr "Ohjainsauva"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Open / confirm"
 msgstr "Avaa / vahvista"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Back"
 msgstr "Takaisin"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Pause/resume"
 msgstr "Tauko/jatka"
 
-#: src/ashytv/ui/shortcuts.py:62
+#: src/ashytv/ui/shortcuts.py:63
 msgid "Backspace"
 msgstr "Askelpalautin"
 

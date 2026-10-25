@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:21-0300\n"
+"POT-Creation-Date: 2026-10-24 23:29-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1052,7 +1052,7 @@ msgstr "快进 10 秒 (→)"
 msgid "Next (↓)"
 msgstr "下一个 (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
 msgid "Volume"
 msgstr "音量"
 
@@ -1116,7 +1116,7 @@ msgstr "画质：{label}（自动）"
 msgid "Up next: {title}"
 msgstr "接下来：{title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
 msgid "Mute"
 msgstr "静音"
 
@@ -1217,63 +1217,67 @@ msgstr "退出"
 msgid "While watching"
 msgstr "观看时"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
 msgid "Channel list"
 msgstr "频道列表"
 
-#: src/ashytv/ui/shortcuts.py:29 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:29
+msgid "Show programme info and controls"
+msgstr "显示节目信息和控制栏"
+
+#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
 msgid "Previous/next channel"
 msgstr "上一个/下一个频道"
 
-#: src/ashytv/ui/shortcuts.py:30
+#: src/ashytv/ui/shortcuts.py:31
 msgid "Type a channel number"
 msgstr "输入频道号码"
 
-#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
 msgid "Last watched channel"
 msgstr "上次观看的频道"
 
-#: src/ashytv/ui/shortcuts.py:32
+#: src/ashytv/ui/shortcuts.py:33
 msgid "Pause/resume (also pauses live TV)"
 msgstr "暂停/继续（同时暂停直播电视）"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Rewind/forward 10 s"
 msgstr "快退/快进 10 秒"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Fullscreen"
 msgstr "全屏"
 
-#: src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/shortcuts.py:38
 msgid "Exit fullscreen / close the player"
 msgstr "退出全屏 / 关闭播放器"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "D-pad"
 msgstr "方向键"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Move"
 msgstr "移动"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Stick"
 msgstr "摇杆"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Open / confirm"
 msgstr "打开 / 确认"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Back"
 msgstr "返回"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Pause/resume"
 msgstr "暂停/继续"
 
-#: src/ashytv/ui/shortcuts.py:62
+#: src/ashytv/ui/shortcuts.py:63
 msgid "Backspace"
 msgstr "Backspace"
 

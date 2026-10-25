@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:21-0300\n"
+"POT-Creation-Date: 2026-10-24 23:29-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1088,7 +1088,7 @@ msgstr "10 s vor (→)"
 msgid "Next (↓)"
 msgstr "Nächster (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
 msgid "Volume"
 msgstr "Lautstärke"
 
@@ -1153,7 +1153,7 @@ msgstr "Qualität: {label} (automatisch)"
 msgid "Up next: {title}"
 msgstr "Als Nächstes: {title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
 msgid "Mute"
 msgstr "Stummschalten"
 
@@ -1254,63 +1254,67 @@ msgstr "Beenden"
 msgid "While watching"
 msgstr "Während der Wiedergabe"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
 msgid "Channel list"
 msgstr "Senderliste"
 
-#: src/ashytv/ui/shortcuts.py:29 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:29
+msgid "Show programme info and controls"
+msgstr "Sendungsinfo und Steuerung anzeigen"
+
+#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
 msgid "Previous/next channel"
 msgstr "Vorheriger/nächster Sender"
 
-#: src/ashytv/ui/shortcuts.py:30
+#: src/ashytv/ui/shortcuts.py:31
 msgid "Type a channel number"
 msgstr "Sendernummer eingeben"
 
-#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
 msgid "Last watched channel"
 msgstr "Zuletzt gesehener Sender"
 
-#: src/ashytv/ui/shortcuts.py:32
+#: src/ashytv/ui/shortcuts.py:33
 msgid "Pause/resume (also pauses live TV)"
 msgstr "Pause/Fortsetzen (pausiert auch Live-TV)"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Rewind/forward 10 s"
 msgstr "10 s zurück/vor"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/shortcuts.py:38
 msgid "Exit fullscreen / close the player"
 msgstr "Vollbild beenden / Player schließen"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "D-pad"
 msgstr "Steuerkreuz"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Move"
 msgstr "Bewegen"
 
-#: src/ashytv/ui/shortcuts.py:43
+#: src/ashytv/ui/shortcuts.py:44
 msgid "Stick"
 msgstr "Stick"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Open / confirm"
 msgstr "Öffnen / bestätigen"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Back"
 msgstr "Zurück"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Pause/resume"
 msgstr "Pause/Fortsetzen"
 
-#: src/ashytv/ui/shortcuts.py:62
+#: src/ashytv/ui/shortcuts.py:63
 msgid "Backspace"
 msgstr "Rücktaste"
 

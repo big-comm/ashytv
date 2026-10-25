@@ -26,6 +26,7 @@ KEYBOARD: list[tuple[str, list[tuple[list[str], str]]]] = [
     ]),
     (_("While watching"), [
         (["Return"], _("Channel list")),
+        (["i"], _("Show programme info and controls")),
         (["Up", "Down"], _("Previous/next channel")),
         ([DIGITS], _("Type a channel number")),
         (["BackSpace"], _("Last watched channel")),

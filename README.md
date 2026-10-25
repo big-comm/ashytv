@@ -195,6 +195,7 @@ through libmanette.
 | Key | Action |
 |---|---|
 | <kbd>Enter</kbd> | Channel list over the video |
+| <kbd>I</kbd> | Show programme info and controls |
 | <kbd>↑</kbd> / <kbd>↓</kbd> | Previous / next channel (or episode) |
 | <kbd>0</kbd>–<kbd>9</kbd> | Type a channel number |
 | <kbd>Backspace</kbd> | Last watched channel |
