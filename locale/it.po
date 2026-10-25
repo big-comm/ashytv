@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:56-0300\n"
+"POT-Creation-Date: 2026-10-24 22:10-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -832,7 +832,7 @@ msgstr "Disattiva per risparmiare dati"
 msgid "Applies from the next video you open."
 msgstr "Si applica dal prossimo video che aprirai."
 
-#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:632
+#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:629
 msgid "Automatic quality"
 msgstr "Qualità automatica"
 
@@ -992,7 +992,7 @@ msgstr "Auto"
 msgid "Back (Esc)"
 msgstr "Indietro (Esc)"
 
-#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:800
+#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:797
 msgid "Record"
 msgstr "Registra"
 
@@ -1000,162 +1000,162 @@ msgstr "Registra"
 msgid "Mini player"
 msgstr "Mini lettore"
 
-#: src/ashytv/ui/player_view.py:164 src/ashytv/ui/player_view.py:227
-msgid "Fullscreen (F)"
-msgstr "Schermo intero (F)"
-
-#: src/ashytv/ui/player_view.py:193 src/ashytv/ui/player_view.py:384
-#: src/ashytv/ui/player_view.py:548 src/ashytv/ui/player_view.py:562
-#: src/ashytv/ui/player_view.py:568
+#: src/ashytv/ui/player_view.py:191 src/ashytv/ui/player_view.py:381
+#: src/ashytv/ui/player_view.py:545 src/ashytv/ui/player_view.py:559
+#: src/ashytv/ui/player_view.py:565
 msgid "● LIVE"
 msgstr "● IN DIRETTA"
 
-#: src/ashytv/ui/player_view.py:195
+#: src/ashytv/ui/player_view.py:193
 msgid "Go live"
 msgstr "Vai in diretta"
 
-#: src/ashytv/ui/player_view.py:196
+#: src/ashytv/ui/player_view.py:194
 msgid "Back to live"
 msgstr "Torna alla diretta"
 
-#: src/ashytv/ui/player_view.py:206
+#: src/ashytv/ui/player_view.py:204
 msgid "Previous (↑)"
 msgstr "Precedente (↑)"
 
-#: src/ashytv/ui/player_view.py:208
+#: src/ashytv/ui/player_view.py:206
 msgid "Back 10 s (←)"
 msgstr "Indietro di 10 s (←)"
 
-#: src/ashytv/ui/player_view.py:210
+#: src/ashytv/ui/player_view.py:208
 msgid "Pause (Space)"
 msgstr "Pausa (Spazio)"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:210
 msgid "Forward 10 s (→)"
 msgstr "Avanti di 10 s (→)"
 
-#: src/ashytv/ui/player_view.py:214
+#: src/ashytv/ui/player_view.py:212
 msgid "Next (↓)"
 msgstr "Successivo (↓)"
 
-#: src/ashytv/ui/player_view.py:221 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
 msgid "Volume"
 msgstr "Volume"
 
-#: src/ashytv/ui/player_view.py:223 src/ashytv/ui/player_view.py:851
+#: src/ashytv/ui/player_view.py:221 src/ashytv/ui/player_view.py:848
 msgid "Subtitles"
 msgstr "Sottotitoli"
 
-#: src/ashytv/ui/player_view.py:225
+#: src/ashytv/ui/player_view.py:223
 msgid "Audio & Video"
 msgstr "Audio e video"
 
-#: src/ashytv/ui/player_view.py:252
+#: src/ashytv/ui/player_view.py:225
+msgid "Fullscreen (F)"
+msgstr "Schermo intero (F)"
+
+#: src/ashytv/ui/player_view.py:250
 msgid "Try again"
 msgstr "Riprova"
 
-#: src/ashytv/ui/player_view.py:419
+#: src/ashytv/ui/player_view.py:416
 msgid "Buffering…"
 msgstr "Buffering…"
 
-#: src/ashytv/ui/player_view.py:419
+#: src/ashytv/ui/player_view.py:416
 msgid "Loading…"
 msgstr "Caricamento…"
 
-#: src/ashytv/ui/player_view.py:421
+#: src/ashytv/ui/player_view.py:418
 msgid "Could not play"
 msgstr "Impossibile riprodurre"
 
-#: src/ashytv/ui/player_view.py:422
+#: src/ashytv/ui/player_view.py:419
 msgid "The channel may be offline or the connection dropped."
 msgstr "Il canale potrebbe essere offline o la connessione è caduta."
 
-#: src/ashytv/ui/player_view.py:429
+#: src/ashytv/ui/player_view.py:426
 msgid "Broadcast ended"
 msgstr "Trasmissione terminata"
 
-#: src/ashytv/ui/player_view.py:430
+#: src/ashytv/ui/player_view.py:427
 msgid "The signal was interrupted."
 msgstr "Il segnale è stato interrotto."
 
-#: src/ashytv/ui/player_view.py:618
+#: src/ashytv/ui/player_view.py:615
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Qualità: {label}"
 
-#: src/ashytv/ui/player_view.py:620
+#: src/ashytv/ui/player_view.py:617
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Non disponibile, passaggio a {label}"
 
-#: src/ashytv/ui/player_view.py:622
+#: src/ashytv/ui/player_view.py:619
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Qualità: {label} (auto)"
 
-#: src/ashytv/ui/player_view.py:656
+#: src/ashytv/ui/player_view.py:653
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Prossimo: {title}"
 
-#: src/ashytv/ui/player_view.py:701 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
 msgid "Mute"
 msgstr "Silenzia"
 
-#: src/ashytv/ui/player_view.py:702 src/ashytv/ui/player_view.py:709
+#: src/ashytv/ui/player_view.py:699 src/ashytv/ui/player_view.py:706
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Volume {level}%"
 
-#: src/ashytv/ui/player_view.py:769
+#: src/ashytv/ui/player_view.py:766
 msgid "Recording"
 msgstr "Registrazione"
 
-#: src/ashytv/ui/player_view.py:780
+#: src/ashytv/ui/player_view.py:777
 msgid "Stop recording"
 msgstr "Interrompi registrazione"
 
-#: src/ashytv/ui/player_view.py:783
+#: src/ashytv/ui/player_view.py:780
 msgid "Recording…"
 msgstr "Registrazione in corso…"
 
-#: src/ashytv/ui/player_view.py:791
+#: src/ashytv/ui/player_view.py:788
 msgid "Could not record this channel."
 msgstr "Impossibile registrare questo canale."
 
-#: src/ashytv/ui/player_view.py:802
+#: src/ashytv/ui/player_view.py:799
 msgid "Recording saved to Recordings."
 msgstr "Registrazione salvata in Registrazioni."
 
-#: src/ashytv/ui/player_view.py:814
+#: src/ashytv/ui/player_view.py:811
 msgid "Mute (M)"
 msgstr "Silenzia (M)"
 
-#: src/ashytv/ui/player_view.py:849
+#: src/ashytv/ui/player_view.py:846
 msgid "Off"
 msgstr "Disattivato"
 
-#: src/ashytv/ui/player_view.py:854
+#: src/ashytv/ui/player_view.py:851
 msgid "No subtitles in this video."
 msgstr "Nessun sottotitolo in questo video."
 
-#: src/ashytv/ui/player_view.py:863
+#: src/ashytv/ui/player_view.py:860
 msgid "Automatic"
 msgstr "Automatica"
 
-#: src/ashytv/ui/player_view.py:866
+#: src/ashytv/ui/player_view.py:863
 msgid "Quality"
 msgstr "Qualità"
 
-#: src/ashytv/ui/player_view.py:870
+#: src/ashytv/ui/player_view.py:867
 msgid "Audio"
 msgstr "Audio"
 
-#: src/ashytv/ui/player_view.py:873
+#: src/ashytv/ui/player_view.py:870
 msgid "Aspect ratio"
 msgstr "Proporzioni"
 
-#: src/ashytv/ui/player_view.py:877
+#: src/ashytv/ui/player_view.py:874
 msgid "Speed"
 msgstr "Velocità"
 

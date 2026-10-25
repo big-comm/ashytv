@@ -161,9 +161,7 @@ class PlayerView(Gtk.Overlay):
         self.rec_btn = self._btn("ashy-record-symbolic", _("Record"), self._toggle_record)
         self.pip_btn = self._btn("ashy-pip-symbolic", _("Mini player"),
                                  lambda: self.emit("pip-requested"))
-        self.fs_top = self._btn("view-fullscreen-symbolic", _("Fullscreen (F)"),
-                                lambda: self.emit("toggle-fullscreen"))
-        for b in (self.fav_btn, self.rec_btn, self.pip_btn, self.fs_top):
+        for b in (self.fav_btn, self.rec_btn, self.pip_btn):
             bar.append(b)
         # WindowHandle: dragging the bar moves the window (buttons still work).
         self.top_bar = Gtk.Revealer(
@@ -276,7 +274,6 @@ class PlayerView(Gtk.Overlay):
         self._fullscreen = fullscreen
         icon = "view-restore-symbolic" if fullscreen else "view-fullscreen-symbolic"
         self.fs_btn.set_icon_name(icon)
-        self.fs_top.set_icon_name(icon)
 
     @property
     def item(self) -> PlayItem | None:

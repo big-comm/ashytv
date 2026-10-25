@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:56-0300\n"
+"POT-Creation-Date: 2026-10-24 22:10-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -836,7 +836,7 @@ msgstr "Veri tasarrufu için kapatın"
 msgid "Applies from the next video you open."
 msgstr "Açacağınız sonraki videodan itibaren geçerli olur."
 
-#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:632
+#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:629
 msgid "Automatic quality"
 msgstr "Otomatik kalite"
 
@@ -998,7 +998,7 @@ msgstr "Otomatik"
 msgid "Back (Esc)"
 msgstr "Geri (Esc)"
 
-#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:800
+#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:797
 msgid "Record"
 msgstr "Kaydet"
 
@@ -1006,162 +1006,162 @@ msgstr "Kaydet"
 msgid "Mini player"
 msgstr "Mini oynatıcı"
 
-#: src/ashytv/ui/player_view.py:164 src/ashytv/ui/player_view.py:227
-msgid "Fullscreen (F)"
-msgstr "Tam ekran (F)"
-
-#: src/ashytv/ui/player_view.py:193 src/ashytv/ui/player_view.py:384
-#: src/ashytv/ui/player_view.py:548 src/ashytv/ui/player_view.py:562
-#: src/ashytv/ui/player_view.py:568
+#: src/ashytv/ui/player_view.py:191 src/ashytv/ui/player_view.py:381
+#: src/ashytv/ui/player_view.py:545 src/ashytv/ui/player_view.py:559
+#: src/ashytv/ui/player_view.py:565
 msgid "● LIVE"
 msgstr "● CANLI"
 
-#: src/ashytv/ui/player_view.py:195
+#: src/ashytv/ui/player_view.py:193
 msgid "Go live"
 msgstr "Canlıya geç"
 
-#: src/ashytv/ui/player_view.py:196
+#: src/ashytv/ui/player_view.py:194
 msgid "Back to live"
 msgstr "Canlıya dön"
 
-#: src/ashytv/ui/player_view.py:206
+#: src/ashytv/ui/player_view.py:204
 msgid "Previous (↑)"
 msgstr "Önceki (↑)"
 
-#: src/ashytv/ui/player_view.py:208
+#: src/ashytv/ui/player_view.py:206
 msgid "Back 10 s (←)"
 msgstr "10 sn geri (←)"
 
-#: src/ashytv/ui/player_view.py:210
+#: src/ashytv/ui/player_view.py:208
 msgid "Pause (Space)"
 msgstr "Duraklat (Boşluk)"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:210
 msgid "Forward 10 s (→)"
 msgstr "10 sn ileri (→)"
 
-#: src/ashytv/ui/player_view.py:214
+#: src/ashytv/ui/player_view.py:212
 msgid "Next (↓)"
 msgstr "Sonraki (↓)"
 
-#: src/ashytv/ui/player_view.py:221 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:36
 msgid "Volume"
 msgstr "Ses"
 
-#: src/ashytv/ui/player_view.py:223 src/ashytv/ui/player_view.py:851
+#: src/ashytv/ui/player_view.py:221 src/ashytv/ui/player_view.py:848
 msgid "Subtitles"
 msgstr "Altyazılar"
 
-#: src/ashytv/ui/player_view.py:225
+#: src/ashytv/ui/player_view.py:223
 msgid "Audio & Video"
 msgstr "Ses ve Video"
 
-#: src/ashytv/ui/player_view.py:252
+#: src/ashytv/ui/player_view.py:225
+msgid "Fullscreen (F)"
+msgstr "Tam ekran (F)"
+
+#: src/ashytv/ui/player_view.py:250
 msgid "Try again"
 msgstr "Yeniden dene"
 
-#: src/ashytv/ui/player_view.py:419
+#: src/ashytv/ui/player_view.py:416
 msgid "Buffering…"
 msgstr "Ara belleğe alınıyor…"
 
-#: src/ashytv/ui/player_view.py:419
+#: src/ashytv/ui/player_view.py:416
 msgid "Loading…"
 msgstr "Yükleniyor…"
 
-#: src/ashytv/ui/player_view.py:421
+#: src/ashytv/ui/player_view.py:418
 msgid "Could not play"
 msgstr "Oynatılamadı"
 
-#: src/ashytv/ui/player_view.py:422
+#: src/ashytv/ui/player_view.py:419
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanal çevrimdışı olabilir veya bağlantı kopmuş olabilir."
 
-#: src/ashytv/ui/player_view.py:429
+#: src/ashytv/ui/player_view.py:426
 msgid "Broadcast ended"
 msgstr "Yayın sona erdi"
 
-#: src/ashytv/ui/player_view.py:430
+#: src/ashytv/ui/player_view.py:427
 msgid "The signal was interrupted."
 msgstr "Sinyal kesildi."
 
-#: src/ashytv/ui/player_view.py:618
+#: src/ashytv/ui/player_view.py:615
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Kalite: {label}"
 
-#: src/ashytv/ui/player_view.py:620
+#: src/ashytv/ui/player_view.py:617
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Kullanılamıyor, {label} kalitesine geçiliyor"
 
-#: src/ashytv/ui/player_view.py:622
+#: src/ashytv/ui/player_view.py:619
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Kalite: {label} (otomatik)"
 
-#: src/ashytv/ui/player_view.py:656
+#: src/ashytv/ui/player_view.py:653
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Sıradaki: {title}"
 
-#: src/ashytv/ui/player_view.py:701 src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:35
 msgid "Mute"
 msgstr "Sesi kapat"
 
-#: src/ashytv/ui/player_view.py:702 src/ashytv/ui/player_view.py:709
+#: src/ashytv/ui/player_view.py:699 src/ashytv/ui/player_view.py:706
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Ses {level}%"
 
-#: src/ashytv/ui/player_view.py:769
+#: src/ashytv/ui/player_view.py:766
 msgid "Recording"
 msgstr "Kayıt"
 
-#: src/ashytv/ui/player_view.py:780
+#: src/ashytv/ui/player_view.py:777
 msgid "Stop recording"
 msgstr "Kaydı durdur"
 
-#: src/ashytv/ui/player_view.py:783
+#: src/ashytv/ui/player_view.py:780
 msgid "Recording…"
 msgstr "Kaydediliyor…"
 
-#: src/ashytv/ui/player_view.py:791
+#: src/ashytv/ui/player_view.py:788
 msgid "Could not record this channel."
 msgstr "Bu kanal kaydedilemedi."
 
-#: src/ashytv/ui/player_view.py:802
+#: src/ashytv/ui/player_view.py:799
 msgid "Recording saved to Recordings."
 msgstr "Kayıt, Kayıtlar bölümüne kaydedildi."
 
-#: src/ashytv/ui/player_view.py:814
+#: src/ashytv/ui/player_view.py:811
 msgid "Mute (M)"
 msgstr "Sessiz (M)"
 
-#: src/ashytv/ui/player_view.py:849
+#: src/ashytv/ui/player_view.py:846
 msgid "Off"
 msgstr "Kapalı"
 
-#: src/ashytv/ui/player_view.py:854
+#: src/ashytv/ui/player_view.py:851
 msgid "No subtitles in this video."
 msgstr "Bu videoda altyazı yok."
 
-#: src/ashytv/ui/player_view.py:863
+#: src/ashytv/ui/player_view.py:860
 msgid "Automatic"
 msgstr "Otomatik"
 
-#: src/ashytv/ui/player_view.py:866
+#: src/ashytv/ui/player_view.py:863
 msgid "Quality"
 msgstr "Kalite"
 
-#: src/ashytv/ui/player_view.py:870
+#: src/ashytv/ui/player_view.py:867
 msgid "Audio"
 msgstr "Ses"
 
-#: src/ashytv/ui/player_view.py:873
+#: src/ashytv/ui/player_view.py:870
 msgid "Aspect ratio"
 msgstr "En boy oranı"
 
-#: src/ashytv/ui/player_view.py:877
+#: src/ashytv/ui/player_view.py:874
 msgid "Speed"
 msgstr "Hız"
 
