@@ -63,7 +63,7 @@ COUNTRIES = {
 _BLOCKED_HOSTS = (
     "pluto.tv", "jmp2.uk", "mjh.nz", "samsung", "wurl.tv", "wurl.com", "amagi.tv",
     "roku", "plex.tv", "tubi", "xumo", "rakuten", "redbox", "stirr", "frndly",
-    "localnow", "youtube.com", "youtu.be", "dailymotion.com", "twitch.tv",
+    "localnow", "ottera", "youtube.com", "youtu.be", "dailymotion.com", "twitch.tv",
     # relays/forwarders of other broadcasters' streams
     "mxnticek.eu", "mcquack.net", "tvkaista.net", "7m.pl", "mov3.co",
     "streams.ovh", "bozztv.com", "lexanetwork.com",

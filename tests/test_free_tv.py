@@ -11,6 +11,8 @@ https://stream3.camara.gov.br/tv1/manifest.m3u8
 https://tv.example.org/live/playlist.m3u8
 #EXTINF:-1 group-title="USA",Platform Channel
 https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/1/master.m3u8
+#EXTINF:-1 group-title="Brazil",FAST distributor feed
+https://rnw-rn.otteravision.com/rnw/rn/rnw_rn.m3u8
 #EXTINF:-1 group-title="Brazil",Bare IP
 http://203.0.113.7/live/index.m3u8
 #EXTINF:-1 group-title="Brazil",Video Site Ⓨ

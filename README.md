@@ -294,7 +294,8 @@ always comes from the original source.
    it by URL and **filters it on your computer**, keeping only broadcasters'
    own streams. It drops:
    - channels of commercial streaming platforms (Pluto TV, Samsung TV Plus,
-     Plex, Roku, Tubi, Xumo, Rakuten and the services that re-serve them);
+     Plex, Roku, Tubi, Xumo, Rakuten), the FAST distributors that feed them
+     (Amagi, Wurl, OTTera) and the services that re-serve them;
    - YouTube, Dailymotion and Twitch links, whose terms only allow their own
      players;
    - streams on bare IP addresses, relays/forwarders and URLs carrying a
