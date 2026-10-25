@@ -20,16 +20,18 @@ series in a fast, good-looking app.
 ![Home](docs/screenshots/home.png)
 
 > [!IMPORTANT]
-> **AshyTV is only a player. It does not host, stream, sell or own any
-> channel, movie or series.** Video always comes straight from the server in
-> the playlist you choose; nothing passes through or is stored by AshyTV or
-> its developers. Use it only with playlists you are legally entitled to use.
+> **AshyTV is only a player, like VLC or mpv. It does not host, provide,
+> sell or own any channel, movie or series, and it has no servers.** It plays
+> what is in the playlist you add, and the video goes straight from that
+> source to your computer — nothing passes through or is stored by AshyTV or
+> its developers. AshyTV does not sell, recommend or endorse any IPTV
+> provider. Use it only with content you are legally entitled to watch.
 >
 > The optional **Free TV** list only *links* to channels broadcasters make
 > freely available and to films with an open licence or in the public domain
-> (see [Free TV](#free-tv)). All screenshots in this repository were made with
-> a bundled demo server that generates fictional channels, artwork and video
-> ([tools/demo](tools/demo)).
+> (see [Free TV](#free-tv) and the [Legal notice](#legal-notice)). All
+> screenshots in this repository were made with a bundled demo server that
+> generates fictional channels, artwork and video ([tools/demo](tools/demo)).
 
 ## Table of contents
 
@@ -43,6 +45,7 @@ series in a fast, good-looking app.
 - [Development](#development)
 - [Project layout](#project-layout)
 - [Free TV](#free-tv)
+- [Legal notice](#legal-notice)
 - [Privacy](#privacy)
 - [Credits](#credits)
 - [License](#license)
@@ -53,7 +56,8 @@ series in a fast, good-looking app.
 - **Free TV** (the first option): free-to-air channels from 80+ countries
   plus public domain classics, Blender's open movies and cartoons — see
   [Free TV](#free-tv).
-- M3U / M3U8 from a local file or URL, and **Xtream Codes** accounts.
+- M3U / M3U8 from a local file or URL, and accounts that use the
+  **Xtream Codes** API (from your own, legal provider).
 - Paste the welcome message from your provider — server, username and
   password are detected automatically.
 - Xtream catalogs are loaded through `player_api.php` (live, movies, series,
@@ -321,11 +325,41 @@ always comes from the original source.
    Public domain status differs between countries; check the rules where you
    live.
 
+The filter works by rules and the list changes over time, so it cannot
+guarantee every channel; it is reviewed whenever a problem is reported.
+
 **Found something that should not be there?** Open an
 [issue](https://github.com/big-comm/ashytv/issues): links are removed from
 the curated catalog and added to the filter right away. Problems with a
 specific Free-TV channel can also be reported to
 [Free-TV/IPTV](https://github.com/Free-TV/IPTV/issues).
+
+## Legal notice
+
+- **No content.** AshyTV is media player software. It does not host, upload,
+  sell, rent or distribute channels, movies or series, and it runs no
+  streaming servers. Playlists (M3U files, URLs and Xtream accounts) are
+  chosen and added by the user.
+- **No providers.** AshyTV is not affiliated with, and does not sell,
+  recommend or endorse, any IPTV provider. "Xtream Codes" refers only to the
+  playlist API that many providers use; AshyTV has no relation to any service
+  of that name.
+- **No circumvention.** AshyTV does not break or bypass DRM, encryption,
+  paywalls, logins or geographic restrictions. It only plays streams that
+  their source already serves openly.
+- **Your responsibility.** You are responsible for making sure you have the
+  right to watch what you play, under the laws of your country.
+- **Free TV.** The Free TV option only stores links to free-to-air
+  broadcasters' streams and to openly licensed or public domain films, as
+  described in [Free TV](#free-tv). If you hold rights to something listed
+  there, open an [issue](https://github.com/big-comm/ashytv/issues) and it
+  will be removed.
+- **Trademarks.** Channel, platform and organization names mentioned in this
+  repository (for example Pluto TV, YouTube, NASA, Blender, Internet
+  Archive) belong to their owners. Their mention does not imply any
+  affiliation or endorsement.
+- **No warranty.** The software is provided "as is", without warranty of any
+  kind, as stated in the [MIT License](LICENSE).
 
 ## Privacy
 

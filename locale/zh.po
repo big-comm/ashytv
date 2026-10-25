@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:35-0300\n"
+"POT-Creation-Date: 2026-10-24 23:38-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1528,25 +1528,41 @@ msgstr "Community Big"
 msgid ""
 "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
 "Xtream Codes account and browse live channels, an electronic program guide, "
-"movies and series. AshyTV does not provide or include any content."
+"movies and series. AshyTV is only a player: it does not host or sell any "
+"content."
 msgstr ""
-"AshyTV 是一款基于 GTK4/libadwaita 的 IPTV 播放器。导入您自己的 M3U 播放列表"
-"或 Xtream Codes 账户，即可浏览直播频道、电子节目指南、电影和剧集。AshyTV 不提"
-"供也不包含任何内容。"
+"AshyTV 是使用 GTK4/libadwaita 构建的 IPTV 播放器。导入您自己的 M3U 播放列表"
+"或 Xtream Codes 账户，浏览直播频道、节目指南、电影和剧集。AshyTV 只是播放器："
+"不托管也不出售任何内容。"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:18
+#: data/org.communitybig.ashytv.metainfo.xml.in:19
+msgid ""
+"Optional Free TV: links to free-to-air channels and to public domain or "
+"openly licensed films"
+msgstr "可选的免费电视：指向免费频道以及公有领域或开放许可电影的链接"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:20
 msgid "Live channels with categories, favorites and now-playing info"
 msgstr "带有分类、收藏和正在播出信息的直播频道"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:19
+#: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid "Program guide (XMLTV) in a time grid"
 msgstr "时间网格形式的节目指南 (XMLTV)"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:20
+#: data/org.communitybig.ashytv.metainfo.xml.in:22
 msgid "Movies and series catalog with resume and next episode"
 msgstr "支持继续观看和下一集的电影与剧集目录"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:21
+#: data/org.communitybig.ashytv.metainfo.xml.in:23
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "基于 libmpv 的播放，支持硬件解码、画中画和录制"
+
+#~ msgid ""
+#~ "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
+#~ "Xtream Codes account and browse live channels, an electronic program "
+#~ "guide, movies and series. AshyTV does not provide or include any content."
+#~ msgstr ""
+#~ "AshyTV 是一款基于 GTK4/libadwaita 的 IPTV 播放器。导入您自己的 M3U 播放列"
+#~ "表或 Xtream Codes 账户，即可浏览直播频道、电子节目指南、电影和剧集。"
+#~ "AshyTV 不提供也不包含任何内容。"

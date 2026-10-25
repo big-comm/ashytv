@@ -99,38 +99,69 @@
     <p>
       AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or
       Xtream Codes account and browse live channels, an electronic program
-      guide, movies and series. AshyTV does not provide or include any content.
+      guide, movies and series. AshyTV is only a player: it does not host or
+      sell any content.
     </p>
-    <p xml:lang="zh">AshyTV 是一款基于 GTK4/libadwaita 的 IPTV 播放器。导入您自己的 M3U 播放列表或 Xtream Codes 账户，即可浏览直播频道、电子节目指南、电影和剧集。AshyTV 不提供也不包含任何内容。</p>
-    <p xml:lang="uk">AshyTV — це IPTV-програвач на GTK4/libadwaita. Імпортуйте власний плейлист M3U або обліковий запис Xtream Codes і переглядайте телеканали наживо, електронну телепрограму, фільми та серіали. AshyTV не надає й не містить жодного вмісту.</p>
-    <p xml:lang="tr">AshyTV, GTK4/libadwaita tabanlı bir IPTV oynatıcısıdır. Kendi M3U oynatma listenizi veya Xtream Codes hesabınızı içe aktarın; canlı kanallara, elektronik program rehberine, filmlere ve dizilere göz atın. AshyTV hiçbir içerik sağlamaz veya barındırmaz.</p>
-    <p xml:lang="sv">AshyTV är en IPTV-spelare i GTK4/libadwaita. Importera din egen M3U-spellista eller ditt Xtream Codes-konto och bläddra bland live-kanaler, en elektronisk TV-guide, filmer och serier. AshyTV tillhandahåller eller innehåller inget innehåll.</p>
-    <p xml:lang="sk">AshyTV je IPTV prehrávač pre GTK4/libadwaita. Importujte vlastný playlist M3U alebo účet Xtream Codes a prehliadajte živé kanály, elektronického programového sprievodcu, filmy a seriály. AshyTV neposkytuje ani neobsahuje žiadny obsah.</p>
-    <p xml:lang="ru">AshyTV — это IPTV-плеер на GTK4/libadwaita. Импортируйте собственный плейлист M3U или аккаунт Xtream Codes и смотрите телеканалы в прямом эфире, электронную телепрограмму, фильмы и сериалы. AshyTV не предоставляет и не включает никакого контента.</p>
-    <p xml:lang="ro">AshyTV este un player IPTV GTK4/libadwaita. Importați propria listă de redare M3U sau un cont Xtream Codes și răsfoiți canale în direct, un ghid electronic de programe, filme și seriale. AshyTV nu oferă și nu include niciun conținut.</p>
-    <p xml:lang="pt-BR">O AshyTV é um player IPTV em GTK4/libadwaita. Importe sua própria playlist M3U ou conta Xtream Codes e navegue por canais ao vivo, guia eletrônico de programação, filmes e séries. O AshyTV não fornece nem inclui nenhum conteúdo.</p>
-    <p xml:lang="pt">O AshyTV é um leitor IPTV em GTK4/libadwaita. Importe a sua própria playlist M3U ou conta Xtream Codes e navegue por canais em direto, guia eletrónico de programação, filmes e séries. O AshyTV não fornece nem inclui qualquer conteúdo.</p>
-    <p xml:lang="pl">AshyTV to odtwarzacz IPTV oparty na GTK4/libadwaita. Zaimportuj własną playlistę M3U lub konto Xtream Codes i przeglądaj kanały na żywo, elektroniczny program TV, filmy i seriale. AshyTV nie dostarcza ani nie zawiera żadnych treści.</p>
-    <p xml:lang="nl">AshyTV is een IPTV-speler voor GTK4/libadwaita. Importeer je eigen M3U-afspeellijst of Xtream Codes-account en blader door live kanalen, een elektronische programmagids, films en series. AshyTV levert en bevat geen inhoud.</p>
-    <p xml:lang="nb">AshyTV er en IPTV-spiller i GTK4/libadwaita. Importer din egen M3U-spilleliste eller Xtream Codes-konto og bla gjennom direktekanaler, en elektronisk programguide, filmer og serier. AshyTV leverer eller inneholder ikke noe innhold.</p>
-    <p xml:lang="ko">AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 Xtream Codes 계정을 가져와 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다.</p>
-    <p xml:lang="ja">AshyTV は GTK4/libadwaita ベースの IPTV プレーヤーです。ご自身の M3U プレイリストまたは Xtream Codes アカウントをインポートして、ライブチャンネル、電子番組表、映画、シリーズを閲覧できます。AshyTV はコンテンツを提供・同梱していません。</p>
-    <p xml:lang="it">AshyTV è un lettore IPTV GTK4/libadwaita. Importa la tua playlist M3U o il tuo account Xtream Codes e sfoglia canali in diretta, una guida elettronica ai programmi, film e serie. AshyTV non fornisce né include alcun contenuto.</p>
-    <p xml:lang="is">AshyTV er IPTV-spilari byggður á GTK4/libadwaita. Fluttu inn þinn eigin M3U-spilunarlista eða Xtream Codes-reikning og skoðaðu beinar rásir, rafræna dagskrá, kvikmyndir og þætti. AshyTV býður ekkert efni og inniheldur ekkert efni.</p>
-    <p xml:lang="hu">Az AshyTV egy GTK4/libadwaita alapú IPTV-lejátszó. Importálja saját M3U-lejátszási listáját vagy Xtream Codes fiókját, és böngésszen élő csatornák, elektronikus műsorújság, filmek és sorozatok között. Az AshyTV nem biztosít és nem tartalmaz semmilyen tartalmat.</p>
-    <p xml:lang="hr">AshyTV je IPTV reproduktor za GTK4/libadwaita. Uvezite vlastitu M3U playlistu ili Xtream Codes račun i pregledavajte kanale uživo, elektronički TV vodič, filmove i serije. AshyTV ne pruža niti uključuje nikakav sadržaj.</p>
-    <p xml:lang="he">AshyTV הוא נגן IPTV מבוסס GTK4/libadwaita. ייבאו רשימת השמעה M3U או חשבון Xtream Codes משלכם וגלשו בערוצים חיים, במדריך שידורים אלקטרוני, בסרטים ובסדרות. AshyTV אינה מספקת או כוללת תוכן כלשהו.</p>
-    <p xml:lang="fr">AshyTV est un lecteur IPTV GTK4/libadwaita. Importez votre propre liste de lecture M3U ou compte Xtream Codes et parcourez les chaînes en direct, un guide électronique des programmes, des films et des séries. AshyTV ne fournit ni n’inclut aucun contenu.</p>
-    <p xml:lang="fi">AshyTV on GTK4/libadwaita-pohjainen IPTV-soitin. Tuo oma M3U-soittolistasi tai Xtream Codes -tilisi ja selaa suoria kanavia, sähköistä ohjelmaopasta, elokuvia ja sarjoja. AshyTV ei tarjoa eikä sisällä mitään sisältöä.</p>
-    <p xml:lang="et">AshyTV on GTK4/libadwaita IPTV-mängija. Impordi oma M3U-esitusloend või Xtream Codes konto ning sirvi otsekanaleid, elektroonilist teleprogrammi, filme ja seriaale. AshyTV ei paku ega sisalda sisu.</p>
-    <p xml:lang="es">AshyTV es un reproductor IPTV en GTK4/libadwaita. Importe su propia lista M3U o cuenta Xtream Codes y explore canales en directo, una guía electrónica de programación, películas y series. AshyTV no ofrece ni incluye ningún contenido.</p>
-    <p xml:lang="en">AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or Xtream Codes account and browse live channels, an electronic program guide, movies and series. AshyTV does not provide or include any content.</p>
-    <p xml:lang="el">Το AshyTV είναι ένα πρόγραμμα αναπαραγωγής IPTV GTK4/libadwaita. Εισαγάγετε τη δική σας λίστα M3U ή λογαριασμό Xtream Codes και περιηγηθείτε σε ζωντανά κανάλια, ηλεκτρονικό τηλεοπτικό οδηγό, ταινίες και σειρές. Το AshyTV δεν παρέχει ούτε περιλαμβάνει κανένα περιεχόμενο.</p>
-    <p xml:lang="de">AshyTV ist ein IPTV-Player auf Basis von GTK4/libadwaita. Importieren Sie Ihre eigene M3U-Playlist oder Ihr Xtream-Codes-Konto und stöbern Sie in Live-Sendern, einem elektronischen Programmführer, Filmen und Serien. AshyTV stellt keine Inhalte bereit und enthält keine.</p>
-    <p xml:lang="da">AshyTV er en IPTV-afspiller i GTK4/libadwaita. Importér din egen M3U-playliste eller Xtream Codes-konto, og gennemse live-kanaler, en elektronisk programguide, film og serier. AshyTV leverer eller indeholder intet indhold.</p>
-    <p xml:lang="cs">AshyTV je IPTV přehrávač pro GTK4/libadwaita. Naimportujte vlastní playlist M3U nebo účet Xtream Codes a procházejte živé kanály, elektronický programový průvodce, filmy a seriály. AshyTV neposkytuje ani neobsahuje žádný obsah.</p>
-    <p xml:lang="bg">AshyTV е IPTV плейър за GTK4/libadwaita. Импортирайте собствен M3U плейлист или акаунт в Xtream Codes и разглеждайте канали на живо, електронна програма, филми и сериали. AshyTV не предоставя и не включва никакво съдържание.</p>
+    <p xml:lang="zh">AshyTV 是使用 GTK4/libadwaita 构建的 IPTV 播放器。导入您自己的 M3U 播放列表或 Xtream Codes 账户，浏览直播频道、节目指南、电影和剧集。AshyTV 只是播放器：不托管也不出售任何内容。</p>
+    <p xml:lang="uk">AshyTV — IPTV-програвач на GTK4/libadwaita. Імпортуйте власний список M3U або обліковий запис Xtream Codes і переглядайте прямі канали, телепрограму, фільми й серіали. AshyTV — лише програвач: він не розміщує й не продає жодного вмісту.</p>
+    <p xml:lang="tr">AshyTV, GTK4/libadwaita ile yapılmış bir IPTV oynatıcıdır. Kendi M3U listenizi veya Xtream Codes hesabınızı içe aktarın; canlı kanallara, yayın akışına, filmlere ve dizilere göz atın. AshyTV yalnızca bir oynatıcıdır: hiçbir içeriği barındırmaz veya satmaz.</p>
+    <p xml:lang="sv">AshyTV är en IPTV-spelare byggd med GTK4/libadwaita. Importera din egen M3U-spellista eller ditt Xtream Codes-konto och bläddra bland livekanaler, programguide, filmer och serier. AshyTV är bara en spelare: den lagrar eller säljer inget innehåll.</p>
+    <p xml:lang="sk">AshyTV je IPTV prehrávač postavený na GTK4/libadwaita. Importujte vlastný zoznam M3U alebo účet Xtream Codes a prechádzajte živé kanály, programového sprievodcu, filmy a seriály. AshyTV je len prehrávač: nehosťuje ani nepredáva žiadny obsah.</p>
+    <p xml:lang="ru">AshyTV — IPTV-плеер на GTK4/libadwaita. Импортируйте свой плейлист M3U или аккаунт Xtream Codes и просматривайте прямые каналы, телегид, фильмы и сериалы. AshyTV — только плеер: он не размещает и не продаёт никакой контент.</p>
+    <p xml:lang="ro">AshyTV este un player IPTV realizat cu GTK4/libadwaita. Importă propria listă M3U sau contul Xtream Codes și răsfoiește canale live, ghidul de programe, filme și seriale. AshyTV este doar un player: nu găzduiește și nu vinde niciun conținut.</p>
+    <p xml:lang="pt-BR">O AshyTV é um player de IPTV feito em GTK4/libadwaita. Importe sua própria playlist M3U ou conta Xtream Codes e navegue por canais ao vivo, guia de programação, filmes e séries. O AshyTV é apenas um player: não hospeda nem vende nenhum conteúdo.</p>
+    <p xml:lang="pt">O AshyTV é um leitor de IPTV feito em GTK4/libadwaita. Importe a sua própria lista M3U ou conta Xtream Codes e navegue por canais em direto, guia de programação, filmes e séries. O AshyTV é apenas um leitor: não aloja nem vende qualquer conteúdo.</p>
+    <p xml:lang="pl">AshyTV to odtwarzacz IPTV zbudowany w GTK4/libadwaita. Zaimportuj własną listę M3U lub konto Xtream Codes i przeglądaj kanały na żywo, przewodnik po programach, filmy i seriale. AshyTV to tylko odtwarzacz: nie hostuje ani nie sprzedaje żadnych treści.</p>
+    <p xml:lang="nl">AshyTV is een IPTV-speler gemaakt met GTK4/libadwaita. Importeer je eigen M3U-afspeellijst of Xtream Codes-account en blader door livezenders, programmagids, films en series. AshyTV is alleen een speler: het host of verkoopt geen inhoud.</p>
+    <p xml:lang="nb">AshyTV er en IPTV-avspiller laget med GTK4/libadwaita. Importer din egen M3U-spilleliste eller Xtream Codes-konto, og bla gjennom direktekanaler, programguide, filmer og serier. AshyTV er bare en avspiller: den lagrer eller selger ikke noe innhold.</p>
+    <p xml:lang="ko">AshyTV는 GTK4/libadwaita로 만든 IPTV 플레이어입니다. 직접 가진 M3U 재생 목록이나 Xtream Codes 계정을 가져와 실시간 채널, 편성표, 영화와 시리즈를 탐색하세요. AshyTV는 플레이어일 뿐이며 어떤 콘텐츠도 호스팅하거나 판매하지 않습니다.</p>
+    <p xml:lang="ja">AshyTV は GTK4/libadwaita で作られた IPTV プレーヤーです。自分の M3U プレイリストや Xtream Codes アカウントを読み込んで、ライブチャンネル、番組表、映画、シリーズを閲覧できます。AshyTV はプレーヤーにすぎず、コンテンツをホストも販売もしていません。</p>
+    <p xml:lang="it">AshyTV è un lettore IPTV realizzato con GTK4/libadwaita. Importa la tua playlist M3U o il tuo account Xtream Codes e sfoglia canali in diretta, guida TV, film e serie. AshyTV è solo un lettore: non ospita né vende alcun contenuto.</p>
+    <p xml:lang="is">AshyTV er IPTV-spilari gerður með GTK4/libadwaita. Fluttu inn þinn eigin M3U-lagalista eða Xtream Codes-aðgang og skoðaðu beinar rásir, dagskrárvísi, kvikmyndir og þáttaraðir. AshyTV er aðeins spilari: hann hýsir hvorki né selur neitt efni.</p>
+    <p xml:lang="hu">Az AshyTV egy GTK4/libadwaita alapú IPTV-lejátszó. Importáld saját M3U-listádat vagy Xtream Codes-fiókodat, és böngészd az élő csatornákat, a műsorújságot, a filmeket és sorozatokat. Az AshyTV csak lejátszó: semmilyen tartalmat nem tárol és nem árul.</p>
+    <p xml:lang="hr">AshyTV je IPTV reproduktor izrađen u GTK4/libadwaita. Uvezite vlastiti M3U popis ili Xtream Codes račun i pregledavajte kanale uživo, TV vodič, filmove i serije. AshyTV je samo reproduktor: ne hostira i ne prodaje nikakav sadržaj.</p>
+    <p xml:lang="he">AshyTV הוא נגן IPTV שנבנה ב-GTK4/libadwaita. ייבאו רשימת M3U משלכם או חשבון Xtream Codes ועיינו בערוצים חיים, במדריך שידורים, בסרטים ובסדרות. AshyTV הוא נגן בלבד: הוא אינו מארח או מוכר שום תוכן.</p>
+    <p xml:lang="fr">AshyTV est un lecteur IPTV en GTK4/libadwaita. Importez votre propre liste M3U ou compte Xtream Codes et parcourez chaînes en direct, guide des programmes, films et séries. AshyTV n’est qu’un lecteur : il n’héberge ni ne vend aucun contenu.</p>
+    <p xml:lang="fi">AshyTV on GTK4/libadwaita-pohjainen IPTV-soitin. Tuo oma M3U-soittolistasi tai Xtream Codes -tilisi ja selaa suoria kanavia, ohjelmaopasta, elokuvia ja sarjoja. AshyTV on vain soitin: se ei isännöi eikä myy mitään sisältöä.</p>
+    <p xml:lang="et">AshyTV on GTK4/libadwaita põhine IPTV-mängija. Impordi oma M3U-esitusloend või Xtream Codes'i konto ja sirvi otsekanaleid, telekava, filme ja sarju. AshyTV on ainult mängija: see ei majuta ega müü mingit sisu.</p>
+    <p xml:lang="es">AshyTV es un reproductor de IPTV hecho con GTK4/libadwaita. Importa tu propia lista M3U o cuenta Xtream Codes y explora canales en vivo, guía de programación, películas y series. AshyTV es solo un reproductor: no aloja ni vende ningún contenido.</p>
+    <p xml:lang="en">AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or Xtream Codes account and browse live channels, an electronic program guide, movies and series. AshyTV is only a player: it does not host or sell any content.</p>
+    <p xml:lang="el">Το AshyTV είναι πρόγραμμα αναπαραγωγής IPTV σε GTK4/libadwaita. Εισαγάγετε τη δική σας λίστα M3U ή λογαριασμό Xtream Codes και περιηγηθείτε σε ζωντανά κανάλια, οδηγό προγράμματος, ταινίες και σειρές. Το AshyTV είναι μόνο πρόγραμμα αναπαραγωγής: δεν φιλοξενεί ούτε πουλά περιεχόμενο.</p>
+    <p xml:lang="de">AshyTV ist ein IPTV-Player mit GTK4/libadwaita. Importieren Sie Ihre eigene M3U-Wiedergabeliste oder Ihr Xtream-Codes-Konto und durchsuchen Sie Live-Sender, Programmführer, Filme und Serien. AshyTV ist nur ein Player: Es hostet oder verkauft keine Inhalte.</p>
+    <p xml:lang="da">AshyTV er en IPTV-afspiller lavet med GTK4/libadwaita. Importér din egen M3U-playliste eller Xtream Codes-konto, og gennemse livekanaler, programguide, film og serier. AshyTV er kun en afspiller: den hoster eller sælger intet indhold.</p>
+    <p xml:lang="cs">AshyTV je IPTV přehrávač postavený na GTK4/libadwaita. Importujte vlastní seznam M3U nebo účet Xtream Codes a procházejte živé kanály, programového průvodce, filmy a seriály. AshyTV je jen přehrávač: nehostuje ani neprodává žádný obsah.</p>
+    <p xml:lang="bg">AshyTV е IPTV плейър, създаден с GTK4/libadwaita. Импортирайте свой M3U списък или акаунт Xtream Codes и разглеждайте канали на живо, програма, филми и сериали. AshyTV е само плейър: не хоства и не продава никакво съдържание.</p>
     <ul>
+      <li>Optional Free TV: links to free-to-air channels and to public domain or openly licensed films</li>
+      <li xml:lang="zh">可选的免费电视：指向免费频道以及公有领域或开放许可电影的链接</li>
+      <li xml:lang="uk">Необов'язкове безкоштовне ТБ: посилання на відкриті канали та фільми в суспільному надбанні або з відкритою ліцензією</li>
+      <li xml:lang="tr">İsteğe bağlı ücretsiz TV: şifresiz kanallara ve kamu malı veya açık lisanslı filmlere bağlantılar</li>
+      <li xml:lang="sv">Valfri gratis-tv: länkar till fria kanaler och till filmer i allmän egendom eller med öppen licens</li>
+      <li xml:lang="sk">Voliteľná TV zadarmo: odkazy na voľne vysielané kanály a na voľné diela či filmy s otvorenou licenciou</li>
+      <li xml:lang="ru">Необязательное бесплатное ТВ: ссылки на открытые каналы и фильмы в общественном достоянии или под открытой лицензией</li>
+      <li xml:lang="ro">TV gratuit opțional: legături către canale libere și filme din domeniul public sau cu licență deschisă</li>
+      <li xml:lang="pt-BR">TV grátis opcional: links para canais abertos e filmes em domínio público ou com licença aberta</li>
+      <li xml:lang="pt">TV gratuita opcional: ligações para canais abertos e filmes em domínio público ou com licença aberta</li>
+      <li xml:lang="pl">Opcjonalna darmowa telewizja: odnośniki do kanałów niekodowanych oraz filmów w domenie publicznej lub na otwartej licencji</li>
+      <li xml:lang="nl">Optionele gratis tv: links naar vrij te ontvangen zenders en naar films uit het publieke domein of met een open licentie</li>
+      <li xml:lang="nb">Valgfri gratis-TV: lenker til frie kanaler og til filmer i det fri eller med åpen lisens</li>
+      <li xml:lang="ko">선택형 무료 TV: 무료 방송 채널과 퍼블릭 도메인 또는 오픈 라이선스 영화로 연결되는 링크</li>
+      <li xml:lang="ja">任意の無料テレビ：無料放送のチャンネルと、パブリックドメインまたはオープンライセンスの映画へのリンク</li>
+      <li xml:lang="it">TV gratuita opzionale: link a canali in chiaro e a film di pubblico dominio o con licenza aperta</li>
+      <li xml:lang="is">Valfrjálst ókeypis sjónvarp: tenglar á opnar rásir og kvikmyndir í almenningseigu eða með opnu leyfi</li>
+      <li xml:lang="hu">Választható ingyenes TV: hivatkozások szabadon fogható csatornákra, valamint közkincs vagy nyílt licencű filmekre</li>
+      <li xml:lang="hr">Neobavezna besplatna TV: poveznice na slobodne kanale i filmove u javnom vlasništvu ili s otvorenom licencom</li>
+      <li xml:lang="he">טלוויזיה חינמית אופציונלית: קישורים לערוצים פתוחים ולסרטים בנחלת הכלל או ברישיון פתוח</li>
+      <li xml:lang="fr">TV gratuite facultative : liens vers des chaînes gratuites et des films du domaine public ou sous licence libre</li>
+      <li xml:lang="fi">Valinnainen ilmainen TV: linkit vapaasti katsottaviin kanaviin sekä tekijänoikeudesta vapaisiin tai avoimesti lisensoituihin elokuviin</li>
+      <li xml:lang="et">Valikuline tasuta TV: lingid vabalt vaadatavatele kanalitele ja avalikku omandisse kuuluvatele või avatud litsentsiga filmidele</li>
+      <li xml:lang="es">TV gratis opcional: enlaces a canales abiertos y a películas de dominio público o con licencia abierta</li>
+      <li xml:lang="en">Optional Free TV: links to free-to-air channels and to public domain or openly licensed films</li>
+      <li xml:lang="el">Προαιρετική δωρεάν TV: σύνδεσμοι σε ελεύθερα κανάλια και σε ταινίες κοινής κτήσης ή με ανοιχτή άδεια</li>
+      <li xml:lang="de">Optionales Gratis-TV: Links zu frei empfangbaren Sendern und zu gemeinfreien oder offen lizenzierten Filmen</li>
+      <li xml:lang="da">Valgfrit gratis tv: links til frie kanaler og til film i offentlig ejendom eller med åben licens</li>
+      <li xml:lang="cs">Volitelná TV zdarma: odkazy na volně vysílané kanály a na volná díla či filmy s otevřenou licencí</li>
+      <li xml:lang="bg">Незадължителна безплатна телевизия: връзки към свободни канали и филми в общественото достояние или с отворен лиценз</li>
       <li>Live channels with categories, favorites and now-playing info</li>
       <li xml:lang="zh">带有分类、收藏和正在播出信息的直播频道</li>
       <li xml:lang="uk">Телеканали з категоріями, обраним та інформацією про поточну передачу</li>
@@ -263,6 +294,7 @@
   </screenshots>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.11.5" date="2026-10-24"/>
     <release version="0.11.4" date="2026-10-24"/>
     <release version="0.11.3" date="2026-10-24"/>
     <release version="0.11.2" date="2026-10-24"/>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:35-0300\n"
+"POT-Creation-Date: 2026-10-24 23:38-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1538,25 +1538,43 @@ msgstr "Community Big"
 msgid ""
 "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
 "Xtream Codes account and browse live channels, an electronic program guide, "
-"movies and series. AshyTV does not provide or include any content."
+"movies and series. AshyTV is only a player: it does not host or sell any "
+"content."
 msgstr ""
-"AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이나 "
-"Xtream Codes 계정을 가져와 실시간 채널, 전자 프로그램 편성표, 영화, 시리즈를 "
-"둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다."
+"AshyTV는 GTK4/libadwaita로 만든 IPTV 플레이어입니다. 직접 가진 M3U 재생 목록"
+"이나 Xtream Codes 계정을 가져와 실시간 채널, 편성표, 영화와 시리즈를 탐색하세"
+"요. AshyTV는 플레이어일 뿐이며 어떤 콘텐츠도 호스팅하거나 판매하지 않습니다."
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:18
+#: data/org.communitybig.ashytv.metainfo.xml.in:19
+msgid ""
+"Optional Free TV: links to free-to-air channels and to public domain or "
+"openly licensed films"
+msgstr ""
+"선택형 무료 TV: 무료 방송 채널과 퍼블릭 도메인 또는 오픈 라이선스 영화로 연결"
+"되는 링크"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:20
 msgid "Live channels with categories, favorites and now-playing info"
 msgstr "카테고리, 즐겨찾기, 현재 방송 정보를 갖춘 실시간 채널"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:19
+#: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid "Program guide (XMLTV) in a time grid"
 msgstr "시간 격자형 프로그램 편성표 (XMLTV)"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:20
+#: data/org.communitybig.ashytv.metainfo.xml.in:22
 msgid "Movies and series catalog with resume and next episode"
 msgstr "이어보기와 다음 에피소드를 지원하는 영화 및 시리즈 카탈로그"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:21
+#: data/org.communitybig.ashytv.metainfo.xml.in:23
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "하드웨어 디코딩, 화면 속 화면, 녹화를 지원하는 libmpv 재생"
+
+#~ msgid ""
+#~ "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
+#~ "Xtream Codes account and browse live channels, an electronic program "
+#~ "guide, movies and series. AshyTV does not provide or include any content."
+#~ msgstr ""
+#~ "AshyTV는 GTK4/libadwaita 기반 IPTV 플레이어입니다. 나만의 M3U 재생목록이"
+#~ "나 Xtream Codes 계정을 가져와 실시간 채널, 전자 프로그램 편성표, 영화, 시"
+#~ "리즈를 둘러보세요. AshyTV는 어떤 콘텐츠도 제공하거나 포함하지 않습니다."

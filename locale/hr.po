@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:35-0300\n"
+"POT-Creation-Date: 2026-10-24 23:38-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -1551,28 +1551,48 @@ msgstr "Community Big"
 msgid ""
 "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
 "Xtream Codes account and browse live channels, an electronic program guide, "
-"movies and series. AshyTV does not provide or include any content."
+"movies and series. AshyTV is only a player: it does not host or sell any "
+"content."
 msgstr ""
-"AshyTV je IPTV reproduktor za GTK4/libadwaita. Uvezite vlastitu M3U "
-"playlistu ili Xtream Codes račun i pregledavajte kanale uživo, elektronički "
-"TV vodič, filmove i serije. AshyTV ne pruža niti uključuje nikakav sadržaj."
+"AshyTV je IPTV reproduktor izrađen u GTK4/libadwaita. Uvezite vlastiti M3U "
+"popis ili Xtream Codes račun i pregledavajte kanale uživo, TV vodič, filmove "
+"i serije. AshyTV je samo reproduktor: ne hostira i ne prodaje nikakav "
+"sadržaj."
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:18
+#: data/org.communitybig.ashytv.metainfo.xml.in:19
+msgid ""
+"Optional Free TV: links to free-to-air channels and to public domain or "
+"openly licensed films"
+msgstr ""
+"Neobavezna besplatna TV: poveznice na slobodne kanale i filmove u javnom "
+"vlasništvu ili s otvorenom licencom"
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:20
 msgid "Live channels with categories, favorites and now-playing info"
 msgstr ""
 "Kanali uživo s kategorijama, favoritima i informacijama o trenutnom programu"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:19
+#: data/org.communitybig.ashytv.metainfo.xml.in:21
 msgid "Program guide (XMLTV) in a time grid"
 msgstr "TV vodič (XMLTV) u vremenskoj mreži"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:20
+#: data/org.communitybig.ashytv.metainfo.xml.in:22
 msgid "Movies and series catalog with resume and next episode"
 msgstr "Katalog filmova i serija s nastavkom gledanja i sljedećom epizodom"
 
-#: data/org.communitybig.ashytv.metainfo.xml.in:21
+#: data/org.communitybig.ashytv.metainfo.xml.in:23
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Reprodukcija putem libmpv-a s hardverskim dekodiranjem, slikom u slici i "
 "snimanjem"
+
+#~ msgid ""
+#~ "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
+#~ "Xtream Codes account and browse live channels, an electronic program "
+#~ "guide, movies and series. AshyTV does not provide or include any content."
+#~ msgstr ""
+#~ "AshyTV je IPTV reproduktor za GTK4/libadwaita. Uvezite vlastitu M3U "
+#~ "playlistu ili Xtream Codes račun i pregledavajte kanale uživo, "
+#~ "elektronički TV vodič, filmove i serije. AshyTV ne pruža niti uključuje "
+#~ "nikakav sadržaj."

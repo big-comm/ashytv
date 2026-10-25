@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ashytv 0.11.4\n"
+"Project-Id-Version: ashytv 0.11.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:35-0300\n"
+"POT-Creation-Date: 2026-10-24 23:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1528,22 +1528,29 @@ msgstr ""
 msgid ""
 "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
 "Xtream Codes account and browse live channels, an electronic program guide, "
-"movies and series. AshyTV does not provide or include any content."
-msgstr ""
-
-#: data/org.communitybig.ashytv.metainfo.xml.in:18
-msgid "Live channels with categories, favorites and now-playing info"
+"movies and series. AshyTV is only a player: it does not host or sell any "
+"content."
 msgstr ""
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:19
-msgid "Program guide (XMLTV) in a time grid"
+msgid ""
+"Optional Free TV: links to free-to-air channels and to public domain or "
+"openly licensed films"
 msgstr ""
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:20
-msgid "Movies and series catalog with resume and next episode"
+msgid "Live channels with categories, favorites and now-playing info"
 msgstr ""
 
 #: data/org.communitybig.ashytv.metainfo.xml.in:21
+msgid "Program guide (XMLTV) in a time grid"
+msgstr ""
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:22
+msgid "Movies and series catalog with resume and next episode"
+msgstr ""
+
+#: data/org.communitybig.ashytv.metainfo.xml.in:23
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
