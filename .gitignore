@@ -38,6 +38,7 @@ pkgbuild/ashytv/
 *.m3u
 *.m3u8
 !tests/*.m3u
+!src/ashytv/data/free_catalog.m3u
 *.xml.gz
 .env
 credentials*

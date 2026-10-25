@@ -6,8 +6,9 @@
 
 **A modern IPTV player for the Linux desktop — built with GTK4 and libadwaita.**
 
-Bring your own M3U playlist or Xtream Codes account and enjoy live TV,
-a program guide, movies and series in a fast, good-looking app.
+Watch free TV channels and open movies out of the box, or bring your own
+M3U playlist or Xtream Codes account, with a program guide, movies and
+series in a fast, good-looking app.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![GTK4](https://img.shields.io/badge/GTK-4-4a86cf)
@@ -19,10 +20,16 @@ a program guide, movies and series in a fast, good-looking app.
 ![Home](docs/screenshots/home.png)
 
 > [!IMPORTANT]
-> **AshyTV does not provide, host or include any content.** It is only a
-> player and organizer for playlists you are legally entitled to use. All
-> screenshots in this repository were made with a bundled demo server that
-> generates fictional channels, artwork and video ([tools/demo](tools/demo)).
+> **AshyTV is only a player. It does not host, stream, sell or own any
+> channel, movie or series.** Video always comes straight from the server in
+> the playlist you choose; nothing passes through or is stored by AshyTV or
+> its developers. Use it only with playlists you are legally entitled to use.
+>
+> The optional **Free TV** list only *links* to channels broadcasters make
+> freely available and to films with an open licence or in the public domain
+> (see [Free TV](#free-tv)). All screenshots in this repository were made with
+> a bundled demo server that generates fictional channels, artwork and video
+> ([tools/demo](tools/demo)).
 
 ## Table of contents
 
@@ -35,6 +42,7 @@ a program guide, movies and series in a fast, good-looking app.
 - [Translations](#translations)
 - [Development](#development)
 - [Project layout](#project-layout)
+- [Free TV](#free-tv)
 - [Privacy](#privacy)
 - [Credits](#credits)
 - [License](#license)
@@ -42,6 +50,9 @@ a program guide, movies and series in a fast, good-looking app.
 ## Features
 
 **Playlists**
+- **Free TV** (the first option): free-to-air channels from 80+ countries
+  plus public domain classics, Blender's open movies and cartoons — see
+  [Free TV](#free-tv).
 - M3U / M3U8 from a local file or URL, and **Xtream Codes** accounts.
 - Paste the welcome message from your provider — server, username and
   password are detected automatically.
@@ -144,6 +155,8 @@ cd ashytv
 
 1. Open AshyTV and click **Get Started**.
 2. In **Playlists**, choose one of:
+   - **Free TV** — your country is preselected; choose another one or
+     "All countries", and keep or turn off the free movies and cartoons;
    - **M3U File** — pick a `.m3u` / `.m3u8` file;
    - **Xtream Codes** — enter server, username and password, or use
      **Paste provider message** to fill them in from the text you received;
@@ -271,12 +284,54 @@ usr/                    # launcher, desktop entry, icons, metainfo, .mo files
 pkgbuild/               # Arch Linux package
 ```
 
+## Free TV
+
+**Free TV** combines two lists. AshyTV only stores their links: the video
+always comes from the original source.
+
+1. **Free-to-air channels** from [Free-TV/IPTV](https://github.com/Free-TV/IPTV),
+   the community list Linux Mint's Hypnotix uses by default. AshyTV fetches
+   it by URL and **filters it on your computer**, keeping only broadcasters'
+   own streams. It drops:
+   - channels of commercial streaming platforms (Pluto TV, Samsung TV Plus,
+     Plex, Roku, Tubi, Xumo, Rakuten and the services that re-serve them);
+   - YouTube, Dailymotion and Twitch links, whose terms only allow their own
+     players;
+   - streams on bare IP addresses, relays/forwarders and URLs carrying a
+     copied access token;
+   - the on-demand ("VOD") sections.
+
+   The filter rules are in [`free_tv.py`](src/ashytv/services/free_tv.py).
+2. **A curated catalog** maintained in this repository
+   ([`free_catalog.m3u`](src/ashytv/data/free_catalog.m3u), CC0):
+   - live: [TV Câmara](https://www.camara.leg.br/tv/termos-de-uso/) (CC BY 4.0)
+     and NASA TV (NASA media is not copyrighted in the US);
+   - [Blender Studio](https://studio.blender.org) open movies — Big Buck
+     Bunny, Elephants Dream, Sintel, Tears of Steel, Cosmos Laundromat —
+     (CC) Blender Foundation | studio.blender.org, CC BY;
+   - sound-era films published up to 1955 that are in the public domain in
+     the United States (copyright not renewed) and in Brazil (70 years after
+     publication, Law 9.610/98, art. 44), streamed from the
+     [Internet Archive](https://archive.org); silent films are left out
+     because their soundtracks were often added later;
+   - the Fleischer/Famous Studios *Superman* cartoons (1941–1943).
+
+   Public domain status differs between countries; check the rules where you
+   live.
+
+**Found something that should not be there?** Open an
+[issue](https://github.com/big-comm/ashytv/issues): links are removed from
+the curated catalog and added to the filter right away. Problems with a
+specific Free-TV channel can also be reported to
+[Free-TV/IPTV](https://github.com/Free-TV/IPTV/issues).
+
 ## Privacy
 
 - Everything stays on your computer: playlists, favorites and history are
   stored locally, and Xtream passwords go to the system keyring when available.
 - AshyTV only talks to the servers in the playlists you add (and to the image
-  hosts they reference). There is no telemetry.
+  hosts they reference); Free TV also downloads its channel list from
+  `raw.githubusercontent.com`. There is no telemetry.
 
 ## Credits
 
@@ -287,6 +342,9 @@ pkgbuild/               # Arch Linux package
   [Adwaita icon theme](https://gitlab.gnome.org/GNOME/adwaita-icon-theme)
   (CC-BY-SA 3.0) — see [`src/ashytv/data/icons/NOTICE.md`](src/ashytv/data/icons/NOTICE.md).
   The AshyTV logo, its own symbolic icons and the welcome artwork are original.
+- Free TV channel list by the [Free-TV/IPTV](https://github.com/Free-TV/IPTV)
+  contributors; open movies by the [Blender Foundation](https://studio.blender.org);
+  public domain films hosted by the [Internet Archive](https://archive.org).
 
 ## License
 

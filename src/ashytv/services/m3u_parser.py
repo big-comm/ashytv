@@ -90,6 +90,8 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
                 logo=pending.get("tvg-logo", ""),
                 user_agent=pending.get("user-agent", ""),
                 referrer=pending.get("referrer", ""),
+                year=pending.get("year", ""),
+                plot=pending.get("description", ""),
             )
             pending = None
 

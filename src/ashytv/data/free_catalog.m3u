@@ -1,0 +1,98 @@
+#EXTM3U
+# AshyTV free catalog — curated list of links, released under CC0 1.0.
+# AshyTV hosts nothing: every entry points to the official source or to the
+# Internet Archive. Criteria: explicit open licence, or films published up to
+# 1955 that are in the public domain both in the United States (copyright not
+# renewed) and in Brazil (70 years after publication, Law 9.610/98 art. 44).
+# Silent films are left out: their soundtracks were often added later.
+# Removal requests: https://github.com/big-comm/ashytv/issues
+
+# Live — TV Câmara: live coverage of the Brazilian Chamber of Deputies, CC BY 4.0
+# (https://www.camara.leg.br/tv/termos-de-uso/). NASA TV: NASA media is not
+# copyrighted in the US (https://www.nasa.gov/nasa-brand-center/images-and-media/).
+#EXTINF:-1 tvg-logo="https://i.imgur.com/UpV2PRk.png" group-title="Open TV",TV Câmara
+https://stream3.camara.gov.br/tv1/manifest.m3u8
+#EXTINF:-1 group-title="Open TV",NASA TV Public
+https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8
+#EXTINF:-1 group-title="Open TV",NASA TV Media
+https://ntv2.akamaized.net/hls/live/2013923/NASA-NTV2-HLS/master.m3u8
+
+# Movies — Blender Studio open movies, (CC) Blender Foundation | studio.blender.org
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/BigBuckBunny_124" year="2008" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Big Buck Bunny (2008)
+https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/ElephantsDream" year="2006" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Elephants Dream (2006)
+https://archive.org/download/ElephantsDream/ed_1024.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Sintel" year="2010" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Sintel (2010)
+https://archive.org/download/Sintel/sintel-2048-surround.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Tears-of-Steel" year="2012" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Tears of Steel (2012)
+https://archive.org/download/Tears-of-Steel/tears_of_steel_720p.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/CosmosLaundromatFirstCycle" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY 4.0" group-title="Movies – Blender Studio",Cosmos Laundromat: First Cycle (2015)
+https://archive.org/download/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4
+
+# Movies — public domain classics (sound era, up to 1955)
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/his_girl_friday" year="1940" description="Directed by Howard Hawks. Public domain in the United States and Brazil." group-title="Movies – Classics",His Girl Friday (1940)
+https://archive.org/download/his_girl_friday/his_girl_friday.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/meet_john_doe" year="1941" description="Directed by Frank Capra. Public domain in the United States and Brazil." group-title="Movies – Classics",Meet John Doe (1941)
+https://archive.org/download/meet_john_doe/meet_john_doe.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/penny_serenade" year="1941" description="Directed by George Stevens. Public domain in the United States and Brazil." group-title="Movies – Classics",Penny Serenade (1941)
+https://archive.org/download/penny_serenade/penny_serenade.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MyManGodfrey1936" year="1936" description="Directed by Gregory La Cava. Public domain in the United States and Brazil." group-title="Movies – Classics",My Man Godfrey (1936)
+https://archive.org/download/MyManGodfrey1936/MyManGodfrey1936.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/NothingSacred" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",Nothing Sacred (1937)
+https://archive.org/download/NothingSacred/NothingSacred.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/AStarIsBorn" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",A Star Is Born (1937)
+https://archive.org/download/AStarIsBorn/AStarIsBorn.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Detour" year="1945" description="Directed by Edgar G. Ulmer. Public domain in the United States and Brazil." group-title="Movies – Classics",Detour (1945)
+https://archive.org/download/Detour/Detour.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/ScarletStreet" year="1945" description="Directed by Fritz Lang. Public domain in the United States and Brazil." group-title="Movies – Classics",Scarlet Street (1945)
+https://archive.org/download/ScarletStreet/Scarlet_Street.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/TheStranger_0" year="1946" description="Directed by Orson Welles. Public domain in the United States and Brazil." group-title="Movies – Classics",The Stranger (1946)
+https://archive.org/download/TheStranger_0/The_Stranger.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/angel_and_the_badman" year="1947" description="Directed by James Edward Grant. Public domain in the United States and Brazil." group-title="Movies – Classics",Angel and the Badman (1947)
+https://archive.org/download/angel_and_the_badman/angel_and_the_badman.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/thoseguysontheradio_gmail_Doa" year="1949" description="Directed by Rudolph Maté. Public domain in the United States and Brazil." group-title="Movies – Classics",D.O.A. (1949)
+https://archive.org/download/thoseguysontheradio_gmail_Doa/doa_1949.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/royal_wedding" year="1951" description="Directed by Stanley Donen. Public domain in the United States and Brazil." group-title="Movies – Classics",Royal Wedding (1951)
+https://archive.org/download/royal_wedding/royal_wedding.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/fathers-little-dividend-1951_202402" year="1951" description="Directed by Vincente Minnelli. Public domain in the United States and Brazil." group-title="Movies – Classics",Father's Little Dividend (1951)
+https://archive.org/download/fathers-little-dividend-1951_202402/Father%27s%20Little%20Dividend%20%281951%29.ia.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/kansascityconfidencial" year="1952" description="Directed by Phil Karlson. Public domain in the United States and Brazil." group-title="Movies – Classics",Kansas City Confidential (1952)
+https://archive.org/download/kansascityconfidencial/kansascityconfidencial.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/cco2_TheLastTimeISawParis" year="1954" description="Directed by Richard Brooks. Public domain in the United States and Brazil." group-title="Movies – Classics",The Last Time I Saw Paris (1954)
+https://archive.org/download/cco2_TheLastTimeISawParis/ccoPublicDomainThe_Last_Time_I_Saw_Paris.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/gullivers_travels1939" year="1939" description="Directed by Dave Fleischer. Public domain in the United States and Brazil." group-title="Movies – Classics",Gulliver's Travels (1939)
+https://archive.org/download/gullivers_travels1939/gullivers_travels1939.mp4
+
+# Series — Fleischer/Famous Studios Superman cartoons (1941–1943), public domain
+# in the US (not renewed) and in Brazil. "Japoteurs" and "Eleventh Hour" are left
+# out for their wartime racial caricatures.
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E01 Superman
+https://archive.org/download/MaxFleischerSuperman/Superman.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E02 The Mechanical Monsters
+https://archive.org/download/MaxFleischerSuperman/Superman-TheMechanicalMonsters.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E03 Billion Dollar Limited
+https://archive.org/download/MaxFleischerSuperman/Superman%20-%20Billion%20Dollar%20Limited.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E04 The Arctic Giant
+https://archive.org/download/MaxFleischerSuperman/Superman-TheArcticGiant.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E05 The Bulleteers
+https://archive.org/download/MaxFleischerSuperman/Superman-TheBulleteers.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E06 The Magnetic Telescope
+https://archive.org/download/MaxFleischerSuperman/Superman-TheMagneticTelescope.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E07 Electric Earthquake
+https://archive.org/download/MaxFleischerSuperman/Superman-ElectricEarthquake.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E08 Volcano
+https://archive.org/download/MaxFleischerSuperman/Superman-Volcano.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E09 Terror on the Midway
+https://archive.org/download/MaxFleischerSuperman/Superman-TerrorOnTheMidway.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E10 Showdown
+https://archive.org/download/MaxFleischerSuperman/Superman-Showdown.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E11 Destruction, Inc.
+https://archive.org/download/MaxFleischerSuperman/Superman-DestructionInc..mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E12 The Mummy Strikes
+https://archive.org/download/MaxFleischerSuperman/Superman-TheMummyStrikes.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E13 Jungle Drums
+https://archive.org/download/MaxFleischerSuperman/Superman-JungleDrums.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E14 The Underground World
+https://archive.org/download/MaxFleischerSuperman/Superman-TheUndergroundWorld1943.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E15 Secret Agent
+https://archive.org/download/MaxFleischerSuperman/Superman-SecretAgent.mp4

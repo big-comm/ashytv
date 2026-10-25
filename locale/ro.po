@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 22:10-0300\n"
+"POT-Creation-Date: 2026-10-24 22:21-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -54,6 +54,15 @@ msgstr "S{season} • E{episode}"
 msgid "Track {number}"
 msgstr "Pista {number}"
 
+#: src/ashytv/services/free_tv.py:178 src/ashytv/ui/pages/lists_page.py:192
+msgid "All countries"
+msgstr "Toate țările"
+
+#: src/ashytv/services/free_tv.py:180
+#, python-brace-format
+msgid "Free TV – {where}"
+msgstr "TV gratuit – {where}"
+
 #: src/ashytv/services/http.py:32
 #, python-brace-format
 msgid "Unsupported URL: {url}"
@@ -86,23 +95,23 @@ msgstr "Nu s-a putut contacta serverul: {reason}"
 msgid "Downloading playlist…"
 msgstr "Se descarcă lista de redare…"
 
-#: src/ashytv/services/importer.py:36
+#: src/ashytv/services/importer.py:37
 msgid "Processing playlist…"
 msgstr "Se procesează lista de redare…"
 
-#: src/ashytv/services/importer.py:41
+#: src/ashytv/services/importer.py:42
 msgid "No channels found in the playlist"
 msgstr "Nu s-au găsit canale în lista de redare"
 
-#: src/ashytv/services/importer.py:46 src/ashytv/services/importer.py:78
+#: src/ashytv/services/importer.py:47 src/ashytv/services/importer.py:79
 msgid "Saving…"
 msgstr "Se salvează…"
 
-#: src/ashytv/services/importer.py:57
+#: src/ashytv/services/importer.py:58
 msgid "Connecting to provider…"
 msgstr "Se conectează la furnizor…"
 
-#: src/ashytv/services/importer.py:60
+#: src/ashytv/services/importer.py:61
 msgid "The provider returned no content"
 msgstr "Furnizorul nu a returnat conținut"
 
@@ -243,7 +252,7 @@ msgstr "Favorite"
 msgid "Recordings"
 msgstr "Înregistrări"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:40
 msgid "Playlists"
 msgstr "Liste de redare"
 
@@ -464,72 +473,76 @@ msgstr "Vezi canalele"
 msgid "Watch now"
 msgstr "Vizionează acum"
 
-#: src/ashytv/ui/pages/lists_page.py:39
+#: src/ashytv/ui/pages/lists_page.py:41
 msgid "Manage your playlists or add a new one"
 msgstr "Gestionați listele de redare sau adăugați una nouă"
 
-#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:212
+#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:263
 msgid "Add Playlist"
 msgstr "Adaugă listă de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:68
+#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:291
+msgid "Free TV"
+msgstr "TV gratuit"
+
+#: src/ashytv/ui/pages/lists_page.py:70
 msgid "M3U File"
 msgstr "Fișier M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:239
-msgid "Xtream Codes"
-msgstr "Xtream Codes"
-
-#: src/ashytv/ui/pages/lists_page.py:69
+#: src/ashytv/ui/pages/lists_page.py:71
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:80
+#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:291
+msgid "Xtream Codes"
+msgstr "Xtream Codes"
+
+#: src/ashytv/ui/pages/lists_page.py:82
 msgid "Playlist name"
 msgstr "Numele listei de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:371
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:426 src/ashytv/ui/pages/lists_page.py:433
 msgid "My Playlist"
 msgstr "Lista mea de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:88
+#: src/ashytv/ui/pages/lists_page.py:90
 msgid "Choose .m3u file…"
 msgstr "Alege fișierul .m3u…"
 
-#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:220
+#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:271
 msgid "No file selected"
 msgstr "Niciun fișier selectat"
 
-#: src/ashytv/ui/pages/lists_page.py:96
+#: src/ashytv/ui/pages/lists_page.py:98
 msgid "File"
 msgstr "Fișier"
 
-#: src/ashytv/ui/pages/lists_page.py:101
+#: src/ashytv/ui/pages/lists_page.py:103
 msgid "Server (URL)"
 msgstr "Server (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:104
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Username"
 msgstr "Nume de utilizator"
 
-#: src/ashytv/ui/pages/lists_page.py:105
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:106
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "Password"
 msgstr "Parolă"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid "Paste provider message"
 msgstr "Lipește mesajul furnizorului"
 
-#: src/ashytv/ui/pages/lists_page.py:111
+#: src/ashytv/ui/pages/lists_page.py:113
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -537,19 +550,19 @@ msgstr ""
 "Lipiți mesajul de bun venit al furnizorului: serverul, numele de utilizator "
 "și parola se completează automat"
 
-#: src/ashytv/ui/pages/lists_page.py:119
+#: src/ashytv/ui/pages/lists_page.py:121
 msgid "Playlist URL (M3U)"
 msgstr "URL-ul listei de redare (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:133
+#: src/ashytv/ui/pages/lists_page.py:138
 msgid "Save and Connect"
 msgstr "Salvează și conectează"
 
-#: src/ashytv/ui/pages/lists_page.py:150
+#: src/ashytv/ui/pages/lists_page.py:155
 msgid "Secure Connection"
 msgstr "Conexiune securizată"
 
-#: src/ashytv/ui/pages/lists_page.py:152
+#: src/ashytv/ui/pages/lists_page.py:157
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -557,19 +570,41 @@ msgstr ""
 "Informațiile dvs. sunt stocate doar pe dispozitivul dvs. Parolele sunt "
 "păstrate în inelul de chei al sistemului."
 
-#: src/ashytv/ui/pages/lists_page.py:164
+#: src/ashytv/ui/pages/lists_page.py:169
 msgid "Your Playlists"
 msgstr "Listele dvs. de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:212
+#: src/ashytv/ui/pages/lists_page.py:198
+msgid "TV channels from"
+msgstr "Canale TV din"
+
+#: src/ashytv/ui/pages/lists_page.py:203
+msgid "Free movies and cartoons"
+msgstr "Filme și desene animate gratuite"
+
+#: src/ashytv/ui/pages/lists_page.py:205
+msgid "Classic films in the public domain and Blender's open movies"
+msgstr "Filme clasice din domeniul public și filmele deschise Blender"
+
+#: src/ashytv/ui/pages/lists_page.py:215
+msgid ""
+"Only free channels that broadcasters make publicly available, and films with "
+"an open licence or in the public domain. AshyTV is a player: it does not "
+"host any of them."
+msgstr ""
+"Doar canale gratuite pe care radiodifuzorii le oferă public și filme cu "
+"licență deschisă sau din domeniul public. AshyTV este un player: nu "
+"găzduiește niciunul dintre ele."
+
+#: src/ashytv/ui/pages/lists_page.py:263
 msgid "Add Another Playlist"
 msgstr "Adaugă o altă listă de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:239
+#: src/ashytv/ui/pages/lists_page.py:292
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:240
+#: src/ashytv/ui/pages/lists_page.py:293
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
@@ -577,42 +612,42 @@ msgstr[0] "{n} element"
 msgstr[1] "{n} elemente"
 msgstr[2] "{n} de elemente"
 
-#: src/ashytv/ui/pages/lists_page.py:243
+#: src/ashytv/ui/pages/lists_page.py:296
 msgid "Disabled"
 msgstr "Dezactivată"
 
-#: src/ashytv/ui/pages/lists_page.py:245
+#: src/ashytv/ui/pages/lists_page.py:298
 #, python-brace-format
 msgid "updated {when}"
 msgstr "actualizat {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:251
+#: src/ashytv/ui/pages/lists_page.py:304
 #, python-brace-format
 msgid "expires {when}"
 msgstr "expiră {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:252
+#: src/ashytv/ui/pages/lists_page.py:305
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "a expirat la {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:270
+#: src/ashytv/ui/pages/lists_page.py:323
 msgid "Show this playlist's channels"
 msgstr "Afișează canalele acestei liste"
 
-#: src/ashytv/ui/pages/lists_page.py:274
+#: src/ashytv/ui/pages/lists_page.py:327
 msgid "Refresh playlist"
 msgstr "Reîmprospătează lista de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:278
+#: src/ashytv/ui/pages/lists_page.py:331
 msgid "Remove playlist"
 msgstr "Elimină lista de redare"
 
-#: src/ashytv/ui/pages/lists_page.py:288
+#: src/ashytv/ui/pages/lists_page.py:341
 msgid "Remove playlist?"
 msgstr "Eliminați lista de redare?"
 
-#: src/ashytv/ui/pages/lists_page.py:289
+#: src/ashytv/ui/pages/lists_page.py:342
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -621,48 +656,48 @@ msgstr ""
 "„{name}” și toate canalele, favoritele și istoricul ei vor fi eliminate de "
 "pe acest dispozitiv."
 
-#: src/ashytv/ui/pages/lists_page.py:291
+#: src/ashytv/ui/pages/lists_page.py:344
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "Anulează"
 
-#: src/ashytv/ui/pages/lists_page.py:292
+#: src/ashytv/ui/pages/lists_page.py:345
 msgid "Remove"
 msgstr "Elimină"
 
-#: src/ashytv/ui/pages/lists_page.py:312
+#: src/ashytv/ui/pages/lists_page.py:367
 msgid "Select M3U playlist"
 msgstr "Selectați lista de redare M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:314
+#: src/ashytv/ui/pages/lists_page.py:369
 msgid "M3U Playlists"
 msgstr "Liste de redare M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:351
+#: src/ashytv/ui/pages/lists_page.py:406
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "Nu s-au găsit serverul, numele de utilizator și parola în textul copiat."
 
-#: src/ashytv/ui/pages/lists_page.py:357
+#: src/ashytv/ui/pages/lists_page.py:412
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Detaliile furnizorului au fost completate. Verificați-le și faceți clic pe "
 "„Salvează și conectează”."
 
-#: src/ashytv/ui/pages/lists_page.py:369
+#: src/ashytv/ui/pages/lists_page.py:424
 msgid "Choose an .m3u file."
 msgstr "Alegeți un fișier .m3u."
 
-#: src/ashytv/ui/pages/lists_page.py:375
+#: src/ashytv/ui/pages/lists_page.py:430
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Introduceți un URL care începe cu http:// sau https://."
 
-#: src/ashytv/ui/pages/lists_page.py:384
+#: src/ashytv/ui/pages/lists_page.py:443
 msgid "Fill in server, username and password."
 msgstr "Completați serverul, numele de utilizator și parola."
 
-#: src/ashytv/ui/pages/lists_page.py:386
+#: src/ashytv/ui/pages/lists_page.py:445
 msgid "Xtream Provider"
 msgstr "Furnizor Xtream"
 

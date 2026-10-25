@@ -14,7 +14,7 @@ from pathlib import Path
 from gi.repository import GLib
 
 from ..i18n import _
-from . import secrets
+from . import free_tv, secrets
 from .downloader import read_source
 from .m3u_parser import group_series, header_epg_url, iter_m3u
 from .storage import Storage
@@ -32,7 +32,8 @@ class ImportResult:
 def import_m3u(db_path: Path, name: str, source: str,
                progress: Callable[[str], None] = lambda _m: None) -> ImportResult:
     progress(_("Downloading playlist…"))
-    text = read_source(source)
+    text = (free_tv.build_playlist(source, read_source) if free_tv.is_free_tv(source)
+            else read_source(source))
     progress(_("Processing playlist…"))
     epg_url = header_epg_url(text)
     channels = list(iter_m3u(text))
