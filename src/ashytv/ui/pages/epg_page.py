@@ -185,6 +185,8 @@ class EpgPage(Gtk.Box):
         self.invalidate()
 
     def focus_content(self) -> bool:
+        if self.filter_model.get_n_items() == 0:
+            return False
         return self.listview.grab_focus()
 
     def _update_empty(self) -> None:

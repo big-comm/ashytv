@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gi.repository import Gdk, GObject, Gtk
+from gi.repository import Gdk, GLib, GObject, Gtk
 
 from .. import APP_ID
 from ..i18n import _
@@ -64,6 +64,8 @@ class WelcomeView(Gtk.Overlay):
             ("view-list-symbolic", _("IPTV Playlists"), _("M3U and Xtream Codes support")),
         ]:
             cards.append(self._card(icon, t, d))
+        # The cards are decorative: the keyboard goes straight to the button.
+        cards.set_can_focus(False)
         content.append(cards)
 
         start = Gtk.Button(halign=Gtk.Align.CENTER)
@@ -75,8 +77,10 @@ class WelcomeView(Gtk.Overlay):
         start.set_size_request(260, -1)
         start.connect("clicked", lambda *_: self.emit("start"))
         content.append(start)
+        self.start_btn = start
+        self.connect("map", lambda *_: GLib.idle_add(lambda: start.grab_focus() and False))
 
-        note = Gtk.Label(label=_("AshyTV does not provide any content — bring your own playlist."))
+        note = Gtk.Label(label=_("AshyTV is only a player: it does not host any content."))
         note.add_css_class("ashy-faint")
         content.append(note)
 

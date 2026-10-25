@@ -17,7 +17,7 @@ DIGITS = "digits"  # special token: "0–9"
 KEYBOARD: list[tuple[str, list[tuple[list[str], str]]]] = [
     (_("Navigation"), [
         (["<Primary>f"], _("Search (or just start typing)")),
-        (["Left", "Right", "Up", "Down"], _("Move between the menu and the page")),
+        (["Left", "Right", "Up", "Down"], _("Move to the nearest item in that direction")),
         (["Return"], _("Open the selected item")),
         (["BackSpace", "Escape"], _("Back to the menu")),
         (["Menu"], _("Group options (move, hide)")),
@@ -27,6 +27,7 @@ KEYBOARD: list[tuple[str, list[tuple[list[str], str]]]] = [
     (_("While watching"), [
         (["Return"], _("Channel list")),
         (["i"], _("Show programme info and controls")),
+        (["Tab"], _("Go to the player buttons (Esc to leave)")),
         (["Up", "Down"], _("Previous/next channel")),
         ([DIGITS], _("Type a channel number")),
         (["BackSpace"], _("Last watched channel")),

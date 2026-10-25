@@ -74,6 +74,12 @@ class CatalogPage(Gtk.Box):
 
     # ---- API -----------------------------------------------------------
 
+    def focus_content(self) -> bool:
+        """Entering the page from the sidebar lands on the posters."""
+        if self.filter_model.get_n_items() == 0:
+            return False
+        return self.grid.grab_focus()
+
     def invalidate(self) -> None:
         self._dirty = True
         if self.get_mapped():

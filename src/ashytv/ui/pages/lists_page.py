@@ -251,6 +251,15 @@ class ListsPage(Gtk.Box):
         row.append(col)
         parent.append(row)
 
+    def focus_content(self) -> bool:
+        """Entering the page from the sidebar lands on the first saved playlist,
+        or on the selected tab of the form."""
+        row = self.existing.get_row_at_index(0)
+        if self.existing_box.get_visible() and row is not None:
+            return row.grab_focus()
+        tab = next((b for b in self._tabs.values() if b.get_active()), None)
+        return tab is not None and tab.grab_focus()
+
     def invalidate(self) -> None:
         self.refresh()
 

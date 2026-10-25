@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 23:38-0300\n"
+"POT-Creation-Date: 2026-10-25 17:05-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -30,12 +30,12 @@ msgid "Live TV"
 msgstr "Live-tv"
 
 #: src/ashytv/models/channel.py:22 src/ashytv/ui/nav_sidebar.py:13
-#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:174
+#: src/ashytv/ui/pages/channels_page.py:25 src/ashytv/window.py:176
 msgid "Movies"
 msgstr "Film"
 
 #: src/ashytv/models/channel.py:23 src/ashytv/ui/nav_sidebar.py:14
-#: src/ashytv/ui/pages/channels_page.py:26 src/ashytv/window.py:179
+#: src/ashytv/ui/pages/channels_page.py:26 src/ashytv/window.py:181
 msgid "Series"
 msgstr "Serier"
 
@@ -218,8 +218,8 @@ msgid "No schedule"
 msgstr "Intet program"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
-#: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:859 src/ashytv/window.py:865
+#: src/ashytv/ui/pages/channels_page.py:436 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:871 src/ashytv/window.py:877
 msgid "Watch"
 msgstr "Se"
 
@@ -255,13 +255,13 @@ msgstr "Se {label}"
 msgid "Episode {n}"
 msgstr "Afsnit {n}"
 
-#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:195
-#: src/ashytv/ui/pages/channels_page.py:435
+#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:201
+#: src/ashytv/ui/pages/channels_page.py:437
 msgid "Remove from favorites"
 msgstr "Fjern fra favoritter"
 
-#: src/ashytv/ui/detail_dialog.py:262 src/ashytv/ui/pages/catalog_page.py:196
-#: src/ashytv/ui/pages/channels_page.py:435
+#: src/ashytv/ui/detail_dialog.py:262 src/ashytv/ui/pages/catalog_page.py:202
+#: src/ashytv/ui/pages/channels_page.py:437
 msgid "Add to favorites"
 msgstr "Føj til favoritter"
 
@@ -311,16 +311,16 @@ msgstr "Intet fundet"
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Tilføj en playliste under “Playlister”, eller skift filteret."
 
-#: src/ashytv/ui/pages/catalog_page.py:87
+#: src/ashytv/ui/pages/catalog_page.py:93
 #: src/ashytv/ui/pages/channels_page.py:207
 msgid "All"
 msgstr "Alle"
 
-#: src/ashytv/ui/pages/catalog_page.py:87
+#: src/ashytv/ui/pages/catalog_page.py:93
 msgid "New Releases"
 msgstr "Nye udgivelser"
 
-#: src/ashytv/ui/pages/catalog_page.py:87
+#: src/ashytv/ui/pages/catalog_page.py:93
 msgid "Trending"
 msgstr "Populært"
 
@@ -396,15 +396,15 @@ msgstr "Flyt ned"
 msgid "Hide group"
 msgstr "Skjul gruppe"
 
-#: src/ashytv/ui/pages/channels_page.py:400 src/ashytv/ui/player_view.py:159
+#: src/ashytv/ui/pages/channels_page.py:402 src/ashytv/ui/player_view.py:163
 msgid "Favorite"
 msgstr "Favorit"
 
-#: src/ashytv/ui/pages/channels_page.py:407
+#: src/ashytv/ui/pages/channels_page.py:409
 msgid "More options"
 msgstr "Flere valgmuligheder"
 
-#: src/ashytv/ui/pages/channels_page.py:438
+#: src/ashytv/ui/pages/channels_page.py:440
 msgid "View schedule"
 msgstr "Vis program"
 
@@ -451,11 +451,11 @@ msgstr "Guide ikke tilgængelig"
 msgid "The guide appears here once your provider's EPG loads."
 msgstr "Guiden vises her, når din udbyders EPG er indlæst."
 
-#: src/ashytv/ui/pages/epg_page.py:350
+#: src/ashytv/ui/pages/epg_page.py:352
 msgid "Cancel reminder"
 msgstr "Annuller påmindelse"
 
-#: src/ashytv/ui/pages/epg_page.py:350
+#: src/ashytv/ui/pages/epg_page.py:352
 msgid "Remind me"
 msgstr "Påmind mig"
 
@@ -500,11 +500,11 @@ msgstr "Se nu"
 msgid "Manage your playlists or add a new one"
 msgstr "Administrer dine playlister, eller tilføj en ny"
 
-#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:263
+#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:272
 msgid "Add Playlist"
 msgstr "Tilføj playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:291
+#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:300
 msgid "Free TV"
 msgstr "Gratis tv"
 
@@ -516,7 +516,7 @@ msgstr "M3U-fil"
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:291
+#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:300
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
@@ -524,8 +524,8 @@ msgstr "Xtream Codes"
 msgid "Playlist name"
 msgstr "Navn på playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:362
-#: src/ashytv/ui/pages/lists_page.py:426 src/ashytv/ui/pages/lists_page.py:433
+#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:435 src/ashytv/ui/pages/lists_page.py:442
 msgid "My Playlist"
 msgstr "Min playliste"
 
@@ -533,7 +533,7 @@ msgstr "Min playliste"
 msgid "Choose .m3u file…"
 msgstr "Vælg .m3u-fil…"
 
-#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:271
+#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:280
 msgid "No file selected"
 msgstr "Ingen fil valgt"
 
@@ -619,57 +619,57 @@ msgstr ""
 "med åben licens eller i offentlig ejendom. AshyTV er en afspiller: den "
 "hoster ingen af dem."
 
-#: src/ashytv/ui/pages/lists_page.py:263
+#: src/ashytv/ui/pages/lists_page.py:272
 msgid "Add Another Playlist"
 msgstr "Tilføj endnu en playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:292
+#: src/ashytv/ui/pages/lists_page.py:301
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:293
+#: src/ashytv/ui/pages/lists_page.py:302
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} element"
 msgstr[1] "{n} elementer"
 
-#: src/ashytv/ui/pages/lists_page.py:296
+#: src/ashytv/ui/pages/lists_page.py:305
 msgid "Disabled"
 msgstr "Deaktiveret"
 
-#: src/ashytv/ui/pages/lists_page.py:298
+#: src/ashytv/ui/pages/lists_page.py:307
 #, python-brace-format
 msgid "updated {when}"
 msgstr "opdateret {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:304
+#: src/ashytv/ui/pages/lists_page.py:313
 #, python-brace-format
 msgid "expires {when}"
 msgstr "udløber {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:305
+#: src/ashytv/ui/pages/lists_page.py:314
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "udløb {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:323
+#: src/ashytv/ui/pages/lists_page.py:332
 msgid "Show this playlist's channels"
 msgstr "Vis kanalerne fra denne playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:327
+#: src/ashytv/ui/pages/lists_page.py:336
 msgid "Refresh playlist"
 msgstr "Opdater playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:331
+#: src/ashytv/ui/pages/lists_page.py:340
 msgid "Remove playlist"
 msgstr "Fjern playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:341
+#: src/ashytv/ui/pages/lists_page.py:350
 msgid "Remove playlist?"
 msgstr "Fjern playliste?"
 
-#: src/ashytv/ui/pages/lists_page.py:342
+#: src/ashytv/ui/pages/lists_page.py:351
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -678,48 +678,48 @@ msgstr ""
 "“{name}” og alle dens kanaler, favoritter og historik fjernes fra denne "
 "enhed."
 
-#: src/ashytv/ui/pages/lists_page.py:344
+#: src/ashytv/ui/pages/lists_page.py:353
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "Annuller"
 
-#: src/ashytv/ui/pages/lists_page.py:345
+#: src/ashytv/ui/pages/lists_page.py:354
 msgid "Remove"
 msgstr "Fjern"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:376
 msgid "Select M3U playlist"
 msgstr "Vælg M3U-playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:369
+#: src/ashytv/ui/pages/lists_page.py:378
 msgid "M3U Playlists"
 msgstr "M3U-playlister"
 
-#: src/ashytv/ui/pages/lists_page.py:406
+#: src/ashytv/ui/pages/lists_page.py:415
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "Kunne ikke finde server, brugernavn og adgangskode i den kopierede tekst."
 
-#: src/ashytv/ui/pages/lists_page.py:412
+#: src/ashytv/ui/pages/lists_page.py:421
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Udbyderens oplysninger er udfyldt. Tjek dem, og klik på “Gem og opret "
 "forbindelse”."
 
-#: src/ashytv/ui/pages/lists_page.py:424
+#: src/ashytv/ui/pages/lists_page.py:433
 msgid "Choose an .m3u file."
 msgstr "Vælg en .m3u-fil."
 
-#: src/ashytv/ui/pages/lists_page.py:430
+#: src/ashytv/ui/pages/lists_page.py:439
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Angiv en URL, der starter med http:// eller https://."
 
-#: src/ashytv/ui/pages/lists_page.py:443
+#: src/ashytv/ui/pages/lists_page.py:452
 msgid "Fill in server, username and password."
 msgstr "Udfyld server, brugernavn og adgangskode."
 
-#: src/ashytv/ui/pages/lists_page.py:445
+#: src/ashytv/ui/pages/lists_page.py:454
 msgid "Xtream Provider"
 msgstr "Xtream-udbyder"
 
@@ -893,7 +893,7 @@ msgstr "Slå fra for at spare data"
 msgid "Applies from the next video you open."
 msgstr "Gælder fra den næste video, du åbner."
 
-#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:629
+#: src/ashytv/ui/pages/settings_page.py:218 src/ashytv/ui/player_view.py:672
 msgid "Automatic quality"
 msgstr "Automatisk kvalitet"
 
@@ -1045,178 +1045,178 @@ msgstr "PIN angivet."
 msgid "PIN removed."
 msgstr "PIN fjernet."
 
-#: src/ashytv/ui/player_view.py:23
+#: src/ashytv/ui/player_view.py:24
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ashytv/ui/player_view.py:135
+#: src/ashytv/ui/player_view.py:139
 msgid "Back (Esc)"
 msgstr "Tilbage (Esc)"
 
-#: src/ashytv/ui/player_view.py:161 src/ashytv/ui/player_view.py:797
+#: src/ashytv/ui/player_view.py:165 src/ashytv/ui/player_view.py:840
 msgid "Record"
 msgstr "Optag"
 
-#: src/ashytv/ui/player_view.py:162
+#: src/ashytv/ui/player_view.py:166
 msgid "Mini player"
 msgstr "Miniafspiller"
 
-#: src/ashytv/ui/player_view.py:191 src/ashytv/ui/player_view.py:381
-#: src/ashytv/ui/player_view.py:545 src/ashytv/ui/player_view.py:559
-#: src/ashytv/ui/player_view.py:565
+#: src/ashytv/ui/player_view.py:195 src/ashytv/ui/player_view.py:388
+#: src/ashytv/ui/player_view.py:588 src/ashytv/ui/player_view.py:602
+#: src/ashytv/ui/player_view.py:608
 msgid "● LIVE"
 msgstr "● LIVE"
 
-#: src/ashytv/ui/player_view.py:193
+#: src/ashytv/ui/player_view.py:197
 msgid "Go live"
 msgstr "Gå live"
 
-#: src/ashytv/ui/player_view.py:194
+#: src/ashytv/ui/player_view.py:198
 msgid "Back to live"
 msgstr "Tilbage til live"
 
-#: src/ashytv/ui/player_view.py:204
+#: src/ashytv/ui/player_view.py:208
 msgid "Previous (↑)"
 msgstr "Forrige (↑)"
 
-#: src/ashytv/ui/player_view.py:206
+#: src/ashytv/ui/player_view.py:210
 msgid "Back 10 s (←)"
 msgstr "10 sek. tilbage (←)"
 
-#: src/ashytv/ui/player_view.py:208
+#: src/ashytv/ui/player_view.py:212
 msgid "Pause (Space)"
 msgstr "Pause (mellemrum)"
 
-#: src/ashytv/ui/player_view.py:210
+#: src/ashytv/ui/player_view.py:214
 msgid "Forward 10 s (→)"
 msgstr "10 sek. frem (→)"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:216
 msgid "Next (↓)"
 msgstr "Næste (↓)"
 
-#: src/ashytv/ui/player_view.py:219 src/ashytv/ui/shortcuts.py:37
+#: src/ashytv/ui/player_view.py:223 src/ashytv/ui/shortcuts.py:38
 msgid "Volume"
 msgstr "Lydstyrke"
 
-#: src/ashytv/ui/player_view.py:221 src/ashytv/ui/player_view.py:848
+#: src/ashytv/ui/player_view.py:225 src/ashytv/ui/player_view.py:891
 msgid "Subtitles"
 msgstr "Undertekster"
 
-#: src/ashytv/ui/player_view.py:223
+#: src/ashytv/ui/player_view.py:227
 msgid "Audio & Video"
 msgstr "Lyd og video"
 
-#: src/ashytv/ui/player_view.py:225
+#: src/ashytv/ui/player_view.py:229
 msgid "Fullscreen (F)"
 msgstr "Fuldskærm (F)"
 
-#: src/ashytv/ui/player_view.py:250
+#: src/ashytv/ui/player_view.py:254
 msgid "Try again"
 msgstr "Prøv igen"
 
-#: src/ashytv/ui/player_view.py:416
+#: src/ashytv/ui/player_view.py:459
 msgid "Buffering…"
 msgstr "Bufferer…"
 
-#: src/ashytv/ui/player_view.py:416
+#: src/ashytv/ui/player_view.py:459
 msgid "Loading…"
 msgstr "Indlæser…"
 
-#: src/ashytv/ui/player_view.py:418
+#: src/ashytv/ui/player_view.py:461
 msgid "Could not play"
 msgstr "Kunne ikke afspilles"
 
-#: src/ashytv/ui/player_view.py:419
+#: src/ashytv/ui/player_view.py:462
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanalen er måske offline, eller forbindelsen blev afbrudt."
 
-#: src/ashytv/ui/player_view.py:426
+#: src/ashytv/ui/player_view.py:469
 msgid "Broadcast ended"
 msgstr "Udsendelsen er slut"
 
-#: src/ashytv/ui/player_view.py:427
+#: src/ashytv/ui/player_view.py:470
 msgid "The signal was interrupted."
 msgstr "Signalet blev afbrudt."
 
-#: src/ashytv/ui/player_view.py:615
+#: src/ashytv/ui/player_view.py:658
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Kvalitet: {label}"
 
-#: src/ashytv/ui/player_view.py:617
+#: src/ashytv/ui/player_view.py:660
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Ikke tilgængelig, skifter til {label}"
 
-#: src/ashytv/ui/player_view.py:619
+#: src/ashytv/ui/player_view.py:662
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Kvalitet: {label} (auto)"
 
-#: src/ashytv/ui/player_view.py:653
+#: src/ashytv/ui/player_view.py:696
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Næste: {title}"
 
-#: src/ashytv/ui/player_view.py:698 src/ashytv/ui/shortcuts.py:36
+#: src/ashytv/ui/player_view.py:741 src/ashytv/ui/shortcuts.py:37
 msgid "Mute"
 msgstr "Lyd fra"
 
-#: src/ashytv/ui/player_view.py:699 src/ashytv/ui/player_view.py:706
+#: src/ashytv/ui/player_view.py:742 src/ashytv/ui/player_view.py:749
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Lydstyrke {level} %"
 
-#: src/ashytv/ui/player_view.py:766
+#: src/ashytv/ui/player_view.py:809
 msgid "Recording"
 msgstr "Optagelse"
 
-#: src/ashytv/ui/player_view.py:777
+#: src/ashytv/ui/player_view.py:820
 msgid "Stop recording"
 msgstr "Stop optagelse"
 
-#: src/ashytv/ui/player_view.py:780
+#: src/ashytv/ui/player_view.py:823
 msgid "Recording…"
 msgstr "Optager…"
 
-#: src/ashytv/ui/player_view.py:788
+#: src/ashytv/ui/player_view.py:831
 msgid "Could not record this channel."
 msgstr "Denne kanal kunne ikke optages."
 
-#: src/ashytv/ui/player_view.py:799
+#: src/ashytv/ui/player_view.py:842
 msgid "Recording saved to Recordings."
 msgstr "Optagelsen er gemt i Optagelser."
 
-#: src/ashytv/ui/player_view.py:811
+#: src/ashytv/ui/player_view.py:854
 msgid "Mute (M)"
 msgstr "Lyd fra (M)"
 
-#: src/ashytv/ui/player_view.py:846
+#: src/ashytv/ui/player_view.py:889
 msgid "Off"
 msgstr "Fra"
 
-#: src/ashytv/ui/player_view.py:851
+#: src/ashytv/ui/player_view.py:894
 msgid "No subtitles in this video."
 msgstr "Ingen undertekster i denne video."
 
-#: src/ashytv/ui/player_view.py:860
+#: src/ashytv/ui/player_view.py:903
 msgid "Automatic"
 msgstr "Automatisk"
 
-#: src/ashytv/ui/player_view.py:863
+#: src/ashytv/ui/player_view.py:906
 msgid "Quality"
 msgstr "Kvalitet"
 
-#: src/ashytv/ui/player_view.py:867
+#: src/ashytv/ui/player_view.py:910
 msgid "Audio"
 msgstr "Lyd"
 
-#: src/ashytv/ui/player_view.py:870
+#: src/ashytv/ui/player_view.py:913
 msgid "Aspect ratio"
 msgstr "Billedformat"
 
-#: src/ashytv/ui/player_view.py:874
+#: src/ashytv/ui/player_view.py:917
 msgid "Speed"
 msgstr "Hastighed"
 
@@ -1233,8 +1233,8 @@ msgid "Search (or just start typing)"
 msgstr "Søg (eller begynd bare at skrive)"
 
 #: src/ashytv/ui/shortcuts.py:20
-msgid "Move between the menu and the page"
-msgstr "Skift mellem menuen og siden"
+msgid "Move to the nearest item in that direction"
+msgstr "Gå til det nærmeste element i den retning"
 
 #: src/ashytv/ui/shortcuts.py:21
 msgid "Open the selected item"
@@ -1252,7 +1252,7 @@ msgstr "Gruppeindstillinger (flyt, skjul)"
 msgid "Keyboard shortcuts"
 msgstr "Tastaturgenveje"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:95
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:97
 msgid "Quit"
 msgstr "Afslut"
 
@@ -1260,7 +1260,7 @@ msgstr "Afslut"
 msgid "While watching"
 msgstr "Under visning"
 
-#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:48
+#: src/ashytv/ui/shortcuts.py:28 src/ashytv/ui/shortcuts.py:49
 msgid "Channel list"
 msgstr "Kanalliste"
 
@@ -1268,59 +1268,63 @@ msgstr "Kanalliste"
 msgid "Show programme info and controls"
 msgstr "Vis programinfo og betjening"
 
-#: src/ashytv/ui/shortcuts.py:30 src/ashytv/ui/shortcuts.py:49
+#: src/ashytv/ui/shortcuts.py:30
+msgid "Go to the player buttons (Esc to leave)"
+msgstr "Gå til afspillerens knapper (Esc for at forlade)"
+
+#: src/ashytv/ui/shortcuts.py:31 src/ashytv/ui/shortcuts.py:50
 msgid "Previous/next channel"
 msgstr "Forrige/næste kanal"
 
-#: src/ashytv/ui/shortcuts.py:31
+#: src/ashytv/ui/shortcuts.py:32
 msgid "Type a channel number"
 msgstr "Indtast et kanalnummer"
 
-#: src/ashytv/ui/shortcuts.py:32 src/ashytv/ui/shortcuts.py:50
+#: src/ashytv/ui/shortcuts.py:33 src/ashytv/ui/shortcuts.py:51
 msgid "Last watched channel"
 msgstr "Sidst sete kanal"
 
-#: src/ashytv/ui/shortcuts.py:33
+#: src/ashytv/ui/shortcuts.py:34
 msgid "Pause/resume (also pauses live TV)"
 msgstr "Pause/genoptag (sætter også live-tv på pause)"
 
-#: src/ashytv/ui/shortcuts.py:34
+#: src/ashytv/ui/shortcuts.py:35
 msgid "Rewind/forward 10 s"
 msgstr "Spol 10 sek. tilbage/frem"
 
-#: src/ashytv/ui/shortcuts.py:35
+#: src/ashytv/ui/shortcuts.py:36
 msgid "Fullscreen"
 msgstr "Fuldskærm"
 
-#: src/ashytv/ui/shortcuts.py:38
+#: src/ashytv/ui/shortcuts.py:39
 msgid "Exit fullscreen / close the player"
 msgstr "Afslut fuldskærm / luk afspilleren"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "D-pad"
 msgstr "D-pad"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Move"
 msgstr "Flyt"
 
-#: src/ashytv/ui/shortcuts.py:44
+#: src/ashytv/ui/shortcuts.py:45
 msgid "Stick"
 msgstr "Styrepind"
 
-#: src/ashytv/ui/shortcuts.py:45
+#: src/ashytv/ui/shortcuts.py:46
 msgid "Open / confirm"
 msgstr "Åbn / bekræft"
 
-#: src/ashytv/ui/shortcuts.py:46
+#: src/ashytv/ui/shortcuts.py:47
 msgid "Back"
 msgstr "Tilbage"
 
-#: src/ashytv/ui/shortcuts.py:47
+#: src/ashytv/ui/shortcuts.py:48
 msgid "Pause/resume"
 msgstr "Pause/genoptag"
 
-#: src/ashytv/ui/shortcuts.py:63
+#: src/ashytv/ui/shortcuts.py:64
 msgid "Backspace"
 msgstr "Backspace"
 
@@ -1344,176 +1348,176 @@ msgstr "Film og serier"
 msgid "M3U and Xtream Codes support"
 msgstr "Understøtter M3U og Xtream Codes"
 
-#: src/ashytv/ui/welcome_view.py:71
+#: src/ashytv/ui/welcome_view.py:73
 msgid "Get Started"
 msgstr "Kom i gang"
 
-#: src/ashytv/ui/welcome_view.py:79
-msgid "AshyTV does not provide any content — bring your own playlist."
-msgstr "AshyTV leverer intet indhold — medbring din egen playliste."
+#: src/ashytv/ui/welcome_view.py:83
+msgid "AshyTV is only a player: it does not host any content."
+msgstr "AshyTV er kun en afspiller: den hoster intet indhold."
 
-#: src/ashytv/window.py:77
+#: src/ashytv/window.py:79
 msgid "Menu"
 msgstr "Menu"
 
-#: src/ashytv/window.py:86
+#: src/ashytv/window.py:88
 msgid "Search…"
 msgstr "Søg…"
 
-#: src/ashytv/window.py:93
+#: src/ashytv/window.py:95
 msgid "Keyboard Shortcuts"
 msgstr "Tastaturgenveje"
 
-#: src/ashytv/window.py:94
+#: src/ashytv/window.py:96
 msgid "About AshyTV"
 msgstr "Om AshyTV"
 
-#: src/ashytv/window.py:97
+#: src/ashytv/window.py:99
 msgid "Main Menu"
 msgstr "Hovedmenu"
 
-#: src/ashytv/window.py:99
+#: src/ashytv/window.py:101
 msgid "Search (Ctrl+F)"
 msgstr "Søg (Ctrl+F)"
 
-#: src/ashytv/window.py:175
+#: src/ashytv/window.py:177
 msgid "The best movies for you"
 msgstr "De bedste film til dig"
 
-#: src/ashytv/window.py:180
+#: src/ashytv/window.py:182
 msgid "Your favorite series in one place"
 msgstr "Dine yndlingsserier samlet ét sted"
 
-#: src/ashytv/window.py:396
+#: src/ashytv/window.py:400
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Afspiller ikke tilgængelig: installér mpv og python-mpv ({error})"
 
-#: src/ashytv/window.py:434
+#: src/ashytv/window.py:438
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Ingen kanal {number}"
 
-#: src/ashytv/window.py:460
+#: src/ashytv/window.py:464
 msgid "Next episode…"
 msgstr "Næste afsnit…"
 
-#: src/ashytv/window.py:484
+#: src/ashytv/window.py:488
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Kunne ikke åbne: {error}"
 
-#: src/ashytv/window.py:488
+#: src/ashytv/window.py:492
 msgid "This item is no longer in the playlist."
 msgstr "Dette element er ikke længere i playlisten."
 
-#: src/ashytv/window.py:519
+#: src/ashytv/window.py:531
 msgid "Added to favorites"
 msgstr "Føjet til favoritter"
 
-#: src/ashytv/window.py:519
+#: src/ashytv/window.py:531
 msgid "Removed from favorites"
 msgstr "Fjernet fra favoritter"
 
-#: src/ashytv/window.py:620
+#: src/ashytv/window.py:632
 msgid "Please wait: an import is already in progress."
 msgstr "Vent venligst: en import er allerede i gang."
 
-#: src/ashytv/window.py:637
+#: src/ashytv/window.py:649
 msgid "Importing playlist…"
 msgstr "Importerer playliste…"
 
-#: src/ashytv/window.py:650
+#: src/ashytv/window.py:662
 msgid "Connecting to the Xtream provider…"
 msgstr "Opretter forbindelse til Xtream-udbyderen…"
 
-#: src/ashytv/window.py:667
+#: src/ashytv/window.py:679
 msgid "Provider password not found; add the playlist again."
 msgstr "Udbyderens adgangskode blev ikke fundet; tilføj playlisten igen."
 
-#: src/ashytv/window.py:671
+#: src/ashytv/window.py:683
 msgid "Updating playlist…"
 msgstr "Opdaterer playliste…"
 
-#: src/ashytv/window.py:691
+#: src/ashytv/window.py:703
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Playlisten “{name}” er opdateret."
 
-#: src/ashytv/window.py:695
+#: src/ashytv/window.py:707
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} element importeret."
 msgstr[1] "{n} elementer importeret."
 
-#: src/ashytv/window.py:696
+#: src/ashytv/window.py:708
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Playliste klar: {n} element."
 msgstr[1] "Playliste klar: {n} elementer."
 
-#: src/ashytv/window.py:717
+#: src/ashytv/window.py:729
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Kunne ikke opdatere “{name}”: {error}"
 
-#: src/ashytv/window.py:721
+#: src/ashytv/window.py:733
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Mislykkedes: {error}"
 
-#: src/ashytv/window.py:722
+#: src/ashytv/window.py:734
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Import mislykkedes: {error}"
 
-#: src/ashytv/window.py:728
+#: src/ashytv/window.py:740
 msgid "Please wait for the import to finish."
 msgstr "Vent venligst, til importen er færdig."
 
-#: src/ashytv/window.py:741
+#: src/ashytv/window.py:753
 msgid "Playlist removed."
 msgstr "Playliste fjernet."
 
-#: src/ashytv/window.py:801
+#: src/ashytv/window.py:813
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Guide (EPG) ikke tilgængelig: {error}"
 
-#: src/ashytv/window.py:836
+#: src/ashytv/window.py:848
 msgid "Programme"
 msgstr "Program"
 
-#: src/ashytv/window.py:840
+#: src/ashytv/window.py:852
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Du bliver mindet om “{title}” kl. {time}"
 
-#: src/ashytv/window.py:841
+#: src/ashytv/window.py:853
 msgid "Reminder cancelled"
 msgstr "Påmindelse annulleret"
 
-#: src/ashytv/window.py:853
+#: src/ashytv/window.py:865
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "“{title}” starter snart på {channel}"
 
-#: src/ashytv/window.py:855
+#: src/ashytv/window.py:867
 msgid "AshyTV reminder"
 msgstr "AshyTV-påmindelse"
 
-#: src/ashytv/window.py:874
+#: src/ashytv/window.py:886
 msgid "This channel is no longer in your playlists."
 msgstr "Denne kanal er ikke længere i dine playlister."
 
-#: src/ashytv/window.py:889
+#: src/ashytv/window.py:901
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Gruppen “{name}” er skjult"
 
-#: src/ashytv/window.py:890
+#: src/ashytv/window.py:902
 msgid "Undo"
 msgstr "Fortryd"
 
@@ -1581,13 +1585,3 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Afspilning med libmpv med hardwareafkodning, billede-i-billede og optagelse"
-
-#~ msgid ""
-#~ "AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or "
-#~ "Xtream Codes account and browse live channels, an electronic program "
-#~ "guide, movies and series. AshyTV does not provide or include any content."
-#~ msgstr ""
-#~ "AshyTV er en IPTV-afspiller i GTK4/libadwaita. Importér din egen M3U-"
-#~ "playliste eller Xtream Codes-konto, og gennemse live-kanaler, en "
-#~ "elektronisk programguide, film og serier. AshyTV leverer eller indeholder "
-#~ "intet indhold."

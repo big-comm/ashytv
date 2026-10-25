@@ -351,6 +351,8 @@ class ChannelsPage(Gtk.Box):
     def focus_content(self) -> bool:
         if self.view == "guide" and self.guide is not None:
             return self.guide.focus_content()
+        if self.filter_model.get_n_items() == 0:
+            return False  # empty: the caller focuses the first control instead
         return self.listview.grab_focus()
 
     def _update_empty(self) -> None:

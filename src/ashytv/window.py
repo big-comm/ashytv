@@ -16,6 +16,7 @@ from .services.gamepad import GamepadInput
 from .services.reminders import Reminder, ReminderBook
 from .services.storage import Storage, collapse_variants
 from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
+from .ui import keynav
 from .ui.detail_dialog import DetailDialog
 from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
@@ -55,6 +56,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._series_ctx: tuple[Channel, list[Episode]] | None = None
         self._importing = False
         self._quiet_id = 0
+        self._focus_before_player: Gtk.Widget | None = None
         self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
 
@@ -358,6 +360,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return
         if self.mini is not None:
             self._close_mini(stop=False)
+        if self.root_stack.get_visible_child_name() == "shell":
+            self._focus_before_player = self.get_focus()  # restored on close
         self.player.play(item, can_zap=can_zap)
         self.root_stack.set_visible_child_name("player")
         if item.is_live:
@@ -511,6 +515,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         page = self.pages.get(self._current)
         if hasattr(page, "refresh"):
             page.refresh()
+        GLib.idle_add(self._restore_focus)
+
+    def _restore_focus(self) -> bool:
+        """Back from the player: the keyboard focus returns where it was."""
+        widget, self._focus_before_player = self._focus_before_player, None
+        if not (widget is not None and widget.get_mapped() and widget.grab_focus()):
+            self.focus_page() or self.nav.focus_active()
+        return GLib.SOURCE_REMOVE
 
     def _on_player_fav(self, _p, item: PlayItem) -> None:
         ch = item.channel
@@ -934,7 +946,26 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if keyval == Gdk.KEY_Escape and self.search_btn.get_active():
             self.search_btn.set_active(False)
             return True
+        direction = self._DIRECTIONS.get(keyval)
+        if direction is not None and not state & (Gdk.ModifierType.CONTROL_MASK
+                                                  | Gdk.ModifierType.ALT_MASK
+                                                  | Gdk.ModifierType.SHIFT_MASK):
+            return self._move_focus(direction)
         return self._type_to_search(keyval, state)
+
+    def _move_focus(self, direction: Gtk.DirectionType) -> bool:
+        """Arrow keys: spatial navigation over the whole window (see keynav)."""
+        focus = self.get_focus()
+        if focus is None:
+            return self.focus_page() or self.nav.focus_active() or True
+        if direction == Gtk.DirectionType.RIGHT and self.nav.has_focus_within(focus) \
+                and self.focus_page():
+            return True  # leaving the sidebar enters the content
+        if not focus.get_mapped():
+            # The focused widget was hidden (emptied list, closed view…).
+            return self.focus_page() or self.nav.focus_active() or True
+        return keynav.move(self, direction, prefer={self.nav: self.nav.focus_active},
+                           walls=(self.nav,))
 
     def _focus_is_editable(self) -> bool:
         focus = self.get_focus()
@@ -965,9 +996,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return False
         focus = self.get_focus()
         in_nav = self.nav.has_focus_within(focus)
-        if in_nav and keyval == Gdk.KEY_Right:
-            return self.focus_page()
-        if not in_nav and keyval in (Gdk.KEY_Left, Gdk.KEY_BackSpace, Gdk.KEY_Escape):
+        if not in_nav and keyval in (Gdk.KEY_BackSpace, Gdk.KEY_Escape):
             if keyval == Gdk.KEY_BackSpace and self._focus_is_editable():
                 return False
             if self.split.get_collapsed():
@@ -992,14 +1021,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return True
         focus = self.get_focus()
         direction = self._DIRECTIONS.get(keyval)
-        if keyval == Gdk.KEY_Right and self.nav.has_focus_within(focus):
-            return self.focus_page()  # leaving the sidebar enters the content
         if direction is not None:
-            if focus is None:
-                return self.focus_page() or self.nav.focus_active() or True
-            if self.child_focus(direction):
-                return True
-            return self._on_nav_key(None, keyval, 0, 0)
+            # Not handled above (e.g. the channel list over the video): a real
+            # key would reach the focused list; move the focus like it would.
+            return self.child_focus(direction) or True
         if keyval in (Gdk.KEY_Return, Gdk.KEY_space) and focus is not None:
             return activate_widget(focus)
         return self._on_nav_key(None, keyval, 0, 0)

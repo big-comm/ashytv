@@ -12,6 +12,7 @@ from ..i18n import _
 from ..models import PlayItem
 from ..services.quality import QualityController
 from ..player.mpv_widget import MpvWidget
+from . import keynav
 from .channel_overlay import ChannelOverlay
 from .detail_dialog import fmt_time
 from .pages._common import set_logo
@@ -55,6 +56,9 @@ class PlayerView(Gtk.Overlay):
         super().__init__()
         self.settings = settings
         self.add_css_class("ashy-player")
+        # Keys go to the video, not to whichever bar button GTK picks; Tab
+        # enters the control bars (see handle_key).
+        self.set_focusable(True)
         self._guide = None
         self._item: PlayItem | None = None
         self._hide_source = 0
@@ -292,6 +296,7 @@ class PlayerView(Gtk.Overlay):
                  else "ashy-film-symbolic", lambda: self._item is item)
         self.logo.set_visible(bool(item.logo) or item.is_live)
         self.title_label.set_text(item.title)
+        self.grab_focus()
         for b in (self.prev_btn, self.next_btn):
             b.set_visible(can_zap)
         for b in (self.back10, self.fwd10):
@@ -350,6 +355,8 @@ class PlayerView(Gtk.Overlay):
                 self._show_controls()
                 return True
             return False  # arrows and Enter move/choose in the channel list
+        if self._handle_bar_key(k):
+            return True
         live = self._item is not None and self._item.is_live
         digit = _DIGITS.get(k)
         if digit is not None and live and self._can_zap:
@@ -404,6 +411,42 @@ class PlayerView(Gtk.Overlay):
         else:
             return False
         self._show_controls()
+        return True
+
+    _BAR_DIRECTIONS = {Gdk.KEY_Left: Gtk.DirectionType.LEFT,
+                       Gdk.KEY_Right: Gtk.DirectionType.RIGHT,
+                       Gdk.KEY_Up: Gtk.DirectionType.UP,
+                       Gdk.KEY_Down: Gtk.DirectionType.DOWN}
+
+    def _bar_focus(self) -> Gtk.Widget | None:
+        """The bar button with the keyboard focus, if any."""
+        root = self.get_root()
+        focus = root.get_focus() if root is not None else None
+        if focus is not None and (focus.is_ancestor(self.top_bar)
+                                  or focus.is_ancestor(self.bottom_bar)):
+            return focus
+        return None
+
+    def _handle_bar_key(self, k: int) -> bool:
+        """Tab enters the control bars; there, the arrows move between the
+        buttons, Enter/Space press them and Esc goes back to the video."""
+        focus = self._bar_focus()
+        if focus is None:
+            if k in (Gdk.KEY_Tab, Gdk.KEY_ISO_Left_Tab):
+                self._show_controls(keep=True)
+                return self.play_btn.grab_focus()
+            return False
+        if k in self._BAR_DIRECTIONS:
+            keynav.move(self.get_root(), self._BAR_DIRECTIONS[k], root=self)
+        elif k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter, Gdk.KEY_ISO_Enter, Gdk.KEY_space):
+            focus.activate()
+        elif k == Gdk.KEY_Escape:
+            self.grab_focus()
+            self._show_controls()
+            return True
+        else:
+            return False  # Tab moves to the next button; other keys work as usual
+        self._show_controls(keep=True)
         return True
 
     # ---- mpv state -------------------------------------------------
@@ -939,7 +982,7 @@ class PlayerView(Gtk.Overlay):
         self._hide_source = 0
         if self.mpv.state not in ("playing", "buffering"):
             return GLib.SOURCE_REMOVE
-        if self.channel_overlay.get_visible() or any(
+        if self.channel_overlay.get_visible() or self._bar_focus() is not None or any(
                 b.get_active() for b in (self.vol_btn, self.cc_btn, self.opts_btn)):
             self._show_controls()  # popover open: wait
             return GLib.SOURCE_REMOVE

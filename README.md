@@ -187,7 +187,7 @@ through libmanette.
 | Key | Action |
 |---|---|
 | *start typing* or <kbd>Ctrl</kbd>+<kbd>F</kbd> | Search the current page |
-| <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> | Move between the menu and the page |
+| <kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd> | Move to the nearest item in that direction — sidebar, filters, groups, lists, the buttons on a row (favorite, menu), dialogs |
 | <kbd>Enter</kbd> | Open the selected item |
 | <kbd>Backspace</kbd> / <kbd>Esc</kbd> | Back to the menu |
 | <kbd>Menu</kbd> on a group | Move up / down or hide the group |
@@ -200,6 +200,7 @@ through libmanette.
 |---|---|
 | <kbd>Enter</kbd> | Channel list over the video |
 | <kbd>I</kbd> | Show programme info and controls |
+| <kbd>Tab</kbd> | Go to the player buttons: arrows move, <kbd>Enter</kbd> presses, <kbd>Esc</kbd> leaves |
 | <kbd>↑</kbd> / <kbd>↓</kbd> | Previous / next channel (or episode) |
 | <kbd>0</kbd>–<kbd>9</kbd> | Type a channel number |
 | <kbd>Backspace</kbd> | Last watched channel |
