@@ -56,7 +56,8 @@ a program guide, movies and series in a fast, good-looking app.
   URL, and loose episodes grouped into series.
 - Imports run in the background — even playlists with hundreds of thousands
   of entries keep the interface responsive.
-- Refresh or remove playlists, with optional automatic refresh.
+- Refresh, disable (keep it without showing its channels) or remove
+  playlists, with optional automatic refresh.
 
 **Watching**
 - **Live TV** with category chips, groups, favorites, recently watched and the

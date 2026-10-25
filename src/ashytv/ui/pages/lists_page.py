@@ -27,6 +27,8 @@ class ListsPage(Gtk.Box):
         "xtream-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str, str, str)),
         "refresh-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         "delete-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
+        # playlist id, enabled
+        "enabled-changed": (GObject.SignalFlags.RUN_FIRST, None, (int, bool)),
     }
 
     def __init__(self, storage):
@@ -278,6 +280,9 @@ class ListsPage(Gtk.Box):
         parts = [_("Xtream Codes") if kind == "xtream" else _("Free TV") if free
                  else _("M3U"),
                  ngettext("{n} item", "{n} items", count).format(n=count)]
+        enabled = bool(pl["enabled"])
+        if not enabled:
+            parts.insert(0, _("Disabled"))
         if pl["updated_at"]:
             parts.append(_("updated {when}").format(when=_fmt_time(pl["updated_at"])))
         meta = self.storage.playlist_meta(pl["id"])
@@ -297,9 +302,16 @@ class ListsPage(Gtk.Box):
             except (ValueError, KeyError):
                 pass
         icon = Gtk.Image(icon_name="network-server-symbolic" if kind == "xtream"
-                         else "tv-symbolic" if free else "view-list-symbolic")
+                         else "tv-symbolic" if free else "view-list-symbolic",
+                         valign=Gtk.Align.CENTER)
         icon.add_css_class("ashy-field-icon")
         row.add_prefix(icon)
+        if not enabled:
+            row.add_css_class("ashy-row-off")
+        switch = Gtk.Switch(active=enabled, valign=Gtk.Align.CENTER,
+                            tooltip_text=_("Show this playlist's channels"))
+        switch.connect("notify::active", lambda sw, _p: self.emit(
+            "enabled-changed", pl["id"], sw.get_active()) or GLib.idle_add(self.refresh))
         refresh = Gtk.Button(icon_name="view-refresh-symbolic", valign=Gtk.Align.CENTER,
                              tooltip_text=_("Refresh playlist"))
         refresh.add_css_class("flat")
@@ -308,6 +320,7 @@ class ListsPage(Gtk.Box):
                             tooltip_text=_("Remove playlist"))
         delete.add_css_class("flat")
         delete.connect("clicked", lambda *_: self._confirm_delete(pl))
+        row.add_suffix(switch)
         row.add_suffix(refresh)
         row.add_suffix(delete)
         return row

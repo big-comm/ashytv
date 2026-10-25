@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 21:41-0300\n"
+"POT-Creation-Date: 2026-10-24 21:52-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -178,7 +178,7 @@ msgstr "Nincs műsor"
 
 #: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
 #: src/ashytv/ui/pages/channels_page.py:434 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:847 src/ashytv/window.py:853
+#: src/ashytv/window.py:859 src/ashytv/window.py:865
 msgid "Watch"
 msgstr "Megtekintés"
 
@@ -246,7 +246,7 @@ msgstr "Kedvencek"
 msgid "Recordings"
 msgstr "Felvételek"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:38
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:40
 msgid "Playlists"
 msgstr "Lejátszási listák"
 
@@ -470,76 +470,76 @@ msgstr "Csatornák megtekintése"
 msgid "Watch now"
 msgstr "Megnézem"
 
-#: src/ashytv/ui/pages/lists_page.py:39
+#: src/ashytv/ui/pages/lists_page.py:41
 msgid "Manage your playlists or add a new one"
 msgstr "Kezelje lejátszási listáit, vagy adjon hozzá újat"
 
-#: src/ashytv/ui/pages/lists_page.py:47 src/ashytv/ui/pages/lists_page.py:250
+#: src/ashytv/ui/pages/lists_page.py:49 src/ashytv/ui/pages/lists_page.py:252
 msgid "Add Playlist"
 msgstr "Lejátszási lista hozzáadása"
 
-#: src/ashytv/ui/pages/lists_page.py:68
+#: src/ashytv/ui/pages/lists_page.py:70
 msgid "M3U File"
 msgstr "M3U-fájl"
 
-#: src/ashytv/ui/pages/lists_page.py:68 src/ashytv/ui/pages/lists_page.py:278
+#: src/ashytv/ui/pages/lists_page.py:70 src/ashytv/ui/pages/lists_page.py:280
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:69 src/ashytv/ui/pages/lists_page.py:278
+#: src/ashytv/ui/pages/lists_page.py:71 src/ashytv/ui/pages/lists_page.py:280
 msgid "Free TV"
 msgstr "Ingyenes TV"
 
-#: src/ashytv/ui/pages/lists_page.py:69
+#: src/ashytv/ui/pages/lists_page.py:71
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:80
+#: src/ashytv/ui/pages/lists_page.py:82
 msgid "Playlist name"
 msgstr "Lejátszási lista neve"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:338
-#: src/ashytv/ui/pages/lists_page.py:402 src/ashytv/ui/pages/lists_page.py:409
+#: src/ashytv/ui/pages/lists_page.py:83 src/ashytv/ui/pages/lists_page.py:351
+#: src/ashytv/ui/pages/lists_page.py:415 src/ashytv/ui/pages/lists_page.py:422
 msgid "My Playlist"
 msgstr "Saját lejátszási listám"
 
-#: src/ashytv/ui/pages/lists_page.py:88
+#: src/ashytv/ui/pages/lists_page.py:90
 msgid "Choose .m3u file…"
 msgstr "Válasszon .m3u fájlt…"
 
-#: src/ashytv/ui/pages/lists_page.py:90 src/ashytv/ui/pages/lists_page.py:258
+#: src/ashytv/ui/pages/lists_page.py:92 src/ashytv/ui/pages/lists_page.py:260
 msgid "No file selected"
 msgstr "Nincs kiválasztott fájl"
 
-#: src/ashytv/ui/pages/lists_page.py:96
+#: src/ashytv/ui/pages/lists_page.py:98
 msgid "File"
 msgstr "Fájl"
 
-#: src/ashytv/ui/pages/lists_page.py:101
+#: src/ashytv/ui/pages/lists_page.py:103
 msgid "Server (URL)"
 msgstr "Kiszolgáló (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:104
+#: src/ashytv/ui/pages/lists_page.py:106
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: src/ashytv/ui/pages/lists_page.py:105
+#: src/ashytv/ui/pages/lists_page.py:107
 msgid "your_username"
 msgstr "az_ön_felhasználóneve"
 
-#: src/ashytv/ui/pages/lists_page.py:106
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "Password"
 msgstr "Jelszó"
 
-#: src/ashytv/ui/pages/lists_page.py:107
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "your_password"
 msgstr "az_ön_jelszava"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:111
 msgid "Paste provider message"
 msgstr "Szolgáltatói üzenet beillesztése"
 
-#: src/ashytv/ui/pages/lists_page.py:111
+#: src/ashytv/ui/pages/lists_page.py:113
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -547,19 +547,19 @@ msgstr ""
 "Illessze be a szolgáltató üdvözlő üzenetét: a kiszolgáló, a felhasználónév "
 "és a jelszó automatikusan kitöltődik"
 
-#: src/ashytv/ui/pages/lists_page.py:119
+#: src/ashytv/ui/pages/lists_page.py:121
 msgid "Playlist URL (M3U)"
 msgstr "Lejátszási lista URL-je (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:136
+#: src/ashytv/ui/pages/lists_page.py:138
 msgid "Save and Connect"
 msgstr "Mentés és csatlakozás"
 
-#: src/ashytv/ui/pages/lists_page.py:153
+#: src/ashytv/ui/pages/lists_page.py:155
 msgid "Secure Connection"
 msgstr "Biztonságos kapcsolat"
 
-#: src/ashytv/ui/pages/lists_page.py:155
+#: src/ashytv/ui/pages/lists_page.py:157
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -567,23 +567,23 @@ msgstr ""
 "Adatait csak az Ön eszköze tárolja. A jelszavak a rendszer kulcstartójában "
 "vannak."
 
-#: src/ashytv/ui/pages/lists_page.py:167
+#: src/ashytv/ui/pages/lists_page.py:169
 msgid "Your Playlists"
 msgstr "Lejátszási listái"
 
-#: src/ashytv/ui/pages/lists_page.py:189
+#: src/ashytv/ui/pages/lists_page.py:191
 msgid "All countries"
 msgstr "Minden ország"
 
-#: src/ashytv/ui/pages/lists_page.py:189
+#: src/ashytv/ui/pages/lists_page.py:191
 msgid "All countries, grouped by category"
 msgstr "Minden ország, kategóriánként"
 
-#: src/ashytv/ui/pages/lists_page.py:198
+#: src/ashytv/ui/pages/lists_page.py:200
 msgid "Channels from"
 msgstr "Csatornák innen"
 
-#: src/ashytv/ui/pages/lists_page.py:201
+#: src/ashytv/ui/pages/lists_page.py:203
 msgid ""
 "Free channels from iptv-org, a community list of streams that broadcasters "
 "make publicly available. AshyTV does not host or control them, and some may "
@@ -593,58 +593,66 @@ msgstr ""
 "nyilvánosan elérhetővé tett adások közösségi listája. Az AshyTV nem tárolja "
 "és nem felügyeli őket, és némelyik elérhetetlen lehet."
 
-#: src/ashytv/ui/pages/lists_page.py:207
+#: src/ashytv/ui/pages/lists_page.py:209
 msgid "About iptv-org"
 msgstr "Az iptv-org-ról"
 
-#: src/ashytv/ui/pages/lists_page.py:213
+#: src/ashytv/ui/pages/lists_page.py:215
 #, python-brace-format
 msgid "Free TV – {where}"
 msgstr "Ingyenes TV – {where}"
 
-#: src/ashytv/ui/pages/lists_page.py:250
+#: src/ashytv/ui/pages/lists_page.py:252
 msgid "Add Another Playlist"
 msgstr "Újabb lejátszási lista hozzáadása"
 
-#: src/ashytv/ui/pages/lists_page.py:279
+#: src/ashytv/ui/pages/lists_page.py:281
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:280
+#: src/ashytv/ui/pages/lists_page.py:282
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} elem"
 msgstr[1] "{n} elem"
 
-#: src/ashytv/ui/pages/lists_page.py:282
+#: src/ashytv/ui/pages/lists_page.py:285
+msgid "Disabled"
+msgstr "Kikapcsolva"
+
+#: src/ashytv/ui/pages/lists_page.py:287
 #, python-brace-format
 msgid "updated {when}"
 msgstr "frissítve: {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:288
+#: src/ashytv/ui/pages/lists_page.py:293
 #, python-brace-format
 msgid "expires {when}"
 msgstr "lejár: {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:289
+#: src/ashytv/ui/pages/lists_page.py:294
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "lejárt: {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:304
+#: src/ashytv/ui/pages/lists_page.py:312
+msgid "Show this playlist's channels"
+msgstr "A lejátszási lista csatornáinak megjelenítése"
+
+#: src/ashytv/ui/pages/lists_page.py:316
 msgid "Refresh playlist"
 msgstr "Lejátszási lista frissítése"
 
-#: src/ashytv/ui/pages/lists_page.py:308
+#: src/ashytv/ui/pages/lists_page.py:320
 msgid "Remove playlist"
 msgstr "Lejátszási lista eltávolítása"
 
-#: src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:330
 msgid "Remove playlist?"
 msgstr "Eltávolítja a lejátszási listát?"
 
-#: src/ashytv/ui/pages/lists_page.py:318
+#: src/ashytv/ui/pages/lists_page.py:331
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -653,47 +661,47 @@ msgstr ""
 "A(z) „{name}” és minden csatornája, kedvence és előzménye el lesz távolítva "
 "erről az eszközről."
 
-#: src/ashytv/ui/pages/lists_page.py:320
+#: src/ashytv/ui/pages/lists_page.py:333
 #: src/ashytv/ui/pages/recordings_page.py:85
 #: src/ashytv/ui/pages/settings_page.py:391
 msgid "Cancel"
 msgstr "Mégse"
 
-#: src/ashytv/ui/pages/lists_page.py:321
+#: src/ashytv/ui/pages/lists_page.py:334
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: src/ashytv/ui/pages/lists_page.py:343
+#: src/ashytv/ui/pages/lists_page.py:356
 msgid "Select M3U playlist"
 msgstr "M3U lejátszási lista kiválasztása"
 
-#: src/ashytv/ui/pages/lists_page.py:345
+#: src/ashytv/ui/pages/lists_page.py:358
 msgid "M3U Playlists"
 msgstr "M3U lejátszási listák"
 
-#: src/ashytv/ui/pages/lists_page.py:382
+#: src/ashytv/ui/pages/lists_page.py:395
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "A másolt szövegben nem található kiszolgáló, felhasználónév és jelszó."
 
-#: src/ashytv/ui/pages/lists_page.py:388
+#: src/ashytv/ui/pages/lists_page.py:401
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "A szolgáltatói adatok kitöltve. Ellenőrizze őket, majd kattintson a „Mentés "
 "és csatlakozás” gombra."
 
-#: src/ashytv/ui/pages/lists_page.py:400
+#: src/ashytv/ui/pages/lists_page.py:413
 msgid "Choose an .m3u file."
 msgstr "Válasszon egy .m3u fájlt."
 
-#: src/ashytv/ui/pages/lists_page.py:406
+#: src/ashytv/ui/pages/lists_page.py:419
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Adjon meg egy http:// vagy https:// kezdetű URL-t."
 
-#: src/ashytv/ui/pages/lists_page.py:419
+#: src/ashytv/ui/pages/lists_page.py:432
 msgid "Fill in server, username and password."
 msgstr "Töltse ki a kiszolgálót, a felhasználónevet és a jelszót."
 
-#: src/ashytv/ui/pages/lists_page.py:421
+#: src/ashytv/ui/pages/lists_page.py:434
 msgid "Xtream Provider"
 msgstr "Xtream-szolgáltató"
 
@@ -1364,138 +1372,138 @@ msgstr "A legjobb filmek az Ön számára"
 msgid "Your favorite series in one place"
 msgstr "Kedvenc sorozatai egy helyen"
 
-#: src/ashytv/window.py:395
+#: src/ashytv/window.py:396
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr ""
 "A lejátszó nem érhető el: telepítse az mpv-t és a python-mpv-t ({error})"
 
-#: src/ashytv/window.py:433
+#: src/ashytv/window.py:434
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Nincs {number}. csatorna"
 
-#: src/ashytv/window.py:459
+#: src/ashytv/window.py:460
 msgid "Next episode…"
 msgstr "Következő epizód…"
 
-#: src/ashytv/window.py:483
+#: src/ashytv/window.py:484
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Nem sikerült megnyitni: {error}"
 
-#: src/ashytv/window.py:487
+#: src/ashytv/window.py:488
 msgid "This item is no longer in the playlist."
 msgstr "Ez az elem már nincs a lejátszási listában."
 
-#: src/ashytv/window.py:518
+#: src/ashytv/window.py:519
 msgid "Added to favorites"
 msgstr "Hozzáadva a kedvencekhez"
 
-#: src/ashytv/window.py:518
+#: src/ashytv/window.py:519
 msgid "Removed from favorites"
 msgstr "Eltávolítva a kedvencek közül"
 
-#: src/ashytv/window.py:619
+#: src/ashytv/window.py:620
 msgid "Please wait: an import is already in progress."
 msgstr "Kérjük, várjon: már folyamatban van egy importálás."
 
-#: src/ashytv/window.py:636
+#: src/ashytv/window.py:637
 msgid "Importing playlist…"
 msgstr "Lejátszási lista importálása…"
 
-#: src/ashytv/window.py:649
+#: src/ashytv/window.py:650
 msgid "Connecting to the Xtream provider…"
 msgstr "Csatlakozás az Xtream-szolgáltatóhoz…"
 
-#: src/ashytv/window.py:666
+#: src/ashytv/window.py:667
 msgid "Provider password not found; add the playlist again."
 msgstr ""
 "A szolgáltató jelszava nem található; adja hozzá újra a lejátszási listát."
 
-#: src/ashytv/window.py:670
+#: src/ashytv/window.py:671
 msgid "Updating playlist…"
 msgstr "Lejátszási lista frissítése…"
 
-#: src/ashytv/window.py:690
+#: src/ashytv/window.py:691
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "A(z) „{name}” lejátszási lista frissítve."
 
-#: src/ashytv/window.py:694
+#: src/ashytv/window.py:695
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} elem importálva."
 msgstr[1] "{n} elem importálva."
 
-#: src/ashytv/window.py:695
+#: src/ashytv/window.py:696
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "A lejátszási lista kész: {n} elem."
 msgstr[1] "A lejátszási lista kész: {n} elem."
 
-#: src/ashytv/window.py:716
+#: src/ashytv/window.py:717
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Nem sikerült frissíteni: „{name}”: {error}"
 
-#: src/ashytv/window.py:720
+#: src/ashytv/window.py:721
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Sikertelen: {error}"
 
-#: src/ashytv/window.py:721
+#: src/ashytv/window.py:722
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Az importálás sikertelen: {error}"
 
-#: src/ashytv/window.py:727
+#: src/ashytv/window.py:728
 msgid "Please wait for the import to finish."
 msgstr "Kérjük, várja meg az importálás végét."
 
-#: src/ashytv/window.py:740
+#: src/ashytv/window.py:741
 msgid "Playlist removed."
 msgstr "Lejátszási lista eltávolítva."
 
-#: src/ashytv/window.py:789
+#: src/ashytv/window.py:801
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "A műsorújság (EPG) nem érhető el: {error}"
 
-#: src/ashytv/window.py:824
+#: src/ashytv/window.py:836
 msgid "Programme"
 msgstr "Műsor"
 
-#: src/ashytv/window.py:828
+#: src/ashytv/window.py:840
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Emlékeztetni fogjuk: „{title}”, ekkor: {time}"
 
-#: src/ashytv/window.py:829
+#: src/ashytv/window.py:841
 msgid "Reminder cancelled"
 msgstr "Emlékeztető törölve"
 
-#: src/ashytv/window.py:841
+#: src/ashytv/window.py:853
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "„{title}” hamarosan kezdődik itt: {channel}"
 
-#: src/ashytv/window.py:843
+#: src/ashytv/window.py:855
 msgid "AshyTV reminder"
 msgstr "AshyTV emlékeztető"
 
-#: src/ashytv/window.py:862
+#: src/ashytv/window.py:874
 msgid "This channel is no longer in your playlists."
 msgstr "Ez a csatorna már nincs a lejátszási listái között."
 
-#: src/ashytv/window.py:877
+#: src/ashytv/window.py:889
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "„{name}” csoport elrejtve"
 
-#: src/ashytv/window.py:878
+#: src/ashytv/window.py:890
 msgid "Undo"
 msgstr "Visszavonás"
 

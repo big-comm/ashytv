@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 3
+_SCHEMA_VERSION = 4
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -58,6 +58,9 @@ class Storage:
         self.hidden_groups: set[str] = set()
         self.group_order: list[str] = []
         self._migrate()
+        # Playlists switched off in the Playlists page: kept, but not shown.
+        self.disabled: set[int] = {
+            r["id"] for r in self.db.execute("SELECT id FROM playlist WHERE enabled = 0")}
 
     def close(self) -> None:
         self.db.close()
@@ -96,7 +99,8 @@ class Storage:
             """
         )
         self._add_columns("playlist", {"updated_at": "INTEGER DEFAULT 0",
-                                       "meta": "TEXT DEFAULT '{}'"})
+                                       "meta": "TEXT DEFAULT '{}'",
+                                       "enabled": "INTEGER DEFAULT 1"})
         self._add_columns("channel", {
             "num": "INTEGER DEFAULT 0",
             "name_key": "TEXT DEFAULT ''",
@@ -248,11 +252,28 @@ class Storage:
         now = now or time.time()
         due = []
         for row in self.list_playlists():
+            if not row["enabled"]:
+                continue
             meta = self.playlist_meta(int(row["id"]))
             last = max(row["updated_at"] or 0, int(meta.get("refresh_failed_at", 0)))
             if now - last > max_age:
                 due.append((last, int(row["id"])))
         return [pid for _last, pid in sorted(due)]
+
+    def set_playlist_enabled(self, playlist_id: int, enabled: bool) -> None:
+        self.db.execute("UPDATE playlist SET enabled = ? WHERE id = ?",
+                        (int(enabled), playlist_id))
+        self.db.commit()
+        if enabled:
+            self.disabled.discard(playlist_id)
+        else:
+            self.disabled.add(playlist_id)
+
+    def _enabled_sql(self, column: str) -> str:
+        """SQL condition excluding the disabled playlists ("" if none)."""
+        if not self.disabled:
+            return ""
+        return f"{column} NOT IN ({','.join(str(int(i)) for i in sorted(self.disabled))})"
 
     def has_playlists(self) -> bool:
         return self.db.execute("SELECT 1 FROM playlist LIMIT 1").fetchone() is not None
@@ -323,6 +344,8 @@ class Storage:
 
     def _where(self, media_type, favorites, group, search, groups=None):
         clauses, params = [], []
+        if self.disabled:
+            clauses.append(self._enabled_sql("c.playlist_id"))
         if media_type is not None:
             clauses.append("c.media_type = ?")
             params.append(media_type.value)
@@ -520,11 +543,15 @@ class Storage:
         self.db.commit()
 
     def history(self, limit: int = 20, media_type: MediaType | None = None) -> list:
-        sql = "SELECT * FROM history"
-        params: list = []
+        clauses, params = [], []
+        if self.disabled:
+            clauses.append(self._enabled_sql("playlist_id"))
         if media_type is not None:
-            sql += " WHERE media_type = ?"
+            clauses.append("media_type = ?")
             params.append(media_type.value)
+        sql = "SELECT * FROM history"
+        if clauses:
+            sql += " WHERE " + " AND ".join(clauses)
         sql += " ORDER BY watched_at DESC LIMIT ?"
         params.append(limit)
         return self.db.execute(sql, params).fetchall()
@@ -548,7 +575,8 @@ class Storage:
                 FROM history h
                 JOIN channel c ON c.playlist_id = h.playlist_id AND c.url = h.url
                 LEFT JOIN favorite f ON f.playlist_id = c.playlist_id AND f.url = c.url
-                WHERE h.media_type = ?
+                WHERE h.media_type = ? {"AND " + self._enabled_sql("h.playlist_id")
+                                        if self.disabled else ""}
                 ORDER BY h.watched_at DESC LIMIT {int(limit)}""",
             (media_type.value,),
         ).fetchall()

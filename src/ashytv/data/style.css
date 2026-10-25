@@ -287,6 +287,9 @@ button.ashy-epg-cell.now {
   background-color: var(--ashy-panel-2); border-radius: 12px;
   min-width: 40px; min-height: 40px;
 }
+.ashy-row-off .title, .ashy-row-off .subtitle, .ashy-row-off .ashy-field-icon {
+  opacity: 0.5;
+}
 .ashy-field-title { font-size: 12px; font-weight: 600; }
 entry.ashy-entry, passwordentry.ashy-entry {
   background-color: var(--ashy-panel); border: 1px solid var(--ashy-border);

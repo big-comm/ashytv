@@ -116,7 +116,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 3
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 4
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -190,3 +190,23 @@ def test_hidden_and_reordered_groups(tmp_path):
     assert [c.name for c in db.channels(MediaType.LIVE, group="Sports")] == ["2"]
     db.group_order = ["Kids"]
     assert [g for g, _n in db.groups(MediaType.LIVE)] == ["Kids", "News"]
+
+
+def test_disabled_playlist_is_hidden_but_kept(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    p1 = db.add_playlist("One", "s1")
+    p2 = db.add_playlist("Two", "s2")
+    db.replace_channels(p1, [_ch("A", "u/a")])
+    db.replace_channels(p2, [_ch("B", "u/b")])
+    db.record_history(p2, "u/b", MediaType.LIVE, "B")
+    db.set_playlist_enabled(p2, False)
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["A"]
+    assert db.count(MediaType.LIVE) == 1
+    assert db.history() == [] and db.recent_channels(MediaType.LIVE) == []
+    assert db.stale_playlists(0, now=10**10) == [p1]
+    # Remembered across restarts; channels come back when enabled again.
+    db.close()
+    db = Storage(tmp_path / "t.db")
+    assert db.disabled == {p2} and db.count_channels(p2) == 1
+    db.set_playlist_enabled(p2, True)
+    assert db.count(MediaType.LIVE) == 2

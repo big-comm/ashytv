@@ -194,6 +194,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         lists.connect("xtream-requested", self._on_xtream_requested)
         lists.connect("refresh-requested", lambda _w, pid: self._refresh_playlist(pid))
         lists.connect("delete-requested", self._on_delete_requested)
+        lists.connect("enabled-changed", self._on_playlist_enabled)
 
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
@@ -743,6 +744,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._epg_source = ""
             self.root_stack.set_visible_child_name("welcome")
 
+    def _on_playlist_enabled(self, _w, playlist_id: int, enabled: bool) -> None:
+        if not enabled and self.player is not None and self.player.item is not None \
+                and self.player.item.playlist_id == playlist_id:
+            self.player.close()
+        self.storage.set_playlist_enabled(playlist_id, enabled)
+        self._invalidate_pages()
+        self._epg_source = ""
+        self._autoload_epg(force_id=playlist_id if enabled else None)
+
     def _auto_refresh(self) -> bool:
         if self.settings.get("auto_refresh"):
             max_age = int(self.settings.get("refresh_hours")) * 3600
@@ -765,6 +775,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if force_id is not None:
             rows.sort(key=lambda r: r["id"] != force_id)
         for row in rows:
+            if not row["enabled"]:
+                continue
             url = ""
             prov = self._providers.get(int(row["id"]))
             if prov is not None and prov.password:
