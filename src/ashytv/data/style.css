@@ -187,6 +187,8 @@ button.ashy-card:hover { background-color: var(--ashy-panel-2); border-color: al
 }
 .ashy-hero-title { font-size: 30px; font-weight: 800; color: #fff; }
 .ashy-hero-sub { color: alpha(#fff, 0.78); }
+.ashy-hero-orig { color: alpha(#fff, 0.85); font-weight: 600; }
+.ashy-facts label.dim-label { min-width: 90px; }
 .ashy-hero .ashy-faint { color: alpha(#fff, 0.6); }
 carouselindicatordots { color: #fff; }
 

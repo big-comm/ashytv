@@ -14,6 +14,7 @@ import mpv
 from gi.repository import GLib, GObject, Gtk
 
 from ..i18n import _
+from ..services import languages
 
 # Resolve OpenGL function pointers via EGL (GTK4 uses EGL on Wayland and, by
 # default, on X11 too). If libEGL is missing, try GLX.
@@ -100,6 +101,17 @@ class MpvWidget(Gtk.GLArea):
             network_timeout="20",
             user_agent="AshyTV",
         )
+        # Audio and subtitles in the user's language when the file has them;
+        # subtitles are not forced on when the audio is already in it.
+        preferred = ",".join(languages.preferred_codes())
+        if preferred:
+            self._mpv["alang"] = preferred
+            self._mpv["slang"] = preferred
+        try:
+            self._mpv["subs-with-matching-audio"] = "forced"
+        except Exception:  # older mpv: yes/no only
+            pass
+        self._pending_subs: list[str] = []
         self._ctx: mpv.MpvRenderContext | None = None
         self._state = "idle"
         self._duration = 0.0
@@ -196,6 +208,7 @@ class MpvWidget(Gtk.GLArea):
             GLib.idle_add(self._set_state, "loading")
         elif eid == mpv.MpvEventID.FILE_LOADED:
             GLib.idle_add(self._set_state, "paused" if self._mpv_pause() else "playing")
+            GLib.idle_add(self._add_pending_subs)
         elif eid == mpv.MpvEventID.END_FILE:
             reason = event.data.reason
             if reason == mpv.MpvEventEndFile.ERROR:
@@ -254,8 +267,22 @@ class MpvWidget(Gtk.GLArea):
     def state(self) -> str:
         return self._state
 
+    def _add_pending_subs(self) -> bool:
+        subs, self._pending_subs = self._pending_subs, []
+        for url in subs:
+            try:
+                self._mpv.command("sub-add", url, "auto")
+            except Exception:
+                pass  # a broken subtitle link must not stop the video
+        return GLib.SOURCE_REMOVE
+
+    def add_subtitle(self, path: str) -> None:
+        """Load a subtitle file (local path or URL) and show it."""
+        self._mpv.command("sub-add", path, "select")
+
     def play(self, url: str, start: float = 0, user_agent: str = "",
-             referrer: str = "") -> None:
+             referrer: str = "", sub_files: list[str] | tuple = ()) -> None:
+        self._pending_subs = list(sub_files)
         options = {}
         if start > 0:
             options["start"] = f"+{start:.0f}"
@@ -350,10 +377,7 @@ class MpvWidget(Gtk.GLArea):
         for t in self._mpv.track_list or []:
             if t.get("type") != kind:
                 continue
-            parts = [t.get("title") or "", t.get("lang") or ""]
-            label = " — ".join(p for p in parts if p) or _("Track {number}").format(
-                number=t.get("id"))
-            out.append((int(t["id"]), label, bool(t.get("selected"))))
+            out.append((int(t["id"]), track_label(t), bool(t.get("selected"))))
         return out
 
     def set_track(self, kind: str, track_id: int | None) -> None:
@@ -369,3 +393,33 @@ class MpvWidget(Gtk.GLArea):
     def record(self, path: str | None) -> None:
         """Record the current stream to `path` (None to stop)."""
         self._mpv["stream-record"] = path or ""
+
+
+_CHANNELS = {1: "1.0", 2: "2.0", 6: "5.1", 8: "7.1"}
+
+
+def track_label(track: dict) -> str:
+    """'Portuguese — Dub — AAC 5.1' from an mpv track-list entry."""
+    lang = languages.language_name(track.get("lang") or "")
+    title = (track.get("title") or "").strip()
+    parts = [lang] if lang else []
+    if title and title.casefold() != lang.casefold():
+        parts.append(title)
+    head = " — ".join(parts)
+    tech = []
+    if track.get("codec"):
+        tech.append(str(track["codec"]).upper().replace("SUBRIP", "SRT"))
+    channels = track.get("demux-channel-count") or track.get("audio-channels")
+    if channels:
+        tech.append(_CHANNELS.get(int(channels), f"{channels} ch"))
+    flags = []
+    if track.get("forced"):
+        flags.append(_("forced"))
+    if track.get("external"):
+        flags.append(_("external"))
+    label = head or _("Track {number}").format(number=track.get("id"))
+    if tech:
+        label += " — " + " ".join(tech)
+    if flags:
+        label += f" ({', '.join(flags)})"
+    return label

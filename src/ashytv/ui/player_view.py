@@ -6,7 +6,7 @@ import os
 import re
 import time
 
-from gi.repository import Adw, Gdk, GLib, GObject, Graphene, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Graphene, Gtk
 
 from ..i18n import _
 from ..models import PlayItem
@@ -316,7 +316,7 @@ class PlayerView(Gtk.Overlay):
             item.url, item.user_agent, item.referrer = (
                 variant.url, variant.user_agent, variant.referrer)
         self.mpv.play(item.url, start=item.start, user_agent=item.user_agent,
-                      referrer=item.referrer)
+                      referrer=item.referrer, sub_files=item.sub_files)
         self.play_btn.set_icon_name("media-playback-pause-symbolic")
         self._show_controls()
 
@@ -894,7 +894,33 @@ class PlayerView(Gtk.Overlay):
             note = Gtk.Label(label=_("No subtitles in this video."), margin_start=6)
             note.add_css_class("dim-label")
             box.append(note)
-        return Gtk.Popover(child=box)
+        popover = Gtk.Popover(child=box)
+        if self._item is not None and not self._item.is_live:
+            load = Gtk.Button(label=_("Load subtitle file…"), margin_top=6)
+            load.add_css_class("flat")
+            load.connect("clicked", lambda *_: (popover.popdown(), self._choose_subtitle()))
+            box.append(load)
+        return popover
+
+    def _choose_subtitle(self) -> None:
+        dialog = Gtk.FileDialog(title=_("Load subtitle file"))
+        filt = Gtk.FileFilter()
+        filt.set_name(_("Subtitles"))
+        for pattern in ("*.srt", "*.ass", "*.ssa", "*.vtt", "*.sub", "*.smi"):
+            filt.add_pattern(pattern)
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(filt)
+        dialog.set_filters(filters)
+        dialog.open(self.get_root(), None, self._subtitle_chosen)
+
+    def _subtitle_chosen(self, dialog, result) -> None:
+        try:
+            file = dialog.open_finish(result)
+        except GLib.Error:
+            return  # cancelled
+        if file is not None and file.get_path():
+            self.mpv.add_subtitle(file.get_path())
+            self._flash(_("Subtitles: {name}").format(name=file.get_basename()))
 
     def _options_popover(self) -> Gtk.Popover:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -905,7 +931,7 @@ class PlayerView(Gtk.Overlay):
                         for i, v in enumerate(self._item.variants)]
             box.append(self._radio_list(_("Quality"), options, self._choose_quality))
         audio = self.mpv.tracks("audio")
-        if len(audio) > 1:
+        if audio:  # shown even with one track: tells which audio is playing
             box.append(self._radio_list(
                 _("Audio"), [(label, tid, sel) for tid, label, sel in audio],
                 lambda v: self.mpv.set_track("audio", v)))

@@ -84,6 +84,9 @@ series in a fast, good-looking app.
 - **Movies & series** catalog with posters, ratings, years, new releases,
   trending, search and categories; series with seasons, episodes and an
   automatic next episode.
+- **Movie details** like a media center: synopsis, original title,
+  duration and "ends at", director, cast, genres, country, release date,
+  video/audio info, trailer and TMDB links (Xtream `get_vod_info`).
 - **Continue watching**: movies and episodes resume where you stopped.
 
 **Player** (libmpv)
@@ -97,8 +100,11 @@ series in a fast, good-looking app.
   live you are and jump back with **Go live**.
 - Type a channel number like on a TV remote; jump back to the last channel.
 - Hardware decoding and a configurable network buffer.
-- Channel zapping, ±10 s seeking, volume, subtitles, audio tracks, aspect
-  ratio and playback speed.
+- Channel zapping, ±10 s seeking, volume, aspect ratio and playback speed.
+- **Audio and subtitle tracks** with language names (CC and ⚙ buttons);
+  your language is picked automatically when the file has it, provider
+  subtitles are added, and you can load a subtitle file (`.srt`, `.ass`,
+  `.vtt`…).
 - Program info and progress bar on live channels.
 - **Picture-in-picture** mini player and **recording** of live streams.
 - Auto-hiding controls and cursor; clear loading and error states.

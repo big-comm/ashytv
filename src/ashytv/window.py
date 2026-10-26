@@ -15,7 +15,12 @@ from .services.quality import quality_label
 from .services.gamepad import GamepadInput
 from .services.reminders import Reminder, ReminderBook
 from .services.storage import Storage, collapse_variants
-from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
+from .services.xtream_client import (
+    XtreamProvider,
+    normalize_host,
+    series_episodes,
+    vod_info,
+)
 from .ui import keynav
 from .ui.detail_dialog import DetailDialog
 from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
@@ -57,6 +62,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._importing = False
         self._quiet_id = 0
         self._focus_before_player: Gtk.Widget | None = None
+        self._vod_info: dict[tuple[int, str], dict] = {}
         self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
 
@@ -338,7 +344,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
             playlist_id=channel.playlist_id, logo=channel.logo, tvg_id=channel.tvg_id,
             number=number, start=start, channel=channel,
             subtitle=" • ".join(p for p in (channel.year, channel.genre) if p),
-            user_agent=channel.user_agent, referrer=channel.referrer)
+            user_agent=channel.user_agent, referrer=channel.referrer,
+            sub_files=self._vod_info.get((channel.playlist_id, channel.ext_id), {})
+            .get("subtitles", []))
         self._start(item, can_zap=self._zap is not None)
 
     def _play_episode(self, series: Channel, episode: Episode, episodes: list[Episode],
@@ -567,7 +575,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
     # ---- details / series ---------------------------------------------
 
     def _open_detail(self, channel: Channel) -> None:
-        dialog = DetailDialog(self.storage, channel, self._with_episodes)
+        dialog = DetailDialog(self.storage, channel, self._with_episodes,
+                              self._with_vod_info)
         dialog.connect("play", self._on_detail_play)
         dialog.connect("favorite-changed", self._on_favorite_changed)
         dialog.present(self)
@@ -597,6 +606,32 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 GLib.idle_add(self._episodes_done, series, None, exc, on_done, on_error)
                 return
             GLib.idle_add(self._episodes_done, series, eps, None, on_done, on_error)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _with_vod_info(self, movie: Channel, on_done, on_error) -> None:
+        """Movie details from the Xtream API (synopsis, cast…), cached per run."""
+        key = (movie.playlist_id, movie.ext_id)
+        if key in self._vod_info:
+            on_done(self._vod_info[key])
+            return
+        prov = self._providers.get(movie.playlist_id)
+        if prov is None or not movie.ext_id or movie.media_type is not MediaType.MOVIE:
+            on_done({})
+            return
+
+        def worker():
+            try:
+                info = vod_info(prov, movie.ext_id)
+            except Exception as exc:
+                GLib.idle_add(lambda e=exc: on_error(e) and False)
+                return
+
+            def done():
+                self._vod_info[key] = info
+                on_done(info)
+                return GLib.SOURCE_REMOVE
+            GLib.idle_add(done)
 
         threading.Thread(target=worker, daemon=True).start()
 

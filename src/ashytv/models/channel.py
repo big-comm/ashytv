@@ -108,6 +108,7 @@ class PlayItem:
     user_agent: str = ""
     referrer: str = ""
     variants: list[Variant] = field(default_factory=list)  # best quality first
+    sub_files: list[str] = field(default_factory=list)  # provider subtitle URLs
 
     @property
     def is_live(self) -> bool:

@@ -227,6 +227,32 @@ PLOTS = [
 ]
 
 
+DIRECTORS = ["Mara Ellison", "Tomas Reyes", "Ingrid Vale", "Hugo Marlowe"]
+ACTORS = ["Ana Bright", "Leo Hart", "Sofia Lane", "Mateo Cruz", "Nina Holt",
+          "Victor Shaw", "Clara Moss", "Diego Stone", "Ruth Kim", "Owen Park"]
+
+
+def vod_info(item: dict) -> dict:
+    """Movie details, all fictional (no real people or titles)."""
+    rng = _rng(item["name"] + "info")
+    year = item["year"]
+    return {"info": {
+        "name": item["name"], "o_name": item["name"],
+        "plot": f"{item['name']} follows a small crew through one long, strange "
+                "night. A fictional story made for the AshyTV demo server.",
+        "director": rng.choice(DIRECTORS),
+        "cast": ", ".join(rng.sample(ACTORS, 4)),
+        "genre": MOVIE_GENRES[(item["stream_id"] - 500) % len(MOVIE_GENRES)],
+        "country": "Demoland",
+        "release_date": f"{year}-0{rng.randint(1, 9)}-1{rng.randint(0, 9)}",
+        "duration_secs": rng.randint(85, 140) * 60,
+        "rating": item["rating"],
+        "video": {"codec_name": "h264", "width": 1920, "height": 1080},
+        "audio": {"codec_name": "aac", "channels": 6, "tags": {"language": "eng"}},
+        "subtitles": [],
+    }, "movie_data": {"stream_id": item["stream_id"], "name": item["name"]}}
+
+
 def series_info(item: dict) -> dict:
     eps = {}
     for season in (1, 2):
@@ -350,6 +376,10 @@ class Handler(BaseHTTPRequestHandler):
             "get_vod_streams": cat["movies"],
             "get_series": cat["series"],
         }
+        if action == "get_vod_info":
+            item = next((m for m in cat["movies"]
+                         if str(m["stream_id"]) == qs.get("vod_id")), None)
+            return self._json(vod_info(item) if item else {})
         if action == "get_series_info":
             item = next((s for s in cat["series"]
                          if str(s["series_id"]) == qs.get("series_id")), None)

@@ -14,7 +14,7 @@ from urllib.parse import parse_qs, quote, urlencode, urlparse
 
 from ..i18n import _
 from ..models import Channel, Episode, MediaType
-from . import http
+from . import http, languages
 from .text import episode_title
 
 # get.php?username=...&password=... — the most reliable way to extract everything.
@@ -304,6 +304,73 @@ def parse_series_info(data: dict) -> list[Episode]:
             ))
     episodes.sort(key=lambda e: (e.season, e.episode))
     return episodes
+
+
+def _media_line(stream) -> str:
+    """ffprobe-style stream info -> '1080p H264' / 'AAC 5.1 (por)'."""
+    if not isinstance(stream, dict):
+        return ""
+    codec = str(stream.get("codec_name") or "").upper()
+    if stream.get("height"):
+        return f"{_int(stream['height'])}p {codec}".strip()
+    channels = _int(stream.get("channels"))
+    layout = {1: "1.0", 2: "2.0", 6: "5.1", 8: "7.1"}.get(channels, "")
+    tags = stream.get("tags") if isinstance(stream.get("tags"), dict) else {}
+    lang = languages.language_name(str(tags.get("language") or ""))
+    return " ".join(p for p in (codec, layout, f"— {lang}" if lang else "") if p)
+
+
+def _text(value) -> str:
+    if isinstance(value, list):
+        value = ", ".join(str(v) for v in value if v)
+    return str(value or "").strip()
+
+
+def parse_vod_info(data: dict) -> dict:
+    """get_vod_info -> the details shown for a movie (missing keys are '')."""
+    info = data.get("info") if isinstance(data, dict) else None
+    if not isinstance(info, dict):
+        return {}
+    backdrop = info.get("backdrop_path") or ""
+    if isinstance(backdrop, list):
+        backdrop = backdrop[0] if backdrop else ""
+    trailer = _text(info.get("youtube_trailer"))
+    if trailer and "://" not in trailer:
+        trailer = f"https://www.youtube.com/watch?v={trailer}"
+    tmdb = _text(info.get("tmdb_id"))
+    subtitles = info.get("subtitles") if isinstance(info.get("subtitles"), list) else []
+    return {
+        "plot": _text(info.get("plot") or info.get("description")),
+        "original_title": _text(info.get("o_name")),
+        "director": _text(info.get("director")),
+        "cast": _text(info.get("cast") or info.get("actors")),
+        "genre": _text(info.get("genre")),
+        "country": _text(info.get("country")),
+        "released": _text(info.get("release_date") or info.get("releasedate")),
+        "duration": _int(info.get("duration_secs")),
+        "rating": _float(info.get("rating")),
+        "age": _text(info.get("mpaa_rating") or info.get("age")),
+        "backdrop": _text(backdrop),
+        "trailer": trailer,
+        "tmdb_url": f"https://www.themoviedb.org/movie/{tmdb}" if tmdb.isdigit() else "",
+        "video": _media_line(info.get("video")),
+        "audio": _media_line(info.get("audio")),
+        "subtitles": [s for s in (_subtitle_url(x) for x in subtitles) if s],
+    }
+
+
+def _subtitle_url(item) -> str:
+    if isinstance(item, str):
+        return item if item.startswith(("http://", "https://")) else ""
+    if isinstance(item, dict):
+        url = str(item.get("url") or item.get("file") or "")
+        return url if url.startswith(("http://", "https://")) else ""
+    return ""
+
+
+def vod_info(provider: XtreamProvider, vod_id: str) -> dict:
+    data = http.fetch_json(provider.api_url("get_vod_info", vod_id=vod_id), timeout=30)
+    return parse_vod_info(data)
 
 
 def series_episodes(provider: XtreamProvider, series_id: str) -> list[Episode]:
