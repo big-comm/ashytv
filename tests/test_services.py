@@ -89,6 +89,7 @@ def test_logo_callbacks_for_same_url_are_all_called(loader, monkeypatch):
     monkeypatch.setattr(logos.GdkPixbuf.Pixbuf, "new_from_file_at_scale",
                         lambda *_a: "pixbuf")
     monkeypatch.setattr(logos, "_texture_from_pixbuf", lambda p: f"tex:{p}")
+    monkeypatch.setattr(loader, "_save_thumb", lambda *_a: None)
     got = []
     loader.load("http://logo", got.append, 40)
     loader.load("http://logo", got.append, 40)  # same logo on another channel
