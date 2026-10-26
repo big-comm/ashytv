@@ -110,6 +110,10 @@ class DetailDialog(Adw.Dialog):
         body.set_margin_bottom(24)
         if channel.plot:
             plot = Gtk.Label(label=channel.plot, xalign=0, wrap=True, selectable=True)
+            if not is_series:
+                plot.set_lines(6)  # movies have no scrolling: keep it short
+                plot.set_ellipsize(3)  # Pango.EllipsizeMode.END
+                plot.set_tooltip_text(channel.plot)
             plot.add_css_class("ashy-page-subtitle")
             body.append(plot)
 
@@ -139,10 +143,16 @@ class DetailDialog(Adw.Dialog):
         else:
             self._update_resume_label()
 
-        page.append(body)
-        sw = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
-        sw.set_child(page)
-        view.set_content(sw)
+        if body.get_first_child() is not None:
+            page.append(body)  # no empty strip under the hero without a synopsis
+        if is_series:
+            # Series: fixed height, the episode list scrolls.
+            sw = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
+            sw.set_child(page)
+            view.set_content(sw)
+        else:
+            # Movies: short content, the dialog takes its height (no scrollbar).
+            view.set_content(page)
         self.set_child(view)
 
     # ---- movie ---------------------------------------------------------

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 17:05-0300\n"
+"POT-Creation-Date: 2026-10-25 23:26-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -218,50 +218,50 @@ msgstr "Enter: oglądaj  •  Esc: zamknij"
 msgid "No schedule"
 msgstr "Brak programu"
 
-#: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:153
+#: src/ashytv/ui/detail_dialog.py:92 src/ashytv/ui/detail_dialog.py:163
 #: src/ashytv/ui/pages/channels_page.py:436 src/ashytv/ui/schedule_dialog.py:18
 #: src/ashytv/window.py:871 src/ashytv/window.py:877
 msgid "Watch"
 msgstr "Oglądaj"
 
-#: src/ashytv/ui/detail_dialog.py:118
+#: src/ashytv/ui/detail_dialog.py:122
 msgid "Episodes"
 msgstr "Odcinki"
 
-#: src/ashytv/ui/detail_dialog.py:133
+#: src/ashytv/ui/detail_dialog.py:137
 msgid "Could not load"
 msgstr "Nie udało się załadować"
 
-#: src/ashytv/ui/detail_dialog.py:152
+#: src/ashytv/ui/detail_dialog.py:162
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Wznów od {time}"
 
-#: src/ashytv/ui/detail_dialog.py:169
+#: src/ashytv/ui/detail_dialog.py:179
 msgid "No episodes available"
 msgstr "Brak dostępnych odcinków"
 
-#: src/ashytv/ui/detail_dialog.py:174
+#: src/ashytv/ui/detail_dialog.py:184
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Sezon {n}"
 
-#: src/ashytv/ui/detail_dialog.py:182
+#: src/ashytv/ui/detail_dialog.py:192
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Oglądaj: {label}"
 
-#: src/ashytv/ui/detail_dialog.py:222
+#: src/ashytv/ui/detail_dialog.py:232
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Odcinek {n}"
 
-#: src/ashytv/ui/detail_dialog.py:261 src/ashytv/ui/pages/catalog_page.py:201
+#: src/ashytv/ui/detail_dialog.py:271 src/ashytv/ui/pages/catalog_page.py:201
 #: src/ashytv/ui/pages/channels_page.py:437
 msgid "Remove from favorites"
 msgstr "Usuń z ulubionych"
 
-#: src/ashytv/ui/detail_dialog.py:262 src/ashytv/ui/pages/catalog_page.py:202
+#: src/ashytv/ui/detail_dialog.py:272 src/ashytv/ui/pages/catalog_page.py:202
 #: src/ashytv/ui/pages/channels_page.py:437
 msgid "Add to favorites"
 msgstr "Dodaj do ulubionych"
