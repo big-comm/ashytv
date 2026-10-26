@@ -158,8 +158,6 @@ class DetailDialog(Adw.Dialog):
                                             halign=Gtk.Align.START,
                                             visible=load_info is not None)
             body.append(self.info_spinner)
-            if load_info is not None:
-                load_info(channel, self._info_loaded, self._info_failed)
 
         page.append(body)
         # Fixed height with a scrolling body: the details arrive later and a
@@ -168,9 +166,13 @@ class DetailDialog(Adw.Dialog):
         sw.set_child(page)
         view.set_content(sw)
         self.set_child(view)
-        self._body = body
+        self._page = page
         if not is_series:
             self._fit_height()
+            # Only now: cached details answer right away, and the dialog must
+            # already be built when they arrive.
+            if load_info is not None:
+                load_info(channel, self._info_loaded, self._info_failed)
 
     # ---- movie ---------------------------------------------------------
 
@@ -182,9 +184,7 @@ class DetailDialog(Adw.Dialog):
     def _fit_height(self) -> None:
         """Movies: as tall as their content (up to 640 px), so there is no
         scrollbar and no empty strip below."""
-        width = 920
-        _min, nat, _b1, _b2 = self.get_child().get_content().get_child().measure(
-            Gtk.Orientation.VERTICAL, width)
+        _min, nat, _b1, _b2 = self._page.measure(Gtk.Orientation.VERTICAL, 920)
         self.set_content_height(min(640, nat))
 
     def _info_loaded(self, info: dict) -> None:

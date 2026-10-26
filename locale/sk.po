@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 18:12-0300\n"
+"POT-Creation-Date: 2026-10-26 18:16-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -225,7 +225,7 @@ msgstr "Enter: sledovať  •  Esc: zavrieť"
 msgid "No schedule"
 msgstr "Žiadny program"
 
-#: src/ashytv/ui/detail_dialog.py:102 src/ashytv/ui/detail_dialog.py:180
+#: src/ashytv/ui/detail_dialog.py:102 src/ashytv/ui/detail_dialog.py:182
 #: src/ashytv/ui/pages/channels_page.py:436 src/ashytv/ui/schedule_dialog.py:18
 #: src/ashytv/window.py:906 src/ashytv/window.py:912
 msgid "Watch"
@@ -239,7 +239,7 @@ msgstr "Epizódy"
 msgid "Could not load"
 msgstr "Nepodarilo sa načítať"
 
-#: src/ashytv/ui/detail_dialog.py:179
+#: src/ashytv/ui/detail_dialog.py:181
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Pokračovať od {time}"
