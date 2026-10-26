@@ -30,7 +30,8 @@ from . import http  # noqa: E402
 
 _MAX_CACHE = 1500        # textures kept in memory (LRU)
 _FAIL_RETRY = 10 * 60    # don't retry a failed logo for 10 min
-_WORKERS = 6
+_WORKERS = 10           # downloads in parallel (decoding is limited below)
+_BURST_GAP = 0.25       # requests closer than this belong to the same screen
 _DECODE_ATTEMPTS = 3
 # gdk-pixbuf may decode through sandboxed glycin loaders (one process per
 # image); too many at once makes some of them fail. Downloads stay parallel,
@@ -53,9 +54,11 @@ def sized_url(url: str, size: int) -> str:
 
 class LogoLoader:
     def __init__(self) -> None:
-        # LIFO queue: the most recent request (the one that just appeared on
-        # screen) is served first; those that already left the screen wait.
-        self._queue: deque[tuple[str, int]] = deque()
+        # Requests come in bursts (a page opening, a scroll). The newest burst
+        # is served first, and inside a burst the order of the requests, so
+        # the posters at the top of the screen appear first.
+        self._bursts: list[deque[tuple[str, int]]] = []
+        self._last_request = 0.0
         self._cond = threading.Condition()
         self._threads: list[threading.Thread] = []
         self._dir = http.cache_dir("logos")
@@ -93,8 +96,12 @@ class LogoLoader:
             waiting.append(callback)  # already loading: just wait along
             return
         self._waiting[key] = [callback]
+        now = time.monotonic()
         with self._cond:
-            self._queue.append(key)
+            if not self._bursts or now - self._last_request > _BURST_GAP:
+                self._bursts.append(deque())
+            self._bursts[-1].append(key)
+            self._last_request = now
             self._cond.notify()
         if len(self._threads) < _WORKERS:
             t = threading.Thread(target=self._run, daemon=True, name="logo")
@@ -107,13 +114,20 @@ class LogoLoader:
 
     # ---- internal ------------------------------------------------------
 
+    def _next(self) -> tuple[str, int] | None:
+        """Next request: newest burst first, in request order (lock held)."""
+        while self._bursts and not self._bursts[-1]:
+            self._bursts.pop()
+        if not self._bursts:
+            return None
+        return self._bursts[-1].popleft()
+
     def _run(self) -> None:
         while True:
             with self._cond:
-                while not self._queue:
+                while (key := self._next()) is None:
                     self._cond.wait()
-                url, size = self._queue.pop()  # LIFO
-            self._work(url, size)
+            self._work(*key)
 
     def _work(self, url: str, size: int) -> None:
         thumb = self.thumb_for(url, size)
@@ -126,6 +140,8 @@ class LogoLoader:
             except GLib.Error:
                 thumb.unlink(missing_ok=True)
         fetch = sized_url(url, size)
+        if fetch != url and self.path_for(url).exists():
+            fetch = url  # already downloaded at the original size: reuse it
         try:
             path = self._ensure_file(fetch)
             pixbuf = _decode(path, size)
@@ -158,7 +174,7 @@ class LogoLoader:
         try:
             with lock:
                 if not path.exists():
-                    data = http.fetch_bytes(url, timeout=20)
+                    data = http.fetch_bytes_keepalive(url, timeout=20)
                     # The folder may have been removed by "Clear cache".
                     path.parent.mkdir(parents=True, exist_ok=True)
                     tmp = path.with_name(path.name + f".{threading.get_ident()}.part")

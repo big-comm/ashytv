@@ -30,7 +30,7 @@ def _loader(monkeypatch, tmp_path):
 def _load(loader, url):
     got = []
     loader.load(url, got.append, 210)
-    loader._work(*loader._queue.pop())
+    loader._work(*loader._next())
     return got[0]
 
 
@@ -49,3 +49,19 @@ def test_second_load_comes_from_the_thumbnail(tmp_path, monkeypatch):
     first.path_for(url).unlink()  # the original is no longer needed
     again = _load(_loader(monkeypatch, tmp_path), url)
     assert (again.get_width(), again.get_height()) == (140, 210)
+
+
+def test_originals_downloaded_by_older_versions_are_reused(tmp_path, monkeypatch):
+    url = "https://image.tmdb.org/t/p/w780/abc.jpg"
+    loader = _loader(monkeypatch, tmp_path)
+    loader._dir.mkdir(parents=True)
+    pb = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, False, 8, 400, 600)
+    pb.fill(0x112233FF)
+    pb.savev(str(loader.path_for(url)), "jpeg", [], [])
+
+    def no_network(_url, timeout=0):
+        raise AssertionError("should not download again")
+
+    monkeypatch.setattr(logos.http, "fetch_bytes_keepalive", no_network)
+    tex = _load(loader, url)
+    assert tex.get_height() == 210

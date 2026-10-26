@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 23:26-0300\n"
+"POT-Creation-Date: 2026-10-26 15:26-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -98,12 +98,12 @@ msgstr "모든 국가"
 msgid "Free TV – {where}"
 msgstr "무료 TV – {where}"
 
-#: src/ashytv/services/http.py:32
+#: src/ashytv/services/http.py:35
 #, python-brace-format
 msgid "Unsupported URL: {url}"
 msgstr "지원되지 않는 URL: {url}"
 
-#: src/ashytv/services/http.py:51
+#: src/ashytv/services/http.py:101
 #, python-brace-format
 msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
@@ -112,16 +112,16 @@ msgstr ""
 "서버가 요청을 거부했습니다 (HTTP {code}). 계정이 만료되었거나 로그인 정보가 "
 "올바르지 않을 수 있습니다."
 
-#: src/ashytv/services/http.py:53
+#: src/ashytv/services/http.py:103
 #, python-brace-format
 msgid "The server returned an error (HTTP {code})."
 msgstr "서버에서 오류를 반환했습니다 (HTTP {code})."
 
-#: src/ashytv/services/http.py:55
+#: src/ashytv/services/http.py:105
 msgid "The server took too long to respond."
 msgstr "서버 응답 시간이 너무 오래 걸렸습니다."
 
-#: src/ashytv/services/http.py:57
+#: src/ashytv/services/http.py:107
 #, python-brace-format
 msgid "Could not reach the server: {reason}"
 msgstr "서버에 연결할 수 없습니다: {reason}"

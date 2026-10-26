@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 23:26-0300\n"
+"POT-Creation-Date: 2026-10-26 15:26-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -98,28 +98,28 @@ msgstr "所有国家"
 msgid "Free TV – {where}"
 msgstr "免费电视 – {where}"
 
-#: src/ashytv/services/http.py:32
+#: src/ashytv/services/http.py:35
 #, python-brace-format
 msgid "Unsupported URL: {url}"
 msgstr "不支持的 URL：{url}"
 
-#: src/ashytv/services/http.py:51
+#: src/ashytv/services/http.py:101
 #, python-brace-format
 msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
 "or the login may be invalid."
 msgstr "服务器拒绝了请求（HTTP {code}）。账户可能已过期，或登录信息无效。"
 
-#: src/ashytv/services/http.py:53
+#: src/ashytv/services/http.py:103
 #, python-brace-format
 msgid "The server returned an error (HTTP {code})."
 msgstr "服务器返回了错误（HTTP {code}）。"
 
-#: src/ashytv/services/http.py:55
+#: src/ashytv/services/http.py:105
 msgid "The server took too long to respond."
 msgstr "服务器响应时间过长。"
 
-#: src/ashytv/services/http.py:57
+#: src/ashytv/services/http.py:107
 #, python-brace-format
 msgid "Could not reach the server: {reason}"
 msgstr "无法连接到服务器：{reason}"

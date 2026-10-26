@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-25 23:26-0300\n"
+"POT-Creation-Date: 2026-10-26 15:26-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -99,12 +99,12 @@ msgstr "Всички държави"
 msgid "Free TV – {where}"
 msgstr "Безплатна телевизия – {where}"
 
-#: src/ashytv/services/http.py:32
+#: src/ashytv/services/http.py:35
 #, python-brace-format
 msgid "Unsupported URL: {url}"
 msgstr "Неподдържан URL: {url}"
 
-#: src/ashytv/services/http.py:51
+#: src/ashytv/services/http.py:101
 #, python-brace-format
 msgid ""
 "The server refused the request (HTTP {code}). The account may have expired "
@@ -113,16 +113,16 @@ msgstr ""
 "Сървърът отказа заявката (HTTP {code}). Акаунтът може да е изтекъл или "
 "данните за вход може да са невалидни."
 
-#: src/ashytv/services/http.py:53
+#: src/ashytv/services/http.py:103
 #, python-brace-format
 msgid "The server returned an error (HTTP {code})."
 msgstr "Сървърът върна грешка (HTTP {code})."
 
-#: src/ashytv/services/http.py:55
+#: src/ashytv/services/http.py:105
 msgid "The server took too long to respond."
 msgstr "Сървърът отговори твърде бавно."
 
-#: src/ashytv/services/http.py:57
+#: src/ashytv/services/http.py:107
 #, python-brace-format
 msgid "Could not reach the server: {reason}"
 msgstr "Няма връзка със сървъра: {reason}"
