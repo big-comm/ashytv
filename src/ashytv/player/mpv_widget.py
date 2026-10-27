@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import ctypes
 import locale
+import time
 
 import mpv
 from gi.repository import GLib, GObject, Gtk
 
 from ..i18n import _
+from ..services import languages
 
 # Resolve OpenGL function pointers via EGL (GTK4 uses EGL on Wayland and, by
 # default, on X11 too). If libEGL is missing, try GLX.
@@ -40,6 +42,7 @@ def _get_proc_address(_ctx, name) -> int:
 
 # python-mpv requires a ctypes callback (not a plain Python function).
 _PROC_ADDRESS_CB = mpv.MpvGlGetProcAddressFn(_get_proc_address)
+_TIME_INTERVAL = 0.25     # seconds between "time-changed" emissions
 
 
 # glGetIntegerv resolved to read the current GtkGLArea framebuffer.
@@ -90,14 +93,30 @@ class MpvWidget(Gtk.GLArea):
             cache="yes",
             cache_secs=str(cache_secs),
             demuxer_max_bytes="64MiB",
-            demuxer_max_back_bytes="16MiB",
+            # Timeshift: keep what was already watched so live TV can be
+            # paused and rewound inside the buffer.
+            demuxer_max_back_bytes="256MiB",
+            demuxer_seekable_cache="yes",
+            force_seekable="yes",
             network_timeout="20",
             user_agent="AshyTV",
         )
+        # Audio and subtitles in the user's language when the file has them;
+        # subtitles are not forced on when the audio is already in it.
+        preferred = ",".join(languages.preferred_codes())
+        if preferred:
+            self._mpv["alang"] = preferred
+            self._mpv["slang"] = preferred
+        try:
+            self._mpv["subs-with-matching-audio"] = "forced"
+        except Exception:  # older mpv: yes/no only
+            pass
+        self._pending_subs: list[str] = []
         self._ctx: mpv.MpvRenderContext | None = None
         self._state = "idle"
         self._duration = 0.0
         self._render_pending = False
+        self._last_time_emit = 0.0
         self._terminated = False
 
         self._mpv.register_event_callback(self._on_mpv_event)
@@ -122,6 +141,21 @@ class MpvWidget(Gtk.GLArea):
             opengl_init_params={"get_proc_address": _PROC_ADDRESS_CB},
         )
         self._ctx.update_cb = self._on_mpv_update
+        if self._state in ("playing", "paused", "buffering"):
+            # Re-created context (e.g. moved to the mini player): mpv dropped
+            # its video output with the old one, so bring the video track back.
+            GLib.idle_add(self._reload_video)
+
+    def _reload_video(self) -> bool:
+        try:
+            track = self._mpv.vid
+            if track in (None, False, "no"):
+                track = "auto"
+            self._mpv.vid = "no"
+            self._mpv.vid = track
+        except Exception:  # no video track: nothing to restore
+            pass
+        return GLib.SOURCE_REMOVE
 
     def _on_unrealize(self, _area) -> None:
         # Only frees the render context: the widget may be realized again
@@ -137,6 +171,8 @@ class MpvWidget(Gtk.GLArea):
             return
         self._terminated = True
         if self._ctx is not None:
+            if self.get_realized():
+                self.make_current()  # libmpv frees GL objects: needs the context
             self._ctx.free()
             self._ctx = None
         self._mpv.terminate()
@@ -172,6 +208,7 @@ class MpvWidget(Gtk.GLArea):
             GLib.idle_add(self._set_state, "loading")
         elif eid == mpv.MpvEventID.FILE_LOADED:
             GLib.idle_add(self._set_state, "paused" if self._mpv_pause() else "playing")
+            GLib.idle_add(self._add_pending_subs)
         elif eid == mpv.MpvEventID.END_FILE:
             reason = event.data.reason
             if reason == mpv.MpvEventEndFile.ERROR:
@@ -198,8 +235,14 @@ class MpvWidget(Gtk.GLArea):
         return GLib.SOURCE_REMOVE
 
     def _on_time_pos(self, _name, value) -> None:
-        if value is not None:
-            GLib.idle_add(self._emit_time, float(value))
+        # time-pos changes every frame; the UI only needs a few updates a second.
+        if value is None:
+            return
+        now = time.monotonic()
+        if now - self._last_time_emit < _TIME_INTERVAL:
+            return
+        self._last_time_emit = now
+        GLib.idle_add(self._emit_time, float(value))
 
     def _emit_time(self, pos: float) -> bool:
         self.emit("time-changed", pos, self._duration)
@@ -224,8 +267,22 @@ class MpvWidget(Gtk.GLArea):
     def state(self) -> str:
         return self._state
 
+    def _add_pending_subs(self) -> bool:
+        subs, self._pending_subs = self._pending_subs, []
+        for url in subs:
+            try:
+                self._mpv.command("sub-add", url, "auto")
+            except Exception:
+                pass  # a broken subtitle link must not stop the video
+        return GLib.SOURCE_REMOVE
+
+    def add_subtitle(self, path: str) -> None:
+        """Load a subtitle file (local path or URL) and show it."""
+        self._mpv.command("sub-add", path, "select")
+
     def play(self, url: str, start: float = 0, user_agent: str = "",
-             referrer: str = "") -> None:
+             referrer: str = "", sub_files: list[str] | tuple = ()) -> None:
+        self._pending_subs = list(sub_files)
         options = {}
         if start > 0:
             options["start"] = f"+{start:.0f}"
@@ -267,6 +324,34 @@ class MpvWidget(Gtk.GLArea):
             return 0.0
 
     @property
+    def cache_time(self) -> float:
+        """Timestamp of the newest buffered packet (the live edge)."""
+        try:
+            # Attribute access reads the *property*; mpv["…"] would read the
+            # option of the same name, which does not exist.
+            return float(self._mpv.demuxer_cache_time or 0)
+        except Exception:  # not available yet
+            return 0.0
+
+    @property
+    def seekable_end(self) -> float:
+        """End of the buffered range mpv can seek into (slightly behind the
+        newest data). Seeking past it would reopen a live stream from scratch."""
+        try:
+            ranges = (self._mpv.demuxer_cache_state or {}).get("seekable-ranges") or []
+            return float(ranges[-1]["end"]) if ranges else 0.0
+        except Exception:  # not available yet
+            return 0.0
+
+    @property
+    def cache_duration(self) -> float:
+        """Seconds of media buffered ahead of the playback position."""
+        try:
+            return float(self._mpv.demuxer_cache_duration or 0)
+        except Exception:  # not available yet
+            return 0.0
+
+    @property
     def duration(self) -> float:
         return self._duration
 
@@ -292,10 +377,7 @@ class MpvWidget(Gtk.GLArea):
         for t in self._mpv.track_list or []:
             if t.get("type") != kind:
                 continue
-            parts = [t.get("title") or "", t.get("lang") or ""]
-            label = " — ".join(p for p in parts if p) or _("Track {number}").format(
-                number=t.get("id"))
-            out.append((int(t["id"]), label, bool(t.get("selected"))))
+            out.append((int(t["id"]), track_label(t), bool(t.get("selected"))))
         return out
 
     def set_track(self, kind: str, track_id: int | None) -> None:
@@ -311,3 +393,33 @@ class MpvWidget(Gtk.GLArea):
     def record(self, path: str | None) -> None:
         """Record the current stream to `path` (None to stop)."""
         self._mpv["stream-record"] = path or ""
+
+
+_CHANNELS = {1: "1.0", 2: "2.0", 6: "5.1", 8: "7.1"}
+
+
+def track_label(track: dict) -> str:
+    """'Portuguese — Dub — AAC 5.1' from an mpv track-list entry."""
+    lang = languages.language_name(track.get("lang") or "")
+    title = (track.get("title") or "").strip()
+    parts = [lang] if lang else []
+    if title and title.casefold() != lang.casefold():
+        parts.append(title)
+    head = " — ".join(parts)
+    tech = []
+    if track.get("codec"):
+        tech.append(str(track["codec"]).upper().replace("SUBRIP", "SRT"))
+    channels = track.get("demux-channel-count") or track.get("audio-channels")
+    if channels:
+        tech.append(_CHANNELS.get(int(channels), f"{channels} ch"))
+    flags = []
+    if track.get("forced"):
+        flags.append(_("forced"))
+    if track.get("external"):
+        flags.append(_("external"))
+    label = head or _("Track {number}").format(number=track.get("id"))
+    if tech:
+        label += " — " + " ".join(tech)
+    if flags:
+        label += f" ({', '.join(flags)})"
+    return label

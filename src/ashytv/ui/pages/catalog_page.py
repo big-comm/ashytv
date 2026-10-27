@@ -74,6 +74,12 @@ class CatalogPage(Gtk.Box):
 
     # ---- API -----------------------------------------------------------
 
+    def focus_content(self) -> bool:
+        """Entering the page from the sidebar lands on the posters."""
+        if self.filter_model.get_n_items() == 0:
+            return False
+        return self.grid.grab_focus()
+
     def invalidate(self) -> None:
         self._dirty = True
         if self.get_mapped():
@@ -109,9 +115,7 @@ class CatalogPage(Gtk.Box):
         elif self._chip == "new":
             chans = self.storage.channels(mt, order="added", limit=300)
         elif self._chip == "top":
-            chans = [c for c in self.storage.channels(mt) if c.rating >= 7.0]
-            chans.sort(key=lambda c: (-c.rating, -(int(c.year) if c.year.isdigit() else 0)))
-            chans = chans[:300]
+            chans = self.storage.channels(mt, order="rating", min_rating=7.0, limit=300)
         else:
             chans = self.storage.channels(mt, group=self._chip)
         self.store.splice(0, self.store.get_n_items(), [ChannelObject(c) for c in chans])

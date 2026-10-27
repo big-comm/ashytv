@@ -1,19 +1,44 @@
-# Python
+# Python bytecode and tool caches
 __pycache__/
 *.py[cod]
-*.egg-info/
-build/
-dist/
-.venv/
+*$py.class
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Python build output
+build/
+dist/
+*.egg-info/
+*.whl
+
+# makepkg output (building inside pkgbuild/)
+pkgbuild/src/
+pkgbuild/pkg/
+pkgbuild/ashytv/
+*.pkg.tar*
+*.src.tar*
+*.log
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
 
 # Local data — never commit playlists, credentials or databases
 *.db
 *.db-*
+*.sqlite*
 *.m3u
 *.m3u8
 !tests/*.m3u
+!src/ashytv/data/free_catalog.m3u
 *.xml.gz
 .env
 credentials*

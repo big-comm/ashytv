@@ -8,7 +8,8 @@ from datetime import date, datetime, timedelta
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
-from ...models import MediaType
+from ...models import Channel, MediaType
+from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
 from ..timeline import ROW_HEIGHT, TimeAxis, TimelineRow
 from ._common import SearchFilter, page_header, set_logo
@@ -40,26 +41,36 @@ class EpgPage(Gtk.Box):
 
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # channel, programme: toggle a reminder for a future programme
+        "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
     }
 
-    def __init__(self, storage):
+    def __init__(self, storage, embedded: bool = False):
+        """`embedded`: shown inside the Channels page, which supplies the
+        channel list (set_channels) and its own header."""
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.storage = storage
+        self._channels: list[Channel] | None = None
+        self.reminders = None  # ReminderBook, set by the window
         self._guide = None
         self._dirty = True
         self._t0 = _now_window_start()
+        self._user_moved = False  # True after ◀ ▶ or picking another day
         self._days: list[date] = []
 
-        self.append(page_header(_("Program Guide"),
-                                _("See what's on now and what's next")))
+        if not embedded:
+            self.append(page_header(_("Program Guide"),
+                                    _("See what's on now and what's next")))
 
         panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         panel.add_css_class("ashy-panel")
         panel.set_overflow(Gtk.Overflow.HIDDEN)
-        panel.set_margin_start(28)
-        panel.set_margin_end(28)
-        panel.set_margin_bottom(22)
+        if not embedded:
+            panel.set_margin_start(28)
+            panel.set_margin_end(28)
+            panel.set_margin_bottom(22)
         panel.set_vexpand(True)
+        panel.set_hexpand(True)
 
         # ---- toolbar: day + navigation ----
         tools = Gtk.Box(spacing=6, margin_top=8, margin_start=8, margin_end=8)
@@ -140,6 +151,13 @@ class EpgPage(Gtk.Box):
         self.search.set_text(text)
 
     def refresh(self) -> None:
+        if not self._user_moved and self._guide and \
+                self._t0 != _now_window_start():
+            # Opened hours later: show what is on now, not the old window.
+            self._t0 = _now_window_start()
+            if not self._dirty:
+                self._select_day_of(self._t0)
+                self._apply_window()
         if not self._dirty:
             return
         self._dirty = False
@@ -148,12 +166,28 @@ class EpgPage(Gtk.Box):
             self.store.remove_all()
             self._update_empty()
             return
-        chans = [c for c in self.storage.channels(MediaType.LIVE)
+        if self._channels is not None:
+            live = self._channels
+        else:
+            live = self.storage.channels(MediaType.LIVE)
+            if self.storage.group_variants:
+                live = collapse_variants(live)
+        chans = [c for c in live
                  if c.tvg_id and guide.has_channel(c.tvg_id)]
         self.store.splice(0, self.store.get_n_items(), [ChannelObject(c) for c in chans])
         self._build_days()
         self._apply_window()
         self._update_empty()
+
+    def set_channels(self, channels: list[Channel]) -> None:
+        """Show these channels (embedded mode) instead of every live channel."""
+        self._channels = channels
+        self.invalidate()
+
+    def focus_content(self) -> bool:
+        if self.filter_model.get_n_items() == 0:
+            return False
+        return self.listview.grab_focus()
 
     def _update_empty(self) -> None:
         self.stack.set_visible_child_name(
@@ -190,14 +224,17 @@ class EpgPage(Gtk.Box):
             self._t0 = _now_window_start()
         else:
             self._t0 = datetime(d.year, d.month, d.day, 18).timestamp()  # prime time
+            self._user_moved = True
         self._apply_window()
 
     def _shift(self, delta: int) -> None:
+        self._user_moved = True
         self._t0 += delta
         self._select_day_of(self._t0)
         self._apply_window()
 
     def _go_now(self) -> None:
+        self._user_moved = False
         self._t0 = _now_window_start()
         self._select_day_of(self._t0)
         self._apply_window()
@@ -265,7 +302,7 @@ class EpgPage(Gtk.Box):
         timeline = row.get_last_child()
 
         num.set_text(str(list_item.get_position() + 1))
-        name.set_text(ch.display_name)
+        name.set_text(ch.base_name if ch.variant_labels and ch.base_name else ch.display_name)
         set_logo(logo, ch.logo, 26, "tv-symbolic", lambda: list_item.get_item() is obj)
 
         t0, t1 = self._t0, self._t0 + _SPAN
@@ -310,7 +347,15 @@ class EpgPage(Gtk.Box):
         if prog.desc:
             d = Gtk.Label(label=prog.desc, xalign=0, wrap=True, max_width_chars=50)
             box.append(d)
+        is_set = bool(self.reminders and self.reminders.has(
+            channel.playlist_id, channel.url, int(prog.start)))
+        remind = Gtk.Button(label=_("Cancel reminder") if is_set else _("Remind me"),
+                            halign=Gtk.Align.START, margin_top=6)
+        remind.add_css_class("pill-accent")
+        box.append(remind)
         pop = Gtk.Popover(child=box)
+        remind.connect("clicked", lambda *_: (pop.popdown(),
+                                             self.emit("remind", channel, prog)))
         pop.set_parent(button)
         pop.connect("closed", lambda p: GLib.idle_add(p.unparent))
         pop.popup()

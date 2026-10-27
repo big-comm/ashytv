@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shutil
+import threading
 from pathlib import Path
 
 from gi.repository import Adw, Gio, GLib, GObject, Gtk
@@ -12,12 +13,14 @@ from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, set_autostart
+from .. import shortcuts
 from ._common import page_header
 
 _CATS = [
     ("geral", _("General"), "emblem-system-symbolic"),
     ("aparencia", _("Appearance"), "applications-graphics-symbolic"),
     ("reproducao", _("Playback"), "media-playback-start-symbolic"),
+    ("atalhos", _("Shortcuts"), "input-keyboard-symbolic"),
     ("pais", _("Parental Controls"), "system-lock-screen-symbolic"),
     ("dados", _("Data"), "folder-download-symbolic"),
     ("sobre", _("About"), "dialog-information-symbolic"),
@@ -78,6 +81,7 @@ class SettingsPage(Gtk.Box):
         self.stack.add_named(self._geral(), "geral")
         self.stack.add_named(self._aparencia(), "aparencia")
         self.stack.add_named(self._reproducao(), "reproducao")
+        self.stack.add_named(self._atalhos(), "atalhos")
         self.stack.add_named(self._pais(), "pais")
         self.stack.add_named(self._dados(), "dados")
         self.stack.add_named(self._sobre(), "sobre")
@@ -132,6 +136,17 @@ class SettingsPage(Gtk.Box):
         self._switch(g, "autostart", _("Start with the system"),
                      _("Open AshyTV when you log in"), set_autostart)
 
+        channels = Adw.PreferencesGroup(title=_("Channels"))
+        self._switch(channels, "group_variants", _("Group qualities of the same channel"),
+                     _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
+        self.hidden_row = Adw.ActionRow(title=_("Hidden groups"))
+        show_all = Gtk.Button(label=_("Show all"), valign=Gtk.Align.CENTER)
+        show_all.connect("clicked", lambda *_: self.settings.set("hidden_groups", []))
+        self.hidden_row.add_suffix(show_all)
+        channels.add(self.hidden_row)
+        self._update_hidden_row()
+        self.settings.connect("hidden_groups", lambda _v: self._update_hidden_row())
+
         g2 = Adw.PreferencesGroup(title=_("IPTV Playlists"))
         self._switch(g2, "auto_refresh", _("Reload playlists automatically"),
                      _("Updates channels and catalog when the app opens"))
@@ -144,7 +159,7 @@ class SettingsPage(Gtk.Box):
         every.connect("notify::selected", lambda r, _p: self.settings.set(
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
-        return self._page(g, g2)
+        return self._page(g, channels, g2)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))
@@ -200,6 +215,8 @@ class SettingsPage(Gtk.Box):
     def _reproducao(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Playback"),
                                  description=_("Applies from the next video you open."))
+        self._switch(g, "auto_quality", _("Automatic quality"),
+                     _("Switches between a channel's qualities to match your connection"))
         self._switch(g, "hwdec", _("Hardware acceleration"),
                      _("Decodes video on the GPU (VA-API/VDPAU/NVDEC)"))
         buf = Adw.SpinRow.new_with_range(5, 120, 5)
@@ -210,18 +227,26 @@ class SettingsPage(Gtk.Box):
             "cache_secs", int(r.get_value())))
         g.add(buf)
 
-        keys = Adw.PreferencesGroup(title=_("Player shortcuts"))
-        for k, d in [(_("Space"), _("Pause/resume")),
-                     ("↑ / ↓", _("Previous/next channel")),
-                     ("← / →", _("Rewind/forward 10 s")), ("F", _("Fullscreen")),
-                     ("M", _("Mute")), ("+ / −", _("Volume")),
-                     (_("Esc"), _("Exit fullscreen / close"))]:
-            row = Adw.ActionRow(title=d)
-            lbl = Gtk.Label(label=k)
-            lbl.add_css_class("dim-label")
-            row.add_suffix(lbl)
-            keys.add(row)
-        return self._page(g, keys)
+        return self._page(g)
+
+    def _atalhos(self) -> Gtk.Widget:
+        groups = []
+        for title, items in shortcuts.KEYBOARD:
+            group = Adw.PreferencesGroup(title=title)
+            for accels, label in items:
+                row = Adw.ActionRow(title=label)
+                row.add_suffix(shortcuts.keys_widget(accels))
+                group.add(row)
+            groups.append(group)
+        pad = Adw.PreferencesGroup(
+            title=_("Game controller"),
+            description=_("Connect a controller to use AshyTV like a TV remote."))
+        for buttons, label in shortcuts.GAMEPAD:
+            row = Adw.ActionRow(title=label)
+            row.add_suffix(shortcuts.keys_widget(buttons, raw=True))
+            pad.add(row)
+        groups.append(pad)
+        return self._page(*groups)
 
     def _pais(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Parental Controls"))
@@ -299,11 +324,26 @@ class SettingsPage(Gtk.Box):
 
     # ---- actions ---------------------------------------------------------
 
+    def _update_hidden_row(self) -> None:
+        n = len(self.settings.get("hidden_groups") or [])
+        self.hidden_row.set_subtitle(
+            ngettext("{n} group hidden — right-click a group in Channels to hide it",
+                     "{n} groups hidden — right-click a group in Channels to hide it",
+                     n).format(n=n))
+
     def _update_cache_row(self) -> None:
-        size = _dir_size(http.cache_root())
+        # Walking thousands of cached logos is slow: do it off the main thread.
+        def worker():
+            size = _dir_size(http.cache_root())
+            GLib.idle_add(self._show_cache_size, size)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _show_cache_size(self, size: int) -> bool:
         self.cache_row.set_subtitle(
             _("Removes downloaded logos, covers and guide data — {size}").format(
                 size=GLib.format_size(size)))
+        return GLib.SOURCE_REMOVE
 
     def _clear_cache(self, _b) -> None:
         shutil.rmtree(http.cache_root(), ignore_errors=True)
@@ -369,9 +409,15 @@ class SettingsPage(Gtk.Box):
         if len(pin) < 4 or not pin.isdigit():
             self.emit("toast", _("The PIN must have at least 4 digits."))
             return
-        self.settings.set("parental_pin", pin)
-        row.set_text("")
-        self.emit("toast", _("PIN set."))
+        def save():
+            self.settings.set("parental_pin", pin)
+            row.set_text("")
+            self.emit("toast", _("PIN set."))
+
+        if self.settings.get("parental_pin"):
+            self._ask_pin(save)  # changing the PIN needs the current one
+        else:
+            save()
 
     def _on_pin_clear(self, _row) -> None:
         if not self.settings.get("parental_pin"):

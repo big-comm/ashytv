@@ -13,6 +13,7 @@ depends=(
 )
 optdepends=(
     'libsecret: store Xtream passwords in the system keyring'
+    'libmanette: use a game controller as a remote'
 )
 makedepends=(
     'git'
@@ -36,7 +37,9 @@ build() {
 
 package() {
     cd "${srcdir}/${pkgname}"
-    python -m installer --destdir="$pkgdir" dist/*.whl
+    # No precompiled bytecode in the package (__pycache__/*.pyc).
+    python -m installer --destdir="$pkgdir" --no-compile-bytecode dist/*.whl
+    find "$pkgdir" -type d -name __pycache__ -prune -exec rm -rf {} +
     install -Dm755 usr/bin/ashytv "${pkgdir}/usr/bin/ashytv"
     install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
     install -Dm644 README.md "${pkgdir}/usr/share/doc/${pkgname}/README.md"

@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gi.repository import Adw, Gdk, Gio, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from . import APP_ID, APP_VERSION
 from .i18n import _
 from .services.logos import logo_loader
 from .services.settings import ACCENTS, Settings
 from .services.storage import Storage
+from .ui import shortcuts
 from .window import AshyTvWindow
 
 _DATA = Path(__file__).parent / "data"
@@ -20,15 +21,6 @@ _SCHEMES = {
     "light": Adw.ColorScheme.FORCE_LIGHT,
     "system": Adw.ColorScheme.DEFAULT,
 }
-_SHORTCUTS = [
-    (_("Navigation"), [("<Primary>f", _("Search")), ("<Primary>q", _("Quit"))]),
-    (_("Player"), [("space", _("Pause/resume")), ("Up Down", _("Previous/next channel")),
-                   ("Left Right", _("Rewind/forward 10 s")), ("f", _("Fullscreen")),
-                   ("m", _("Mute")), ("plus minus", _("Volume")),
-                   ("Escape", _("Exit fullscreen / close the player"))]),
-]
-
-
 class AshyTvApplication(Adw.Application):
     def __init__(self):
         super().__init__(
@@ -63,6 +55,10 @@ class AshyTvApplication(Adw.Application):
             self.settings.connect(key, lambda _v: self._apply_dynamic_css())
         self.settings.connect("show_logos", self._on_show_logos)
 
+        watch = Gio.SimpleAction.new("watch-reminder", GLib.VariantType.new("s"))
+        watch.connect("activate", self._on_watch_reminder)
+        self.add_action(watch)
+
         for name, callback, accels in (
             ("about", self._on_about, []),
             ("shortcuts", self._on_shortcuts, ["<Primary>question"]),
@@ -86,6 +82,11 @@ class AshyTvApplication(Adw.Application):
         if self.storage is not None:
             self.storage.close()
         Adw.Application.do_shutdown(self)
+
+    def _on_watch_reminder(self, _action, key) -> None:
+        self.activate()  # make sure the window exists (e.g. started from the notification)
+        if self.window is not None:
+            self.window.watch_reminder(key.get_string())
 
     def _quit(self) -> None:
         if self.window is not None:
@@ -146,9 +147,10 @@ class AshyTvApplication(Adw.Application):
 
     def _on_shortcuts(self, *_args) -> None:
         dialog = Adw.ShortcutsDialog()
-        for title, items in _SHORTCUTS:
+        for title, items in shortcuts.KEYBOARD:
             section = Adw.ShortcutsSection(title=title)
-            for accel, label in items:
-                section.add(Adw.ShortcutsItem(title=label, accelerator=accel))
+            for accels, label in items:
+                section.add(Adw.ShortcutsItem(
+                    title=label, accelerator=shortcuts.dialog_accelerator(accels)))
             dialog.add(section)
         dialog.present(self.window)

@@ -38,8 +38,10 @@ class ChipRow(Gtk.ScrolledWindow):
                          hscrollbar_policy=Gtk.PolicyType.AUTOMATIC)
         self.set_margin_start(28)
         self.set_margin_end(28)
-        self.set_margin_bottom(12)
-        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        self.set_margin_bottom(2)
+        # Room under the chips for the overlay scrollbar, so it never covers them.
+        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8,
+                            margin_bottom=10)
         self.set_child(self._box)
         self._on_selected = on_selected
         self._buttons: dict[str, Gtk.Button] = {}

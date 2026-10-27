@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import time
 
-from gi.repository import Adw, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
 from ...services.text import normalize
+from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
+from .epg_page import EpgPage
 from ._common import ChipRow, SearchFilter, page_header, set_logo
 
 _ALL = "__all__"
@@ -37,6 +39,9 @@ class ChannelsPage(Gtk.Box):
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "show-schedule": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
+        "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
     }
 
     def __init__(self, storage, media_type: MediaType = MediaType.LIVE,
@@ -53,7 +58,32 @@ class ChannelsPage(Gtk.Box):
         title = _("Favorites") if favorites_only else _("TV Channels")
         sub = (_("Channels, movies and series you marked") if favorites_only
                else _("All your channels organized by category"))
-        self.append(page_header(title, sub))
+        header = page_header(title, sub)
+        header.set_hexpand(True)
+        top = Gtk.Box()
+        top.append(header)
+        self.guide: EpgPage | None = None
+        if not favorites_only:
+            # List | Guide: the same channels as a list or as a time grid.
+            switch = Gtk.Box(valign=Gtk.Align.CENTER, margin_end=28, margin_top=8)
+            switch.add_css_class("ashy-tabs")
+            self._view_buttons: dict[str, Gtk.ToggleButton] = {}
+            first = None
+            for key, label, icon in (("list", _("List"), "view-list-symbolic"),
+                                     ("guide", _("Guide"), "x-office-calendar-symbolic")):
+                content = Gtk.Box(spacing=6)
+                content.append(Gtk.Image(icon_name=icon))
+                content.append(Gtk.Label(label=label))
+                btn = Gtk.ToggleButton(child=content, tooltip_text=label)
+                if first is None:
+                    first = btn
+                else:
+                    btn.set_group(first)
+                btn.connect("toggled", self._on_view_toggled, key)
+                self._view_buttons[key] = btn
+                switch.append(btn)
+            top.append(switch)
+        self.append(top)
 
         self.chips = ChipRow(self._on_chip)
         if not favorites_only:
@@ -118,7 +148,16 @@ class ChannelsPage(Gtk.Box):
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
-        body.append(cpanel)
+        self.view_stack = Gtk.Stack(hexpand=True,
+                                    transition_type=Gtk.StackTransitionType.CROSSFADE)
+        self.view_stack.add_named(cpanel, "list")
+        if not favorites_only:
+            self.guide = EpgPage(storage, embedded=True)
+            self.guide.connect("play", lambda _g, ch: self.emit("play", ch))
+            self.guide.connect("remind", lambda _g, ch, prog: self.emit("remind", ch, prog))
+            self.view_stack.add_named(self.guide, "guide")
+            self._view_buttons["list"].set_active(True)
+        body.append(self.view_stack)
         self.append(body)
 
         # Refresh "now playing" every minute (visible rows only).
@@ -136,17 +175,22 @@ class ChannelsPage(Gtk.Box):
             return
         self._dirty = False
         if self.favorites_only:
-            self._load_channels(self.storage.channels(favorites=True, order="favorite"))
+            self._load_channels(self._collapse(
+                self.storage.channels(favorites=True, order="favorite")))
             return
         self._build_chips()
         self._build_groups()
 
     def set_guide(self, guide) -> None:
         self._guide = guide
+        if self.guide is not None:
+            self.guide.set_guide(guide)
         self._rebind_visible()
 
     def set_search(self, text: str) -> None:
         self.search.set_text(text)
+        if self.guide is not None:
+            self.guide.set_search(text)
 
     def focus_channel(self, channel: Channel) -> None:
         for i in range(self.filter_model.get_n_items()):
@@ -174,7 +218,7 @@ class ChannelsPage(Gtk.Box):
         self._build_groups()
 
     def _chip_groups(self) -> list[tuple[str, int]]:
-        groups = self.storage.groups(self.media_type)
+        groups = self.storage.groups(self.media_type, collapse=self._grouped)
         words = next((w for k, _l, w in _KEYWORD_CHIPS if k == self._chip), None)
         if words is None:
             return groups
@@ -184,15 +228,18 @@ class ChannelsPage(Gtk.Box):
         self.group_list.remove_all()
         if self._chip == "fav":
             self._add_group_row(_("Favorites"),
-                                self.storage.count(self.media_type, favorites=True), _ALL)
+                                self.storage.count(self.media_type, favorites=True,
+                                                   collapse=self._grouped), _ALL)
         elif self._chip == "recent":
             self._add_group_row(_("Recently watched"),
-                                len(self.storage.recent_urls(self.media_type)), _ALL)
+                                len(self._collapse(self.storage.recent_channels(
+                                    self.media_type))), _ALL)
         else:
             groups = self._chip_groups()
             label = (_("All Channels") if self._chip == "all"
                      else _("All in this category"))
-            total = (self.storage.count(self.media_type) if self._chip == "all"
+            total = (self.storage.count(self.media_type, collapse=self._grouped)
+                     if self._chip == "all"
                      else sum(n for _g, n in groups))
             self._add_group_row(label, total, _ALL)
             for name, count in groups:
@@ -219,6 +266,38 @@ class ChannelsPage(Gtk.Box):
         box.append(c)
         row.set_child(box)
         self.group_list.append(row)
+        if key != _ALL and not self.favorites_only:
+            # Right click or the Menu key: hide / reorder this group.
+            click = Gtk.GestureClick(button=3)
+            click.connect("pressed", lambda *_: self._group_menu(row, key))
+            row.add_controller(click)
+            keys = Gtk.EventControllerKey()
+            keys.connect("key-pressed", self._on_group_key, row, key)
+            row.add_controller(keys)
+
+    def _on_group_key(self, _c, keyval, _code, _state, row, key) -> bool:
+        if keyval == Gdk.KEY_Menu:
+            self._group_menu(row, key)
+            return True
+        return False
+
+    def _group_menu(self, row: Gtk.ListBoxRow, group: str) -> None:
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        popover = Gtk.Popover(child=box)
+        popover.set_parent(row)
+
+        def item(label, callback):
+            b = Gtk.Button(label=label)
+            b.add_css_class("flat")
+            b.get_child().set_xalign(0)
+            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
+            box.append(b)
+
+        item(_("Move up"), lambda: self.emit("move-group", group, -1))
+        item(_("Move down"), lambda: self.emit("move-group", group, 1))
+        item(_("Hide group"), lambda: self.emit("hide-group", group))
+        popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
+        popover.popup()
 
     def _on_group_selected(self, _list, row) -> None:
         if row is None:
@@ -228,8 +307,7 @@ class ChannelsPage(Gtk.Box):
         if self._chip == "fav":
             chans = self.storage.channels(self.media_type, favorites=True)
         elif self._chip == "recent":
-            chans = [c for url in self.storage.recent_urls(self.media_type)
-                     for c in self._find_by_url(url)]
+            chans = self.storage.recent_channels(self.media_type)
         elif key != _ALL:
             chans = self.storage.channels(self.media_type, group=key)
         elif self._chip == "all":
@@ -237,20 +315,45 @@ class ChannelsPage(Gtk.Box):
         else:
             groups = [g for g, _n in self._chip_groups()]
             chans = self.storage.channels(self.media_type, groups=groups) if groups else []
-        self._load_channels(chans)
+        self._load_channels(self._collapse(chans))
 
-    def _find_by_url(self, url: str) -> list[Channel]:
-        row = self.storage.db.execute(
-            "SELECT playlist_id FROM channel WHERE url = ? LIMIT 1", (url,)).fetchone()
-        if row is None:
-            return []
-        ch = self.storage.find_channel(row[0], url)
-        return [ch] if ch else []
+    @property
+    def _grouped(self) -> bool:
+        return self.storage.group_variants
+
+    def _collapse(self, channels: list[Channel]) -> list[Channel]:
+        return collapse_variants(channels) if self._grouped else channels
 
     def _load_channels(self, channels: list[Channel]) -> None:
         self.store.splice(0, self.store.get_n_items(),
                           [ChannelObject(c) for c in channels])
         self._update_empty()
+        if self.guide is not None:
+            self.guide.set_channels(channels)
+
+    # ---- list / guide view -------------------------------------------
+
+    @property
+    def view(self) -> str:
+        return self.view_stack.get_visible_child_name()
+
+    def set_view(self, view: str) -> None:
+        if self.guide is not None and view in self._view_buttons:
+            self._view_buttons[view].set_active(True)
+
+    def _on_view_toggled(self, button: Gtk.ToggleButton, key: str) -> None:
+        if not button.get_active():
+            return
+        self.view_stack.set_visible_child_name(key)
+        if key == "guide" and self.guide is not None:
+            self.guide.refresh()
+
+    def focus_content(self) -> bool:
+        if self.view == "guide" and self.guide is not None:
+            return self.guide.focus_content()
+        if self.filter_model.get_n_items() == 0:
+            return False  # empty: the caller focuses the first control instead
+        return self.listview.grab_focus()
 
     def _update_empty(self) -> None:
         empty = self.filter_model.get_n_items() == 0
@@ -280,13 +383,18 @@ class ChannelsPage(Gtk.Box):
 
         texts = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, hexpand=True,
                         valign=Gtk.Align.CENTER, spacing=2)
+        name_row = Gtk.Box(spacing=8)
         name = Gtk.Label(xalign=0, ellipsize=3)
         name.add_css_class("ashy-chan-name")
+        qualities = Gtk.Label(xalign=0, valign=Gtk.Align.CENTER)
+        qualities.add_css_class("ashy-quality")
+        name_row.append(name)
+        name_row.append(qualities)
         prog = Gtk.Label(xalign=0, ellipsize=3)
         prog.add_css_class("ashy-chan-prog")
         bar = Gtk.ProgressBar()
         bar.add_css_class("ashy-progress-mini")
-        texts.append(name)
+        texts.append(name_row)
         texts.append(prog)
         texts.append(bar)
 
@@ -346,12 +454,17 @@ class ChannelsPage(Gtk.Box):
         logo = num.get_next_sibling()
         texts = logo.get_next_sibling()
         fav = texts.get_next_sibling()
-        name = texts.get_first_child()
-        prog = name.get_next_sibling()
+        name_row = texts.get_first_child()
+        name = name_row.get_first_child()
+        qualities = name.get_next_sibling()
+        prog = name_row.get_next_sibling()
         bar = prog.get_next_sibling()
 
         num.set_text(str(list_item.get_position() + 1))
-        name.set_text(ch.display_name)
+        grouped = bool(ch.variant_labels) and bool(ch.base_name)
+        name.set_text(ch.base_name if grouped else ch.display_name)
+        qualities.set_text(" · ".join(ch.variant_labels) if grouped else "")
+        qualities.set_visible(grouped)
         fallback = {MediaType.LIVE: "tv-symbolic", MediaType.MOVIE: "ashy-film-symbolic",
                     MediaType.SERIES: "ashy-series-symbolic"}[ch.media_type]
         set_logo(logo, ch.logo, 30, fallback, lambda: list_item.get_item() is obj)

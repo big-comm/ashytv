@@ -187,6 +187,8 @@ button.ashy-card:hover { background-color: var(--ashy-panel-2); border-color: al
 }
 .ashy-hero-title { font-size: 30px; font-weight: 800; color: #fff; }
 .ashy-hero-sub { color: alpha(#fff, 0.78); }
+.ashy-hero-orig { color: alpha(#fff, 0.85); font-weight: 600; }
+.ashy-facts label.dim-label { min-width: 90px; }
 .ashy-hero .ashy-faint { color: alpha(#fff, 0.6); }
 carouselindicatordots { color: #fff; }
 
@@ -287,6 +289,9 @@ button.ashy-epg-cell.now {
   background-color: var(--ashy-panel-2); border-radius: 12px;
   min-width: 40px; min-height: 40px;
 }
+.ashy-row-off .title, .ashy-row-off .subtitle, .ashy-row-off .ashy-field-icon {
+  opacity: 0.5;
+}
 .ashy-field-title { font-size: 12px; font-weight: 600; }
 entry.ashy-entry, passwordentry.ashy-entry {
   background-color: var(--ashy-panel); border: 1px solid var(--ashy-border);
@@ -323,3 +328,69 @@ button.ashy-swatch image { color: #fff; }
 /* Series dialog */
 .ashy-series-backdrop { border-radius: 0; }
 .ashy-episode-row { padding: 8px; border-radius: 12px; }
+
+/* Quality variants badge ("FHD · HD · SD") */
+.ashy-quality {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--ashy-fg-dim);
+  background-color: var(--ashy-panel-2);
+  border-radius: 6px; padding: 1px 6px;
+}
+.ashy-chanlist > row:selected .ashy-quality { color: #fff; background-color: alpha(#fff, 0.2); }
+
+/* ---------------- Channel list over the video ---------------- */
+.ashy-channel-overlay {
+  background-image: linear-gradient(to right, rgba(6, 10, 22, 0.94) 0%,
+                                    rgba(6, 10, 22, 0.86) 70%, rgba(6, 10, 22, 0) 100%);
+  padding: 24px 80px 24px 24px;
+  color: #fff;
+}
+.ashy-channel-overlay .ashy-chanlist { background: transparent; }
+.ashy-channel-overlay .ashy-chan-prog,
+.ashy-channel-overlay .ashy-faint { color: alpha(#fff, 0.65); }
+.ashy-overlay-detail { margin-left: 18px; margin-top: 54px; }
+.ashy-overlay-prog {
+  padding: 10px 12px; border-radius: 12px;
+  background-color: alpha(#fff, 0.06);
+}
+.ashy-overlay-prog.now { background-color: alpha(var(--ashy-accent), 0.35); }
+
+/* ---------------- Timeshift ---------------- */
+.ashy-rec-dot.ashy-behind { color: #f5c518; }
+.ashy-player button.ashy-go-live {
+  background-color: var(--ashy-accent); color: #fff;
+  border-radius: 999px; padding: 2px 14px; font-weight: 700;
+}
+
+/* ---------------- Compact sidebar (icons only) ---------------- */
+.ashy-nav.compact { padding: 8px 6px; }
+.ashy-nav.compact button.ashy-nav-item { padding: 10px; }
+.ashy-nav.compact button.ashy-nav-item > box { margin-left: 4px; }
+button.ashy-nav-toggle { color: var(--ashy-fg-faint); }
+
+/* ---------------- Keyboard / remote focus ---------------- */
+button:focus-visible,
+togglebutton:focus-visible,
+.ashy-chanlist > row:focus-visible,
+.ashy-grouplist > row:focus-visible,
+.ashy-settings-cat > row:focus-visible,
+gridview.ashy-posters > child:focus-visible,
+.ashy-epg-list > row:focus-visible {
+  outline: 3px solid var(--ashy-accent-2);
+  outline-offset: 2px;
+}
+gridview.ashy-posters > child:focus-visible .ashy-poster-img {
+  box-shadow: 0 0 0 3px var(--ashy-accent-2);
+}
+
+/* ---------------- Key caps (Settings → Shortcuts) ---------------- */
+.ashy-keycap {
+  background-color: var(--ashy-panel-2);
+  border: 1px solid var(--ashy-border);
+  border-bottom-width: 2px;
+  border-radius: 7px;
+  padding: 3px 9px;
+  min-width: 14px;
+  font-size: 12px;
+  font-weight: 600;
+}

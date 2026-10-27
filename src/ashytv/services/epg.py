@@ -180,7 +180,8 @@ def fetch_guide_async(url, on_done, on_error=None, max_age: int = CACHE_TTL) -> 
         try:
             fresh = path.exists() and time.time() - path.stat().st_mtime < max_age
             if not fresh:
-                tmp = path.with_suffix(".part")
+                path.parent.mkdir(parents=True, exist_ok=True)
+                tmp = path.with_name(f"{path.name}.{threading.get_ident()}.part")
                 with http.open_url(url, timeout=120) as resp, open(tmp, "wb") as out:
                     while chunk := resp.read(1 << 16):
                         out.write(chunk)

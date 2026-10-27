@@ -17,13 +17,18 @@ ship, link to or recommend any content.
   picture-in-picture, recording, loading/error states
 - Parental controls (hide adult categories, PIN)
 - Translations (29 languages), test suite, fictional demo server
+- Quality variants grouped into one channel, automatic quality (adaptive)
+- TiviMate-style channel list over the video, number tuning, last channel
+- Timeshift (pause / rewind live TV, "Go live")
+- Guide merged into Channels (List | Guide), icons-only sidebar
+- Keyboard, TV-remote and game-controller navigation (libmanette)
+- Hide / reorder channel groups, programme reminders
 
 ## Next
 
 - [ ] Flatpak manifest and Flathub submission
-- [ ] Reorder / hide channel groups
 - [ ] Movie details through `get_vod_info` (plot, cast, duration)
-- [ ] Catch-up / timeshift for providers that support archives
+- [ ] Catch-up for providers that keep an archive
 - [ ] Multiple guide sources merged (several playlists at once)
-- [ ] Remote-control friendly navigation (D-pad focus, big-screen mode)
+- [ ] Big-screen ("10-foot") mode with larger fonts
 - [ ] CI (lint, tests, translation checks)

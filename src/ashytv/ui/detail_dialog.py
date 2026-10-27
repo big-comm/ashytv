@@ -1,12 +1,15 @@
-"""Movie/series detail dialog (synopsis, seasons and episodes)."""
+"""Movie/series detail dialog (synopsis, details, seasons and episodes)."""
 
 from __future__ import annotations
 
+import time
 from collections.abc import Callable
+from datetime import date
 
 from gi.repository import Adw, GLib, GObject, Gtk
 
-from ..i18n import _
+from ..i18n import _, ngettext
+from ..services import http
 from ..models import Channel, Episode, MediaType
 from .pages._common import set_picture
 
@@ -27,7 +30,8 @@ class DetailDialog(Adw.Dialog):
     }
 
     def __init__(self, storage, channel: Channel,
-                 load_episodes: Callable[[Channel, Callable, Callable], None]):
+                 load_episodes: Callable[[Channel, Callable, Callable], None],
+                 load_info: Callable[[Channel, Callable, Callable], None] | None = None):
         is_series = channel.media_type is MediaType.SERIES
         super().__init__(title=channel.display_name, content_width=920,
                          content_height=640 if is_series else -1)
@@ -55,6 +59,7 @@ class DetailDialog(Adw.Dialog):
         backdrop = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
         set_picture(backdrop, channel.backdrop or channel.logo, 780)
         hero.add_overlay(backdrop)
+        self.backdrop = backdrop
         shade = Gtk.Box()
         shade.add_css_class("ashy-hero-shade")
         hero.add_overlay(shade)
@@ -82,9 +87,15 @@ class DetailDialog(Adw.Dialog):
             # Skip empty parts and repeats (genre and category are often equal).
             if part and part.casefold() not in (m.casefold() for m in meta):
                 meta.append(part)
+        self._meta = meta
         meta_lbl = Gtk.Label(label="  •  ".join(meta), xalign=0, wrap=True)
         meta_lbl.add_css_class("ashy-hero-sub")
+        self.meta_lbl = meta_lbl
+        # Original title (filled in by the movie details, when different).
+        self.orig_lbl = Gtk.Label(xalign=0, wrap=True, visible=False)
+        self.orig_lbl.add_css_class("ashy-hero-orig")
         texts.append(title)
+        texts.append(self.orig_lbl)
         texts.append(meta_lbl)
 
         actions = Gtk.Box(spacing=10)
@@ -107,10 +118,10 @@ class DetailDialog(Adw.Dialog):
         body.set_margin_start(28)
         body.set_margin_end(28)
         body.set_margin_bottom(24)
-        if channel.plot:
-            plot = Gtk.Label(label=channel.plot, xalign=0, wrap=True, selectable=True)
-            plot.add_css_class("ashy-page-subtitle")
-            body.append(plot)
+        self.plot_lbl = Gtk.Label(label=channel.plot, xalign=0, wrap=True,
+                                  selectable=True, visible=bool(channel.plot))
+        self.plot_lbl.add_css_class("ashy-page-subtitle")
+        body.append(self.plot_lbl)
 
         if channel.media_type is MediaType.SERIES:
             row = Gtk.Box(spacing=12)
@@ -137,12 +148,31 @@ class DetailDialog(Adw.Dialog):
             load_episodes(channel, self._episodes_loaded, self._episodes_failed)
         else:
             self._update_resume_label()
+            # Details like in a media center: technical info, people, links.
+            self.facts = Gtk.Grid(column_spacing=24, row_spacing=8, visible=False)
+            self.facts.add_css_class("ashy-facts")
+            body.append(self.facts)
+            self.links = Gtk.Box(spacing=6, visible=False)
+            body.append(self.links)
+            self.info_spinner = Adw.Spinner(height_request=24, width_request=24,
+                                            halign=Gtk.Align.START,
+                                            visible=load_info is not None)
+            body.append(self.info_spinner)
 
         page.append(body)
+        # Fixed height with a scrolling body: the details arrive later and a
+        # long synopsis or cast must not push the dialog off screen.
         sw = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(page)
         view.set_content(sw)
         self.set_child(view)
+        self._page = page
+        if not is_series:
+            self._fit_height()
+            # Only now: cached details answer right away, and the dialog must
+            # already be built when they arrive.
+            if load_info is not None:
+                load_info(channel, self._info_loaded, self._info_failed)
 
     # ---- movie ---------------------------------------------------------
 
@@ -150,6 +180,70 @@ class DetailDialog(Adw.Dialog):
         pos = self.storage.resume_position(self.channel.playlist_id, self.channel.url)
         self.play_btn.set_label(_("Resume from {time}").format(time=fmt_time(pos))
                                 if pos > 0 else _("Watch"))
+
+    def _fit_height(self) -> None:
+        """Movies: as tall as their content (up to 640 px), so there is no
+        scrollbar and no empty strip below."""
+        _min, nat, _b1, _b2 = self._page.measure(Gtk.Orientation.VERTICAL, 920)
+        self.set_content_height(min(640, nat))
+
+    def _info_loaded(self, info: dict) -> None:
+        self.info_spinner.set_visible(False)
+        if not info:
+            self._fit_height()
+            return
+        if info.get("plot") and len(info["plot"]) > len(self.plot_lbl.get_label()):
+            self.plot_lbl.set_label(info["plot"])
+            self.plot_lbl.set_visible(True)
+        orig = info.get("original_title", "")
+        if orig and orig.casefold() not in self.channel.display_name.casefold():
+            self.orig_lbl.set_label(orig)
+            self.orig_lbl.set_visible(True)
+        if info.get("backdrop") and not self.channel.backdrop:
+            set_picture(self.backdrop, info["backdrop"], 780)
+        meta = list(self._meta)
+        duration = info.get("duration", 0)
+        if duration:
+            h, m = divmod(duration // 60, 60)
+            meta.insert(1 if meta else 0,
+                        _("{h} h {m} min").format(h=h, m=m) if h else _("{m} min").format(m=m))
+        if info.get("age"):
+            meta.append(info["age"])
+        if duration:
+            remaining = duration - self.storage.resume_position(self.channel.playlist_id,
+                                                                self.channel.url)
+            ends = time.strftime("%H:%M", time.localtime(time.time() + remaining))
+            meta.append(_("Ends at {time}").format(time=ends))
+        self.meta_lbl.set_label("  •  ".join(meta))
+
+        rows = [(_("Video"), info.get("video")), (_("Audio"), info.get("audio")),
+                (_("Director"), info.get("director")), (_("Cast"), info.get("cast")),
+                (_("Genres"), info.get("genre")), (_("Country"), info.get("country")),
+                (_("Released"), _format_date(info.get("released", ""))),
+                (_("Subtitles"), ngettext("{n} file", "{n} files",
+                                          len(info["subtitles"])).format(
+                                              n=len(info["subtitles"]))
+                 if info.get("subtitles") else "")]
+        row = 0
+        for name, value in rows:
+            if not value:
+                continue
+            key = Gtk.Label(label=name, xalign=0, valign=Gtk.Align.START)
+            key.add_css_class("dim-label")
+            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True, selectable=True)
+            self.facts.attach(key, 0, row, 1, 1)
+            self.facts.attach(val, 1, row, 1, 1)
+            row += 1
+        self.facts.set_visible(row > 0)
+        for label, url in ((_("Trailer"), info.get("trailer")), ("TMDB", info.get("tmdb_url"))):
+            if url:
+                self.links.append(Gtk.LinkButton(uri=url, label=label))
+        self.links.set_visible(self.links.get_first_child() is not None)
+        self._fit_height()
+
+    def _info_failed(self, _exc: Exception) -> None:
+        self.info_spinner.set_visible(False)  # the basic data is still shown
+        self._fit_height()
 
     def _on_play_main(self, _b) -> None:
         if self.channel.media_type is MediaType.SERIES:
@@ -181,7 +275,7 @@ class DetailDialog(Adw.Dialog):
             self.play_btn.set_label(_("Watch {label}").format(label=nxt.label))
 
     def _episodes_failed(self, exc: Exception) -> None:
-        self.ep_error.set_description(str(exc))
+        self.ep_error.set_description(GLib.markup_escape_text(http.describe_error(exc)))
         self.ep_stack.set_visible_child_name("error")
 
     def _next_episode(self) -> Episode | None:
@@ -263,6 +357,15 @@ class DetailDialog(Adw.Dialog):
             self.fav_btn.add_css_class("active")
         else:
             self.fav_btn.remove_css_class("active")
+
+
+def _format_date(text: str) -> str:
+    """'1985-08-09' -> the date in the user's format; other text unchanged."""
+    try:
+        d = date.fromisoformat(text[:10])
+    except ValueError:
+        return text
+    return GLib.DateTime.new_local(d.year, d.month, d.day, 0, 0, 0).format("%x")
 
 
 def _escape(text: str) -> str:

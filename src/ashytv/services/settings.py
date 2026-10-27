@@ -21,6 +21,8 @@ DEFAULTS: dict = {
     "window_opacity": 0.94,     # window background opacity (translucent)
     "show_logos": True,
     "hwdec": True,
+    "auto_quality": True,       # adapt between quality variants
+    "group_variants": True,     # show "NEWS FHD/HD/SD" as one channel
     "cache_secs": 20,           # player network buffer (seconds)
     "volume": 100,
     "hide_adult": True,
@@ -28,6 +30,10 @@ DEFAULTS: dict = {
     "auto_refresh": True,
     "refresh_hours": 12,
     "autostart": False,
+    "sidebar_compact": False,   # sidebar shows icons only
+    "hidden_groups": [],        # channel group names the user hid
+    "group_order": [],          # channel group names in the user's order
+    "reminders": [],            # programme reminders (see services/reminders.py)
 }
 
 

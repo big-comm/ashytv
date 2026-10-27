@@ -78,7 +78,8 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
             # Stream URL.
             if pending is None:
                 pending = {"name": line, "group": ""}
-            group = pending.get("group", "")
+            # "Entertainment;Movies": several categories, keep the first.
+            group = pending.get("group", "").split(";", 1)[0].strip()
             yield Channel(
                 name=pending.get("name", ""),
                 url=line,
@@ -89,6 +90,8 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
                 logo=pending.get("tvg-logo", ""),
                 user_agent=pending.get("user-agent", ""),
                 referrer=pending.get("referrer", ""),
+                year=pending.get("year", ""),
+                plot=pending.get("description", ""),
             )
             pending = None
 

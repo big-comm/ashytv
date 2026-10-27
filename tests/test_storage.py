@@ -116,9 +116,97 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 2
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 4
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
     db.close()
     Storage(path).close()  # reopening does not migrate again
+
+
+def test_stale_playlists_skip_recent_failures(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    old = db.add_playlist("Expired", "a")
+    good = db.add_playlist("Good", "b")
+    db.db.execute("UPDATE playlist SET updated_at = 1000 WHERE id = ?", (old,))
+    db.db.execute("UPDATE playlist SET updated_at = 2000 WHERE id = ?", (good,))
+    db.db.commit()
+    assert db.stale_playlists(max_age=100, now=10_000) == [old, good]
+    # A failed automatic refresh pushes the playlist back by one interval.
+    db.update_playlist_meta(old, refresh_failed_at=9_950)
+    assert db.stale_playlists(max_age=100, now=10_000) == [good]
+    assert db.get_playlist(old)["updated_at"] == 1000  # not marked as updated
+    assert db.playlist_meta(old)["refresh_failed_at"] == 9_950
+
+
+def _variants_db(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [
+        _ch("News 24 HD", "u/hd", group="News"),
+        _ch("News 24 FHD", "u/fhd", group="News"),
+        _ch("News 24 SD", "u/sd", group="News"),
+        _ch("Weather", "u/w", group="News"),
+        _ch("News 24 HD", "u/other", group="Other"),
+        _ch("Film 4K", "movie/1.mp4", MediaType.MOVIE, group="Movies"),
+    ])
+    return db
+
+
+def test_variants_are_stored_and_listed_best_first(tmp_path):
+    db = _variants_db(tmp_path)
+    hd = next(c for c in db.channels(MediaType.LIVE) if c.url == "u/hd")
+    assert (hd.quality, hd.base_name) == (2, "News 24")
+    assert [c.url for c in db.variants(hd)] == ["u/fhd", "u/hd", "u/sd"]
+    weather = next(c for c in db.channels(MediaType.LIVE) if c.url == "u/w")
+    assert db.variants(weather) == [weather]
+    movie = db.channels(MediaType.MOVIE)[0]
+    assert movie.quality == 0  # movies are not grouped
+
+
+def test_collapse_variants_keeps_one_entry_per_channel(tmp_path):
+    from ashytv.services.storage import collapse_variants
+
+    db = _variants_db(tmp_path)
+    collapsed = collapse_variants(db.channels(MediaType.LIVE))
+    assert [c.url for c in collapsed] == ["u/fhd", "u/w", "u/other"]
+    assert collapsed[0].variant_labels == ("FHD", "HD", "SD")
+    assert collapsed[1].variant_labels == ()  # no quality in the name
+    assert collapsed[2].variant_labels == ("HD",)  # single quality: badge only
+    assert db.count(MediaType.LIVE) == 5
+    assert db.count(MediaType.LIVE, collapse=True) == 3
+    assert dict(db.groups(MediaType.LIVE, collapse=True)) == {"News": 2, "Other": 1}
+
+
+def test_hidden_and_reordered_groups(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("1", "u/1", group="News"), _ch("2", "u/2", group="Sports"),
+                              _ch("3", "u/3", group="Kids")])
+    db.hidden_groups = {"Sports"}
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == ["News", "Kids"]
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["1", "3"]
+    # Opening a hidden group explicitly still lists its channels.
+    assert [c.name for c in db.channels(MediaType.LIVE, group="Sports")] == ["2"]
+    db.group_order = ["Kids"]
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == ["Kids", "News"]
+
+
+def test_disabled_playlist_is_hidden_but_kept(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    p1 = db.add_playlist("One", "s1")
+    p2 = db.add_playlist("Two", "s2")
+    db.replace_channels(p1, [_ch("A", "u/a")])
+    db.replace_channels(p2, [_ch("B", "u/b")])
+    db.record_history(p2, "u/b", MediaType.LIVE, "B")
+    db.set_playlist_enabled(p2, False)
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["A"]
+    assert db.count(MediaType.LIVE) == 1
+    assert db.history() == [] and db.recent_channels(MediaType.LIVE) == []
+    assert db.stale_playlists(0, now=10**10) == [p1]
+    # Remembered across restarts; channels come back when enabled again.
+    db.close()
+    db = Storage(tmp_path / "t.db")
+    assert db.disabled == {p2} and db.count_channels(p2) == 1
+    db.set_playlist_enabled(p2, True)
+    assert db.count(MediaType.LIVE) == 2

@@ -12,9 +12,11 @@
     <p>
       AshyTV is a GTK4/libadwaita IPTV player. Import your own M3U playlist or
       Xtream Codes account and browse live channels, an electronic program
-      guide, movies and series. AshyTV does not provide or include any content.
+      guide, movies and series. AshyTV is only a player: it does not host or
+      sell any content.
     </p>
     <ul>
+      <li>Optional Free TV: links to free-to-air channels and to public domain or openly licensed films</li>
       <li>Live channels with categories, favorites and now-playing info</li>
       <li>Program guide (XMLTV) in a time grid</li>
       <li>Movies and series catalog with resume and next episode</li>
@@ -31,6 +33,32 @@
   </screenshots>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="0.13.2" date="2026-10-27"/>
+    <release version="0.13.1" date="2026-10-26"/>
+    <release version="0.13.0" date="2026-10-26"/>
+    <release version="0.12.3" date="2026-10-26"/>
+    <release version="0.12.2" date="2026-10-26"/>
+    <release version="0.12.1" date="2026-10-25"/>
+    <release version="0.12.0" date="2026-10-25"/>
+    <release version="0.11.5" date="2026-10-24"/>
+    <release version="0.11.4" date="2026-10-24"/>
+    <release version="0.11.3" date="2026-10-24"/>
+    <release version="0.11.2" date="2026-10-24"/>
+    <release version="0.11.1" date="2026-10-24"/>
+    <release version="0.11.0" date="2026-10-24"/>
+    <release version="0.10.2" date="2026-10-24"/>
+    <release version="0.10.1" date="2026-10-24"/>
+    <release version="0.10.0" date="2026-10-24"/>
+    <release version="0.9.0" date="2026-10-24"/>
+    <release version="0.8.0" date="2026-10-24"/>
+    <release version="0.7.2" date="2026-10-24"/>
+    <release version="0.7.0" date="2026-10-24"/>
+    <release version="0.6.0" date="2026-10-24"/>
+    <release version="0.5.0" date="2026-10-24"/>
+    <release version="0.4.3" date="2026-10-24"/>
+    <release version="0.4.0" date="2026-10-24"/>
+    <release version="0.3.0" date="2026-10-24"/>
+    <release version="0.2.0" date="2026-10-24"/>
     <release version="0.1.0" date="2026-10-24"/>
   </releases>
 </component>

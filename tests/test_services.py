@@ -89,11 +89,12 @@ def test_logo_callbacks_for_same_url_are_all_called(loader, monkeypatch):
     monkeypatch.setattr(logos.GdkPixbuf.Pixbuf, "new_from_file_at_scale",
                         lambda *_a: "pixbuf")
     monkeypatch.setattr(logos, "_texture_from_pixbuf", lambda p: f"tex:{p}")
+    monkeypatch.setattr(loader, "_save_thumb", lambda *_a: None)
     got = []
     loader.load("http://logo", got.append, 40)
     loader.load("http://logo", got.append, 40)  # same logo on another channel
     assert got == []  # still queued
-    key = loader._queue.pop()
+    key = loader._next()
     loader._work(*key)
     assert got == ["tex:pixbuf", "tex:pixbuf"]
     # Afterwards it comes straight from the in-memory cache.
@@ -110,15 +111,20 @@ def test_failed_logo_is_not_retried_immediately(loader, monkeypatch):
 
     monkeypatch.setattr(loader, "_ensure_file", boom)
     loader.load("http://bad", lambda _t: None, 40)
-    loader._work(*loader._queue.pop())
+    loader._work(*loader._next())
     loader.load("http://bad", lambda _t: None, 40)
-    assert not loader._queue and calls == ["http://bad"]
+    assert loader._next() is None and calls == ["http://bad"]
 
 
-def test_logo_queue_is_lifo(loader):
-    for n in range(3):
+def test_logo_queue_serves_the_screen_in_order_newest_screen_first(loader):
+    for n in range(3):  # a page opens: top to bottom
         loader.load(f"http://l/{n}", lambda _t: None, 40)
-    assert loader._queue.pop()[0] == "http://l/2"  # most recent first
+    assert loader._next()[0] == "http://l/0"  # the top of the screen first
+    loader._last_request -= 10  # later, the user scrolls: a new burst
+    loader.load("http://l/9", lambda _t: None, 40)
+    assert [loader._next()[0] for _ in range(3)] == ["http://l/9", "http://l/1",
+                                                      "http://l/2"]
+    assert loader._next() is None
 
 
 def test_decode_retries_transient_loader_errors(monkeypatch, tmp_path):
@@ -144,3 +150,30 @@ def test_decode_gives_up_after_attempts(monkeypatch, tmp_path):
     monkeypatch.setattr(logos.time, "sleep", lambda _s: None)
     with pytest.raises(logos.GLib.Error):
         logos._decode(tmp_path / "x.png", 40)
+
+
+def test_describe_error_is_user_friendly():
+    import urllib.error
+
+    from ashytv.services import http
+
+    not_found = urllib.error.HTTPError("http://x", 404, "Not Found", {}, None)
+    assert "HTTP 404" in http.describe_error(not_found)
+    assert "expired" in http.describe_error(not_found)
+    assert "HTTP 500" in http.describe_error(
+        urllib.error.HTTPError("http://x", 500, "Oops", {}, None))
+    assert "reach the server" in http.describe_error(urllib.error.URLError("no route"))
+    assert http.describe_error(TimeoutError()) == "The server took too long to respond."
+    assert http.describe_error(ValueError("plain")) == "plain"
+
+
+def test_logo_download_survives_cleared_cache(loader, monkeypatch, tmp_path):
+    import shutil
+
+    monkeypatch.setattr(logos.http, "fetch_bytes_keepalive", lambda url, timeout=0: b"data")
+    loader._dir = tmp_path / "logos"
+    loader._dir.mkdir()
+    shutil.rmtree(loader._dir)  # "Clear cache" removed the folder
+    path = loader._ensure_file("http://logo/1.png")
+    assert path.read_bytes() == b"data"
+    assert loader._url_locks == {}  # the per-URL lock is always released

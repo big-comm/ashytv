@@ -9,15 +9,23 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from . import APP_ID
 from .i18n import _, ngettext
-from .models import Channel, Episode, MediaType, PlayItem
-from .services import epg, importer, secrets
-from .services.storage import Storage
-from .services.xtream_client import XtreamProvider, normalize_host, series_episodes
+from .models import Channel, Episode, MediaType, PlayItem, Variant
+from .services import epg, http, importer, secrets
+from .services.quality import quality_label
+from .services.gamepad import GamepadInput
+from .services.reminders import Reminder, ReminderBook
+from .services.storage import Storage, collapse_variants
+from .services.xtream_client import (
+    XtreamProvider,
+    normalize_host,
+    series_episodes,
+    vod_info,
+)
+from .ui import keynav
 from .ui.detail_dialog import DetailDialog
-from .ui.nav_sidebar import NavSidebar
+from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
-from .ui.pages.epg_page import EpgPage
 from .ui.pages.home_page import HomePage
 from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
@@ -25,7 +33,7 @@ from .ui.pages.settings_page import SettingsPage
 from .ui.schedule_dialog import schedule_dialog
 from .ui.welcome_view import WelcomeView
 
-_SEARCHABLE = {"channels", "movies", "series", "favorites", "epg"}
+_SEARCHABLE = {"channels", "movies", "series", "favorites"}
 _EPISODE_CACHE_SECS = 6 * 3600
 
 
@@ -49,8 +57,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._providers: dict[int, XtreamProvider] = {}
         self._zap: list | Gio.ListModel | None = None
         self._zap_index = 0
+        self._prev_zap_index: int | None = None
         self._series_ctx: tuple[Channel, list[Episode]] | None = None
         self._importing = False
+        self._quiet_id = 0
+        self._focus_before_player: Gtk.Widget | None = None
+        self._vod_info: dict[tuple[int, str], dict] = {}
+        self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
 
         self._load_providers()
@@ -64,6 +77,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         # ---- sidebar ----
         self.nav = NavSidebar()
         self.nav.connect("navigate", lambda _w, key: self.navigate(key))
+        self.nav.connect("compact-changed", self._on_nav_compact)
 
         # ---- header (spans the full width, as in the mockup) ----
         header = Adw.HeaderBar()
@@ -101,13 +115,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.page_stack.set_vexpand(True)
 
         self.split = Adw.OverlaySplitView(show_sidebar=True, sidebar_width_fraction=0.18,
-                                          min_sidebar_width=200, max_sidebar_width=240)
+                                          min_sidebar_width=FULL_WIDTH,
+                                          max_sidebar_width=FULL_WIDTH)
         self.split.set_sidebar(self.nav)
         self.split.set_content(content)
         self.split.bind_property("show-sidebar", self.sidebar_btn, "active",
                                  GObject.BindingFlags.BIDIRECTIONAL
                                  | GObject.BindingFlags.SYNC_CREATE)
         self.split.connect("notify::collapsed", self._on_collapsed)
+        self.nav.set_compact(bool(self.settings.get("sidebar_compact")))
 
         shell = Adw.ToolbarView()
         shell.add_top_bar(header)
@@ -129,6 +145,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.add_breakpoint(bp)
 
         self._install_keys()
+        self.gamepad = GamepadInput(self.handle_remote_key)
+        self.reminders = ReminderBook(self.settings.get("reminders"))
+        if self.pages["channels"].guide is not None:
+            self.pages["channels"].guide.reminders = self.reminders
+        GLib.timeout_add_seconds(20, self._check_reminders)
         self.connect("close-request", self._on_close_request)
         self.connect("notify::fullscreened", self._on_fullscreen_changed)
         self._connect_settings()
@@ -153,9 +174,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("play", self._on_play)
         channels.connect("favorite-changed", self._on_favorite_changed)
         channels.connect("show-schedule", self._on_show_schedule)
+        channels.connect("hide-group", self._on_hide_group)
+        channels.connect("remind", self._on_remind)
+        channels.connect("move-group", self._on_move_group)
 
-        epg_page = EpgPage(self.storage)
-        epg_page.connect("play", self._on_play)
 
         movies = CatalogPage(self.storage, MediaType.MOVIE, _("Movies"),
                              _("The best movies for you"))
@@ -180,13 +202,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         lists.connect("xtream-requested", self._on_xtream_requested)
         lists.connect("refresh-requested", lambda _w, pid: self._refresh_playlist(pid))
         lists.connect("delete-requested", self._on_delete_requested)
+        lists.connect("enabled-changed", self._on_playlist_enabled)
 
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
         settings.connect("history-cleared", lambda *_: self.pages["home"].invalidate())
 
         self.pages = {
-            "home": home, "channels": channels, "epg": epg_page,
+            "home": home, "channels": channels,
             "movies": movies, "series": series, "favorites": favorites,
             "recordings": recordings, "lists": lists, "settings": settings,
         }
@@ -217,6 +240,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_start(self, _w) -> None:
         self.root_stack.set_visible_child_name("shell")
         self.navigate("lists" if not self.storage.has_playlists() else "home")
+
+    def _on_nav_compact(self, _nav, compact: bool) -> None:
+        width = COMPACT_WIDTH if compact else FULL_WIDTH
+        self.split.set_min_sidebar_width(width)
+        self.split.set_max_sidebar_width(width)
+        self.settings.set("sidebar_compact", compact)
 
     def _on_collapsed(self, split, _p) -> None:
         collapsed = split.get_collapsed()
@@ -275,13 +304,37 @@ class AshyTvWindow(Adw.ApplicationWindow):
         zap = page.filter_model if page is self.pages["channels"] else None
         self._play_channel(channel, zap)
 
+    def _live_channels(self) -> list[Channel]:
+        chans = self.storage.channels(MediaType.LIVE)
+        return collapse_variants(chans) if self.storage.group_variants else chans
+
+    def _live_item(self, ch: Channel, number: int) -> PlayItem:
+        """PlayItem for a live channel, with its quality variants when grouped."""
+        variants = []
+        if self.storage.group_variants:
+            variants = [Variant(label=quality_label(v.quality),
+                                url=self._resolve(v.url, v.playlist_id),
+                                user_agent=v.user_agent, referrer=v.referrer)
+                        for v in self.storage.variants(ch)]
+        title = ch.base_name if len(variants) > 1 else ch.display_name
+        return PlayItem(
+            title=title, url=self._resolve(ch.url, ch.playlist_id), key=ch.url,
+            media_type=ch.media_type, playlist_id=ch.playlist_id, logo=ch.logo,
+            tvg_id=ch.tvg_id, number=number, channel=ch,
+            user_agent=ch.user_agent, referrer=ch.referrer,
+            variants=variants if len(variants) > 1 else [])
+
     def _play_channel(self, channel: Channel, zap=None, start: float = 0) -> None:
         if channel.media_type is MediaType.LIVE and zap is None:
-            zap = self.storage.channels(MediaType.LIVE)
+            zap = self._live_channels()
         self._zap = zap if channel.media_type is MediaType.LIVE else None
         self._series_ctx = None
         self._zap_index = self._find_index(channel)
+        self._prev_zap_index = None
         number = self._zap_index + 1 if self._zap is not None else 0
+        if channel.media_type is MediaType.LIVE:
+            self._start(self._live_item(channel, number), can_zap=self._zap is not None)
+            return
         if channel.media_type is MediaType.MOVIE and not start:
             start = self.storage.resume_position(channel.playlist_id, channel.url)
         item = PlayItem(
@@ -291,7 +344,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
             playlist_id=channel.playlist_id, logo=channel.logo, tvg_id=channel.tvg_id,
             number=number, start=start, channel=channel,
             subtitle=" • ".join(p for p in (channel.year, channel.genre) if p),
-            user_agent=channel.user_agent, referrer=channel.referrer)
+            user_agent=channel.user_agent, referrer=channel.referrer,
+            sub_files=self._vod_info.get((channel.playlist_id, channel.ext_id), {})
+            .get("subtitles", []))
         self._start(item, can_zap=self._zap is not None)
 
     def _play_episode(self, series: Channel, episode: Episode, episodes: list[Episode],
@@ -313,6 +368,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return
         if self.mini is not None:
             self._close_mini(stop=False)
+        if self.root_stack.get_visible_child_name() == "shell":
+            self._focus_before_player = self.get_focus()  # restored on close
         self.player.play(item, can_zap=can_zap)
         self.root_stack.set_visible_child_name("player")
         if item.is_live:
@@ -360,6 +417,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
                             self._record(item, pos, dur))
         self.player.connect("ended", self._on_ended)
         self.player.connect("pip-requested", self._on_pip)
+        self.player.connect("channel-list", self._on_channel_list)
+        self.player.connect("zap-to", lambda _p, index: self._zap_to(index))
+        self.player.connect("zap-previous", lambda *_: self._zap_previous())
         self.player.connect("toast", lambda _p, msg: self._toast(msg))
         if self._epg_guide is not None:
             self.player.set_guide(self._epg_guide)
@@ -376,17 +436,32 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 self._play_episode(series, episodes[nxt], episodes)
             return
         n = self._zap_len()
-        if not n:
+        if n:
+            self._zap_to((self._zap_index + delta) % n)
+
+    def _zap_to(self, index: int) -> None:
+        """Tune the channel at `index` of the zapping list (0-based)."""
+        n = self._zap_len()
+        if not 0 <= index < n:
+            self.player.flash(_("No channel {number}").format(number=index + 1))
             return
-        self._zap_index = (self._zap_index + delta) % n
-        ch = self._zap_item(self._zap_index)
-        item = PlayItem(
-            title=ch.display_name, url=self._resolve(ch.url, ch.playlist_id), key=ch.url,
-            media_type=ch.media_type, playlist_id=ch.playlist_id, logo=ch.logo,
-            tvg_id=ch.tvg_id, number=self._zap_index + 1, channel=ch,
-            user_agent=ch.user_agent, referrer=ch.referrer)
+        if index == self._zap_index and self.player.item is not None:
+            return
+        self._prev_zap_index = self._zap_index
+        self._zap_index = index
+        item = self._live_item(self._zap_item(index), index + 1)
         self.player.play(item, can_zap=True)
         self._record(item, 0, 0)
+
+    def _zap_previous(self) -> None:
+        if self._prev_zap_index is not None:
+            self._zap_to(self._prev_zap_index)
+
+    def _on_channel_list(self, _p) -> None:
+        n = self._zap_len()
+        if n:
+            channels = [self._zap_item(i) for i in range(n)]
+            self.player.show_channel_list(channels, self._zap_index, self._epg_guide)
 
     def _on_ended(self, _p, item: PlayItem) -> None:
         if self._series_ctx is None:
@@ -448,6 +523,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         page = self.pages.get(self._current)
         if hasattr(page, "refresh"):
             page.refresh()
+        GLib.idle_add(self._restore_focus)
+
+    def _restore_focus(self) -> bool:
+        """Back from the player: the keyboard focus returns where it was."""
+        widget, self._focus_before_player = self._focus_before_player, None
+        if not (widget is not None and widget.get_mapped() and widget.grab_focus()):
+            self.focus_page() or self.nav.focus_active()
+        return GLib.SOURCE_REMOVE
 
     def _on_player_fav(self, _p, item: PlayItem) -> None:
         ch = item.channel
@@ -492,7 +575,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
     # ---- details / series ---------------------------------------------
 
     def _open_detail(self, channel: Channel) -> None:
-        dialog = DetailDialog(self.storage, channel, self._with_episodes)
+        dialog = DetailDialog(self.storage, channel, self._with_episodes,
+                              self._with_vod_info)
         dialog.connect("play", self._on_detail_play)
         dialog.connect("favorite-changed", self._on_favorite_changed)
         dialog.present(self)
@@ -525,6 +609,32 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
         threading.Thread(target=worker, daemon=True).start()
 
+    def _with_vod_info(self, movie: Channel, on_done, on_error) -> None:
+        """Movie details from the Xtream API (synopsis, cast…), cached per run."""
+        key = (movie.playlist_id, movie.ext_id)
+        if key in self._vod_info:
+            on_done(self._vod_info[key])
+            return
+        prov = self._providers.get(movie.playlist_id)
+        if prov is None or not movie.ext_id or movie.media_type is not MediaType.MOVIE:
+            on_done({})
+            return
+
+        def worker():
+            try:
+                info = vod_info(prov, movie.ext_id)
+            except Exception as exc:
+                GLib.idle_add(lambda e=exc: on_error(e) and False)
+                return
+
+            def done():
+                self._vod_info[key] = info
+                on_done(info)
+                return GLib.SOURCE_REMOVE
+            GLib.idle_add(done)
+
+        threading.Thread(target=worker, daemon=True).start()
+
     def _episodes_done(self, series, eps, exc, on_done, on_error) -> bool:
         if exc is not None:
             cached = self.storage.episodes(series.id)
@@ -533,9 +643,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
             else:
                 on_error(exc)
             return GLib.SOURCE_REMOVE
-        self.storage.replace_episodes(series.id, eps)
-        self._fetched_series[series.id] = time.time()
-        on_done(self.storage.episodes(series.id))
+        # A playlist refresh may have replaced the row: look the series up again.
+        current = self.storage.find_channel(series.playlist_id, series.url)
+        if current is None:
+            on_done(eps)
+            return GLib.SOURCE_REMOVE
+        self.storage.replace_episodes(current.id, eps)
+        self._fetched_series[current.id] = time.time()
+        on_done(self.storage.episodes(current.id))
         return GLib.SOURCE_REMOVE
 
     def _on_show_schedule(self, _page, channel: Channel) -> None:
@@ -544,17 +659,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     # ---- playlist import ---------------------------------------------
 
-    def _begin_import(self, message: str) -> bool:
+    def _begin_import(self, message: str, quiet_id: int = 0) -> bool:
+        """Start an import. `quiet_id` marks an automatic background refresh
+        of that playlist: no banner or form status, only a toast at the end."""
         if self._importing:
-            self._toast(_("Please wait: an import is already in progress."))
+            if not quiet_id:
+                self._toast(_("Please wait: an import is already in progress."))
             return False
         self._importing = True
-        self.pages["lists"].set_busy(True, message)
-        self.banner.set_title(message)
-        self.banner.set_revealed(True)
+        self._quiet_id = quiet_id
+        self.pages["lists"].set_busy(True, "" if quiet_id else message)
+        if not quiet_id:
+            self.banner.set_title(message)
+            self.banner.set_revealed(True)
         return True
 
     def _import_progress(self, message: str) -> None:
+        if self._quiet_id:
+            return
         self.pages["lists"].set_status(message)
         self.banner.set_title(message)
 
@@ -570,57 +692,91 @@ class AshyTvWindow(Adw.ApplicationWindow):
         provider = XtreamProvider(host=normalize_host(host), username=user, password=pwd)
         self._run_xtream_import(name, provider)
 
-    def _run_xtream_import(self, name: str, provider: XtreamProvider) -> None:
-        if not self._begin_import(_("Connecting to the Xtream provider…")):
+    def _run_xtream_import(self, name: str, provider: XtreamProvider,
+                           quiet_id: int = 0) -> None:
+        if not self._begin_import(_("Connecting to the Xtream provider…"), quiet_id):
             return
         db_path = self.storage.path
         importer.run_async(
             lambda progress: importer.import_xtream(db_path, name, provider, progress),
             self._import_done, self._import_error, self._import_progress)
 
-    def _refresh_playlist(self, playlist_id: int) -> None:
+    def _refresh_playlist(self, playlist_id: int, quiet: bool = False) -> bool:
+        """Refresh a playlist; returns False when it could not be started."""
         row = self.storage.get_playlist(playlist_id)
         if row is None:
-            return
+            return False
+        quiet_id = playlist_id if quiet else 0
         if row["kind"] == "xtream":
             prov = self._providers.get(playlist_id)
             if prov is None or not prov.password:
-                self._toast(_("Provider password not found; add the playlist again."))
-                return
-            self._run_xtream_import(row["name"], prov)
+                if not quiet:
+                    self._toast(_("Provider password not found; add the playlist again."))
+                return False
+            self._run_xtream_import(row["name"], prov, quiet_id)
         else:
-            if not self._begin_import(_("Updating playlist…")):
-                return
+            if not self._begin_import(_("Updating playlist…"), quiet_id):
+                return False
             db_path, name, source = self.storage.path, row["name"], row["source"]
             importer.run_async(
                 lambda progress: importer.import_m3u(db_path, name, source, progress),
                 self._import_done, self._import_error, self._import_progress)
+        return True
 
     def _import_done(self, result) -> None:
+        quiet_id, self._quiet_id = self._quiet_id, 0
         self._importing = False
         self.banner.set_revealed(False)
-        self.pages["lists"].set_busy(False, ngettext(
-            "{n} item imported.", "{n} items imported.", result.count).format(n=result.count))
-        self._toast(ngettext("Playlist ready: {n} item.", "Playlist ready: {n} items.",
-                             result.count).format(n=result.count))
         self._load_providers()
         self._invalidate_pages()
         self._epg_source = ""
         self._autoload_epg(force_id=result.playlist_id)
+        if quiet_id:
+            self.pages["lists"].set_busy(False)
+            row = self.storage.get_playlist(quiet_id)
+            if row is not None:
+                self._toast(_("Playlist “{name}” updated.").format(name=row["name"]))
+            self._next_auto_refresh()
+            return
+        self.pages["lists"].set_busy(False, ngettext(
+            "{n} item imported.", "{n} items imported.", result.count).format(n=result.count))
+        self._toast(ngettext("Playlist ready: {n} item.", "Playlist ready: {n} items.",
+                             result.count).format(n=result.count))
+        self.pages["lists"].clear_form()
         if self.root_stack.get_visible_child_name() != "player":
             self.root_stack.set_visible_child_name("shell")
         if self._current == "lists":
             self.navigate("channels")
+        self._next_auto_refresh()
 
     def _import_error(self, exc: Exception) -> None:
+        quiet_id, self._quiet_id = self._quiet_id, 0
         self._importing = False
         self.banner.set_revealed(False)
-        msg = str(exc) or exc.__class__.__name__
+        msg = http.describe_error(exc)
         self.pages["lists"].set_busy(False)
+        if quiet_id:
+            # Background refresh: keep the old data, don't retry until the
+            # next interval and don't put the error in the "add" form.
+            row = self.storage.get_playlist(quiet_id)
+            if row is not None:
+                self.storage.update_playlist_meta(quiet_id, refresh_failed_at=int(time.time()))
+                self._toast(_("Could not update “{name}”: {error}").format(
+                    name=row["name"], error=msg))
+            self._next_auto_refresh()
+            return
         self.pages["lists"].set_status(_("Failed: {error}").format(error=msg), error=True)
         self._toast(_("Import failed: {error}").format(error=msg))
+        self._next_auto_refresh()
 
     def _on_delete_requested(self, _w, playlist_id: int) -> None:
+        if self._importing:
+            # The import would write the playlist back right after deleting it.
+            self._toast(_("Please wait for the import to finish."))
+            return
+        if self.player is not None and self.player.item is not None \
+                and self.player.item.playlist_id == playlist_id:
+            self.player.close()
         prov = self._providers.get(playlist_id)
         self.storage.delete_playlist(playlist_id)
         if prov is not None and not any(
@@ -635,15 +791,29 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._epg_source = ""
             self.root_stack.set_visible_child_name("welcome")
 
+    def _on_playlist_enabled(self, _w, playlist_id: int, enabled: bool) -> None:
+        if not enabled and self.player is not None and self.player.item is not None \
+                and self.player.item.playlist_id == playlist_id:
+            self.player.close()
+        self.storage.set_playlist_enabled(playlist_id, enabled)
+        self._invalidate_pages()
+        self._epg_source = ""
+        self._autoload_epg(force_id=playlist_id if enabled else None)
+
     def _auto_refresh(self) -> bool:
-        if not self.settings.get("auto_refresh"):
-            return GLib.SOURCE_REMOVE
-        max_age = int(self.settings.get("refresh_hours")) * 3600
-        for row in self.storage.list_playlists():
-            if time.time() - (row["updated_at"] or 0) > max_age:
-                self._refresh_playlist(int(row["id"]))
-                break  # one at a time; the others on the next launch
+        if self.settings.get("auto_refresh"):
+            max_age = int(self.settings.get("refresh_hours")) * 3600
+            self._refresh_queue = self.storage.stale_playlists(max_age)
+            self._next_auto_refresh()
         return GLib.SOURCE_REMOVE
+
+    def _next_auto_refresh(self) -> None:
+        """Refresh the queued playlists one after another, quietly."""
+        while self._refresh_queue:
+            if self._importing:
+                return  # a manual import is running; resumes when it ends
+            if self._refresh_playlist(self._refresh_queue.pop(0), quiet=True):
+                return
 
     # ---- automatic EPG -----------------------------------------------
 
@@ -652,6 +822,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if force_id is not None:
             rows.sort(key=lambda r: r["id"] != force_id)
         for row in rows:
+            if not row["enabled"]:
+                continue
             url = ""
             prov = self._providers.get(int(row["id"]))
             if prov is not None and prov.password:
@@ -666,17 +838,22 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if url == self._epg_source:
             return
         self._epg_source = url
-        epg.fetch_guide_async(url, on_done=self._on_epg_ready,
-                              on_error=self._on_epg_error)
+        # Results of an older request (other playlist, deleted one…) are ignored.
+        epg.fetch_guide_async(url, on_done=lambda g: self._on_epg_ready(g, url),
+                              on_error=lambda e: self._on_epg_error(e, url))
 
-    def _on_epg_error(self, exc) -> bool:
-        self._epg_source = ""
-        self._toast(_("Guide (EPG) unavailable: {error}").format(error=exc))
+    def _on_epg_error(self, exc, url: str) -> bool:
+        if url == self._epg_source:
+            self._epg_source = ""
+            self._toast(_("Guide (EPG) unavailable: {error}").format(
+                error=http.describe_error(exc)))
         return GLib.SOURCE_REMOVE
 
-    def _on_epg_ready(self, guide) -> bool:
+    def _on_epg_ready(self, guide, url: str) -> bool:
+        if url != self._epg_source:
+            return GLib.SOURCE_REMOVE
         self._epg_guide = guide
-        for key in ("home", "channels", "favorites", "epg"):
+        for key in ("home", "channels", "favorites"):
             self.pages[key].set_guide(guide)
         if self.player is not None:
             self.player.set_guide(guide)
@@ -688,8 +865,92 @@ class AshyTvWindow(Adw.ApplicationWindow):
         s = self.settings
         self.storage.hide_adult = bool(s.get("hide_adult"))
         s.connect("hide_adult", self._on_hide_adult)
+        self.storage.group_variants = bool(s.get("group_variants"))
+        self.storage.hidden_groups = set(s.get("hidden_groups") or [])
+        self.storage.group_order = list(s.get("group_order") or [])
+        s.connect("hidden_groups", self._on_groups_setting)
+        s.connect("group_order", self._on_groups_setting)
+        s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
-            "home", "channels", "favorites", "movies", "series", "epg"))
+            "home", "channels", "favorites", "movies", "series"))
+
+    # ---- reminders ---------------------------------------------------
+
+    def _on_remind(self, _page, channel: Channel, prog) -> None:
+        reminder = Reminder(playlist_id=channel.playlist_id, channel_url=channel.url,
+                            channel_name=channel.base_name if channel.variant_labels
+                            else channel.display_name,
+                            title=prog.title or _("Programme"), start=int(prog.start))
+        is_set = self.reminders.toggle(reminder)
+        self.settings.set("reminders", self.reminders.to_list())
+        when = GLib.DateTime.new_from_unix_local(reminder.start).format("%R")
+        self._toast(_("You will be reminded of “{title}” at {time}").format(
+            title=reminder.title, time=when) if is_set else _("Reminder cancelled"))
+
+    def _check_reminders(self) -> bool:
+        now = time.time()
+        due = self.reminders.due(now)
+        if due or self.reminders.prune(now):
+            self.settings.set("reminders", self.reminders.to_list())
+        for r in due:
+            self._announce(r)
+        return GLib.SOURCE_CONTINUE
+
+    def _announce(self, r: Reminder) -> None:
+        text = _("“{title}” starts soon on {channel}").format(title=r.title,
+                                                               channel=r.channel_name)
+        notification = Gio.Notification.new(_("AshyTV reminder"))
+        notification.set_body(text)
+        notification.set_default_action_and_target("app.watch-reminder",
+                                                   GLib.Variant("s", r.key))
+        notification.add_button_with_target(_("Watch"), "app.watch-reminder",
+                                            GLib.Variant("s", r.key))
+        app = self.get_application()
+        if app is not None:
+            app.send_notification(f"reminder-{r.key}", notification)
+        toast = Adw.Toast(title=GLib.markup_escape_text(text), timeout=10,
+                          button_label=_("Watch"))
+        toast.connect("button-clicked", lambda *_: self.watch_reminder(r.key))
+        self.toasts.add_toast(toast)
+
+    def watch_reminder(self, key: str) -> None:
+        playlist_id, _sep, rest = key.partition("|")
+        url = rest.rsplit("|", 1)[0]
+        channel = self.storage.find_channel(int(playlist_id or 0), url)
+        if channel is None:
+            self._toast(_("This channel is no longer in your playlists."))
+            return
+        self.present()
+        self._play_channel(channel)
+
+    def _on_groups_setting(self, _value) -> None:
+        self.storage.hidden_groups = set(self.settings.get("hidden_groups") or [])
+        self.storage.group_order = list(self.settings.get("group_order") or [])
+        self._invalidate_pages("home", "channels", "favorites")
+
+    def _on_hide_group(self, _page, group: str) -> None:
+        hidden = list(self.settings.get("hidden_groups") or [])
+        if group not in hidden:
+            self.settings.set("hidden_groups", [*hidden, group])
+        toast = Adw.Toast(title=GLib.markup_escape_text(
+            _("Group “{name}” hidden").format(name=group)), timeout=5,
+            button_label=_("Undo"))
+        toast.connect("button-clicked", lambda *_: self.settings.set(
+            "hidden_groups", [g for g in self.settings.get("hidden_groups") if g != group]))
+        self.toasts.add_toast(toast)
+
+    def _on_move_group(self, _page, group: str, delta: int) -> None:
+        order = [g for g, _n in self.storage.groups(MediaType.LIVE)]
+        if group not in order:
+            return
+        i = order.index(group)
+        j = max(0, min(len(order) - 1, i + delta))
+        order.insert(j, order.pop(i))
+        self.settings.set("group_order", order)
+
+    def _on_group_variants(self, value) -> None:
+        self.storage.group_variants = bool(value)
+        self._invalidate_pages("home", "channels", "favorites")
 
     def _on_hide_adult(self, value) -> None:
         self.storage.hide_adult = bool(value)
@@ -702,6 +963,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self._on_key)
         self.add_controller(keys)
+        # Bubble phase: only keys no widget used (e.g. ← at the left edge).
+        nav_keys = Gtk.EventControllerKey()
+        nav_keys.connect("key-pressed", self._on_nav_key)
+        self.add_controller(nav_keys)
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
         if self.root_stack.get_visible_child_name() == "player" and self.player:
@@ -716,7 +981,96 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if keyval == Gdk.KEY_Escape and self.search_btn.get_active():
             self.search_btn.set_active(False)
             return True
+        direction = self._DIRECTIONS.get(keyval)
+        if direction is not None and not state & (Gdk.ModifierType.CONTROL_MASK
+                                                  | Gdk.ModifierType.ALT_MASK
+                                                  | Gdk.ModifierType.SHIFT_MASK):
+            return self._move_focus(direction)
+        return self._type_to_search(keyval, state)
+
+    def _move_focus(self, direction: Gtk.DirectionType) -> bool:
+        """Arrow keys: spatial navigation over the whole window (see keynav)."""
+        focus = self.get_focus()
+        if focus is None:
+            return self.focus_page() or self.nav.focus_active() or True
+        if direction == Gtk.DirectionType.RIGHT and self.nav.has_focus_within(focus) \
+                and self.focus_page():
+            return True  # leaving the sidebar enters the content
+        if not focus.get_mapped():
+            # The focused widget was hidden (emptied list, closed view…).
+            return self.focus_page() or self.nav.focus_active() or True
+        return keynav.move(self, direction, prefer={self.nav: self.nav.focus_active},
+                           walls=(self.nav,))
+
+    def _focus_is_editable(self) -> bool:
+        focus = self.get_focus()
+        return focus is not None and (isinstance(focus, Gtk.Editable)
+                                      or focus.get_ancestor(Gtk.Editable) is not None)
+
+    def _type_to_search(self, keyval: int, state) -> bool:
+        """Typing on a searchable page starts searching right away."""
+        if (state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK
+                     | Gdk.ModifierType.SUPER_MASK)
+                or self.root_stack.get_visible_child_name() != "shell"
+                or not self.search_btn.get_visible() or self._focus_is_editable()):
+            return False
+        char = chr(Gdk.keyval_to_unicode(keyval) or 0)
+        if not char.isprintable() or char.isspace() or char == "\0":
+            return False
+        if not self.search_btn.get_active():
+            self.search_btn.set_active(True)
+        self.search.grab_focus()
+        self.search.insert_text(char, -1)
+        self.search.set_position(-1)
+        return True
+
+    def _on_nav_key(self, _c, keyval, _code, state) -> bool:
+        """Remote-style movement between the sidebar and the page."""
+        if (self.root_stack.get_visible_child_name() != "shell"
+                or state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK)):
+            return False
+        focus = self.get_focus()
+        in_nav = self.nav.has_focus_within(focus)
+        if not in_nav and keyval in (Gdk.KEY_BackSpace, Gdk.KEY_Escape):
+            if keyval == Gdk.KEY_BackSpace and self._focus_is_editable():
+                return False
+            if self.split.get_collapsed():
+                self.split.set_show_sidebar(True)
+            self.nav.focus_active()
+            return True
         return False
+
+    _DIRECTIONS = {Gdk.KEY_Up: Gtk.DirectionType.UP, Gdk.KEY_Down: Gtk.DirectionType.DOWN,
+                   Gdk.KEY_Left: Gtk.DirectionType.LEFT,
+                   Gdk.KEY_Right: Gtk.DirectionType.RIGHT}
+
+    def handle_remote_key(self, keyval: int) -> bool:
+        """A key from a game controller / remote: behave like the keyboard."""
+        if not self.is_active():
+            return False  # another application has the focus
+        dialog = self.get_visible_dialog()
+        if dialog is not None and keyval in (Gdk.KEY_Escape, Gdk.KEY_BackSpace):
+            dialog.close()
+            return True
+        if self._on_key(None, keyval, 0, 0):
+            return True
+        focus = self.get_focus()
+        direction = self._DIRECTIONS.get(keyval)
+        if direction is not None:
+            # Not handled above (e.g. the channel list over the video): a real
+            # key would reach the focused list; move the focus like it would.
+            return self.child_focus(direction) or True
+        if keyval in (Gdk.KEY_Return, Gdk.KEY_space) and focus is not None:
+            return activate_widget(focus)
+        return self._on_nav_key(None, keyval, 0, 0)
+
+    def focus_page(self) -> bool:
+        page = self.pages.get(self._current)
+        if page is None:
+            return False
+        if hasattr(page, "focus_content") and page.focus_content():
+            return True
+        return page.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _on_close_request(self, _w) -> bool:
         if self.mini is not None:
@@ -728,3 +1082,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _toast(self, text: str) -> None:
         self.toasts.add_toast(Adw.Toast(title=GLib.markup_escape_text(text), timeout=3))
 
+
+def activate_widget(widget: Gtk.Widget) -> bool:
+    """Activate the focused widget like Enter would.
+
+    Buttons, list rows and list/grid items all bind Enter to their
+    "activate" signal, so widget.activate() covers every case.
+    """
+    return widget.activate()
