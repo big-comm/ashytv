@@ -186,3 +186,78 @@ def test_xmltv_time_respects_timezone():
 
 def test_provider_json_is_valid_json():
     assert json.loads(XtreamProvider("http://h", "u", "p").to_json())["host"] == "http://h"
+
+
+def test_parse_provider_keeps_plus_and_symbols_in_password():
+    assert parse_provider("http://s.tv/get.php?username=u&password=ab+cd").password == "ab+cd"
+    assert parse_provider("DNS: http://s.tv\nUsuário: u\nSenha: Ab@123!").password == "Ab@123!"
+
+
+def test_xtream_junk_items_are_skipped():
+    from ashytv.services.xtream_client import live_channels, parse_series_info
+    assert [c.name for c in live_channels([None, "x", {"stream_id": 1, "name": "A"}], {})] == ["A"]
+    eps = parse_series_info({"episodes": {"1": [None, "junk", {"id": 4, "episode_num": 1,
+                                                                "title": "A", "info": []}]}})
+    assert [e.url for e in eps] == ["series/4.mp4"]
+    assert parse_series_info({"episodes": "nonsense"}) == []
+
+
+def test_trailer_only_web_links():
+    from ashytv.services.xtream_client import parse_vod_info
+    assert parse_vod_info({"info": {"youtube_trailer": "abc"}})["trailer"].startswith("https://")
+    assert parse_vod_info({"info": {"youtube_trailer": "file:///etc/passwd"}})["trailer"] == ""
+
+
+def test_epg_wrong_stop_does_not_hide_the_next_programmes():
+    g = EpgGuide()
+    g.load_xmltv(_xml(("C", 100, 10000, "Bad"), ("C", 200, 300, "B"), ("C", 300, 400, "C")))
+    assert [(p.title, p.stop) for p in g.between("C", 0, 1000)] == [
+        ("Bad", 200), ("B", 300), ("C", 400)]
+
+
+def test_epg_missing_stop_is_the_next_start():
+    xml = (b'<tv><programme start="20261023120000 +0000" channel="C"><title>A</title>'
+           b'</programme><programme start="20261023130000 +0000" channel="C">'
+           b'<title>B</title></programme></tv>')
+    g = EpgGuide()
+    g.load_xmltv(xml)
+    a, b = g.between("C", 0, 2**31)
+    assert a.stop == b.start and b.stop == b.start + 3600
+
+
+def test_epg_short_dates_and_utc():
+    assert _parse_ts(None, "202610231200 +0000") == 1792756800
+    assert _parse_ts(None, "20261023120000 Z") == 1792756800
+    assert _parse_ts(None, "20261023120000 UTC") == 1792756800
+
+
+def test_epg_keeps_only_wanted_channels_and_window_case_insensitive():
+    now = 1_000_000
+    g = EpgGuide()
+    g.load_xmltv(_xml(("News.BR", now, now + 60, "Now"), ("Other", now, now + 60, "X"),
+                      ("News.BR", now + 30 * 86400, now + 30 * 86400 + 60, "Far")),
+                 channels={"news.br"}, now=now)
+    assert g.has_channel("news.br") and g.has_channel("NEWS.BR")
+    assert not g.has_channel("Other")
+    assert [p.title for p in g.between("News.BR", 0, 2**31)] == ["Now"]
+
+
+def test_failed_guide_download_keeps_old_cache_and_leaves_no_part(tmp_path, monkeypatch):
+    from ashytv.services import epg
+
+    path = tmp_path / "g.xml"
+    path.write_bytes(b"<tv/>")
+    import os
+    os.utime(path, (0, 0))  # stale
+
+    def boom(*_a, **_k):
+        raise OSError("network down")
+
+    monkeypatch.setattr(epg.http, "open_url", boom)
+    epg.download_guide("http://h/g.xml", path)  # stale copy kept, no error
+    assert path.read_bytes() == b"<tv/>"
+    assert list(tmp_path.iterdir()) == [path]
+    path.unlink()
+    with pytest.raises(OSError):
+        epg.download_guide("http://h/g.xml", path)
+    assert list(tmp_path.iterdir()) == []
