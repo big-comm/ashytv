@@ -106,6 +106,10 @@ class ChannelOverlay(Gtk.Box):
             texts.append(w)
         for w in (num, logo, texts):
             row.append(w)
+        # The number is the row's position: it changes when a search filters
+        # the list without the row being bound again.
+        item.connect("notify::position",
+                     lambda li, _p: num.set_text(str(li.get_position() + 1)))
         item.set_child(row)
 
     def _on_bind(self, _f, item: Gtk.ListItem) -> None:

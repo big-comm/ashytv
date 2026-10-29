@@ -238,7 +238,11 @@ def keeps_key(focus: Gtk.Widget | None, direction: Gtk.DirectionType) -> bool:
         return False
     if direction in (Gtk.DirectionType.LEFT, Gtk.DirectionType.RIGHT):
         return _ancestor(focus, _HORIZONTAL_KEEPERS) is not None
-    return _ancestor(focus, (Gtk.TextView,)) is not None
+    # Spin buttons step with Up/Down, and so does a vertical slider.
+    if _ancestor(focus, (Gtk.TextView, Gtk.SpinButton)) is not None:
+        return True
+    scale = _ancestor(focus, (Gtk.Scale,))
+    return scale is not None and scale.get_orientation() == Gtk.Orientation.VERTICAL
 
 
 def move(window: Gtk.Widget, direction: Gtk.DirectionType,

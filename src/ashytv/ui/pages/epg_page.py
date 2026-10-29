@@ -283,6 +283,10 @@ class EpgPage(Gtk.Box):
         timeline.set_hexpand(True)
         timeline.set_margin_end(12)
         row.append(timeline)
+        # The number is the row's position: it changes when a search filters
+        # the list without the row being bound again.
+        list_item.connect("notify::position",
+                          lambda li, _p: num.set_text(str(li.get_position() + 1)))
         list_item.set_child(row)
 
     def _play_item(self, list_item) -> None:

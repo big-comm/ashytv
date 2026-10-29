@@ -12,7 +12,7 @@ from ...services.text import normalize
 from ...services.storage import collapse_variants
 from ..channel_object import ChannelObject
 from .epg_page import EpgPage
-from ._common import ChipRow, SearchFilter, page_header, set_logo
+from ._common import ChipRow, SearchFilter, page_header, set_logo, update_favorite
 
 _ALL = "__all__"
 
@@ -416,6 +416,10 @@ class ChannelsPage(Gtk.Box):
         row.append(texts)
         row.append(fav)
         row.append(more)
+        # The number is the row's position: it changes when a search filters
+        # the list without the row being bound again.
+        list_item.connect("notify::position",
+                          lambda li, _p: num.set_text(str(li.get_position() + 1)))
         list_item.set_child(row)
 
     def _build_menu(self, button: Gtk.MenuButton, list_item: Gtk.ListItem) -> None:
@@ -494,12 +498,26 @@ class ChannelsPage(Gtk.Box):
             button.remove_css_class("active")
 
     def _toggle_fav(self, channel: Channel) -> None:
-        self.storage.set_favorite(channel, not channel.favorite)
+        if not self.storage.set_favorite(channel, not channel.favorite):
+            return
         self.emit("favorite-changed", channel)
+        self.favorite_changed(channel)
+
+    def favorite_changed(self, channel: Channel) -> None:
+        """Update the rows of one channel in place: no reload, so the scroll
+        position and the keyboard focus stay where they are."""
         if self.favorites_only and not channel.favorite:
-            self._dirty = True
-            self.refresh()
+            # Removed from Favorites: drop just its rows.
+            for i in reversed(range(self.store.get_n_items())):
+                ch = self.store.get_item(i).channel
+                if ch.playlist_id == channel.playlist_id and ch.url == channel.url:
+                    self.store.remove(i)
+        elif self.favorites_only:
+            self._dirty = True  # a new favorite: its place in the list needs a reload
+            if self.get_mapped():
+                self.refresh()
         else:
+            update_favorite(self.store, channel)
             self._rebind_visible()
 
     def _on_activate(self, _lv, position: int) -> None:

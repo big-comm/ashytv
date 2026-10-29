@@ -267,6 +267,12 @@ button.ashy-epg-cell.now {
 .ashy-player scale trough { background-color: alpha(#fff, 0.25); min-height: 4px; border-radius: 3px; }
 .ashy-player scale highlight { background-color: var(--ashy-accent-2); border-radius: 3px; }
 .ashy-player scale slider { background-color: #fff; min-width: 14px; min-height: 14px; margin: -6px; }
+/* Popovers (tracks, volume, subtitles) follow the theme, not the white-on-
+   video look of the bar: on the light theme they were white on white. */
+.ashy-player popover button { color: inherit; }
+.ashy-player popover button:hover { background-color: alpha(currentColor, 0.1); }
+.ashy-player popover scale trough { background-color: alpha(currentColor, 0.2); }
+.ashy-player popover scale slider { background-color: var(--ashy-accent-2); }
 .ashy-player-center {
   background-color: rgba(10, 16, 32, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.12);

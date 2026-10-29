@@ -12,7 +12,7 @@ from ... import APP_VERSION
 from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
-from ...services.settings import ACCENTS, set_autostart
+from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
 from ._common import page_header
 
@@ -345,11 +345,22 @@ class SettingsPage(Gtk.Box):
                 size=GLib.format_size(size)))
         return GLib.SOURCE_REMOVE
 
-    def _clear_cache(self, _b) -> None:
-        shutil.rmtree(http.cache_root(), ignore_errors=True)
+    def _clear_cache(self, button) -> None:
+        # Thousands of files: deleting them on the main thread froze the window.
+        button.set_sensitive(False)
         logo_loader.clear_memory()
-        self._update_cache_row()
-        self.emit("toast", _("Cache cleared."))
+
+        def worker():
+            shutil.rmtree(http.cache_root(), ignore_errors=True)
+            GLib.idle_add(done)
+
+        def done():
+            button.set_sensitive(True)
+            self._update_cache_row()
+            self.emit("toast", _("Cache cleared."))
+            return GLib.SOURCE_REMOVE
+
+        threading.Thread(target=worker, daemon=True).start()
 
     def _clear_history(self, _b) -> None:
         self.storage.clear_history()
@@ -396,7 +407,7 @@ class SettingsPage(Gtk.Box):
         def response(_d, r):
             if r != "ok":
                 return
-            if entry.get_text() == self.settings.get("parental_pin"):
+            if check_pin(self.settings.get("parental_pin") or "", entry.get_text()):
                 on_ok()
             else:
                 self.emit("toast", _("Incorrect PIN."))
@@ -410,7 +421,7 @@ class SettingsPage(Gtk.Box):
             self.emit("toast", _("The PIN must have at least 4 digits."))
             return
         def save():
-            self.settings.set("parental_pin", pin)
+            self.settings.set("parental_pin", hash_pin(pin))
             row.set_text("")
             self.emit("toast", _("PIN set."))
 

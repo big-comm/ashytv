@@ -343,7 +343,8 @@ class DetailDialog(Adw.Dialog):
     # ---- favorite ------------------------------------------------------
 
     def _toggle_fav(self, _b) -> None:
-        self.storage.set_favorite(self.channel, not self.channel.favorite)
+        if not self.storage.set_favorite(self.channel, not self.channel.favorite):
+            return
         self._paint_fav()
         self.emit("favorite-changed", self.channel)
 

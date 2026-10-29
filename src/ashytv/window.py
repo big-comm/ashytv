@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sqlite3
 import threading
 import time
 
@@ -36,6 +37,14 @@ from .ui.welcome_view import WelcomeView
 _SEARCHABLE = {"channels", "movies", "series", "favorites"}
 _EPISODE_CACHE_SECS = 6 * 3600
 
+# URL schemes a playlist may hand to mpv.
+_STREAM_SCHEMES = frozenset({
+    "http", "https", "rtmp", "rtmps", "rtmpt", "rtmpe", "rtsp", "rtsps",
+    "udp", "rtp", "srt", "mms", "mmsh",
+})
+# Anything else plays this instead, which fails with the usual error screen.
+_BLOCKED_URL = "/nonexistent/ashytv-blocked-url"
+
 
 class AshyTvWindow(Adw.ApplicationWindow):
     __gtype_name__ = "AshyTvWindow"
@@ -53,6 +62,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.mini = None
         self._epg_guide = None
         self._epg_source = ""
+        self._last_recorded = ""  # key of the item whose history was saved last
+        self._passwords: dict[tuple[str, str], str] = {}  # keyring lookups
         self._current = "home"
         self._providers: dict[int, XtreamProvider] = {}
         self._zap: list | Gio.ListModel | None = None
@@ -281,14 +292,26 @@ class AshyTvWindow(Adw.ApplicationWindow):
             try:
                 prov = XtreamProvider.from_json(row["source"])
                 if not prov.password:
-                    prov.password = secrets.lookup_password(prov.host, prov.username) or ""
+                    # The keyring answers over D-Bus, synchronously: ask once
+                    # per account, not on every import.
+                    key = (prov.host, prov.username)
+                    if key not in self._passwords:
+                        self._passwords[key] = secrets.lookup_password(*key) or ""
+                    prov.password = self._passwords[key]
                 self._providers[int(row["id"])] = prov
             except (ValueError, KeyError):
                 continue
 
     def _resolve(self, url: str, playlist_id: int) -> str:
-        """Relative Xtream provider path -> URL with credentials."""
-        if "://" in url or url.startswith("/"):
+        """Relative Xtream provider path -> URL with credentials.
+
+        A playlist is untrusted input: only network streaming protocols (and
+        local paths) reach mpv. Its own protocols (edl://, av://, lavfi…)
+        could do much more than play a stream.
+        """
+        if "://" in url:
+            return url if url.split("://", 1)[0].lower() in _STREAM_SCHEMES else _BLOCKED_URL
+        if url.startswith("/"):
             return url
         prov = self._providers.get(playlist_id)
         return prov.stream_url(url) if prov else url
@@ -441,6 +464,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _zap_to(self, index: int) -> None:
         """Tune the channel at `index` of the zapping list (0-based)."""
+        if self.root_stack.get_visible_child_name() != "player" or self.player is None:
+            return  # a number typed just before closing the player
         n = self._zap_len()
         if not 0 <= index < n:
             self.player.flash(_("No channel {number}").format(number=index + 1))
@@ -475,13 +500,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _record(self, item: PlayItem, pos: float, dur: float) -> None:
         if not item.playlist_id:
             return
-        self.storage.record_history(
-            item.playlist_id, item.key, item.media_type, item.title,
-            subtitle=item.subtitle, logo=item.logo, tvg_id=item.tvg_id,
-            position=pos, duration=dur,
-            parent=item.channel.url if item.media_type is MediaType.SERIES
-            and item.channel else "")
-        self.pages["home"].invalidate()
+        try:
+            self.storage.record_history(
+                item.playlist_id, item.key, item.media_type, item.title,
+                subtitle=item.subtitle, logo=item.logo, tvg_id=item.tvg_id,
+                position=pos, duration=dur,
+                parent=item.channel.url if item.media_type is MediaType.SERIES
+                and item.channel else "")
+        except sqlite3.Error:
+            return  # busy with an import: the next save (10 s later) catches up
+        # Progress saves of the same item (every 10 s) only mark the Home as
+        # stale: rebuilding it while visible (picture-in-picture) reset its
+        # scroll and keyboard focus each time.
+        home = self.pages["home"]
+        if item.key != self._last_recorded:
+            self._last_recorded = item.key
+            home.invalidate()
+        else:
+            home.mark_stale()
 
     def _on_resume(self, _page, row) -> None:
         mt = MediaType(row["media_type"])
@@ -489,6 +525,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if mt is MediaType.SERIES and row["parent"]:
             series = self.storage.find_channel(pid, row["parent"])
             if series is None:
+                self._toast(_("This item is no longer in the playlist."))
                 return
             self._with_episodes(series, lambda eps: self._resume_episode(series, eps,
                                                                          row["url"]),
@@ -503,8 +540,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _resume_episode(self, series, episodes, url) -> None:
         ep = next((e for e in episodes if e.url == url), None)
-        if ep is not None:
-            self._play_episode(series, ep, episodes)
+        if ep is None:
+            self._toast(_("This episode is no longer available."))
+            return
+        self._play_episode(series, ep, episodes)
 
     def _on_toggle_fullscreen(self, _p) -> None:
         if self.is_fullscreen():
@@ -534,14 +573,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _on_player_fav(self, _p, item: PlayItem) -> None:
         ch = item.channel
-        self.storage.set_favorite(ch, not ch.favorite)
+        if not self.storage.set_favorite(ch, not ch.favorite):
+            self._toast(_("Could not save now: a playlist is being updated. Try again."))
+            return
         self._on_favorite_changed(None, ch)
         self._toast(_("Added to favorites") if ch.favorite else _("Removed from favorites"))
 
-    def _on_favorite_changed(self, source, _channel) -> None:
+    def _on_favorite_changed(self, source, channel) -> None:
+        # The page the user is on (or is under the player / a dialog) is
+        # updated in place, keeping its scroll and focus; the others reload
+        # when shown.
         for key in ("home", "channels", "favorites", "movies", "series"):
-            if self.pages[key] is not source:
-                self.pages[key].invalidate()
+            page = self.pages[key]
+            if page is source:
+                continue
+            if key == self._current or page.get_mapped():
+                page.favorite_changed(channel)
+            else:
+                page.invalidate()
 
     # ---- mini player ---------------------------------------------------
 
@@ -727,6 +776,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         quiet_id, self._quiet_id = self._quiet_id, 0
         self._importing = False
         self.banner.set_revealed(False)
+        self._passwords.clear()  # the import may have saved a new password
         self._load_providers()
         self._invalidate_pages()
         self._epg_source = ""
@@ -778,7 +828,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 and self.player.item.playlist_id == playlist_id:
             self.player.close()
         prov = self._providers.get(playlist_id)
-        self.storage.delete_playlist(playlist_id)
+        try:
+            self.storage.delete_playlist(playlist_id)
+        except sqlite3.Error:
+            self._toast(_("Could not save now: a playlist is being updated. Try again."))
+            return
+        if prov is not None:
+            self._passwords.pop((prov.host, prov.username), None)
         if prov is not None and not any(
                 p.host == prov.host and p.username == prov.username
                 for pid, p in self._providers.items() if pid != playlist_id):
@@ -796,7 +852,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 and self.player.item.playlist_id == playlist_id:
             self.player.close()
         self.storage.set_playlist_enabled(playlist_id, enabled)
-        self._invalidate_pages()
+        # Not the Playlists page: it rebuilds itself once, after the switch.
+        self._invalidate_pages(*(k for k in self.pages if k != "lists"))
         self._epg_source = ""
         self._autoload_epg(force_id=playlist_id if enabled else None)
 
@@ -839,8 +896,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return
         self._epg_source = url
         # Results of an older request (other playlist, deleted one…) are ignored.
+        try:
+            channels = self.storage.tvg_ids() or None
+        except sqlite3.Error:
+            channels = None
         epg.fetch_guide_async(url, on_done=lambda g: self._on_epg_ready(g, url),
-                              on_error=lambda e: self._on_epg_error(e, url))
+                              on_error=lambda e: self._on_epg_error(e, url),
+                              channels=channels)
 
     def _on_epg_error(self, exc, url: str) -> bool:
         if url == self._epg_source:
@@ -921,6 +983,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._toast(_("This channel is no longer in your playlists."))
             return
         self.present()
+        # A dialog left open would sit over the video and keep the keys.
+        dialog = self.get_visible_dialog()
+        if dialog is not None:
+            dialog.force_close()
         self._play_channel(channel)
 
     def _on_groups_setting(self, _value) -> None:
@@ -969,6 +1035,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.add_controller(nav_keys)
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
+        # A dialog is a child of the window, so this capture-phase handler
+        # sees its keys too: leave them to the dialog (typing must not open
+        # the search behind it, Esc must close it).
+        if self.get_visible_dialog() is not None:
+            return False
         if self.root_stack.get_visible_child_name() == "player" and self.player:
             if state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK):
                 return False
@@ -1026,6 +1097,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _on_nav_key(self, _c, keyval, _code, state) -> bool:
         """Remote-style movement between the sidebar and the page."""
+        if self.get_visible_dialog() is not None:
+            return False
         if (self.root_stack.get_visible_child_name() != "shell"
                 or state & (Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.ALT_MASK)):
             return False

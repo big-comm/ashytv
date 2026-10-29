@@ -147,3 +147,16 @@ def scroller(child: Gtk.Widget, **kwargs) -> Gtk.ScrolledWindow:
     sw = Gtk.ScrolledWindow(hexpand=True, vexpand=True, **kwargs)
     sw.set_child(child)
     return sw
+
+
+def update_favorite(store, channel) -> list[int]:
+    """Copy `channel.favorite` to the matching items of a ChannelObject store
+    (the caller repaints its bound rows). Returns the positions found. Far
+    cheaper than reloading the whole list, and keeps scroll and focus."""
+    found = []
+    for i in range(store.get_n_items()):
+        ch = store.get_item(i).channel
+        if ch.playlist_id == channel.playlist_id and ch.url == channel.url:
+            ch.favorite = channel.favorite
+            found.append(i)
+    return found

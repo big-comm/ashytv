@@ -89,6 +89,13 @@ class HomePage(Gtk.Box):
         self._guide = guide
         self.invalidate()
 
+    def mark_stale(self) -> None:
+        """Refresh on the next visit, not now."""
+        self._dirty = True
+
+    def favorite_changed(self, _channel) -> None:
+        self.invalidate()
+
     def invalidate(self) -> None:
         self._dirty = True
         if self.get_mapped():

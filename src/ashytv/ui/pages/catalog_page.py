@@ -9,7 +9,7 @@ from gi.repository import Adw, Gdk, Gio, GObject, Gtk
 from ...i18n import _
 from ...models import Channel, MediaType
 from ..channel_object import ChannelObject
-from ._common import ChipRow, SearchFilter, page_header, set_picture
+from ._common import ChipRow, SearchFilter, page_header, set_picture, update_favorite
 
 _POSTER_W = 150
 _POSTER_H = 225
@@ -51,6 +51,8 @@ class CatalogPage(Gtk.Box):
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_setup)
         factory.connect("bind", self._on_bind)
+        factory.connect("unbind", lambda _f, li: self._bound.discard(li))
+        self._bound: set[Gtk.ListItem] = set()
 
         self.grid = Gtk.GridView(model=selection, factory=factory,
                                  max_columns=12, min_columns=2,
@@ -79,6 +81,14 @@ class CatalogPage(Gtk.Box):
         if self.filter_model.get_n_items() == 0:
             return False
         return self.grid.grab_focus()
+
+    def favorite_changed(self, channel: Channel) -> None:
+        """A favorite changed elsewhere: repaint the cards on screen only
+        (a GridView doesn't rebind a row whose item is the same object)."""
+        update_favorite(self.store, channel)
+        for list_item in list(self._bound):
+            if list_item.get_item() is not None:
+                self._on_bind(None, list_item)
 
     def invalidate(self) -> None:
         self._dirty = True
@@ -170,6 +180,7 @@ class CatalogPage(Gtk.Box):
 
     def _on_bind(self, _f, list_item: Gtk.ListItem) -> None:
         obj: ChannelObject = list_item.get_item()
+        self._bound.add(list_item)
         ch = obj.channel
         card = list_item.get_child()
         frame = card.get_first_child()
@@ -209,7 +220,8 @@ class CatalogPage(Gtk.Box):
 
         def toggle(*_a):
             popover.popdown()
-            self.storage.set_favorite(ch, not ch.favorite)
+            if not self.storage.set_favorite(ch, not ch.favorite):
+                return
             self.emit("favorite-changed", ch)
             frame = card.get_first_child()
             frame.get_child().get_next_sibling().get_next_sibling().set_visible(ch.favorite)

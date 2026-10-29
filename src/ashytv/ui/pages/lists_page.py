@@ -35,6 +35,8 @@ class ListsPage(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.storage = storage
         self._file_path = ""
+        self._switches: dict[int, Gtk.Switch] = {}
+        self._refocus: int | None = None  # playlist whose switch gets the focus back
         self._busy = False
 
         self.append(page_header(_("Playlists"),
@@ -265,11 +267,26 @@ class ListsPage(Gtk.Box):
 
     def refresh(self) -> None:
         self.existing.remove_all()
+        self._switches = {}
         playlists = self.storage.list_playlists()
         for pl in playlists:
             self.existing.append(self._playlist_row(pl))
         self.existing_box.set_visible(bool(playlists))
         self.add_head.set_label(_("Add Another Playlist") if playlists else _("Add Playlist"))
+        # The rows are rebuilt: give the keyboard focus back to the switch
+        # the user just flipped.
+        refocus, self._refocus = self._refocus, None
+        if refocus in self._switches:
+            self._switches[refocus].grab_focus()
+
+    def _on_switch(self, switch: Gtk.Switch, playlist_id: int) -> None:
+        self._refocus = playlist_id
+        self.emit("enabled-changed", playlist_id, switch.get_active())
+        GLib.idle_add(self._refresh_once)
+
+    def _refresh_once(self) -> bool:
+        self.refresh()
+        return GLib.SOURCE_REMOVE
 
     def clear_form(self) -> None:
         """Empty the "add" form after a playlist was saved."""
@@ -330,8 +347,8 @@ class ListsPage(Gtk.Box):
             row.add_css_class("ashy-row-off")
         switch = Gtk.Switch(active=enabled, valign=Gtk.Align.CENTER,
                             tooltip_text=_("Show this playlist's channels"))
-        switch.connect("notify::active", lambda sw, _p: self.emit(
-            "enabled-changed", pl["id"], sw.get_active()) or GLib.idle_add(self.refresh))
+        switch.connect("notify::active", lambda sw, _p: self._on_switch(sw, pl["id"]))
+        self._switches[pl["id"]] = switch
         refresh = Gtk.Button(icon_name="view-refresh-symbolic", valign=Gtk.Align.CENTER,
                              tooltip_text=_("Refresh playlist"))
         refresh.add_css_class("flat")
