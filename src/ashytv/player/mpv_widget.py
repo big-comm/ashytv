@@ -114,6 +114,9 @@ class MpvWidget(Gtk.GLArea):
         self._pending_subs: list[str] = []
         self._ctx: mpv.MpvRenderContext | None = None
         self._state = "idle"
+        # Bumped by play()/stop(): mpv events queued for an older file (an
+        # error of the channel being left) must not change the new state.
+        self._generation = 0
         self._duration = 0.0
         self._render_pending = False
         self._last_time_emit = 0.0
@@ -204,17 +207,24 @@ class MpvWidget(Gtk.GLArea):
 
     def _on_mpv_event(self, event) -> None:
         eid = event.event_id.value
+        gen = self._generation
         if eid == mpv.MpvEventID.START_FILE:
-            GLib.idle_add(self._set_state, "loading")
+            GLib.idle_add(self._state_from_event, gen, "loading")
         elif eid == mpv.MpvEventID.FILE_LOADED:
-            GLib.idle_add(self._set_state, "paused" if self._mpv_pause() else "playing")
+            GLib.idle_add(self._state_from_event, gen,
+                          "paused" if self._mpv_pause() else "playing")
             GLib.idle_add(self._add_pending_subs)
         elif eid == mpv.MpvEventID.END_FILE:
             reason = event.data.reason
             if reason == mpv.MpvEventEndFile.ERROR:
-                GLib.idle_add(self._set_state, "error")
+                GLib.idle_add(self._state_from_event, gen, "error")
             elif reason == mpv.MpvEventEndFile.EOF:
-                GLib.idle_add(self._set_state, "ended")
+                GLib.idle_add(self._state_from_event, gen, "ended")
+
+    def _state_from_event(self, gen: int, state: str) -> bool:
+        if gen == self._generation:
+            self._set_state(state)
+        return GLib.SOURCE_REMOVE
 
     def _mpv_pause(self) -> bool:
         try:
@@ -291,11 +301,13 @@ class MpvWidget(Gtk.GLArea):
         if referrer:
             options["referrer"] = referrer
         self._duration = 0.0
+        self._generation += 1
         self._set_state("loading")
         self._mpv.loadfile(url, "replace", **options)
         self._mpv.pause = False
 
     def stop(self) -> None:
+        self._generation += 1
         try:
             self._mpv.command("stop")
         except Exception:

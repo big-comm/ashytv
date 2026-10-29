@@ -321,6 +321,7 @@ class PlayerView(Gtk.Overlay):
         self._show_controls()
 
     def close(self) -> None:
+        self._cancel_digits()  # a pending number must not tune after closing
         self._save_progress()
         self._stop_recording()
         self.mpv.stop()
