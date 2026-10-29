@@ -6,7 +6,10 @@ running straight from source; once Meson packaging exists, we can migrate.
 
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
+import secrets
 from collections.abc import Callable
 from pathlib import Path
 
@@ -26,7 +29,7 @@ DEFAULTS: dict = {
     "cache_secs": 20,           # player network buffer (seconds)
     "volume": 100,
     "hide_adult": True,
-    "parental_pin": "",
+    "parental_pin": "",         # hash_pin() of the PIN, "" = no PIN
     "auto_refresh": True,
     "refresh_hours": 12,
     "autostart": False,
@@ -60,9 +63,17 @@ class Settings:
         try:
             stored = json.loads(self.path.read_text(encoding="utf-8"))
             if isinstance(stored, dict):
-                self._data.update({k: v for k, v in stored.items() if k in DEFAULTS})
+                # Only known keys with a value of the right type: a hand-edited
+                # or corrupted file must not break the app at startup.
+                self._data.update({k: v for k, v in stored.items()
+                                   if k in DEFAULTS and _valid(DEFAULTS[k], v)})
         except (OSError, ValueError):
             pass
+        pin = self._data.get("parental_pin") or ""
+        if pin and not is_hashed(pin):
+            # PINs used to be stored in clear text.
+            self._data["parental_pin"] = hash_pin(pin)
+            self._save()
 
     def __getitem__(self, key: str):
         return self._data[key]
@@ -91,6 +102,46 @@ class Settings:
             tmp.replace(self.path)
         except OSError:
             pass
+
+
+def _valid(default, value) -> bool:
+    if isinstance(default, bool):
+        return isinstance(value, bool)
+    if isinstance(default, float):
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    return isinstance(value, type(default)) and not (
+        isinstance(value, bool) and not isinstance(default, bool))
+
+
+# ---- parental PIN ----------------------------------------------------------
+
+_PIN_SCHEME = "pbkdf2"
+_PIN_ROUNDS = 200_000
+
+
+def hash_pin(pin: str) -> str:
+    """Salted hash stored instead of the PIN itself."""
+    salt = secrets.token_hex(8)
+    digest = hashlib.pbkdf2_hmac("sha256", pin.encode(), bytes.fromhex(salt), _PIN_ROUNDS)
+    return f"{_PIN_SCHEME}${salt}${digest.hex()}"
+
+
+def is_hashed(stored: str) -> bool:
+    return stored.startswith(_PIN_SCHEME + "$")
+
+
+def check_pin(stored: str, pin: str) -> bool:
+    if not stored:
+        return False
+    if not is_hashed(stored):
+        return hmac.compare_digest(stored, pin)
+    _scheme, salt, digest = stored.split("$", 2)
+    try:
+        attempt = hashlib.pbkdf2_hmac("sha256", pin.encode(), bytes.fromhex(salt),
+                                      _PIN_ROUNDS)
+    except ValueError:
+        return False
+    return hmac.compare_digest(attempt.hex(), digest)
 
 
 _AUTOSTART = """[Desktop Entry]
