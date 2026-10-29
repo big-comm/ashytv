@@ -72,7 +72,8 @@ _RELAY_WORDS = ("relay", "forward", "proxy", "restream", ".php")
 # Signed URLs: a token copied from someone's session, not a public stream.
 _TOKEN_RE = re.compile(r"[?&](?:wmsAuthSign|token|hdnts|hdnea|auth|signature|"
                        r"expires|md5|e)=", re.IGNORECASE)
-_IP_RE = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3}$|^\[")
+# IPv4, or IPv6 (urlsplit().hostname drops the brackets: any ':' means one).
+_IP_RE = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3}$|:")
 
 
 def allowed(group: str, url: str) -> bool:
@@ -81,7 +82,7 @@ def allowed(group: str, url: str) -> bool:
         return False
     parts = urlsplit(url)
     host = (parts.hostname or "").lower()
-    if not host or _IP_RE.match(host) or any(b in host for b in _BLOCKED_HOSTS):
+    if not host or _IP_RE.search(host) or any(b in host for b in _BLOCKED_HOSTS):
         return False
     rest = (parts.path + "?" + parts.query).lower()
     return not (any(w in rest for w in _RELAY_WORDS) or _TOKEN_RE.search(url))

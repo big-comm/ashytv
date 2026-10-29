@@ -16,7 +16,7 @@ from gi.repository import GLib
 from ..i18n import _
 from . import free_tv, secrets
 from .downloader import read_source
-from .m3u_parser import group_series, header_epg_url, iter_m3u
+from .m3u_parser import group_series, header_epg_url, iter_m3u, looks_like_m3u
 from .storage import Storage
 from .xtream_client import XtreamProvider, load_catalog
 
@@ -35,6 +35,10 @@ def import_m3u(db_path: Path, name: str, source: str,
     text = (free_tv.build_playlist(source, read_source) if free_tv.is_free_tv(source)
             else read_source(source))
     progress(_("Processing playlist…"))
+    # An expired account often answers with an HTML page and HTTP 200: never
+    # let that replace a good list.
+    if not looks_like_m3u(text):
+        raise ValueError(_("The address did not return an M3U playlist"))
     epg_url = header_epg_url(text)
     channels = list(iter_m3u(text))
     if free_tv.is_free_tv(source):

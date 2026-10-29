@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable, Iterator
+from urllib.parse import unquote
 
 from ..models import Channel, Episode, MediaType
 from .text import episode_title
@@ -14,6 +15,10 @@ _ATTR_RE = re.compile(r'([\w-]+)="([^"]*)"')
 # "Series Name S01E02" / "Nome.S1.E2" / "Nome - s01 e02"
 _EPISODE_RE = re.compile(r"^(?P<show>.*?)[\s._-]*S(?P<s>\d{1,3})[\s._-]*E(?P<e>\d{1,4})\b",
                          re.IGNORECASE)
+
+# A stream line: a URL with a scheme or an absolute path. Anything else (an
+# HTML error page served with HTTP 200, stray text) is not a channel.
+_STREAM_RE = re.compile(r"^(?:[a-z][a-z0-9+.-]*://|/)", re.IGNORECASE)
 
 # Keywords to classify by group-title (last resort); provider group names are often Portuguese.
 _MOVIE_HINTS = ("filme", "movie", "vod", "cinema")
@@ -47,6 +52,11 @@ def _classify(group: str, url: str = "") -> MediaType:
     return MediaType.LIVE
 
 
+def looks_like_m3u(text: str) -> bool:
+    """True for an M3U playlist; False for an error page or other data."""
+    return "#EXTINF" in text[:1 << 20] or "#EXTM3U" in text[:4096]
+
+
 def parse_m3u(text: str) -> list[Channel]:
     """Convert M3U content into a list of Channel."""
     return list(iter_m3u(text))
@@ -56,7 +66,8 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
     lines = text.splitlines() if isinstance(text, str) else text
     pending: dict | None = None
     for raw in lines:
-        line = raw.strip()
+        # strip() keeps a UTF-8 BOM (lists saved on Windows): drop it too.
+        line = raw.strip().lstrip("\ufeff")
         if not line or line.startswith("#EXTM3U"):
             continue
 
@@ -66,7 +77,9 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
             if pending is None:
                 continue
             if line.startswith("#EXTGRP:"):
-                pending["group"] = line.split(":", 1)[1].strip()
+                # Only a fallback: group-title on the #EXTINF line wins.
+                if not pending.get("group"):
+                    pending["group"] = line.split(":", 1)[1].strip()
             elif line.startswith("#EXTVLCOPT:"):
                 key, _, value = line[len("#EXTVLCOPT:"):].partition("=")
                 key = key.strip().lower()
@@ -74,10 +87,18 @@ def iter_m3u(text: str | Iterable[str]) -> Iterator[Channel]:
                     pending["user-agent"] = value.strip()
                 elif key == "http-referrer":
                     pending["referrer"] = value.strip()
-        else:
-            # Stream URL.
+        elif _STREAM_RE.match(line):
+            # Stream URL. Kodi syntax: "url|User-Agent=...&Referer=..."
+            line, _sep, options = line.partition("|")
             if pending is None:
                 pending = {"name": line, "group": ""}
+            for part in options.split("&") if options else ():
+                key, _eq, value = part.partition("=")
+                key = key.strip().lower()
+                if key == "user-agent":
+                    pending.setdefault("user-agent", unquote(value))
+                elif key in ("referer", "referrer"):
+                    pending.setdefault("referrer", unquote(value))
             # "Entertainment;Movies": several categories, keep the first.
             group = pending.get("group", "").split(";", 1)[0].strip()
             yield Channel(
@@ -120,7 +141,7 @@ def _parse_extinf(line: str) -> dict:
 def header_epg_url(text: str) -> str:
     """Guide URL declared in the header: #EXTM3U url-tvg="..." / x-tvg-url."""
     for raw in text[:4096].splitlines():
-        line = raw.strip()
+        line = raw.strip().lstrip("\ufeff")
         if line.startswith("#EXTM3U"):
             attrs = dict(_ATTR_RE.findall(line))
             url = attrs.get("x-tvg-url") or attrs.get("url-tvg") or ""

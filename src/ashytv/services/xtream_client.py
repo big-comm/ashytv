@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
-from urllib.parse import parse_qs, quote, urlencode, urlparse
+from urllib.parse import quote, unquote, urlencode, urlparse
 
 from ..i18n import _
 from ..models import Channel, Episode, MediaType
@@ -23,7 +23,8 @@ _GETPHP_RE = re.compile(
 )
 _HOST_RE = re.compile(r"https?://[^\s\"'>`]+", re.IGNORECASE)
 _USER_RE = re.compile(r"(?:Usu[aá]rio|username)\s*[:=]?\s*`?([A-Za-z0-9_.-]+)`?", re.I)
-_PASS_RE = re.compile(r"(?:Senha|password)\s*[:=]?\s*`?([A-Za-z0-9_.-]+)`?", re.I)
+# Passwords may carry symbols ("Ab@123!"): everything up to a space or backtick.
+_PASS_RE = re.compile(r"(?:Senha|password)\s*[:=]?\s*`?([^\s`]+)`?", re.I)
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 
 
@@ -94,9 +95,9 @@ def parse_provider(text: str) -> XtreamProvider | None:
     m = _GETPHP_RE.search(text)
     if m:
         host = m.group(1).rstrip("/")
-        qs = parse_qs(m.group(2))
-        user = (qs.get("username") or [""])[0]
-        pwd = (qs.get("password") or [""])[0]
+        qs = _query(m.group(2))
+        user = qs.get("username", "")
+        pwd = qs.get("password", "")
         if host and user and pwd:
             return XtreamProvider(host=host, username=user, password=pwd)
 
@@ -109,6 +110,17 @@ def parse_provider(text: str) -> XtreamProvider | None:
             host=host.rstrip("/"), username=um.group(1), password=pm.group(1)
         )
     return None
+
+
+def _query(qs: str) -> dict[str, str]:
+    """Query string to dict without parse_qs's "+" -> space: a password
+    pasted as "ab+cd" means "ab+cd"."""
+    out: dict[str, str] = {}
+    for part in qs.split("&"):
+        key, sep, value = part.partition("=")
+        if sep and key not in out:
+            out[key] = unquote(value)
+    return out
 
 
 # Lines that usually announce the server in a provider message.
@@ -182,6 +194,8 @@ def account_info(provider: XtreamProvider) -> dict:
 
 def _categories(provider: XtreamProvider, action: str) -> dict[str, str]:
     data = http.fetch_json(provider.api_url(action), timeout=60) or []
+    if not isinstance(data, list):
+        return {}
     return {str(c.get("category_id")): str(c.get("category_name") or "")
             for c in data if isinstance(c, dict)}
 
@@ -189,6 +203,8 @@ def _categories(provider: XtreamProvider, action: str) -> dict[str, str]:
 def live_channels(items: list, cats: dict[str, str]) -> list[Channel]:
     out = []
     for it in items:
+        if not isinstance(it, dict):
+            continue
         sid = it.get("stream_id")
         if sid is None:
             continue
@@ -208,6 +224,8 @@ def live_channels(items: list, cats: dict[str, str]) -> list[Channel]:
 def movies(items: list, cats: dict[str, str]) -> list[Channel]:
     out = []
     for it in items:
+        if not isinstance(it, dict):
+            continue
         sid = it.get("stream_id")
         if sid is None:
             continue
@@ -232,6 +250,8 @@ def movies(items: list, cats: dict[str, str]) -> list[Channel]:
 def series(items: list, cats: dict[str, str]) -> list[Channel]:
     out = []
     for it in items:
+        if not isinstance(it, dict):
+            continue
         sid = it.get("series_id")
         if sid is None:
             continue
@@ -286,8 +306,14 @@ def parse_series_info(data: dict) -> list[Episode]:
     series_name = str((info_block or {}).get("name") or "") if isinstance(info_block, dict) else ""
     if isinstance(seasons, list):  # some servers send a list of lists
         seasons = {str(i + 1): eps for i, eps in enumerate(seasons)}
-    for season_key, items in (seasons or {}).items():
+    if not isinstance(seasons, dict):
+        seasons = {}
+    for season_key, items in seasons.items():
+        if not isinstance(items, list):
+            continue
         for it in items or []:
+            if not isinstance(it, dict):
+                continue
             info = it.get("info") or {}
             if not isinstance(info, dict):
                 info = {}
@@ -337,6 +363,8 @@ def parse_vod_info(data: dict) -> dict:
     trailer = _text(info.get("youtube_trailer"))
     if trailer and "://" not in trailer:
         trailer = f"https://www.youtube.com/watch?v={trailer}"
+    elif not trailer.startswith(("http://", "https://")):
+        trailer = ""  # file://, smb://… from a provider must not reach the launcher
     tmdb = _text(info.get("tmdb_id"))
     subtitles = info.get("subtitles") if isinstance(info.get("subtitles"), list) else []
     return {

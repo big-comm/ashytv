@@ -92,3 +92,8 @@ def test_groups_are_localized_after_classification(monkeypatch):
     free_tv.localize_groups(chans)
     assert [c.group for c in chans] == ["Classics", "Brasil", "Reino Unido", "News (AR)"]
     assert chans[0].media_type is MediaType.MOVIE
+
+
+def test_ipv6_hosts_are_dropped():
+    assert not free_tv.allowed("Brazil", "http://[2001:db8::1]/live.m3u8")
+    assert free_tv.allowed("Brazil", "https://tv.example.org/live/playlist.m3u8")
