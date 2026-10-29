@@ -210,3 +210,39 @@ def test_disabled_playlist_is_hidden_but_kept(tmp_path):
     assert db.disabled == {p2} and db.count_channels(p2) == 1
     db.set_playlist_enabled(p2, True)
     assert db.count(MediaType.LIVE) == 2
+
+
+def test_search_wildcards_are_literal(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("100% News", "u/a"), _ch("Sports", "u/b"),
+                              _ch("Big_Show", "u/c")])
+    assert [c.name for c in db.channels(search="%")] == ["100% News"]
+    assert [c.name for c in db.channels(search="_")] == ["Big_Show"]
+
+
+def test_parental_filter_covers_history_and_recents(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a", group="News"), _ch("X", "u/x", group="XXX Adult"),
+                              _ch("Toon", "u/t", group="Adult Swim")])
+    for url, title in (("u/a", "A"), ("u/x", "X"), ("u/t", "Toon")):
+        db.record_history(pid, url, MediaType.LIVE, title)
+    db.hide_adult = True
+    assert sorted(r["url"] for r in db.history()) == ["u/a", "u/t"]
+    assert sorted(c.name for c in db.recent_channels(MediaType.LIVE)) == ["A", "Toon"]
+    db.hidden_groups = {"News"}
+    assert [r["url"] for r in db.history()] == ["u/t"]
+
+
+def test_favorite_while_database_is_busy(tmp_path):
+    path = tmp_path / "t.db"
+    db = Storage(path, timeout=0.1)
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a")])
+    ch = db.channels()[0]
+    writer = sqlite3.connect(path)
+    writer.execute("BEGIN IMMEDIATE")  # an import holding the write lock
+    assert db.set_favorite(ch, True) is False and not ch.favorite
+    writer.rollback()
+    assert db.set_favorite(ch, True) is True and ch.favorite

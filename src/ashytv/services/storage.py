@@ -44,9 +44,12 @@ def default_path() -> Path:
 class Storage:
     """Thin layer over SQLite."""
 
-    def __init__(self, path: Path | None = None):
+    def __init__(self, path: Path | None = None, timeout: float = 30):
         self.path = path or default_path()
-        self.db = sqlite3.connect(self.path, timeout=30)
+        # The UI connection uses a short timeout (see application.py): an
+        # import holds the write lock for a while and the window must not
+        # freeze waiting for it.
+        self.db = sqlite3.connect(self.path, timeout=timeout)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys = ON")
         self.db.execute("PRAGMA journal_mode = WAL")
@@ -220,6 +223,13 @@ class Storage:
             "SELECT * FROM playlist WHERE id = ?", (playlist_id,)
         ).fetchone()
 
+    def tvg_ids(self) -> set[str]:
+        """Lowercase guide ids of the live channels (to trim the XMLTV)."""
+        rows = self.db.execute(
+            "SELECT DISTINCT lower(tvg_id) FROM channel WHERE media_type = 'live' "
+            "AND tvg_id != ''")
+        return {r[0] for r in rows}
+
     def playlist_meta(self, playlist_id: int) -> dict:
         row = self.get_playlist(playlist_id)
         try:
@@ -358,17 +368,43 @@ class Storage:
             clauses.append(f"c.grp IN ({','.join('?' * len(groups))})")
             params.extend(groups)
         if search:
-            clauses.append("c.name_key LIKE ?")
-            params.append(f"%{normalize(search)}%")
-        if self.hide_adult:
-            for kw in ADULT_KEYWORDS:
-                clauses.append("lower(c.grp) NOT LIKE ?")
-                params.append(f"%{kw}%")
-        if self.hidden_groups and group is None:
-            clauses.append(f"c.grp NOT IN ({','.join('?' * len(self.hidden_groups))})")
-            params.extend(sorted(self.hidden_groups))
+            # "%" and "_" typed by the user are text, not wildcards.
+            clauses.append("c.name_key LIKE ? ESCAPE '\\'")
+            params.append(f"%{_like_escape(normalize(search))}%")
+        hide_sql, hide_params = self._hidden_sql("c.grp", hidden=group is None)
+        if hide_sql:
+            clauses.append(hide_sql)
+            params.extend(hide_params)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return where, params
+
+    def _hidden_sql(self, col: str, hidden: bool = True) -> tuple[str, list]:
+        """SQL condition (true = visible) for the parental filter and the
+        groups the user hid; ("", []) when nothing is hidden."""
+        clauses, params = [], []
+        if self.hide_adult:
+            for kw in ADULT_KEYWORDS:
+                if kw == "adult":
+                    # "Adult Swim" is a cartoon channel.
+                    clauses.append(f"(lower({col}) NOT LIKE ? OR lower({col}) LIKE ?)")
+                    params += ["%adult%", "%adult swim%"]
+                else:
+                    clauses.append(f"lower({col}) NOT LIKE ?")
+                    params.append(f"%{kw}%")
+        if hidden and self.hidden_groups:
+            clauses.append(f"{col} NOT IN ({','.join('?' * len(self.hidden_groups))})")
+            params.extend(sorted(self.hidden_groups))
+        return " AND ".join(clauses), params
+
+    def _history_visible_sql(self, alias: str) -> tuple[str, list]:
+        """History entries whose channel (or series) is not filtered out."""
+        cond, params = self._hidden_sql("c.grp")
+        if not cond:
+            return "", []
+        return (f"""NOT EXISTS (SELECT 1 FROM channel c
+                    WHERE c.playlist_id = {alias}.playlist_id
+                      AND c.url IN ({alias}.url, {alias}.parent)
+                      AND NOT ({cond}))""", params)
 
     _FROM = """FROM channel c LEFT JOIN favorite f
                ON f.playlist_id = c.playlist_id AND f.url = c.url"""
@@ -468,7 +504,18 @@ class Storage:
 
     # ---- favorites -----------------------------------------------------
 
-    def set_favorite(self, channel: Channel, value: bool) -> None:
+    def set_favorite(self, channel: Channel, value: bool) -> bool:
+        """Save a favorite; False (nothing changed) while the database is
+        busy with an import."""
+        try:
+            self._write_favorite(channel, value)
+        except sqlite3.OperationalError:
+            self.db.rollback()
+            return False
+        channel.favorite = value
+        return True
+
+    def _write_favorite(self, channel: Channel, value: bool) -> None:
         if value:
             self.db.execute(
                 "INSERT OR IGNORE INTO favorite (playlist_id, url) VALUES (?, ?)",
@@ -480,7 +527,6 @@ class Storage:
                 (channel.playlist_id, channel.url),
             )
         self.db.commit()
-        channel.favorite = value
 
     # ---- episodes ------------------------------------------------------
 
@@ -549,6 +595,10 @@ class Storage:
         if media_type is not None:
             clauses.append("media_type = ?")
             params.append(media_type.value)
+        visible, vparams = self._history_visible_sql("history")
+        if visible:
+            clauses.append(visible)
+            params.extend(vparams)
         sql = "SELECT * FROM history"
         if clauses:
             sql += " WHERE " + " AND ".join(clauses)
@@ -570,6 +620,7 @@ class Storage:
 
     def recent_channels(self, media_type: MediaType, limit: int = 50) -> list[Channel]:
         """Recently watched items that still exist, most recent first."""
+        hidden, hparams = self._hidden_sql("c.grp")
         rows = self.db.execute(
             f"""SELECT c.*, f.url IS NOT NULL AS fav
                 FROM history h
@@ -577,8 +628,9 @@ class Storage:
                 LEFT JOIN favorite f ON f.playlist_id = c.playlist_id AND f.url = c.url
                 WHERE h.media_type = ? {"AND " + self._enabled_sql("h.playlist_id")
                                         if self.disabled else ""}
+                {"AND " + hidden if hidden else ""}
                 ORDER BY h.watched_at DESC LIMIT {int(limit)}""",
-            (media_type.value,),
+            (media_type.value, *hparams),
         ).fetchall()
         return [self._row_to_channel(r) for r in rows]
 
@@ -610,6 +662,10 @@ class Storage:
             quality=int(r["quality"] or 0),
             base_name=r["base_name"] or "",
         )
+
+
+def _like_escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
 def collapse_variants(channels: Iterable[Channel]) -> list[Channel]:
