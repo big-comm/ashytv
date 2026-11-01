@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 15:22-0300\n"
+"POT-Creation-Date: 2026-11-01 15:37-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "自分のプレイリストをインポートしてください。アプリはコンテンツを提供しませ"
 "ん。"
 
-#: src/ashytv/application.py:167 src/ashytv/ui/pages/settings_page.py:311
+#: src/ashytv/application.py:167 src/ashytv/ui/pages/settings_page.py:313
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
@@ -46,15 +46,15 @@ msgstr ""
 msgid "Live TV"
 msgstr "ライブTV"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:287
-#: src/ashytv/ui/nav_sidebar.py:13 src/ashytv/ui/pages/channels_page.py:30
-#: src/ashytv/window.py:198
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:294
+#: src/ashytv/ui/nav_sidebar.py:13 src/ashytv/ui/pages/channels_page.py:40
+#: src/ashytv/window.py:199
 msgid "Movies"
 msgstr "映画"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:287
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:31
-#: src/ashytv/window.py:203
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:294
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:41
+#: src/ashytv/window.py:205
 msgid "Series"
 msgstr "シリーズ"
 
@@ -100,11 +100,11 @@ msgstr "アニメ"
 msgid "Business"
 msgstr "ビジネス"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:28
+#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:38
 msgid "News"
 msgstr "ニュース"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:34
+#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:44
 msgid "Documentaries"
 msgstr "ドキュメンタリー"
 
@@ -112,7 +112,7 @@ msgstr "ドキュメンタリー"
 msgid "Weather"
 msgstr "天気"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:36
+#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:46
 msgid "Music"
 msgstr "音楽"
 
@@ -235,70 +235,70 @@ msgstr "ユーザー名またはパスワードが正しくありません"
 msgid "Account status: {status}"
 msgstr "アカウントの状態: {status}"
 
-#: src/ashytv/ui/cast.py:188 src/ashytv/ui/detail_dialog.py:246
+#: src/ashytv/ui/cast.py:195 src/ashytv/ui/detail_dialog.py:246
 msgid "Cast"
 msgstr "出演"
 
-#: src/ashytv/ui/cast.py:219
+#: src/ashytv/ui/cast.py:226
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} の出演作"
 
-#: src/ashytv/ui/cast.py:267
+#: src/ashytv/ui/cast.py:274
 msgid "Cast data: TMDB"
 msgstr "出演者データ: TMDB"
 
-#: src/ashytv/ui/cast.py:292
+#: src/ashytv/ui/cast.py:299
 msgid "Nothing in your playlists"
 msgstr "プレイリストにありません"
 
-#: src/ashytv/ui/cast.py:293
+#: src/ashytv/ui/cast.py:300
 msgid "None of this person's movies or series are in your playlists."
 msgstr "この人物の映画やシリーズはプレイリストにありません。"
 
-#: src/ashytv/ui/cast.py:298
+#: src/ashytv/ui/cast.py:305
 msgid "Found in the details of the titles you opened."
 msgstr "開いた作品の詳細から見つかりました。"
 
-#: src/ashytv/ui/channel_info.py:66
+#: src/ashytv/ui/channel_info.py:70
 msgid "Live"
 msgstr "ライブ"
 
-#: src/ashytv/ui/channel_info.py:71 src/ashytv/ui/channel_info.py:220
+#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
 msgid "Unmute"
 msgstr "ミュート解除"
 
-#: src/ashytv/ui/channel_info.py:116 src/ashytv/ui/channel_overlay.py:153
+#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:153
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "番組表なし"
 
-#: src/ashytv/ui/channel_info.py:147
+#: src/ashytv/ui/channel_info.py:151
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "チャンネル {number}"
 
-#: src/ashytv/ui/channel_info.py:172 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "現在"
 
-#: src/ashytv/ui/channel_info.py:176
+#: src/ashytv/ui/channel_info.py:180
 #, python-brace-format
 msgid "{m} min left"
 msgstr "残り {m} 分"
 
-#: src/ashytv/ui/channel_info.py:180 src/ashytv/ui/player_view.py:697
+#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:697
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "次の番組: {title}"
 
-#: src/ashytv/ui/channel_info.py:220 src/ashytv/ui/player_view.py:742
+#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:742
 #: src/ashytv/ui/shortcuts.py:37
 msgid "Mute"
 msgstr "ミュート"
 
 #: src/ashytv/ui/channel_overlay.py:40 src/ashytv/ui/nav_sidebar.py:12
-#: src/ashytv/ui/pages/settings_page.py:139
+#: src/ashytv/ui/pages/settings_page.py:142
 msgid "Channels"
 msgstr "チャンネル"
 
@@ -307,8 +307,8 @@ msgid "Enter: watch  •  Esc: close"
 msgstr "Enter：視聴  •  Esc：閉じる"
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
-#: src/ashytv/ui/pages/channels_page.py:582 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1004 src/ashytv/window.py:1010
+#: src/ashytv/ui/pages/channels_page.py:563 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1012 src/ashytv/window.py:1018
 msgid "Watch"
 msgstr "視聴"
 
@@ -398,15 +398,43 @@ msgstr "{label} を視聴"
 msgid "Episode {n}"
 msgstr "エピソード {n}"
 
-#: src/ashytv/ui/detail_dialog.py:384 src/ashytv/ui/pages/catalog_page.py:217
-#: src/ashytv/ui/pages/channels_page.py:583
+#: src/ashytv/ui/detail_dialog.py:384 src/ashytv/ui/pages/catalog_page.py:225
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Remove from favorites"
 msgstr "お気に入りから削除"
 
-#: src/ashytv/ui/detail_dialog.py:385 src/ashytv/ui/pages/catalog_page.py:218
-#: src/ashytv/ui/pages/channels_page.py:583
+#: src/ashytv/ui/detail_dialog.py:385 src/ashytv/ui/pages/catalog_page.py:226
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Add to favorites"
 msgstr "お気に入りに追加"
+
+#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:147
+msgid "Hidden channels and groups"
+msgstr "非表示のチャンネルとグループ"
+
+#: src/ashytv/ui/hidden_dialog.py:24
+msgid "Show all"
+msgstr "すべて表示"
+
+#: src/ashytv/ui/hidden_dialog.py:41
+msgid "Nothing hidden"
+msgstr "非表示の項目はありません"
+
+#: src/ashytv/ui/hidden_dialog.py:42
+msgid "Right-click (or long-press) a group or channel to hide it."
+msgstr "グループやチャンネルを右クリック（または長押し）すると非表示にできます。"
+
+#: src/ashytv/ui/hidden_dialog.py:64
+msgid "Channel"
+msgstr "チャンネル"
+
+#: src/ashytv/ui/hidden_dialog.py:64
+msgid "Group"
+msgstr "グループ"
+
+#: src/ashytv/ui/hidden_dialog.py:67
+msgid "Show"
+msgstr "表示"
 
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
@@ -420,9 +448,9 @@ msgstr "停止"
 msgid "Home"
 msgstr "ホーム"
 
-#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:68
-#: src/ashytv/ui/pages/channels_page.py:242
-#: src/ashytv/ui/pages/channels_page.py:265
+#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:79
+#: src/ashytv/ui/pages/channels_page.py:258
+#: src/ashytv/ui/pages/channels_page.py:281
 msgid "Favorites"
 msgstr "お気に入り"
 
@@ -434,7 +462,7 @@ msgstr "録画"
 msgid "Playlists"
 msgstr "プレイリスト"
 
-#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:60
+#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:63
 msgid "Settings"
 msgstr "設定"
 
@@ -446,111 +474,119 @@ msgstr "メニューを折りたたむ"
 msgid "Expand menu"
 msgstr "メニューを展開"
 
-#: src/ashytv/ui/pages/catalog_page.py:71
+#: src/ashytv/ui/pages/catalog_page.py:73
 msgid "Nothing found"
 msgstr "何も見つかりません"
 
-#: src/ashytv/ui/pages/catalog_page.py:72
+#: src/ashytv/ui/pages/catalog_page.py:74
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr ""
 "「プレイリスト」でプレイリストを追加するか、フィルターを変更してください。"
 
-#: src/ashytv/ui/pages/catalog_page.py:105
-#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/catalog_page.py:107
+#: src/ashytv/ui/pages/channels_page.py:258
 msgid "All"
 msgstr "すべて"
 
-#: src/ashytv/ui/pages/catalog_page.py:105
+#: src/ashytv/ui/pages/catalog_page.py:107
 msgid "New Releases"
 msgstr "新着"
 
-#: src/ashytv/ui/pages/catalog_page.py:105
+#: src/ashytv/ui/pages/catalog_page.py:107
 msgid "Trending"
 msgstr "トレンド"
 
-#: src/ashytv/ui/pages/channels_page.py:26
+#: src/ashytv/ui/pages/catalog_page.py:123
+msgid "Hide category"
+msgstr "カテゴリを非表示"
+
+#: src/ashytv/ui/pages/channels_page.py:36
 msgid "Sports"
 msgstr "スポーツ"
 
-#: src/ashytv/ui/pages/channels_page.py:29
+#: src/ashytv/ui/pages/channels_page.py:39
 msgid "Free-to-air"
 msgstr "無料放送"
 
-#: src/ashytv/ui/pages/channels_page.py:32
+#: src/ashytv/ui/pages/channels_page.py:42
 msgid "Kids"
 msgstr "キッズ"
 
-#: src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:79
 msgid "TV Channels"
 msgstr "TVチャンネル"
 
-#: src/ashytv/ui/pages/channels_page.py:69
+#: src/ashytv/ui/pages/channels_page.py:80
 msgid "Channels, movies and series you marked"
 msgstr "お気に入りに登録したチャンネル、映画、シリーズ"
 
-#: src/ashytv/ui/pages/channels_page.py:70
+#: src/ashytv/ui/pages/channels_page.py:81
 msgid "All your channels organized by category"
 msgstr "カテゴリ別に整理されたすべてのチャンネル"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:93
 msgid "List"
 msgstr "リスト"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:94
 msgid "Guide"
 msgstr "番組表"
 
-#: src/ashytv/ui/pages/channels_page.py:151
+#: src/ashytv/ui/pages/channels_page.py:167
 msgid "Nothing here yet"
 msgstr "まだ何もありません"
 
-#: src/ashytv/ui/pages/channels_page.py:152
+#: src/ashytv/ui/pages/channels_page.py:168
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "チャンネル、映画、シリーズのハートをタップすると、ここに保存されます。"
 
-#: src/ashytv/ui/pages/channels_page.py:154
+#: src/ashytv/ui/pages/channels_page.py:170
 msgid "No channels in this category."
 msgstr "このカテゴリにチャンネルはありません。"
 
-#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/channels_page.py:258
 msgid "Recent"
 msgstr "最近"
 
-#: src/ashytv/ui/pages/channels_page.py:269
+#: src/ashytv/ui/pages/channels_page.py:285
 msgid "Recently watched"
 msgstr "最近視聴した項目"
 
-#: src/ashytv/ui/pages/channels_page.py:274
+#: src/ashytv/ui/pages/channels_page.py:290
 msgid "All Channels"
 msgstr "すべてのチャンネル"
 
-#: src/ashytv/ui/pages/channels_page.py:275
+#: src/ashytv/ui/pages/channels_page.py:291
 msgid "All in this category"
 msgstr "このカテゴリのすべて"
 
-#: src/ashytv/ui/pages/channels_page.py:331
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Move up"
 msgstr "上へ移動"
 
-#: src/ashytv/ui/pages/channels_page.py:332
+#: src/ashytv/ui/pages/channels_page.py:327
 msgid "Move down"
 msgstr "下へ移動"
 
-#: src/ashytv/ui/pages/channels_page.py:333
+#: src/ashytv/ui/pages/channels_page.py:328
 msgid "Hide group"
 msgstr "グループを非表示"
 
-#: src/ashytv/ui/pages/channels_page.py:543 src/ashytv/ui/player_view.py:163
+#: src/ashytv/ui/pages/channels_page.py:537 src/ashytv/ui/player_view.py:163
 msgid "Favorite"
 msgstr "お気に入り"
 
-#: src/ashytv/ui/pages/channels_page.py:550
+#: src/ashytv/ui/pages/channels_page.py:544
 msgid "More options"
 msgstr "その他のオプション"
 
-#: src/ashytv/ui/pages/channels_page.py:586
+#: src/ashytv/ui/pages/channels_page.py:567
 msgid "View schedule"
 msgstr "番組表を見る"
+
+#: src/ashytv/ui/pages/channels_page.py:569
+msgid "Hide channel"
+msgstr "チャンネルを非表示"
 
 #: src/ashytv/ui/pages/epg_page.py:26
 #, python-brace-format
@@ -819,7 +855,7 @@ msgstr ""
 
 #: src/ashytv/ui/pages/lists_page.py:370
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:408
+#: src/ashytv/ui/pages/settings_page.py:414
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -867,7 +903,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "プレーヤーの ● ボタンで、放送中の番組を録画できます"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:295
 msgid "Open folder"
 msgstr "フォルダーを開く"
 
@@ -891,248 +927,240 @@ msgstr "録画を削除しますか?"
 msgid "Delete"
 msgstr "削除"
 
-#: src/ashytv/ui/pages/settings_page.py:20
-#: src/ashytv/ui/pages/settings_page.py:135
+#: src/ashytv/ui/pages/settings_page.py:21
+#: src/ashytv/ui/pages/settings_page.py:138
 msgid "General"
 msgstr "一般"
 
-#: src/ashytv/ui/pages/settings_page.py:21
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:22
+#: src/ashytv/ui/pages/settings_page.py:169
 msgid "Appearance"
 msgstr "外観"
 
-#: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:218
+#: src/ashytv/ui/pages/settings_page.py:23
+#: src/ashytv/ui/pages/settings_page.py:220
 msgid "Playback"
 msgstr "再生"
 
-#: src/ashytv/ui/pages/settings_page.py:23
+#: src/ashytv/ui/pages/settings_page.py:24
 msgid "Shortcuts"
 msgstr "ショートカット"
 
-#: src/ashytv/ui/pages/settings_page.py:24
-#: src/ashytv/ui/pages/settings_page.py:254
+#: src/ashytv/ui/pages/settings_page.py:25
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Parental Controls"
 msgstr "保護者による制限"
 
-#: src/ashytv/ui/pages/settings_page.py:25
-#: src/ashytv/ui/pages/settings_page.py:275
+#: src/ashytv/ui/pages/settings_page.py:26
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Data"
 msgstr "データ"
 
-#: src/ashytv/ui/pages/settings_page.py:26
-#: src/ashytv/ui/pages/settings_page.py:301
+#: src/ashytv/ui/pages/settings_page.py:27
+#: src/ashytv/ui/pages/settings_page.py:303
 msgid "About"
 msgstr "このアプリについて"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Dark"
 msgstr "ダーク"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Follow system"
 msgstr "システムに従う"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Light"
 msgstr "ライト"
 
-#: src/ashytv/ui/pages/settings_page.py:60
+#: src/ashytv/ui/pages/settings_page.py:63
 msgid "Customize AshyTV your way"
 msgstr "AshyTV を自分好みにカスタマイズ"
 
-#: src/ashytv/ui/pages/settings_page.py:136
+#: src/ashytv/ui/pages/settings_page.py:139
 msgid "Start with the system"
 msgstr "システム起動時に開始"
 
-#: src/ashytv/ui/pages/settings_page.py:137
+#: src/ashytv/ui/pages/settings_page.py:140
 msgid "Open AshyTV when you log in"
 msgstr "ログイン時に AshyTV を開く"
 
-#: src/ashytv/ui/pages/settings_page.py:140
+#: src/ashytv/ui/pages/settings_page.py:143
 msgid "Group qualities of the same channel"
 msgstr "同じチャンネルの画質をまとめる"
 
-#: src/ashytv/ui/pages/settings_page.py:141
+#: src/ashytv/ui/pages/settings_page.py:144
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "「News FHD」「News HD」「News SD」を1つのチャンネルとして表示します"
 
-#: src/ashytv/ui/pages/settings_page.py:142
+#: src/ashytv/ui/pages/settings_page.py:145
 msgid "Live preview"
 msgstr "ライブプレビュー"
 
-#: src/ashytv/ui/pages/settings_page.py:143
+#: src/ashytv/ui/pages/settings_page.py:146
 msgid "Plays the selected channel, muted, next to the channel list"
 msgstr "選択したチャンネルをミュートでチャンネル一覧の横に再生します"
 
-#: src/ashytv/ui/pages/settings_page.py:144
-msgid "Hidden groups"
-msgstr "非表示のグループ"
-
-#: src/ashytv/ui/pages/settings_page.py:145
-msgid "Show all"
-msgstr "すべて表示"
-
-#: src/ashytv/ui/pages/settings_page.py:152 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:154 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV プレイリスト"
 
-#: src/ashytv/ui/pages/settings_page.py:153
+#: src/ashytv/ui/pages/settings_page.py:155
 msgid "Reload playlists automatically"
 msgstr "プレイリストを自動的に再読み込み"
 
-#: src/ashytv/ui/pages/settings_page.py:154
+#: src/ashytv/ui/pages/settings_page.py:156
 msgid "Updates channels and catalog when the app opens"
 msgstr "アプリを開いたときにチャンネルとカタログを更新します"
 
-#: src/ashytv/ui/pages/settings_page.py:155
+#: src/ashytv/ui/pages/settings_page.py:157
 msgid "Check every"
 msgstr "更新間隔"
 
-#: src/ashytv/ui/pages/settings_page.py:157
+#: src/ashytv/ui/pages/settings_page.py:159
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
 msgstr[0] "{h} 時間"
 
-#: src/ashytv/ui/pages/settings_page.py:168
+#: src/ashytv/ui/pages/settings_page.py:170
 msgid "Theme"
 msgstr "テーマ"
 
-#: src/ashytv/ui/pages/settings_page.py:178
+#: src/ashytv/ui/pages/settings_page.py:180
 msgid "Accent Color"
 msgstr "アクセントカラー"
 
-#: src/ashytv/ui/pages/settings_page.py:179
+#: src/ashytv/ui/pages/settings_page.py:181
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "ボタン、選択項目、ハイライトに使用する色を選択します。"
 
-#: src/ashytv/ui/pages/settings_page.py:201
+#: src/ashytv/ui/pages/settings_page.py:203
 msgid "Transparency"
 msgstr "透明度"
 
-#: src/ashytv/ui/pages/settings_page.py:202
+#: src/ashytv/ui/pages/settings_page.py:204
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "ウィンドウの背景を半透明にします（コンポジターに依存します）。"
 
-#: src/ashytv/ui/pages/settings_page.py:204
+#: src/ashytv/ui/pages/settings_page.py:206
 msgid "Translucent window"
 msgstr "半透明ウィンドウ"
 
-#: src/ashytv/ui/pages/settings_page.py:206
+#: src/ashytv/ui/pages/settings_page.py:208
 msgid "Background opacity (%)"
 msgstr "背景の不透明度 (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:212
+#: src/ashytv/ui/pages/settings_page.py:214
 msgid "Content"
 msgstr "コンテンツ"
 
-#: src/ashytv/ui/pages/settings_page.py:213
+#: src/ashytv/ui/pages/settings_page.py:215
 msgid "Show logos and covers"
 msgstr "ロゴとカバーを表示"
 
-#: src/ashytv/ui/pages/settings_page.py:214
+#: src/ashytv/ui/pages/settings_page.py:216
 msgid "Turn off to save data"
 msgstr "オフにするとデータ通信量を節約できます"
 
-#: src/ashytv/ui/pages/settings_page.py:219
+#: src/ashytv/ui/pages/settings_page.py:221
 msgid "Applies from the next video you open."
 msgstr "次に開く動画から適用されます。"
 
-#: src/ashytv/ui/pages/settings_page.py:220 src/ashytv/ui/player_view.py:673
+#: src/ashytv/ui/pages/settings_page.py:222 src/ashytv/ui/player_view.py:673
 msgid "Automatic quality"
 msgstr "自動画質"
 
-#: src/ashytv/ui/pages/settings_page.py:221
+#: src/ashytv/ui/pages/settings_page.py:223
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "接続状況に合わせてチャンネルの画質を切り替えます"
 
-#: src/ashytv/ui/pages/settings_page.py:222
+#: src/ashytv/ui/pages/settings_page.py:224
 msgid "Hardware acceleration"
 msgstr "ハードウェアアクセラレーション"
 
-#: src/ashytv/ui/pages/settings_page.py:223
+#: src/ashytv/ui/pages/settings_page.py:225
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "GPU で動画をデコードします (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:227
 msgid "Network buffer (seconds)"
 msgstr "ネットワークバッファー (秒)"
 
-#: src/ashytv/ui/pages/settings_page.py:226
+#: src/ashytv/ui/pages/settings_page.py:228
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr ""
 "バッファーを増やすと途切れにくくなりますが、チャンネル切り替え時の遅延が増え"
 "ます"
 
-#: src/ashytv/ui/pages/settings_page.py:244
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Game controller"
 msgstr "ゲームコントローラー"
 
-#: src/ashytv/ui/pages/settings_page.py:245
+#: src/ashytv/ui/pages/settings_page.py:247
 msgid "Connect a controller to use AshyTV like a TV remote."
 msgstr ""
 "コントローラーを接続すると、AshyTV をテレビのリモコンのように操作できます。"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Hide adult content"
 msgstr "アダルトコンテンツを非表示"
 
-#: src/ashytv/ui/pages/settings_page.py:257
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "「adult」「XXX」「+18」などの語を含むカテゴリを非表示にします"
 
-#: src/ashytv/ui/pages/settings_page.py:263
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:263
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "With a PIN set, it is required to show adult content."
 msgstr "PIN を設定すると、アダルトコンテンツの表示に PIN が必要になります。"
 
-#: src/ashytv/ui/pages/settings_page.py:265
+#: src/ashytv/ui/pages/settings_page.py:267
 msgid "New PIN (4+ digits)"
 msgstr "新しい PIN (4桁以上)"
 
-#: src/ashytv/ui/pages/settings_page.py:269
+#: src/ashytv/ui/pages/settings_page.py:271
 msgid "Remove PIN"
 msgstr "PIN を削除"
 
-#: src/ashytv/ui/pages/settings_page.py:276
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Clear cache"
 msgstr "キャッシュを消去"
 
-#: src/ashytv/ui/pages/settings_page.py:277
+#: src/ashytv/ui/pages/settings_page.py:279
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "ダウンロードしたロゴ、カバー、番組表データを削除します"
 
-#: src/ashytv/ui/pages/settings_page.py:279
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:288
 msgid "Clear"
 msgstr "消去"
 
-#: src/ashytv/ui/pages/settings_page.py:284
+#: src/ashytv/ui/pages/settings_page.py:286
 msgid "Clear history"
 msgstr "履歴を消去"
 
-#: src/ashytv/ui/pages/settings_page.py:285
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "「視聴を続ける」と最近の項目を消去します"
 
-#: src/ashytv/ui/pages/settings_page.py:291
+#: src/ashytv/ui/pages/settings_page.py:293
 msgid "Recordings folder"
 msgstr "録画フォルダー"
 
-#: src/ashytv/ui/pages/settings_page.py:303
+#: src/ashytv/ui/pages/settings_page.py:305
 #, python-brace-format
 msgid "Version {version}"
 msgstr "バージョン {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:306
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Disclaimer"
 msgstr "免責事項"
 
-#: src/ashytv/ui/pages/settings_page.py:307
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -1140,56 +1168,53 @@ msgstr ""
 "AshyTV はコンテンツを提供・収録していません。追加したプレイリストを再生するだ"
 "けです。"
 
-#: src/ashytv/ui/pages/settings_page.py:313
+#: src/ashytv/ui/pages/settings_page.py:315
 msgid "More information"
 msgstr "詳細情報"
 
-#: src/ashytv/ui/pages/settings_page.py:336
+#: src/ashytv/ui/pages/settings_page.py:338
 #, python-brace-format
-msgid "{n} group hidden — right-click a group in Channels to hide it"
-msgid_plural "{n} groups hidden — right-click a group in Channels to hide it"
-msgstr[0] ""
-"{n} 件のグループを非表示にしました — チャンネルでグループを右クリックすると非"
-"表示にできます"
+msgid "Hidden: {n}. Right-click a group or channel to hide it."
+msgstr "非表示: {n}。グループやチャンネルを右クリックすると非表示にできます。"
 
-#: src/ashytv/ui/pages/settings_page.py:350
+#: src/ashytv/ui/pages/settings_page.py:356
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "ダウンロードしたロゴ、カバー、番組表データを削除します — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:366
+#: src/ashytv/ui/pages/settings_page.py:372
 msgid "Cache cleared."
 msgstr "キャッシュを消去しました。"
 
-#: src/ashytv/ui/pages/settings_page.py:374
+#: src/ashytv/ui/pages/settings_page.py:380
 msgid "History cleared."
 msgstr "履歴を消去しました。"
 
-#: src/ashytv/ui/pages/settings_page.py:404
+#: src/ashytv/ui/pages/settings_page.py:410
 msgid "Enter PIN"
 msgstr "PIN を入力"
 
-#: src/ashytv/ui/pages/settings_page.py:405
+#: src/ashytv/ui/pages/settings_page.py:411
 msgid "Required to show adult content."
 msgstr "アダルトコンテンツの表示に必要です。"
 
-#: src/ashytv/ui/pages/settings_page.py:409
+#: src/ashytv/ui/pages/settings_page.py:415
 msgid "Unlock"
 msgstr "ロック解除"
 
-#: src/ashytv/ui/pages/settings_page.py:419
+#: src/ashytv/ui/pages/settings_page.py:425
 msgid "Incorrect PIN."
 msgstr "PIN が正しくありません。"
 
-#: src/ashytv/ui/pages/settings_page.py:427
+#: src/ashytv/ui/pages/settings_page.py:433
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN は 4桁以上にしてください。"
 
-#: src/ashytv/ui/pages/settings_page.py:432
+#: src/ashytv/ui/pages/settings_page.py:438
 msgid "PIN set."
 msgstr "PIN を設定しました。"
 
-#: src/ashytv/ui/pages/settings_page.py:444
+#: src/ashytv/ui/pages/settings_page.py:450
 msgid "PIN removed."
 msgstr "PIN を削除しました。"
 
@@ -1524,156 +1549,161 @@ msgstr "メインメニュー"
 msgid "Search (Ctrl+F)"
 msgstr "検索 (Ctrl+F)"
 
-#: src/ashytv/window.py:199
+#: src/ashytv/window.py:200
 msgid "The best movies for you"
 msgstr "あなたにおすすめの映画"
 
-#: src/ashytv/window.py:204
+#: src/ashytv/window.py:206
 msgid "Your favorite series in one place"
 msgstr "お気に入りのシリーズをひとつの場所で"
 
-#: src/ashytv/window.py:438
+#: src/ashytv/window.py:443
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr ""
 "プレーヤーを利用できません: mpv と python-mpv をインストールしてください "
 "({error})"
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:483
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "チャンネル {number} はありません"
 
-#: src/ashytv/window.py:504
+#: src/ashytv/window.py:509
 msgid "Next episode…"
 msgstr "次のエピソード…"
 
-#: src/ashytv/window.py:535 src/ashytv/window.py:544
+#: src/ashytv/window.py:540 src/ashytv/window.py:549
 msgid "This item is no longer in the playlist."
 msgstr "この項目はプレイリストに存在しません。"
 
-#: src/ashytv/window.py:540
+#: src/ashytv/window.py:545
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "開けませんでした: {error}"
 
-#: src/ashytv/window.py:551
+#: src/ashytv/window.py:556
 msgid "This episode is no longer available."
 msgstr "このエピソードはもう利用できません。"
 
-#: src/ashytv/window.py:584 src/ashytv/window.py:869
-msgid "Could not save now: a playlist is being updated. Try again."
-msgstr "今は保存できません: プレイリストを更新中です。もう一度お試しください。"
-
-#: src/ashytv/window.py:587
+#: src/ashytv/window.py:592
 msgid "Added to favorites"
 msgstr "お気に入りに追加しました"
 
-#: src/ashytv/window.py:587
+#: src/ashytv/window.py:592
 msgid "Removed from favorites"
 msgstr "お気に入りから削除しました"
 
-#: src/ashytv/window.py:751
+#: src/ashytv/window.py:756
 msgid "Please wait: an import is already in progress."
 msgstr "お待ちください。インポートがすでに進行中です。"
 
-#: src/ashytv/window.py:768
+#: src/ashytv/window.py:773
 msgid "Importing playlist…"
 msgstr "プレイリストをインポート中…"
 
-#: src/ashytv/window.py:781
+#: src/ashytv/window.py:786
 msgid "Connecting to the Xtream provider…"
 msgstr "Xtream プロバイダーに接続中…"
 
-#: src/ashytv/window.py:798
+#: src/ashytv/window.py:803
 msgid "Provider password not found; add the playlist again."
 msgstr ""
 "プロバイダーのパスワードが見つかりません。プレイリストをもう一度追加してくだ"
 "さい。"
 
-#: src/ashytv/window.py:802
+#: src/ashytv/window.py:807
 msgid "Updating playlist…"
 msgstr "プレイリストを更新中…"
 
-#: src/ashytv/window.py:823
+#: src/ashytv/window.py:828
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "プレイリスト「{name}」を更新しました。"
 
-#: src/ashytv/window.py:827
+#: src/ashytv/window.py:832
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} 件をインポートしました。"
 
-#: src/ashytv/window.py:828
+#: src/ashytv/window.py:833
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "プレイリストの準備完了: {n} 件"
 
-#: src/ashytv/window.py:849
+#: src/ashytv/window.py:854
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "「{name}」を更新できませんでした: {error}"
 
-#: src/ashytv/window.py:853
+#: src/ashytv/window.py:858
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "失敗しました: {error}"
 
-#: src/ashytv/window.py:854
+#: src/ashytv/window.py:859
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "インポートに失敗しました: {error}"
 
-#: src/ashytv/window.py:860
+#: src/ashytv/window.py:865
 msgid "Please wait for the import to finish."
 msgstr "インポートが完了するまでお待ちください。"
 
-#: src/ashytv/window.py:879
+#: src/ashytv/window.py:884
 msgid "Playlist removed."
 msgstr "プレイリストを削除しました。"
 
-#: src/ashytv/window.py:945
+#: src/ashytv/window.py:950
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "番組表 (EPG) を利用できません: {error}"
 
-#: src/ashytv/window.py:981
+#: src/ashytv/window.py:989
 msgid "Programme"
 msgstr "番組"
 
-#: src/ashytv/window.py:985
+#: src/ashytv/window.py:993
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "「{title}」を {time} にお知らせします"
 
-#: src/ashytv/window.py:986
+#: src/ashytv/window.py:994
 msgid "Reminder cancelled"
 msgstr "リマインダーを取り消しました"
 
-#: src/ashytv/window.py:998
+#: src/ashytv/window.py:1006
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "「{title}」がまもなく {channel} で始まります"
 
-#: src/ashytv/window.py:1000
+#: src/ashytv/window.py:1008
 msgid "AshyTV reminder"
 msgstr "AshyTV リマインダー"
 
-#: src/ashytv/window.py:1019
+#: src/ashytv/window.py:1027
 msgid "This channel is no longer in your playlists."
 msgstr "このチャンネルはプレイリストにありません。"
 
-#: src/ashytv/window.py:1038
+#: src/ashytv/window.py:1054
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "グループ「{name}」を非表示にしました"
 
-#: src/ashytv/window.py:1039
+#: src/ashytv/window.py:1067
+#, python-brace-format
+msgid "Channel “{name}” hidden"
+msgstr "チャンネル「{name}」を非表示にしました"
+
+#: src/ashytv/window.py:1071
 msgid "Undo"
 msgstr "元に戻す"
+
+#: src/ashytv/window.py:1233
+msgid "Could not save now: a playlist is being updated. Try again."
+msgstr "今は保存できません: プレイリストを更新中です。もう一度お試しください。"
 
 #: data/org.communitybig.ashytv.desktop.in:3
 #: data/org.communitybig.ashytv.metainfo.xml.in:4

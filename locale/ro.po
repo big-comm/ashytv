@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 15:22-0300\n"
+"POT-Creation-Date: 2026-11-01 15:37-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Un player IPTV modern pentru desktopul Linux.\n"
 "Importați propria listă de redare — aplicația nu oferă niciun conținut."
 
-#: src/ashytv/application.py:167 src/ashytv/ui/pages/settings_page.py:311
+#: src/ashytv/application.py:167 src/ashytv/ui/pages/settings_page.py:313
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
@@ -46,15 +46,15 @@ msgstr ""
 msgid "Live TV"
 msgstr "TV în direct"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:287
-#: src/ashytv/ui/nav_sidebar.py:13 src/ashytv/ui/pages/channels_page.py:30
-#: src/ashytv/window.py:198
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:294
+#: src/ashytv/ui/nav_sidebar.py:13 src/ashytv/ui/pages/channels_page.py:40
+#: src/ashytv/window.py:199
 msgid "Movies"
 msgstr "Filme"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:287
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:31
-#: src/ashytv/window.py:203
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:294
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:41
+#: src/ashytv/window.py:205
 msgid "Series"
 msgstr "Seriale"
 
@@ -100,11 +100,11 @@ msgstr "Desene animate"
 msgid "Business"
 msgstr "Afaceri"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:28
+#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:38
 msgid "News"
 msgstr "Știri"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:34
+#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:44
 msgid "Documentaries"
 msgstr "Documentare"
 
@@ -112,7 +112,7 @@ msgstr "Documentare"
 msgid "Weather"
 msgstr "Vremea"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:36
+#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:46
 msgid "Music"
 msgstr "Muzică"
 
@@ -235,70 +235,70 @@ msgstr "Nume de utilizator sau parolă invalidă"
 msgid "Account status: {status}"
 msgstr "Starea contului: {status}"
 
-#: src/ashytv/ui/cast.py:188 src/ashytv/ui/detail_dialog.py:246
+#: src/ashytv/ui/cast.py:195 src/ashytv/ui/detail_dialog.py:246
 msgid "Cast"
 msgstr "Distribuție"
 
-#: src/ashytv/ui/cast.py:219
+#: src/ashytv/ui/cast.py:226
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Titluri cu {name}"
 
-#: src/ashytv/ui/cast.py:267
+#: src/ashytv/ui/cast.py:274
 msgid "Cast data: TMDB"
 msgstr "Date despre distribuție: TMDB"
 
-#: src/ashytv/ui/cast.py:292
+#: src/ashytv/ui/cast.py:299
 msgid "Nothing in your playlists"
 msgstr "Nimic în listele tale"
 
-#: src/ashytv/ui/cast.py:293
+#: src/ashytv/ui/cast.py:300
 msgid "None of this person's movies or series are in your playlists."
 msgstr "Niciun film sau serial al acestei persoane nu se află în listele tale."
 
-#: src/ashytv/ui/cast.py:298
+#: src/ashytv/ui/cast.py:305
 msgid "Found in the details of the titles you opened."
 msgstr "Găsit în detaliile titlurilor pe care le-ai deschis."
 
-#: src/ashytv/ui/channel_info.py:66
+#: src/ashytv/ui/channel_info.py:70
 msgid "Live"
 msgstr "În direct"
 
-#: src/ashytv/ui/channel_info.py:71 src/ashytv/ui/channel_info.py:220
+#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
 msgid "Unmute"
 msgstr "Activează sunetul"
 
-#: src/ashytv/ui/channel_info.py:116 src/ashytv/ui/channel_overlay.py:153
+#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:153
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "Fără program"
 
-#: src/ashytv/ui/channel_info.py:147
+#: src/ashytv/ui/channel_info.py:151
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "Canalul {number}"
 
-#: src/ashytv/ui/channel_info.py:172 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Acum"
 
-#: src/ashytv/ui/channel_info.py:176
+#: src/ashytv/ui/channel_info.py:180
 #, python-brace-format
 msgid "{m} min left"
 msgstr "Mai sunt {m} min"
 
-#: src/ashytv/ui/channel_info.py:180 src/ashytv/ui/player_view.py:697
+#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:697
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Urmează: {title}"
 
-#: src/ashytv/ui/channel_info.py:220 src/ashytv/ui/player_view.py:742
+#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:742
 #: src/ashytv/ui/shortcuts.py:37
 msgid "Mute"
 msgstr "Dezactivare sunet"
 
 #: src/ashytv/ui/channel_overlay.py:40 src/ashytv/ui/nav_sidebar.py:12
-#: src/ashytv/ui/pages/settings_page.py:139
+#: src/ashytv/ui/pages/settings_page.py:142
 msgid "Channels"
 msgstr "Canale"
 
@@ -307,8 +307,8 @@ msgid "Enter: watch  •  Esc: close"
 msgstr "Enter: vizionează  •  Esc: închide"
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
-#: src/ashytv/ui/pages/channels_page.py:582 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1004 src/ashytv/window.py:1010
+#: src/ashytv/ui/pages/channels_page.py:563 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1012 src/ashytv/window.py:1018
 msgid "Watch"
 msgstr "Vizionează"
 
@@ -400,15 +400,43 @@ msgstr "Vizionează {label}"
 msgid "Episode {n}"
 msgstr "Episodul {n}"
 
-#: src/ashytv/ui/detail_dialog.py:384 src/ashytv/ui/pages/catalog_page.py:217
-#: src/ashytv/ui/pages/channels_page.py:583
+#: src/ashytv/ui/detail_dialog.py:384 src/ashytv/ui/pages/catalog_page.py:225
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Remove from favorites"
 msgstr "Elimină din favorite"
 
-#: src/ashytv/ui/detail_dialog.py:385 src/ashytv/ui/pages/catalog_page.py:218
-#: src/ashytv/ui/pages/channels_page.py:583
+#: src/ashytv/ui/detail_dialog.py:385 src/ashytv/ui/pages/catalog_page.py:226
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Add to favorites"
 msgstr "Adaugă la favorite"
+
+#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:147
+msgid "Hidden channels and groups"
+msgstr "Canale și grupuri ascunse"
+
+#: src/ashytv/ui/hidden_dialog.py:24
+msgid "Show all"
+msgstr "Arată tot"
+
+#: src/ashytv/ui/hidden_dialog.py:41
+msgid "Nothing hidden"
+msgstr "Nimic ascuns"
+
+#: src/ashytv/ui/hidden_dialog.py:42
+msgid "Right-click (or long-press) a group or channel to hide it."
+msgstr "Clic dreapta (sau apăsare lungă) pe un grup sau canal pentru a-l ascunde."
+
+#: src/ashytv/ui/hidden_dialog.py:64
+msgid "Channel"
+msgstr "Canal"
+
+#: src/ashytv/ui/hidden_dialog.py:64
+msgid "Group"
+msgstr "Grup"
+
+#: src/ashytv/ui/hidden_dialog.py:67
+msgid "Show"
+msgstr "Arată"
 
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
@@ -422,9 +450,9 @@ msgstr "Oprește"
 msgid "Home"
 msgstr "Acasă"
 
-#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:68
-#: src/ashytv/ui/pages/channels_page.py:242
-#: src/ashytv/ui/pages/channels_page.py:265
+#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:79
+#: src/ashytv/ui/pages/channels_page.py:258
+#: src/ashytv/ui/pages/channels_page.py:281
 msgid "Favorites"
 msgstr "Favorite"
 
@@ -436,7 +464,7 @@ msgstr "Înregistrări"
 msgid "Playlists"
 msgstr "Liste de redare"
 
-#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:60
+#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:63
 msgid "Settings"
 msgstr "Setări"
 
@@ -448,110 +476,118 @@ msgstr "Restrânge meniul"
 msgid "Expand menu"
 msgstr "Extinde meniul"
 
-#: src/ashytv/ui/pages/catalog_page.py:71
+#: src/ashytv/ui/pages/catalog_page.py:73
 msgid "Nothing found"
 msgstr "Nu s-a găsit nimic"
 
-#: src/ashytv/ui/pages/catalog_page.py:72
+#: src/ashytv/ui/pages/catalog_page.py:74
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Adăugați o listă de redare în „Liste de redare” sau schimbați filtrul."
 
-#: src/ashytv/ui/pages/catalog_page.py:105
-#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/catalog_page.py:107
+#: src/ashytv/ui/pages/channels_page.py:258
 msgid "All"
 msgstr "Toate"
 
-#: src/ashytv/ui/pages/catalog_page.py:105
+#: src/ashytv/ui/pages/catalog_page.py:107
 msgid "New Releases"
 msgstr "Noutăți"
 
-#: src/ashytv/ui/pages/catalog_page.py:105
+#: src/ashytv/ui/pages/catalog_page.py:107
 msgid "Trending"
 msgstr "Populare"
 
-#: src/ashytv/ui/pages/channels_page.py:26
+#: src/ashytv/ui/pages/catalog_page.py:123
+msgid "Hide category"
+msgstr "Ascunde categoria"
+
+#: src/ashytv/ui/pages/channels_page.py:36
 msgid "Sports"
 msgstr "Sport"
 
-#: src/ashytv/ui/pages/channels_page.py:29
+#: src/ashytv/ui/pages/channels_page.py:39
 msgid "Free-to-air"
 msgstr "Necodificate"
 
-#: src/ashytv/ui/pages/channels_page.py:32
+#: src/ashytv/ui/pages/channels_page.py:42
 msgid "Kids"
 msgstr "Copii"
 
-#: src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:79
 msgid "TV Channels"
 msgstr "Canale TV"
 
-#: src/ashytv/ui/pages/channels_page.py:69
+#: src/ashytv/ui/pages/channels_page.py:80
 msgid "Channels, movies and series you marked"
 msgstr "Canalele, filmele și serialele marcate de dvs."
 
-#: src/ashytv/ui/pages/channels_page.py:70
+#: src/ashytv/ui/pages/channels_page.py:81
 msgid "All your channels organized by category"
 msgstr "Toate canalele dvs., organizate pe categorii"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:93
 msgid "List"
 msgstr "Listă"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:94
 msgid "Guide"
 msgstr "Ghid"
 
-#: src/ashytv/ui/pages/channels_page.py:151
+#: src/ashytv/ui/pages/channels_page.py:167
 msgid "Nothing here yet"
 msgstr "Încă nu este nimic aici"
 
-#: src/ashytv/ui/pages/channels_page.py:152
+#: src/ashytv/ui/pages/channels_page.py:168
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "Atingeți inima de pe un canal, film sau serial pentru a-l păstra aici."
 
-#: src/ashytv/ui/pages/channels_page.py:154
+#: src/ashytv/ui/pages/channels_page.py:170
 msgid "No channels in this category."
 msgstr "Nu există canale în această categorie."
 
-#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/channels_page.py:258
 msgid "Recent"
 msgstr "Recente"
 
-#: src/ashytv/ui/pages/channels_page.py:269
+#: src/ashytv/ui/pages/channels_page.py:285
 msgid "Recently watched"
 msgstr "Vizionate recent"
 
-#: src/ashytv/ui/pages/channels_page.py:274
+#: src/ashytv/ui/pages/channels_page.py:290
 msgid "All Channels"
 msgstr "Toate canalele"
 
-#: src/ashytv/ui/pages/channels_page.py:275
+#: src/ashytv/ui/pages/channels_page.py:291
 msgid "All in this category"
 msgstr "Toate din această categorie"
 
-#: src/ashytv/ui/pages/channels_page.py:331
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Move up"
 msgstr "Mută în sus"
 
-#: src/ashytv/ui/pages/channels_page.py:332
+#: src/ashytv/ui/pages/channels_page.py:327
 msgid "Move down"
 msgstr "Mută în jos"
 
-#: src/ashytv/ui/pages/channels_page.py:333
+#: src/ashytv/ui/pages/channels_page.py:328
 msgid "Hide group"
 msgstr "Ascunde grupul"
 
-#: src/ashytv/ui/pages/channels_page.py:543 src/ashytv/ui/player_view.py:163
+#: src/ashytv/ui/pages/channels_page.py:537 src/ashytv/ui/player_view.py:163
 msgid "Favorite"
 msgstr "Favorit"
 
-#: src/ashytv/ui/pages/channels_page.py:550
+#: src/ashytv/ui/pages/channels_page.py:544
 msgid "More options"
 msgstr "Mai multe opțiuni"
 
-#: src/ashytv/ui/pages/channels_page.py:586
+#: src/ashytv/ui/pages/channels_page.py:567
 msgid "View schedule"
 msgstr "Vezi programul"
+
+#: src/ashytv/ui/pages/channels_page.py:569
+msgid "Hide channel"
+msgstr "Ascunde canalul"
 
 #: src/ashytv/ui/pages/epg_page.py:26
 #, python-brace-format
@@ -822,7 +858,7 @@ msgstr ""
 
 #: src/ashytv/ui/pages/lists_page.py:370
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:408
+#: src/ashytv/ui/pages/settings_page.py:414
 msgid "Cancel"
 msgstr "Anulează"
 
@@ -870,7 +906,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "Folosiți butonul ● din player pentru a înregistra ce rulează"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:295
 msgid "Open folder"
 msgstr "Deschide folderul"
 
@@ -894,105 +930,97 @@ msgstr "Ștergeți înregistrarea?"
 msgid "Delete"
 msgstr "Șterge"
 
-#: src/ashytv/ui/pages/settings_page.py:20
-#: src/ashytv/ui/pages/settings_page.py:135
+#: src/ashytv/ui/pages/settings_page.py:21
+#: src/ashytv/ui/pages/settings_page.py:138
 msgid "General"
 msgstr "General"
 
-#: src/ashytv/ui/pages/settings_page.py:21
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:22
+#: src/ashytv/ui/pages/settings_page.py:169
 msgid "Appearance"
 msgstr "Aspect"
 
-#: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:218
+#: src/ashytv/ui/pages/settings_page.py:23
+#: src/ashytv/ui/pages/settings_page.py:220
 msgid "Playback"
 msgstr "Redare"
 
-#: src/ashytv/ui/pages/settings_page.py:23
+#: src/ashytv/ui/pages/settings_page.py:24
 msgid "Shortcuts"
 msgstr "Comenzi rapide"
 
-#: src/ashytv/ui/pages/settings_page.py:24
-#: src/ashytv/ui/pages/settings_page.py:254
+#: src/ashytv/ui/pages/settings_page.py:25
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Parental Controls"
 msgstr "Control parental"
 
-#: src/ashytv/ui/pages/settings_page.py:25
-#: src/ashytv/ui/pages/settings_page.py:275
+#: src/ashytv/ui/pages/settings_page.py:26
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Data"
 msgstr "Date"
 
-#: src/ashytv/ui/pages/settings_page.py:26
-#: src/ashytv/ui/pages/settings_page.py:301
+#: src/ashytv/ui/pages/settings_page.py:27
+#: src/ashytv/ui/pages/settings_page.py:303
 msgid "About"
 msgstr "Despre"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Dark"
 msgstr "Întunecat"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Follow system"
 msgstr "Urmărește sistemul"
 
-#: src/ashytv/ui/pages/settings_page.py:28
+#: src/ashytv/ui/pages/settings_page.py:29
 msgid "Light"
 msgstr "Luminos"
 
-#: src/ashytv/ui/pages/settings_page.py:60
+#: src/ashytv/ui/pages/settings_page.py:63
 msgid "Customize AshyTV your way"
 msgstr "Personalizați AshyTV după preferințe"
 
-#: src/ashytv/ui/pages/settings_page.py:136
+#: src/ashytv/ui/pages/settings_page.py:139
 msgid "Start with the system"
 msgstr "Pornește odată cu sistemul"
 
-#: src/ashytv/ui/pages/settings_page.py:137
+#: src/ashytv/ui/pages/settings_page.py:140
 msgid "Open AshyTV when you log in"
 msgstr "Deschide AshyTV la autentificare"
 
-#: src/ashytv/ui/pages/settings_page.py:140
+#: src/ashytv/ui/pages/settings_page.py:143
 msgid "Group qualities of the same channel"
 msgstr "Grupează calitățile aceluiași canal"
 
-#: src/ashytv/ui/pages/settings_page.py:141
+#: src/ashytv/ui/pages/settings_page.py:144
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "Afișează „News FHD”, „News HD” și „News SD” ca un singur canal"
 
-#: src/ashytv/ui/pages/settings_page.py:142
+#: src/ashytv/ui/pages/settings_page.py:145
 msgid "Live preview"
 msgstr "Previzualizare în direct"
 
-#: src/ashytv/ui/pages/settings_page.py:143
+#: src/ashytv/ui/pages/settings_page.py:146
 msgid "Plays the selected channel, muted, next to the channel list"
 msgstr "Redă canalul selectat, fără sunet, lângă lista de canale"
 
-#: src/ashytv/ui/pages/settings_page.py:144
-msgid "Hidden groups"
-msgstr "Grupuri ascunse"
-
-#: src/ashytv/ui/pages/settings_page.py:145
-msgid "Show all"
-msgstr "Arată tot"
-
-#: src/ashytv/ui/pages/settings_page.py:152 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:154 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "Liste de redare IPTV"
 
-#: src/ashytv/ui/pages/settings_page.py:153
+#: src/ashytv/ui/pages/settings_page.py:155
 msgid "Reload playlists automatically"
 msgstr "Reîncarcă automat listele de redare"
 
-#: src/ashytv/ui/pages/settings_page.py:154
+#: src/ashytv/ui/pages/settings_page.py:156
 msgid "Updates channels and catalog when the app opens"
 msgstr "Actualizează canalele și catalogul la deschiderea aplicației"
 
-#: src/ashytv/ui/pages/settings_page.py:155
+#: src/ashytv/ui/pages/settings_page.py:157
 msgid "Check every"
 msgstr "Verifică la fiecare"
 
-#: src/ashytv/ui/pages/settings_page.py:157
+#: src/ashytv/ui/pages/settings_page.py:159
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
@@ -1000,145 +1028,145 @@ msgstr[0] "{h} oră"
 msgstr[1] "{h} ore"
 msgstr[2] "{h} de ore"
 
-#: src/ashytv/ui/pages/settings_page.py:168
+#: src/ashytv/ui/pages/settings_page.py:170
 msgid "Theme"
 msgstr "Temă"
 
-#: src/ashytv/ui/pages/settings_page.py:178
+#: src/ashytv/ui/pages/settings_page.py:180
 msgid "Accent Color"
 msgstr "Culoare de accent"
 
-#: src/ashytv/ui/pages/settings_page.py:179
+#: src/ashytv/ui/pages/settings_page.py:181
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "Alegeți culoarea folosită pentru butoane, selecții și evidențieri."
 
-#: src/ashytv/ui/pages/settings_page.py:201
+#: src/ashytv/ui/pages/settings_page.py:203
 msgid "Transparency"
 msgstr "Transparență"
 
-#: src/ashytv/ui/pages/settings_page.py:202
+#: src/ashytv/ui/pages/settings_page.py:204
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "Face fundalul ferestrei translucid (depinde de compozitor)."
 
-#: src/ashytv/ui/pages/settings_page.py:204
+#: src/ashytv/ui/pages/settings_page.py:206
 msgid "Translucent window"
 msgstr "Fereastră translucidă"
 
-#: src/ashytv/ui/pages/settings_page.py:206
+#: src/ashytv/ui/pages/settings_page.py:208
 msgid "Background opacity (%)"
 msgstr "Opacitatea fundalului (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:212
+#: src/ashytv/ui/pages/settings_page.py:214
 msgid "Content"
 msgstr "Conținut"
 
-#: src/ashytv/ui/pages/settings_page.py:213
+#: src/ashytv/ui/pages/settings_page.py:215
 msgid "Show logos and covers"
 msgstr "Afișează sigle și coperți"
 
-#: src/ashytv/ui/pages/settings_page.py:214
+#: src/ashytv/ui/pages/settings_page.py:216
 msgid "Turn off to save data"
 msgstr "Dezactivați pentru a economisi date"
 
-#: src/ashytv/ui/pages/settings_page.py:219
+#: src/ashytv/ui/pages/settings_page.py:221
 msgid "Applies from the next video you open."
 msgstr "Se aplică de la următorul videoclip deschis."
 
-#: src/ashytv/ui/pages/settings_page.py:220 src/ashytv/ui/player_view.py:673
+#: src/ashytv/ui/pages/settings_page.py:222 src/ashytv/ui/player_view.py:673
 msgid "Automatic quality"
 msgstr "Calitate automată"
 
-#: src/ashytv/ui/pages/settings_page.py:221
+#: src/ashytv/ui/pages/settings_page.py:223
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "Comută între calitățile unui canal în funcție de conexiunea ta"
 
-#: src/ashytv/ui/pages/settings_page.py:222
+#: src/ashytv/ui/pages/settings_page.py:224
 msgid "Hardware acceleration"
 msgstr "Accelerare hardware"
 
-#: src/ashytv/ui/pages/settings_page.py:223
+#: src/ashytv/ui/pages/settings_page.py:225
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "Decodează video pe GPU (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:225
+#: src/ashytv/ui/pages/settings_page.py:227
 msgid "Network buffer (seconds)"
 msgstr "Buffer de rețea (secunde)"
 
-#: src/ashytv/ui/pages/settings_page.py:226
+#: src/ashytv/ui/pages/settings_page.py:228
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr ""
 "Buffer mai mare = mai puține sacadări, dar mai multă întârziere la "
 "schimbarea canalului"
 
-#: src/ashytv/ui/pages/settings_page.py:244
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Game controller"
 msgstr "Controler de joc"
 
-#: src/ashytv/ui/pages/settings_page.py:245
+#: src/ashytv/ui/pages/settings_page.py:247
 msgid "Connect a controller to use AshyTV like a TV remote."
 msgstr "Conectați un controler pentru a folosi AshyTV ca pe o telecomandă TV."
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Hide adult content"
 msgstr "Ascunde conținutul pentru adulți"
 
-#: src/ashytv/ui/pages/settings_page.py:257
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "Ascunde categoriile cu termeni precum „adult”, „XXX”, „+18”"
 
-#: src/ashytv/ui/pages/settings_page.py:263
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:263
+#: src/ashytv/ui/pages/settings_page.py:265
 msgid "With a PIN set, it is required to show adult content."
 msgstr ""
 "Dacă este setat un PIN, acesta este necesar pentru a afișa conținutul pentru "
 "adulți."
 
-#: src/ashytv/ui/pages/settings_page.py:265
+#: src/ashytv/ui/pages/settings_page.py:267
 msgid "New PIN (4+ digits)"
 msgstr "PIN nou (minimum 4 cifre)"
 
-#: src/ashytv/ui/pages/settings_page.py:269
+#: src/ashytv/ui/pages/settings_page.py:271
 msgid "Remove PIN"
 msgstr "Elimină PIN-ul"
 
-#: src/ashytv/ui/pages/settings_page.py:276
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Clear cache"
 msgstr "Golește memoria cache"
 
-#: src/ashytv/ui/pages/settings_page.py:277
+#: src/ashytv/ui/pages/settings_page.py:279
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "Elimină siglele, copertele și datele de ghid descărcate"
 
-#: src/ashytv/ui/pages/settings_page.py:279
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:281
+#: src/ashytv/ui/pages/settings_page.py:288
 msgid "Clear"
 msgstr "Golește"
 
-#: src/ashytv/ui/pages/settings_page.py:284
+#: src/ashytv/ui/pages/settings_page.py:286
 msgid "Clear history"
 msgstr "Șterge istoricul"
 
-#: src/ashytv/ui/pages/settings_page.py:285
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "Uită „Continuă vizionarea” și elementele recente"
 
-#: src/ashytv/ui/pages/settings_page.py:291
+#: src/ashytv/ui/pages/settings_page.py:293
 msgid "Recordings folder"
 msgstr "Folderul înregistrărilor"
 
-#: src/ashytv/ui/pages/settings_page.py:303
+#: src/ashytv/ui/pages/settings_page.py:305
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Versiunea {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:306
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Disclaimer"
 msgstr "Declinarea responsabilității"
 
-#: src/ashytv/ui/pages/settings_page.py:307
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -1146,62 +1174,53 @@ msgstr ""
 "AshyTV nu oferă și nu conține niciun conținut: redă doar listele de redare "
 "pe care le adăugați."
 
-#: src/ashytv/ui/pages/settings_page.py:313
+#: src/ashytv/ui/pages/settings_page.py:315
 msgid "More information"
 msgstr "Mai multe informații"
 
-#: src/ashytv/ui/pages/settings_page.py:336
+#: src/ashytv/ui/pages/settings_page.py:338
 #, python-brace-format
-msgid "{n} group hidden — right-click a group in Channels to hide it"
-msgid_plural "{n} groups hidden — right-click a group in Channels to hide it"
-msgstr[0] ""
-"{n} grup ascuns — faceți clic dreapta pe un grup din Canale pentru a-l "
-"ascunde"
-msgstr[1] ""
-"{n} grupuri ascunse — faceți clic dreapta pe un grup din Canale pentru a-l "
-"ascunde"
-msgstr[2] ""
-"{n} de grupuri ascunse — faceți clic dreapta pe un grup din Canale pentru a-"
-"l ascunde"
+msgid "Hidden: {n}. Right-click a group or channel to hide it."
+msgstr "Ascunse: {n}. Clic dreapta pe un grup sau canal pentru a-l ascunde."
 
-#: src/ashytv/ui/pages/settings_page.py:350
+#: src/ashytv/ui/pages/settings_page.py:356
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Elimină siglele, copertele și datele de ghid descărcate — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:366
+#: src/ashytv/ui/pages/settings_page.py:372
 msgid "Cache cleared."
 msgstr "Memoria cache a fost golită."
 
-#: src/ashytv/ui/pages/settings_page.py:374
+#: src/ashytv/ui/pages/settings_page.py:380
 msgid "History cleared."
 msgstr "Istoricul a fost șters."
 
-#: src/ashytv/ui/pages/settings_page.py:404
+#: src/ashytv/ui/pages/settings_page.py:410
 msgid "Enter PIN"
 msgstr "Introduceți PIN-ul"
 
-#: src/ashytv/ui/pages/settings_page.py:405
+#: src/ashytv/ui/pages/settings_page.py:411
 msgid "Required to show adult content."
 msgstr "Necesar pentru a afișa conținutul pentru adulți."
 
-#: src/ashytv/ui/pages/settings_page.py:409
+#: src/ashytv/ui/pages/settings_page.py:415
 msgid "Unlock"
 msgstr "Deblochează"
 
-#: src/ashytv/ui/pages/settings_page.py:419
+#: src/ashytv/ui/pages/settings_page.py:425
 msgid "Incorrect PIN."
 msgstr "PIN incorect."
 
-#: src/ashytv/ui/pages/settings_page.py:427
+#: src/ashytv/ui/pages/settings_page.py:433
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN-ul trebuie să aibă cel puțin 4 cifre."
 
-#: src/ashytv/ui/pages/settings_page.py:432
+#: src/ashytv/ui/pages/settings_page.py:438
 msgid "PIN set."
 msgstr "PIN setat."
 
-#: src/ashytv/ui/pages/settings_page.py:444
+#: src/ashytv/ui/pages/settings_page.py:450
 msgid "PIN removed."
 msgstr "PIN eliminat."
 
@@ -1536,82 +1555,76 @@ msgstr "Meniul principal"
 msgid "Search (Ctrl+F)"
 msgstr "Căutare (Ctrl+F)"
 
-#: src/ashytv/window.py:199
+#: src/ashytv/window.py:200
 msgid "The best movies for you"
 msgstr "Cele mai bune filme pentru dvs."
 
-#: src/ashytv/window.py:204
+#: src/ashytv/window.py:206
 msgid "Your favorite series in one place"
 msgstr "Serialele preferate, într-un singur loc"
 
-#: src/ashytv/window.py:438
+#: src/ashytv/window.py:443
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Player indisponibil: instalați mpv și python-mpv ({error})"
 
-#: src/ashytv/window.py:478
+#: src/ashytv/window.py:483
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Niciun canal {number}"
 
-#: src/ashytv/window.py:504
+#: src/ashytv/window.py:509
 msgid "Next episode…"
 msgstr "Episodul următor…"
 
-#: src/ashytv/window.py:535 src/ashytv/window.py:544
+#: src/ashytv/window.py:540 src/ashytv/window.py:549
 msgid "This item is no longer in the playlist."
 msgstr "Acest element nu mai este în lista de redare."
 
-#: src/ashytv/window.py:540
+#: src/ashytv/window.py:545
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Nu s-a putut deschide: {error}"
 
-#: src/ashytv/window.py:551
+#: src/ashytv/window.py:556
 msgid "This episode is no longer available."
 msgstr "Acest episod nu mai este disponibil."
 
-#: src/ashytv/window.py:584 src/ashytv/window.py:869
-msgid "Could not save now: a playlist is being updated. Try again."
-msgstr ""
-"Nu se poate salva acum: o listă este în curs de actualizare. Încercați din "
-"nou."
-
-#: src/ashytv/window.py:587
+#: src/ashytv/window.py:592
 msgid "Added to favorites"
 msgstr "Adăugat la favorite"
 
-#: src/ashytv/window.py:587
+#: src/ashytv/window.py:592
 msgid "Removed from favorites"
 msgstr "Eliminat din favorite"
 
-#: src/ashytv/window.py:751
+#: src/ashytv/window.py:756
 msgid "Please wait: an import is already in progress."
 msgstr "Vă rugăm să așteptați: un import este deja în curs."
 
-#: src/ashytv/window.py:768
+#: src/ashytv/window.py:773
 msgid "Importing playlist…"
 msgstr "Se importă lista de redare…"
 
-#: src/ashytv/window.py:781
+#: src/ashytv/window.py:786
 msgid "Connecting to the Xtream provider…"
 msgstr "Se conectează la furnizorul Xtream…"
 
-#: src/ashytv/window.py:798
+#: src/ashytv/window.py:803
 msgid "Provider password not found; add the playlist again."
 msgstr ""
 "Parola furnizorului nu a fost găsită; adăugați din nou lista de redare."
 
-#: src/ashytv/window.py:802
+#: src/ashytv/window.py:807
 msgid "Updating playlist…"
 msgstr "Se actualizează lista de redare…"
 
-#: src/ashytv/window.py:823
+#: src/ashytv/window.py:828
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Lista de redare „{name}” a fost actualizată."
 
-#: src/ashytv/window.py:827
+#: src/ashytv/window.py:832
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
@@ -1619,7 +1632,7 @@ msgstr[0] "{n} element importat."
 msgstr[1] "{n} elemente importate."
 msgstr[2] "{n} de elemente importate."
 
-#: src/ashytv/window.py:828
+#: src/ashytv/window.py:833
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
@@ -1627,68 +1640,79 @@ msgstr[0] "Lista de redare este gata: {n} element."
 msgstr[1] "Lista de redare este gata: {n} elemente."
 msgstr[2] "Lista de redare este gata: {n} de elemente."
 
-#: src/ashytv/window.py:849
+#: src/ashytv/window.py:854
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Nu s-a putut actualiza „{name}”: {error}"
 
-#: src/ashytv/window.py:853
+#: src/ashytv/window.py:858
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Eșec: {error}"
 
-#: src/ashytv/window.py:854
+#: src/ashytv/window.py:859
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Importul a eșuat: {error}"
 
-#: src/ashytv/window.py:860
+#: src/ashytv/window.py:865
 msgid "Please wait for the import to finish."
 msgstr "Așteaptă finalizarea importului."
 
-#: src/ashytv/window.py:879
+#: src/ashytv/window.py:884
 msgid "Playlist removed."
 msgstr "Lista de redare a fost eliminată."
 
-#: src/ashytv/window.py:945
+#: src/ashytv/window.py:950
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Ghidul (EPG) este indisponibil: {error}"
 
-#: src/ashytv/window.py:981
+#: src/ashytv/window.py:989
 msgid "Programme"
 msgstr "Emisiune"
 
-#: src/ashytv/window.py:985
+#: src/ashytv/window.py:993
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Veți fi atenționat despre „{title}” la {time}"
 
-#: src/ashytv/window.py:986
+#: src/ashytv/window.py:994
 msgid "Reminder cancelled"
 msgstr "Memento anulat"
 
-#: src/ashytv/window.py:998
+#: src/ashytv/window.py:1006
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "„{title}” începe în curând pe {channel}"
 
-#: src/ashytv/window.py:1000
+#: src/ashytv/window.py:1008
 msgid "AshyTV reminder"
 msgstr "Memento AshyTV"
 
-#: src/ashytv/window.py:1019
+#: src/ashytv/window.py:1027
 msgid "This channel is no longer in your playlists."
 msgstr "Acest canal nu mai este în listele dvs. de redare."
 
-#: src/ashytv/window.py:1038
+#: src/ashytv/window.py:1054
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Grupul „{name}” a fost ascuns"
 
-#: src/ashytv/window.py:1039
+#: src/ashytv/window.py:1067
+#, python-brace-format
+msgid "Channel “{name}” hidden"
+msgstr "Canalul „{name}” a fost ascuns"
+
+#: src/ashytv/window.py:1071
 msgid "Undo"
 msgstr "Anulează"
+
+#: src/ashytv/window.py:1233
+msgid "Could not save now: a playlist is being updated. Try again."
+msgstr ""
+"Nu se poate salva acum: o listă este în curs de actualizare. Încercați din "
+"nou."
 
 #: data/org.communitybig.ashytv.desktop.in:3
 #: data/org.communitybig.ashytv.metainfo.xml.in:4
