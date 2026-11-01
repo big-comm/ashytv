@@ -32,6 +32,7 @@ class CatalogPage(Gtk.Box):
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # (media type, category): hide a category
         "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (object, str)),
+        "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, storage, media_type: MediaType, title: str, subtitle: str):
@@ -108,6 +109,7 @@ class CatalogPage(Gtk.Box):
         chips += [(g, chip_label(g)) for g, _n in groups]
         if self._chip not in {k for k, _l in chips}:
             self._chip = "all"
+        self.update_hidden_count()
         self.chips.set_chips(chips, self._chip)
         self._load()
 
@@ -115,6 +117,13 @@ class CatalogPage(Gtk.Box):
         self.search.set_text(text)
 
     # ---- data ---------------------------------------------------------
+
+    def update_hidden_count(self) -> None:
+        """Last chip: 'Hidden (N)' when categories of this section are hidden."""
+        n = self.storage.hidden_count(self.media_type)
+        self.chips.set_extra(_("Hidden ({n})").format(n=n), "view-conceal-symbolic",
+                             (lambda: self.emit("show-hidden")) if n else None,
+                             _("See hidden channels and groups"))
 
     def _chip_menu(self, key: str) -> list:
         """Categories (not All / New / Trending) can be hidden."""

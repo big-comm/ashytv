@@ -588,6 +588,44 @@ class Storage:
                FROM hidden h JOIN playlist p ON p.id = h.playlist_id
                ORDER BY p.name, h.playlist_id, h.kind DESC, h.media_type, h.label""").fetchall()
 
+    def hidden_entries(self, media_type: MediaType | None = None) -> list[dict]:
+        """What the user hid, as shown to them: the quality variants of one
+        channel ("News FHD", "News HD") are a single entry. Each entry has
+        playlist_id, playlist, kind, media_type, name, logo, group and
+        `entries` (the rows to pass to unhide())."""
+        merged: dict[tuple, dict] = {}
+        for r in self.hidden_items():
+            if media_type is not None and r["media_type"] != media_type.value:
+                continue
+            name = r["label"] or r["key"]
+            if r["kind"] == "channel":
+                name = split_quality(name)[0] or name
+            key = (r["playlist_id"], r["kind"], r["media_type"], name)
+            entry = merged.get(key)
+            if entry is None:
+                entry = merged[key] = {
+                    "playlist_id": r["playlist_id"], "playlist": r["playlist"],
+                    "kind": r["kind"], "media_type": MediaType(r["media_type"]),
+                    "name": name, "logo": "", "group": "", "entries": []}
+                if r["kind"] == "channel":
+                    entry["logo"], entry["group"] = self._hidden_channel_info(r)
+            entry["entries"].append((r["playlist_id"], r["kind"], r["media_type"], r["key"]))
+        return list(merged.values())
+
+    def hidden_count(self, media_type: MediaType | None = None) -> int:
+        """Entries hidden in the enabled playlists (variants counted once)."""
+        return sum(1 for e in self.hidden_entries(media_type)
+                   if e["playlist_id"] not in self.disabled)
+
+    def _hidden_channel_info(self, row) -> tuple[str, str]:
+        found = self.db.execute(
+            f"""SELECT c.logo, c.grp FROM channel c
+                WHERE c.playlist_id = ? AND c.media_type = ?
+                  AND ({_CHANNEL_KEY_SQL.format(a="c")} = ?
+                       OR (c.ext_id = '' AND c.name = ?)) LIMIT 1""",
+            (row["playlist_id"], row["media_type"], row["key"], row["label"])).fetchone()
+        return (found["logo"] or "", found["grp"] or "") if found else ("", "")
+
     def migrate_hidden_groups(self, names: Iterable[str]) -> None:
         """Group names hidden by older versions (one global list) -> hidden
         per playlist, in every playlist and section that has them."""

@@ -308,3 +308,27 @@ def test_hidden_rows_go_with_their_playlist_and_legacy_names_migrate(tmp_path):
     assert [c.name for c in db.channels(MediaType.LIVE)] == ["B"]
     db.delete_playlist(pid)
     assert db.hidden_items() == []
+
+
+def test_hidden_entries_count_variants_once_with_logo_and_group(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    p1 = db.add_playlist("One", "s1")
+    p2 = db.add_playlist("Two", "s2")
+    db.replace_channels(p1, [_ch("News FHD", "live/1.ts", group="BR", ext_id="1", logo="L"),
+                             _ch("News HD", "live/2.ts", group="BR", ext_id="2"),
+                             _ch("M", "m/1", MediaType.MOVIE, group="Drama")])
+    db.replace_channels(p2, [_ch("X", "u/x", group="Kids")])
+    db.hide_channel(collapse_variants(db.channels(MediaType.LIVE))[0])
+    db.hide_group(MediaType.MOVIE, "Drama")
+    db.hide_group(MediaType.LIVE, "Kids")
+    entries = db.hidden_entries(MediaType.LIVE)
+    news = next(e for e in entries if e["kind"] == "channel")
+    assert news["name"] == "News"
+    assert len(news["entries"]) == 2
+    assert (news["logo"], news["group"]) == ("L", "BR")
+    assert db.hidden_count() == 3
+    assert db.hidden_count(MediaType.MOVIE) == 1
+    db.set_playlist_enabled(p2, False)  # the disabled playlist's items don't count
+    assert db.hidden_count(MediaType.LIVE) == 1
+    db.unhide(news["entries"])
+    assert db.count(MediaType.LIVE) == 2

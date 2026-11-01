@@ -1,4 +1,4 @@
-"""Settings → Hidden channels and groups: show them again, per playlist."""
+"""Hidden channels and groups: see them and show them again."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from gi.repository import Adw, GLib, Gtk
 
 from ..i18n import _
 from ..models import MediaType
-from ..services.quality import split_quality
+from .pages._common import set_logo
 
 
 class HiddenDialog(Adw.Dialog):
@@ -33,11 +33,11 @@ class HiddenDialog(Adw.Dialog):
     def _fill(self) -> None:
         for group in list(self._groups()):
             self._page.remove(group)
-        rows = self.storage.hidden_items()
-        self._show_all.set_sensitive(bool(rows))
-        if not rows:
+        items = self.storage.hidden_entries()
+        self._show_all.set_sensitive(bool(items))
+        if not items:
             empty = Adw.PreferencesGroup()
-            status = Adw.StatusPage(icon_name="view-reveal-symbolic",
+            status = Adw.StatusPage(icon_name="view-conceal-symbolic",
                                     title=_("Nothing hidden"),
                                     description=_("Right-click (or long-press) a group or "
                                                   "channel to hide it."))
@@ -45,29 +45,38 @@ class HiddenDialog(Adw.Dialog):
             empty.add(status)
             self._page.add(empty)
             return
-        # Quality variants of one channel ("News FHD", "News HD") are one row.
-        merged: dict[tuple, tuple[str, list]] = {}
-        for r in rows:
-            name = r["label"] or r["key"]
-            if r["kind"] == "channel":
-                name = split_quality(name)[0] or name
-            key = (r["playlist_id"], r["playlist"], r["kind"], r["media_type"], name)
-            merged.setdefault(key, (name, []))[1].append(
-                (r["playlist_id"], r["kind"], r["media_type"], r["key"]))
-        groups: dict[int, Adw.PreferencesGroup] = {}
-        for (pid, playlist, kind, media_type, _n), (name, entries) in merged.items():
-            group = groups.get(pid)
-            if group is None:
-                group = groups[pid] = Adw.PreferencesGroup(
-                    title=GLib.markup_escape_text(playlist))
-                self._page.add(group)
-            what = _("Group") if kind == "group" else _("Channel")
-            row = Adw.ActionRow(title=GLib.markup_escape_text(name),
-                                subtitle=f"{what} • {MediaType(media_type).label}")
-            show = Gtk.Button(label=_("Show"), valign=Gtk.Align.CENTER)
-            show.connect("clicked", lambda _b, e=entries: self._apply(e))
-            row.add_suffix(show)
-            group.add(row)
+        several = len({e["playlist_id"] for e in items}) > 1
+        # One section per part of the app: Live TV, Movies, Series.
+        for media_type in MediaType:
+            section = [e for e in items if e["media_type"] is media_type]
+            if not section:
+                continue
+            group = Adw.PreferencesGroup(title=media_type.label)
+            for entry in sorted(section, key=lambda e: (e["kind"] != "group",
+                                                        e["name"].casefold())):
+                group.add(self._row(entry, several))
+            self._page.add(group)
+
+    def _row(self, entry: dict, several: bool) -> Gtk.Widget:
+        if entry["kind"] == "group":
+            what = _("Group") if entry["media_type"] is MediaType.LIVE else _("Category")
+            parts = [what]
+            icon = Gtk.Image(icon_name="folder-symbolic", pixel_size=24)
+        else:
+            parts = [_("Channel"), entry["group"]]
+            icon = Gtk.Image(pixel_size=24)
+            icon.add_css_class("ashy-logo-badge")
+            set_logo(icon, entry["logo"], 24, "tv-symbolic")
+        if several:
+            parts.append(entry["playlist"])
+        row = Adw.ActionRow(title=GLib.markup_escape_text(entry["name"]),
+                            subtitle=GLib.markup_escape_text(
+                                " • ".join(p for p in parts if p)))
+        row.add_prefix(icon)
+        show = Gtk.Button(label=_("Show"), valign=Gtk.Align.CENTER)
+        show.connect("clicked", lambda _b, e=entry["entries"]: self._apply(e))
+        row.add_suffix(show)
+        return row
 
     def _groups(self):
         # Adw.PreferencesPage has no API to list its groups: walk the widgets.

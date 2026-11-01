@@ -422,3 +422,4 @@ gridview.ashy-posters > child:focus-visible .ashy-poster-img {
 button.ashy-cast-card { padding: 6px; border-radius: 14px; }
 button.ashy-cast-card:hover .ashy-cast-photo { box-shadow: 0 0 0 2px var(--ashy-accent); }
 .ashy-cast-name { font-weight: 700; font-size: 13px; }
+.ashy-grouplist > row.ashy-hidden-entry { color: var(--ashy-fg-dim); margin-top: 6px; }

@@ -25,6 +25,7 @@ from .services.xtream_client import (
 from .ui import keynav
 from .ui.cast import ActorDialog, CastService
 from .ui.detail_dialog import DetailDialog
+from .ui.hidden_dialog import HiddenDialog
 from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
@@ -189,6 +190,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("show-schedule", self._on_show_schedule)
         channels.connect("hide-group", lambda _p, group: self._hide_group(MediaType.LIVE, group))
         channels.connect("hide-channel", self._on_hide_channel)
+        channels.connect("show-hidden", lambda *_: self.show_hidden())
         channels.connect("remind", self._on_remind)
         channels.connect("move-group", self._on_move_group)
         channels.preview_source = self._preview_source
@@ -201,12 +203,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         movies.connect("play", self._on_play)
         movies.connect("favorite-changed", self._on_favorite_changed)
         movies.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
+        movies.connect("show-hidden", lambda *_: self.show_hidden())
 
         series = CatalogPage(self.storage, MediaType.SERIES, _("Series"),
                              _("Your favorite series in one place"))
         series.connect("play", self._on_play)
         series.connect("favorite-changed", self._on_favorite_changed)
         series.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
+        series.connect("show-hidden", lambda *_: self.show_hidden())
 
         favorites = ChannelsPage(self.storage, favorites_only=True)
         favorites.connect("play", self._on_play)
@@ -227,7 +231,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
         settings.connect("history-cleared", lambda *_: self.pages["home"].invalidate())
-        settings.connect("hidden-changed", lambda *_: self._hidden_changed())
+        settings.connect("show-hidden", lambda *_: self.show_hidden())
 
         self.pages = {
             "home": home, "channels": channels,
@@ -1043,7 +1047,20 @@ class AshyTvWindow(Adw.ApplicationWindow):
         """Something was hidden or shown again: every list, rail, guide and
         the zapping order follow (the page on screen reloads now)."""
         self._invalidate_pages("home", "channels", "favorites", "movies", "series")
+        self._update_hidden_counts()
+
+    def _update_hidden_counts(self) -> None:
+        """'Hidden (N)' entries and the Settings row, right away."""
+        for key in ("channels", "movies", "series"):
+            self.pages[key].update_hidden_count()
         self.pages["settings"].update_hidden()
+
+    def show_hidden(self) -> None:
+        """The dialog to see what is hidden and show it again."""
+        dialog = self.get_visible_dialog()
+        if isinstance(dialog, HiddenDialog):
+            return
+        HiddenDialog(self.storage, self._hidden_changed).present(self)
 
     def _hide_group(self, media_type: MediaType, group: str) -> None:
         entries = self.storage.hide_group(media_type, group)
@@ -1051,7 +1068,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._toast(_busy_message())
             return
         self._hidden_changed()
-        self._undo_toast(_("Group “{name}” hidden").format(name=group), entries)
+        title = (_("Group “{name}” hidden") if media_type is MediaType.LIVE
+                 else _("Category “{name}” hidden"))
+        self._undo_toast(title.format(name=group), entries)
 
     def _on_hide_channel(self, page, channel: Channel) -> None:
         entries = self.storage.hide_channel(channel)
@@ -1062,19 +1081,33 @@ class AshyTvWindow(Adw.ApplicationWindow):
         for key in ("home", "channels", "favorites"):
             if self.pages[key] is not page:
                 self.pages[key].invalidate()
-        self.pages["settings"].update_hidden()
+        self._update_hidden_counts()
         name = channel.base_name if channel.variant_labels else channel.display_name
         self._undo_toast(_("Channel “{name}” hidden").format(name=name), entries)
 
     def _undo_toast(self, title: str, entries: list) -> None:
-        toast = Adw.Toast(title=GLib.markup_escape_text(title), timeout=5,
-                          button_label=_("Undo"))
+        """'… hidden. To show it again: Settings → …' with Undo and See hidden
+        (a toast has one button: the second one lives in its custom title)."""
+        text = Gtk.Label(label=f"{title}\n"
+                         + _("To show it again: Settings → Hidden channels and groups"),
+                         wrap=True, max_width_chars=46, xalign=0)
+        see = Gtk.Button(label=_("See hidden"), valign=Gtk.Align.CENTER)
+        see.add_css_class("flat")
+        content = Gtk.Box(spacing=10)
+        content.append(text)
+        content.append(see)
+        toast = Adw.Toast(custom_title=content, timeout=8, button_label=_("Undo"))
 
         def undo(*_a):
             self.storage.unhide(entries)
             self._hidden_changed()
 
+        def see_hidden(*_a):
+            toast.dismiss()
+            self.show_hidden()
+
         toast.connect("button-clicked", undo)
+        see.connect("clicked", see_hidden)
         self.toasts.add_toast(toast)
 
     def _on_move_group(self, _page, group: str, delta: int) -> None:

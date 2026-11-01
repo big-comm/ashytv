@@ -48,6 +48,7 @@ class ChipRow(Gtk.ScrolledWindow):
         # key -> [(label, callback)] of its context menu ([] = none)
         self._menu_items = menu_items
         self._buttons: dict[str, Gtk.Button] = {}
+        self._extra: Gtk.Button | None = None
         self.active = ""
 
     def set_chips(self, chips: list[tuple[str, str]], active: str = "") -> None:
@@ -63,7 +64,25 @@ class ChipRow(Gtk.ScrolledWindow):
                 add_context_menu(btn, lambda b=btn, k=key: self._open_menu(b, k))
             self._buttons[key] = btn
             self._box.append(btn)
+        if self._extra is not None:
+            self._box.append(self._extra)
         self._mark(active or (chips[0][0] if chips else ""))
+
+    def set_extra(self, label: str, icon: str, callback: Callable[[], None] | None,
+                  tooltip: str = "") -> None:
+        """An action chip after the others (not a filter); None removes it."""
+        if self._extra is not None:
+            self._box.remove(self._extra)
+            self._extra = None
+        if callback is None:
+            return
+        content = Gtk.Box(spacing=6)
+        content.append(Gtk.Image(icon_name=icon))
+        content.append(Gtk.Label(label=label))
+        self._extra = Gtk.Button(child=content, tooltip_text=tooltip or None)
+        self._extra.add_css_class("ashy-chip")
+        self._extra.connect("clicked", lambda *_: callback())
+        self._box.append(self._extra)
 
     def _open_menu(self, button: Gtk.Button, key: str) -> None:
         items = self._menu_items(key) if self._menu_items else []

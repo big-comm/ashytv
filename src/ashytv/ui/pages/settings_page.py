@@ -14,7 +14,6 @@ from ...services import http
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
-from ..hidden_dialog import HiddenDialog
 from ._common import page_header
 
 _CATS = [
@@ -51,8 +50,8 @@ class SettingsPage(Gtk.Box):
     __gsignals__ = {
         "history-cleared": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
-        # groups/channels were shown again here
-        "hidden-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        # open the hidden channels and groups dialog
+        "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, settings, storage):
@@ -144,11 +143,14 @@ class SettingsPage(Gtk.Box):
                      _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
         self._switch(channels, "channel_preview", _("Live preview"),
                      _("Plays the selected channel, muted, next to the channel list"))
+        # Its own group, so it is easy to find: everything the user hid.
+        hidden_group = Adw.PreferencesGroup(title=_("Hidden channels and groups"))
         self.hidden_row = Adw.ActionRow(title=_("Hidden channels and groups"),
-                                        activatable=True)
+                                        activatable=True, subtitle_lines=2)
+        self.hidden_row.add_prefix(Gtk.Image(icon_name="view-conceal-symbolic"))
         self.hidden_row.add_suffix(Gtk.Image(icon_name="go-next-symbolic"))
-        self.hidden_row.connect("activated", lambda *_: self._open_hidden())
-        channels.add(self.hidden_row)
+        self.hidden_row.connect("activated", lambda *_: self.emit("show-hidden"))
+        hidden_group.add(self.hidden_row)
         self.update_hidden()
 
         g2 = Adw.PreferencesGroup(title=_("IPTV Playlists"))
@@ -163,7 +165,7 @@ class SettingsPage(Gtk.Box):
         every.connect("notify::selected", lambda r, _p: self.settings.set(
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
-        return self._page(g, channels, g2)
+        return self._page(g, channels, hidden_group, g2)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))
@@ -333,15 +335,12 @@ class SettingsPage(Gtk.Box):
     # ---- actions ---------------------------------------------------------
 
     def update_hidden(self) -> None:
-        n = len(self.storage.hidden_items())
+        n = len(self.storage.hidden_entries())  # as many as the dialog lists
         self.hidden_row.set_subtitle(
-            _("Hidden: {n}. Right-click a group or channel to hide it.").format(n=n))
-
-    def _open_hidden(self) -> None:
-        def changed():
-            self.emit("hidden-changed")
-
-        HiddenDialog(self.storage, changed).present(self)
+            ngettext("{n} hidden item · Click to see it and show it again",
+                     "{n} hidden items · Click to see them and show them again",
+                     n).format(n=n) if n else
+            _("Nothing hidden · Right-click a group or channel to hide it"))
 
     def _update_cache_row(self) -> None:
         # Walking thousands of cached logos is slow: do it off the main thread.
