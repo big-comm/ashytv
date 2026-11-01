@@ -187,7 +187,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("play", self._on_play)
         channels.connect("favorite-changed", self._on_favorite_changed)
         channels.connect("show-schedule", self._on_show_schedule)
-        channels.connect("hide-group", self._on_hide_group)
+        channels.connect("hide-group", lambda _p, group: self._hide_group(MediaType.LIVE, group))
+        channels.connect("hide-channel", self._on_hide_channel)
         channels.connect("remind", self._on_remind)
         channels.connect("move-group", self._on_move_group)
         channels.preview_source = self._preview_source
@@ -199,16 +200,19 @@ class AshyTvWindow(Adw.ApplicationWindow):
                              _("The best movies for you"))
         movies.connect("play", self._on_play)
         movies.connect("favorite-changed", self._on_favorite_changed)
+        movies.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
 
         series = CatalogPage(self.storage, MediaType.SERIES, _("Series"),
                              _("Your favorite series in one place"))
         series.connect("play", self._on_play)
         series.connect("favorite-changed", self._on_favorite_changed)
+        series.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
 
         favorites = ChannelsPage(self.storage, favorites_only=True)
         favorites.connect("play", self._on_play)
         favorites.connect("favorite-changed", self._on_favorite_changed)
         favorites.connect("show-schedule", self._on_show_schedule)
+        favorites.connect("hide-channel", self._on_hide_channel)
 
         recordings = RecordingsPage()
         recordings.connect("play", self._on_play)
@@ -223,6 +227,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
         settings.connect("history-cleared", lambda *_: self.pages["home"].invalidate())
+        settings.connect("hidden-changed", lambda *_: self._hidden_changed())
 
         self.pages = {
             "home": home, "channels": channels,
@@ -581,7 +586,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_player_fav(self, _p, item: PlayItem) -> None:
         ch = item.channel
         if not self.storage.set_favorite(ch, not ch.favorite):
-            self._toast(_("Could not save now: a playlist is being updated. Try again."))
+            self._toast(_busy_message())
             return
         self._on_favorite_changed(None, ch)
         self._toast(_("Added to favorites") if ch.favorite else _("Removed from favorites"))
@@ -866,7 +871,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         try:
             self.storage.delete_playlist(playlist_id)
         except sqlite3.Error:
-            self._toast(_("Could not save now: a playlist is being updated. Try again."))
+            self._toast(_busy_message())
             return
         if prov is not None:
             self._passwords.pop((prov.host, prov.username), None)
@@ -963,9 +968,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.storage.hide_adult = bool(s.get("hide_adult"))
         s.connect("hide_adult", self._on_hide_adult)
         self.storage.group_variants = bool(s.get("group_variants"))
-        self.storage.hidden_groups = set(s.get("hidden_groups") or [])
+        if s.get("hidden_groups"):
+            # Older versions kept one global list of group names: now they
+            # are hidden per playlist in the database.
+            self.storage.migrate_hidden_groups(s.get("hidden_groups"))
+            s.set("hidden_groups", [])
         self.storage.group_order = list(s.get("group_order") or [])
-        s.connect("hidden_groups", self._on_groups_setting)
         s.connect("group_order", self._on_groups_setting)
         s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
@@ -1026,19 +1034,47 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._play_channel(channel)
 
     def _on_groups_setting(self, _value) -> None:
-        self.storage.hidden_groups = set(self.settings.get("hidden_groups") or [])
         self.storage.group_order = list(self.settings.get("group_order") or [])
         self._invalidate_pages("home", "channels", "favorites")
 
-    def _on_hide_group(self, _page, group: str) -> None:
-        hidden = list(self.settings.get("hidden_groups") or [])
-        if group not in hidden:
-            self.settings.set("hidden_groups", [*hidden, group])
-        toast = Adw.Toast(title=GLib.markup_escape_text(
-            _("Group “{name}” hidden").format(name=group)), timeout=5,
-            button_label=_("Undo"))
-        toast.connect("button-clicked", lambda *_: self.settings.set(
-            "hidden_groups", [g for g in self.settings.get("hidden_groups") if g != group]))
+    # ---- hidden groups and channels -----------------------------------------
+
+    def _hidden_changed(self) -> None:
+        """Something was hidden or shown again: every list, rail, guide and
+        the zapping order follow (the page on screen reloads now)."""
+        self._invalidate_pages("home", "channels", "favorites", "movies", "series")
+        self.pages["settings"].update_hidden()
+
+    def _hide_group(self, media_type: MediaType, group: str) -> None:
+        entries = self.storage.hide_group(media_type, group)
+        if not entries:
+            self._toast(_busy_message())
+            return
+        self._hidden_changed()
+        self._undo_toast(_("Group “{name}” hidden").format(name=group), entries)
+
+    def _on_hide_channel(self, page, channel: Channel) -> None:
+        entries = self.storage.hide_channel(channel)
+        if not entries:
+            self._toast(_busy_message())
+            return
+        page.channel_hidden(channel)  # in place: the list keeps its scroll
+        for key in ("home", "channels", "favorites"):
+            if self.pages[key] is not page:
+                self.pages[key].invalidate()
+        self.pages["settings"].update_hidden()
+        name = channel.base_name if channel.variant_labels else channel.display_name
+        self._undo_toast(_("Channel “{name}” hidden").format(name=name), entries)
+
+    def _undo_toast(self, title: str, entries: list) -> None:
+        toast = Adw.Toast(title=GLib.markup_escape_text(title), timeout=5,
+                          button_label=_("Undo"))
+
+        def undo(*_a):
+            self.storage.unhide(entries)
+            self._hidden_changed()
+
+        toast.connect("button-clicked", undo)
         self.toasts.add_toast(toast)
 
     def _on_move_group(self, _page, group: str, delta: int) -> None:
@@ -1191,6 +1227,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _toast(self, text: str) -> None:
         self.toasts.add_toast(Adw.Toast(title=GLib.markup_escape_text(text), timeout=3))
+
+
+def _busy_message() -> str:
+    return _("Could not save now: a playlist is being updated. Try again.")
 
 
 def activate_widget(widget: Gtk.Widget) -> bool:

@@ -4,16 +4,26 @@ from __future__ import annotations
 
 import time
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
 from ...services.text import normalize
-from ...services.storage import collapse_variants
+from ...services.storage import channel_key, collapse_variants
 from ..channel_info import ChannelInfoPanel
 from ..channel_object import ChannelObject
 from .epg_page import EpgPage
-from ._common import ChipRow, SearchFilter, page_header, set_logo, update_favorite
+from ._common import (
+    ChipRow,
+    SearchFilter,
+    add_context_menu,
+    fill_menu,
+    is_menu_key,
+    page_header,
+    popup_menu,
+    set_logo,
+    update_favorite,
+)
 
 _ALL = "__all__"
 # Arrowing through the list must not open a stream per row.
@@ -45,6 +55,7 @@ class ChannelsPage(Gtk.Box):
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "show-schedule": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "hide-channel": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
         "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
     }
@@ -143,6 +154,11 @@ class ChannelsPage(Gtk.Box):
                                      single_click_activate=not with_panel, vexpand=True)
         self.listview.add_css_class("ashy-chanlist")
         self.listview.connect("activate", self._on_activate)
+        # Menu key / Shift+F10 on the focused row (the row items, not our
+        # cards, take the focus, so the key is caught on the list).
+        list_keys = Gtk.EventControllerKey()
+        list_keys.connect("key-pressed", self._on_list_key)
+        self.listview.add_controller(list_keys)
         cscroll = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
         cscroll.set_child(self.listview)
 
@@ -302,37 +318,15 @@ class ChannelsPage(Gtk.Box):
         row.set_child(box)
         self.group_list.append(row)
         if key != _ALL and not self.favorites_only:
-            # Right click or the Menu key: hide / reorder this group.
-            click = Gtk.GestureClick(button=3)
-            click.connect("pressed", lambda *_: self._group_menu(row, key))
-            row.add_controller(click)
-            keys = Gtk.EventControllerKey()
-            keys.connect("key-pressed", self._on_group_key, row, key)
-            row.add_controller(keys)
-
-    def _on_group_key(self, _c, keyval, _code, _state, row, key) -> bool:
-        if keyval == Gdk.KEY_Menu:
-            self._group_menu(row, key)
-            return True
-        return False
+            # Right click, long press or the Menu key: hide / reorder it.
+            add_context_menu(row, lambda: self._group_menu(row, key))
 
     def _group_menu(self, row: Gtk.ListBoxRow, group: str) -> None:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        popover = Gtk.Popover(child=box)
-        popover.set_parent(row)
-
-        def item(label, callback):
-            b = Gtk.Button(label=label)
-            b.add_css_class("flat")
-            b.get_child().set_xalign(0)
-            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
-            box.append(b)
-
-        item(_("Move up"), lambda: self.emit("move-group", group, -1))
-        item(_("Move down"), lambda: self.emit("move-group", group, 1))
-        item(_("Hide group"), lambda: self.emit("hide-group", group))
-        popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
-        popover.popup()
+        popup_menu(row, [
+            (_("Move up"), lambda: self.emit("move-group", group, -1)),
+            (_("Move down"), lambda: self.emit("move-group", group, 1)),
+            (_("Hide group"), lambda: self.emit("hide-group", group)),
+        ])
 
     def _on_group_selected(self, _list, row) -> None:
         if row is None:
@@ -558,33 +552,64 @@ class ChannelsPage(Gtk.Box):
         row.append(fav)
         row.append(more)
         row._list_item = list_item  # type: ignore[attr-defined]  # focus -> row
+        add_context_menu(row, lambda: self._row_menu(list_item), keys=False)
         # The number is the row's position: it changes when a search filters
         # the list without the row being bound again.
         list_item.connect("notify::position",
                           lambda li, _p: num.set_text(str(li.get_position() + 1)))
         list_item.set_child(row)
 
+    def _menu_items(self, ch: Channel) -> list:
+        items = [(_("Watch"), lambda: self.emit("play", ch)),
+                 (_("Remove from favorites") if ch.favorite else _("Add to favorites"),
+                  lambda: self._toggle_fav(ch))]
+        if ch.media_type is MediaType.LIVE and ch.tvg_id:
+            items.append((_("View schedule"), lambda: self.emit("show-schedule", ch)))
+        if ch.playlist_id:
+            items.append((_("Hide channel"), lambda: self.emit("hide-channel", ch)))
+        return items
+
     def _build_menu(self, button: Gtk.MenuButton, list_item: Gtk.ListItem) -> None:
         obj = list_item.get_item()
         if obj is None:
             return
-        ch = obj.channel
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         popover = Gtk.Popover(child=box)
-
-        def item(label, callback):
-            b = Gtk.Button(label=label)
-            b.add_css_class("flat")
-            b.get_child().set_xalign(0)
-            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
-            box.append(b)
-
-        item(_("Watch"), lambda: self.emit("play", ch))
-        item(_("Remove from favorites") if ch.favorite else _("Add to favorites"),
-             lambda: self._toggle_fav(ch))
-        if ch.media_type is MediaType.LIVE and ch.tvg_id:
-            item(_("View schedule"), lambda: self.emit("show-schedule", ch))
+        fill_menu(box, popover, self._menu_items(obj.channel))
         button.set_popover(popover)
+
+    def _row_menu(self, list_item: Gtk.ListItem) -> None:
+        obj = list_item.get_item()
+        if obj is not None and list_item.get_child() is not None:
+            popup_menu(list_item.get_child(), self._menu_items(obj.channel))
+
+    def _on_list_key(self, _c, keyval, _code, state) -> bool:
+        if not is_menu_key(keyval, state):
+            return False
+        focus = self.get_root().get_focus() if self.get_root() else None
+        while focus is not None and focus.get_parent() is not self.listview:
+            focus = focus.get_parent()
+        list_item = getattr(focus.get_first_child(), "_list_item", None) if focus else None
+        if list_item is None:
+            return False
+        self._row_menu(list_item)
+        return True
+
+    def channel_hidden(self, channel: Channel) -> None:
+        """Drop a hidden channel's rows in place (scroll and focus stay); the
+        group counts are refreshed the next time the page is shown."""
+        def key(ch: Channel) -> tuple:
+            return (ch.playlist_id, ch.group, ch.base_name or channel_key(ch))
+
+        hidden = key(channel)
+        for i in reversed(range(self.store.get_n_items())):
+            if key(self.store.get_item(i).channel) == hidden:
+                self.store.remove(i)
+        self._dirty = True
+        self._update_empty()
+        if self.guide is not None:
+            self.guide.set_channels([self.store.get_item(i).channel
+                                     for i in range(self.store.get_n_items())])
 
     def _on_fav_clicked(self, _button: Gtk.Button, list_item: Gtk.ListItem) -> None:
         obj = list_item.get_item()

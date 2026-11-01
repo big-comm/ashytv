@@ -136,7 +136,7 @@ class CastService:
         """Changes when a playlist is updated or the filters change."""
         s = self.storage
         return (tuple((r["id"], r["updated_at"]) for r in s.list_playlists()),
-                s.hide_adult, frozenset(s.hidden_groups), frozenset(s.disabled))
+                s.hide_adult, s.hidden_version, frozenset(s.disabled))
 
     def _catalog_index(self, key: tuple) -> CatalogIndex:
         with self._lock:
@@ -146,7 +146,6 @@ class CastService:
             db = Storage(self.storage.path, timeout=5)
             try:
                 db.hide_adult = self.storage.hide_adult
-                db.hidden_groups = set(self.storage.hidden_groups)
                 db.disabled = set(self.storage.disabled)
                 items = db.channels(MediaType.MOVIE) + db.channels(MediaType.SERIES)
             finally:

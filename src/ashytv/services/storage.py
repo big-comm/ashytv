@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 5
+_SCHEMA_VERSION = 6
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -57,10 +57,13 @@ class Storage:
         self.hide_adult = False
         # Show "NEWS FHD/HD/SD" as one channel (pages honour it).
         self.group_variants = True
-        # Channel groups the user hid / reordered (names), set by the window.
-        self.hidden_groups: set[str] = set()
+        # Channel group order the user chose (names), set by the window.
         self.group_order: list[str] = []
         self._migrate()
+        # Groups/channels the user hid live in the `hidden` table (per
+        # playlist); the filter is skipped while it is empty.
+        self._any_hidden = self._count_hidden() > 0
+        self.hidden_version = 0     # bumped when something is hidden/shown
         # Playlists switched off in the Playlists page: kept, but not shown.
         self.disabled: set[int] = {
             r["id"] for r in self.db.execute("SELECT id FROM playlist WHERE enabled = 0")}
@@ -167,6 +170,18 @@ class Storage:
                 ON channel(playlist_id, grp, base_key);
             CREATE INDEX IF NOT EXISTS idx_episode_channel ON episode(channel_id);
             CREATE INDEX IF NOT EXISTS idx_history_time ON history(watched_at);
+            -- Groups and channels the user hid, per playlist. Channels are
+            -- keyed by the provider stream id (Xtream) or their URL, so the
+            -- choice survives a playlist refresh.
+            CREATE TABLE IF NOT EXISTS hidden (
+                playlist_id INTEGER NOT NULL REFERENCES playlist(id) ON DELETE CASCADE,
+                kind        TEXT NOT NULL,        -- group | channel
+                media_type  TEXT NOT NULL,
+                key         TEXT NOT NULL,        -- group name / channel key
+                label       TEXT DEFAULT '',      -- channel name (shown; M3U fallback)
+                added_at    INTEGER DEFAULT (strftime('%s','now')),
+                PRIMARY KEY (playlist_id, kind, media_type, key)
+            );
             """
         )
         if has_v1:
@@ -372,16 +387,19 @@ class Storage:
             # "%" and "_" typed by the user are text, not wildcards.
             clauses.append("c.name_key LIKE ? ESCAPE '\\'")
             params.append(f"%{_like_escape(normalize(search))}%")
-        hide_sql, hide_params = self._hidden_sql("c.grp", hidden=group is None)
+        hide_sql, hide_params = self._hidden_sql("c", groups=group is None)
         if hide_sql:
             clauses.append(hide_sql)
             params.extend(hide_params)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return where, params
 
-    def _hidden_sql(self, col: str, hidden: bool = True) -> tuple[str, list]:
-        """SQL condition (true = visible) for the parental filter and the
-        groups the user hid; ("", []) when nothing is hidden."""
+    def _hidden_sql(self, alias: str = "c", groups: bool = True) -> tuple[str, list]:
+        """SQL condition (true = visible) on channel `alias` for the parental
+        filter and what the user hid; ("", []) when nothing is hidden.
+        `groups=False`: a group opened explicitly still lists its channels
+        (only hidden channels are left out)."""
+        col = f"{alias}.grp"
         clauses, params = [], []
         if self.hide_adult:
             for kw in ADULT_KEYWORDS:
@@ -392,14 +410,19 @@ class Storage:
                 else:
                     clauses.append(f"lower({col}) NOT LIKE ?")
                     params.append(f"%{kw}%")
-        if hidden and self.hidden_groups:
-            clauses.append(f"{col} NOT IN ({','.join('?' * len(self.hidden_groups))})")
-            params.extend(sorted(self.hidden_groups))
+        if self._any_hidden:
+            group_sql = f" OR (h.kind = 'group' AND h.key = {alias}.grp)" if groups else ""
+            clauses.append(
+                f"""NOT EXISTS (SELECT 1 FROM hidden h
+                    WHERE h.playlist_id = {alias}.playlist_id
+                      AND h.media_type = {alias}.media_type
+                      AND ((h.kind = 'channel' AND (h.key = {_CHANNEL_KEY_SQL.format(a=alias)}
+                            OR ({alias}.ext_id = '' AND h.label = {alias}.name))){group_sql}))""")
         return " AND ".join(clauses), params
 
     def _history_visible_sql(self, alias: str) -> tuple[str, list]:
         """History entries whose channel (or series) is not filtered out."""
-        cond, params = self._hidden_sql("c.grp")
+        cond, params = self._hidden_sql("c")
         if not cond:
             return "", []
         return (f"""NOT EXISTS (SELECT 1 FROM channel c
@@ -502,6 +525,75 @@ class Storage:
             (playlist_id, url),
         ).fetchone()
         return self._row_to_channel(row) if row else None
+
+    # ---- hidden groups and channels ---------------------------------------
+
+    def _count_hidden(self) -> int:
+        return int(self.db.execute("SELECT COUNT(*) FROM hidden").fetchone()[0])
+
+    def _insert_hidden(self, rows: list[tuple]) -> list[tuple]:
+        """rows = (playlist_id, kind, media_type, key, label); returns the
+        ones actually added (to undo exactly those)."""
+        added = []
+        try:
+            for row in rows:
+                cur = self.db.execute(
+                    """INSERT OR IGNORE INTO hidden (playlist_id, kind, media_type, key, label)
+                       VALUES (?, ?, ?, ?, ?)""", row)
+                if cur.rowcount:
+                    added.append(row[:4])
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()  # busy with an import: nothing changed
+            return []
+        self._any_hidden = self._any_hidden or bool(added)
+        self.hidden_version += 1
+        return added
+
+    def hide_group(self, media_type: MediaType, group: str) -> list[tuple]:
+        """Hide a group (by name) in every playlist that has it."""
+        rows = self.db.execute(
+            "SELECT DISTINCT playlist_id FROM channel WHERE media_type = ? AND grp = ?",
+            (media_type.value, group)).fetchall()
+        return self._insert_hidden([(r[0], "group", media_type.value, group, group)
+                                    for r in rows])
+
+    def hide_channel(self, channel: Channel) -> list[tuple]:
+        """Hide a channel and its quality variants."""
+        return self._insert_hidden([
+            (v.playlist_id, "channel", v.media_type.value, channel_key(v), v.name)
+            for v in self.variants(channel)])
+
+    def unhide(self, entries: Iterable[tuple]) -> None:
+        """entries = (playlist_id, kind, media_type, key)."""
+        try:
+            self.db.executemany(
+                """DELETE FROM hidden WHERE playlist_id = ? AND kind = ?
+                   AND media_type = ? AND key = ?""", list(entries))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()
+        self._any_hidden = self._count_hidden() > 0
+        self.hidden_version += 1
+
+    def unhide_all(self) -> None:
+        self.unhide([tuple(r) for r in self.db.execute(
+            "SELECT playlist_id, kind, media_type, key FROM hidden")])
+
+    def hidden_items(self) -> list[sqlite3.Row]:
+        """Everything hidden, with the playlist name, for Settings."""
+        return self.db.execute(
+            """SELECT h.playlist_id, h.kind, h.media_type, h.key, h.label,
+                      p.name AS playlist
+               FROM hidden h JOIN playlist p ON p.id = h.playlist_id
+               ORDER BY p.name, h.playlist_id, h.kind DESC, h.media_type, h.label""").fetchall()
+
+    def migrate_hidden_groups(self, names: Iterable[str]) -> None:
+        """Group names hidden by older versions (one global list) -> hidden
+        per playlist, in every playlist and section that has them."""
+        for name in names:
+            for mt in MediaType:
+                self.hide_group(mt, name)
 
     # ---- favorites -----------------------------------------------------
 
@@ -621,7 +713,7 @@ class Storage:
 
     def recent_channels(self, media_type: MediaType, limit: int = 50) -> list[Channel]:
         """Recently watched items that still exist, most recent first."""
-        hidden, hparams = self._hidden_sql("c.grp")
+        hidden, hparams = self._hidden_sql("c")
         rows = self.db.execute(
             f"""SELECT c.*, f.url IS NOT NULL AS fav
                 FROM history h
@@ -664,6 +756,14 @@ class Storage:
             base_name=r["base_name"] or "",
             tmdb=r["tmdb"] or "",
         )
+
+
+# The stable key of a channel: the provider stream id, else its URL.
+_CHANNEL_KEY_SQL = "CASE WHEN {a}.ext_id <> '' THEN {a}.ext_id ELSE {a}.url END"
+
+
+def channel_key(channel: Channel) -> str:
+    return channel.ext_id or channel.url
 
 
 def _like_escape(text: str) -> str:

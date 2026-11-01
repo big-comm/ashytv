@@ -30,6 +30,8 @@ class CatalogPage(Gtk.Box):
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # (media type, category): hide a category
+        "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (object, str)),
     }
 
     def __init__(self, storage, media_type: MediaType, title: str, subtitle: str):
@@ -40,7 +42,7 @@ class CatalogPage(Gtk.Box):
         self._chip = "all"
 
         self.append(page_header(title, subtitle))
-        self.chips = ChipRow(self._on_chip)
+        self.chips = ChipRow(self._on_chip, self._chip_menu)
         self.append(self.chips)
 
         self.store = Gio.ListStore.new(ChannelObject)
@@ -113,6 +115,12 @@ class CatalogPage(Gtk.Box):
         self.search.set_text(text)
 
     # ---- data ---------------------------------------------------------
+
+    def _chip_menu(self, key: str) -> list:
+        """Categories (not All / New / Trending) can be hidden."""
+        if key in ("all", "new", "top"):
+            return []
+        return [(_("Hide category"), lambda: self.emit("hide-group", self.media_type, key))]
 
     def _on_chip(self, key: str) -> None:
         self._chip = key

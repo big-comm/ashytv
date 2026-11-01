@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from gi.repository import GLib, Gtk
+from gi.repository import Gdk, GLib, Gtk
 
 from ...services.logos import logo_loader
 from ...services.text import normalize
@@ -33,7 +33,8 @@ def page_header(title: str, subtitle: str = "") -> Gtk.Box:
 class ChipRow(Gtk.ScrolledWindow):
     """Scrollable row of filter chips (single selection)."""
 
-    def __init__(self, on_selected: Callable[[str], None]):
+    def __init__(self, on_selected: Callable[[str], None],
+                 menu_items: Callable[[str], list] | None = None):
         super().__init__(vscrollbar_policy=Gtk.PolicyType.NEVER,
                          hscrollbar_policy=Gtk.PolicyType.AUTOMATIC)
         self.set_margin_start(28)
@@ -44,6 +45,8 @@ class ChipRow(Gtk.ScrolledWindow):
                             margin_bottom=10)
         self.set_child(self._box)
         self._on_selected = on_selected
+        # key -> [(label, callback)] of its context menu ([] = none)
+        self._menu_items = menu_items
         self._buttons: dict[str, Gtk.Button] = {}
         self.active = ""
 
@@ -56,9 +59,16 @@ class ChipRow(Gtk.ScrolledWindow):
             btn = Gtk.Button(label=label)
             btn.add_css_class("ashy-chip")
             btn.connect("clicked", lambda _b, k=key: self.select(k))
+            if self._menu_items is not None:
+                add_context_menu(btn, lambda b=btn, k=key: self._open_menu(b, k))
             self._buttons[key] = btn
             self._box.append(btn)
         self._mark(active or (chips[0][0] if chips else ""))
+
+    def _open_menu(self, button: Gtk.Button, key: str) -> None:
+        items = self._menu_items(key) if self._menu_items else []
+        if items:
+            popup_menu(button, items)
 
     def select(self, key: str) -> None:
         self._mark(key)
@@ -160,3 +170,56 @@ def update_favorite(store, channel) -> list[int]:
             ch.favorite = channel.favorite
             found.append(i)
     return found
+
+
+def is_menu_key(keyval: int, state) -> bool:
+    """The keyboard's context menu keys: Menu and Shift+F10."""
+    return keyval == Gdk.KEY_Menu or (
+        keyval == Gdk.KEY_F10 and bool(state & Gdk.ModifierType.SHIFT_MASK))
+
+
+def add_context_menu(widget: Gtk.Widget, open_menu: Callable[[], None],
+                     keys: bool = True) -> None:
+    """Right click, long press (touch) and — when `widget` takes the focus
+    itself — the Menu key / Shift+F10 call open_menu()."""
+    def pressed(gesture, *_a):
+        gesture.set_state(Gtk.EventSequenceState.CLAIMED)
+        open_menu()
+
+    click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+    click.connect("pressed", pressed)
+    widget.add_controller(click)
+    press = Gtk.GestureLongPress(touch_only=True)
+    press.connect("pressed", pressed)
+    widget.add_controller(press)
+    if keys:
+        def key_pressed(_c, keyval, _code, state) -> bool:
+            if not is_menu_key(keyval, state):
+                return False
+            open_menu()
+            return True
+
+        ctrl = Gtk.EventControllerKey()
+        ctrl.connect("key-pressed", key_pressed)
+        widget.add_controller(ctrl)
+
+
+def popup_menu(anchor: Gtk.Widget, items: list[tuple[str, Callable[[], None]]]) -> Gtk.Popover:
+    """A small popover of flat buttons pointing at `anchor`."""
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+    popover = Gtk.Popover(child=box)
+    popover.set_parent(anchor)
+    fill_menu(box, popover, items)
+    popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
+    popover.popup()
+    return popover
+
+
+def fill_menu(box: Gtk.Box, popover: Gtk.Popover,
+              items: list[tuple[str, Callable[[], None]]]) -> None:
+    for label, callback in items:
+        b = Gtk.Button(label=label)
+        b.add_css_class("flat")
+        b.get_child().set_xalign(0)
+        b.connect("clicked", lambda _b, cb=callback: (popover.popdown(), cb()))
+        box.append(b)

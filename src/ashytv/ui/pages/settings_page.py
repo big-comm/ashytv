@@ -14,6 +14,7 @@ from ...services import http
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
+from ..hidden_dialog import HiddenDialog
 from ._common import page_header
 
 _CATS = [
@@ -50,6 +51,8 @@ class SettingsPage(Gtk.Box):
     __gsignals__ = {
         "history-cleared": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        # groups/channels were shown again here
+        "hidden-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, settings, storage):
@@ -141,13 +144,12 @@ class SettingsPage(Gtk.Box):
                      _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
         self._switch(channels, "channel_preview", _("Live preview"),
                      _("Plays the selected channel, muted, next to the channel list"))
-        self.hidden_row = Adw.ActionRow(title=_("Hidden groups"))
-        show_all = Gtk.Button(label=_("Show all"), valign=Gtk.Align.CENTER)
-        show_all.connect("clicked", lambda *_: self.settings.set("hidden_groups", []))
-        self.hidden_row.add_suffix(show_all)
+        self.hidden_row = Adw.ActionRow(title=_("Hidden channels and groups"),
+                                        activatable=True)
+        self.hidden_row.add_suffix(Gtk.Image(icon_name="go-next-symbolic"))
+        self.hidden_row.connect("activated", lambda *_: self._open_hidden())
         channels.add(self.hidden_row)
-        self._update_hidden_row()
-        self.settings.connect("hidden_groups", lambda _v: self._update_hidden_row())
+        self.update_hidden()
 
         g2 = Adw.PreferencesGroup(title=_("IPTV Playlists"))
         self._switch(g2, "auto_refresh", _("Reload playlists automatically"),
@@ -330,12 +332,16 @@ class SettingsPage(Gtk.Box):
 
     # ---- actions ---------------------------------------------------------
 
-    def _update_hidden_row(self) -> None:
-        n = len(self.settings.get("hidden_groups") or [])
+    def update_hidden(self) -> None:
+        n = len(self.storage.hidden_items())
         self.hidden_row.set_subtitle(
-            ngettext("{n} group hidden — right-click a group in Channels to hide it",
-                     "{n} groups hidden — right-click a group in Channels to hide it",
-                     n).format(n=n))
+            _("Hidden: {n}. Right-click a group or channel to hide it.").format(n=n))
+
+    def _open_hidden(self) -> None:
+        def changed():
+            self.emit("hidden-changed")
+
+        HiddenDialog(self.storage, changed).present(self)
 
     def _update_cache_row(self) -> None:
         # Walking thousands of cached logos is slow: do it off the main thread.
