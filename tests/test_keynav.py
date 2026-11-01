@@ -34,3 +34,10 @@ def test_nearest_in_line_target_wins():
     near = _Rect(100, 160, 200, 200)
     far = _Rect(100, 400, 200, 440)
     assert _score(FOCUS, near, D.DOWN) < _score(FOCUS, far, D.DOWN)
+
+
+def test_off_line_targets_only_when_asked():
+    # Settings: the category on the left, the first option starts lower.
+    below_right = _Rect(300, 160, 600, 200)
+    assert _score(FOCUS, below_right, D.RIGHT) is None
+    assert _score(FOCUS, below_right, D.RIGHT, strict=False) is not None

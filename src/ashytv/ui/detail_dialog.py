@@ -125,7 +125,7 @@ class DetailDialog(Adw.Dialog):
         body.set_margin_end(28)
         body.set_margin_bottom(24)
         self.plot_lbl = Gtk.Label(label=channel.plot, xalign=0, wrap=True,
-                                  selectable=True, visible=bool(channel.plot))
+                                  visible=bool(channel.plot))
         self.plot_lbl.add_css_class("ashy-page-subtitle")
         body.append(self.plot_lbl)
 
@@ -256,7 +256,9 @@ class DetailDialog(Adw.Dialog):
                 continue
             key = Gtk.Label(label=name, xalign=0, valign=Gtk.Align.START)
             key.add_css_class("dim-label")
-            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True, selectable=True)
+            # Not selectable: a selectable label is a Tab stop with no visible
+            # focus, and one made unfocusable traps Tab (GTK keeps it).
+            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True)
             self.facts.attach(key, 0, row, 1, 1)
             self.facts.attach(val, 1, row, 1, 1)
             row += 1

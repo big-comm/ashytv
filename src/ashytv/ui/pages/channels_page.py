@@ -202,7 +202,8 @@ class ChannelsPage(Gtk.Box):
             self.filter_model.connect("items-changed", self._on_items_changed)
             self.connect("map", self._on_map)
             self.connect("unmap", self._on_unmap)
-        self.view_stack = Gtk.Stack(hexpand=True,
+        # The list must not inherit the guide's minimum width (narrow windows).
+        self.view_stack = Gtk.Stack(hexpand=True, hhomogeneous=False,
                                     transition_type=Gtk.StackTransitionType.CROSSFADE)
         self.view_stack.add_named(list_area, "list")
         if not favorites_only:

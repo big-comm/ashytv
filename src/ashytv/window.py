@@ -22,6 +22,7 @@ from .services.xtream_client import (
     series_details,
     vod_info,
 )
+from .ui import focus as focus_util
 from .ui import keynav
 from .ui.cast import ActorDialog, CastService
 from .ui.detail_dialog import DetailDialog
@@ -88,8 +89,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
         # ---- pages ----
         self.pages: dict[str, Gtk.Widget] = {}
+        # Not homogeneous: the widest page (Channels with its guide) must not
+        # force every page — and the window — to its minimum width, which
+        # pushed chips and posters out of sight on narrow windows.
         self.page_stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE,
-                                    transition_duration=150)
+                                    transition_duration=150, hhomogeneous=False,
+                                    vhomogeneous=False)
+        self.page_stack.set_name(keynav.PAGES_NAME)
         self._build_pages()
 
         # ---- sidebar ----
@@ -1075,8 +1081,18 @@ class AshyTvWindow(Adw.ApplicationWindow):
         start_page = self._current
         mark_seen(self.settings)
         self.tour = Tour(self.tour_layer, self._tour_steps(), self.navigate,
-                         lambda: self.navigate(start_page))
+                         lambda: self._tour_finished(start_page))
         self.tour.start()
+
+    def _tour_finished(self, page: str) -> None:
+        self.navigate(page)
+        # The card's buttons are gone: the focus goes back to the page.
+        GLib.timeout_add(250, self._refocus_page)
+
+    def _refocus_page(self) -> bool:
+        if not self.focus_page():
+            self.nav.focus_active()
+        return GLib.SOURCE_REMOVE
 
     def _tour_steps(self) -> list[Step]:
         ch, nav = self.pages["channels"], self.nav
@@ -1431,6 +1447,47 @@ class AshyTvWindow(Adw.ApplicationWindow):
         nav_keys = Gtk.EventControllerKey()
         nav_keys.connect("key-pressed", self._on_nav_key)
         self.add_controller(nav_keys)
+        # The focus must stay visible: scroll to it, and never lose it.
+        self._focus_check = 0
+        self.connect("notify::focus-widget", self._on_focus_changed)
+        # While the keyboard is in use, hover highlights are hidden (CSS):
+        # a resting pointer must not look like a second selection.
+        self.connect("notify::focus-visible", self._on_focus_visible)
+
+    def _on_focus_visible(self, *_a) -> None:
+        if self.get_focus_visible():
+            self.add_css_class("ashy-keyboard")
+        else:
+            self.remove_css_class("ashy-keyboard")
+
+    def _on_focus_changed(self, *_a) -> None:
+        if not self.get_focus_visible() or self._focus_check:
+            return  # pointer use: leave scrolling to the user
+        self._focus_check = GLib.idle_add(self._check_focus)
+
+    def _check_focus(self) -> bool:
+        self._focus_check = 0
+        focus = self.get_focus()
+        if isinstance(focus, (Gtk.ScrolledWindow, Gtk.Viewport)):
+            # A scrolled area with nothing focusable inside (an empty page)
+            # takes the focus with no visible ring: skip it from now on.
+            focus.set_focusable(False)
+            if focus.child_focus(Gtk.DirectionType.TAB_FORWARD):
+                return GLib.SOURCE_REMOVE
+            dialog = self.get_visible_dialog()
+            if dialog is not None and dialog.child_focus(Gtk.DirectionType.TAB_FORWARD):
+                return GLib.SOURCE_REMOVE
+            focus = None
+        if focus_util.is_visible(focus):
+            focus_util.reveal(focus)
+            return GLib.SOURCE_REMOVE
+        # Lost (a list was rebuilt, a page hidden…): back to the page.
+        if (self.root_stack.get_visible_child_name() == "shell"
+                and self.get_visible_dialog() is None
+                and not (self.tour is not None and self.tour.active)
+                and not self.focus_page()):
+            self.nav.focus_active()
+        return GLib.SOURCE_REMOVE
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
         if self.tour is not None and self.tour.active:
@@ -1521,6 +1578,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
         """A key from a game controller / remote: behave like the keyboard."""
         if not self.is_active():
             return False  # another application has the focus
+        focus = self.get_focus()
+        popover = focus.get_ancestor(Gtk.Popover) if focus is not None else None
+        if popover is not None and keyval in (Gdk.KEY_Escape, Gdk.KEY_BackSpace):
+            popover.popdown()  # like Esc on a keyboard: back to what opened it
+            return True
         dialog = self.get_visible_dialog()
         if dialog is not None and keyval in (Gdk.KEY_Escape, Gdk.KEY_BackSpace):
             dialog.close()
@@ -1541,9 +1603,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         page = self.pages.get(self._current)
         if page is None:
             return False
-        if hasattr(page, "focus_content") and page.focus_content():
-            return True
-        return page.child_focus(Gtk.DirectionType.TAB_FORWARD)
+        done = ((hasattr(page, "focus_content") and page.focus_content())
+                or page.child_focus(Gtk.DirectionType.TAB_FORWARD))
+        focus = self.get_focus()
+        if done and focus is not None:
+            focus_util.reveal(focus)  # the same widget again: no focus signal
+        return done
 
     def _on_close_request(self, _w) -> bool:
         self.pages["channels"].shutdown()

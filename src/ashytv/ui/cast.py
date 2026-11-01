@@ -307,17 +307,30 @@ class ActorDialog(Adw.Dialog):
             note.add_css_class(_FAINT)
             self._sections.append(note)
         self._credit.set_visible(from_tmdb)
+        # Keyboard: start on the first title (the focus was on the dialog).
+        root = self.get_root()
+        focus = root.get_focus() if root is not None else None
+        if focus is None or not focus.is_ancestor(self._sections):
+            self._sections.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _section(self, title: str, items: list[Channel]) -> Gtk.Widget:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         label = Gtk.Label(label=f"{title}  ({len(items)})", xalign=0)
         label.add_css_class("ashy-section-title")
         box.append(label)
+        # The FlowBox children are the focus/activation targets (one ring
+        # each, arrows move in 2D); a button inside them was a second stop.
         flow = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE, homogeneous=True,
                            max_children_per_line=8, min_children_per_line=2,
                            column_spacing=6, row_spacing=6)
+        flow.add_css_class("ashy-poster-flow")
         for ch in items:
-            flow.append(self._poster(ch))
+            child = Gtk.FlowBoxChild(child=self._poster(ch))
+            child._channel = ch  # type: ignore[attr-defined]
+            child.get_child()._marquee.attach_focus(child)  # type: ignore[attr-defined]
+            flow.append(child)
+        flow.connect("child-activated",
+                     lambda _f, child: self.emit("open", child._channel))
         box.append(flow)
         return box
 
@@ -339,9 +352,9 @@ class ActorDialog(Adw.Dialog):
         year.add_css_class("ashy-year")
         box.append(year)
         # Natural width: a wider FlowBox column must not stretch the poster.
-        card = Gtk.Button(child=box, halign=Gtk.Align.CENTER)
-        card.add_css_class("flat")
-        title.attach_hover(card)
-        title.attach_focus(card)
-        card.connect("clicked", lambda *_: self.emit("open", ch))
-        return card
+        box.set_halign(Gtk.Align.CENTER)
+        box.set_margin_top(6)
+        box.set_margin_bottom(6)
+        title.attach_hover(box)
+        box._marquee = title  # type: ignore[attr-defined]
+        return box

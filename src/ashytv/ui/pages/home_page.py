@@ -52,6 +52,7 @@ class HomePage(Gtk.Box):
                                          valign=Gtk.Align.END, margin_bottom=8)
         hero.add_overlay(dots)
         inner.append(hero)
+        self.carousel.connect("page-changed", lambda _c, index: self._on_slide(index))
         GLib.timeout_add_seconds(_SLIDE_SECS, self._advance)
 
         # ---- sections ----
@@ -146,6 +147,7 @@ class HomePage(Gtk.Box):
             return
         for ch in featured:
             self.carousel.append(self._slide(ch))
+        self._on_slide(0)
 
     def _welcome_slide(self) -> Gtk.Widget:
         slide = Gtk.Overlay(hexpand=True)
@@ -213,6 +215,26 @@ class HomePage(Gtk.Box):
         btn.connect("clicked", lambda *_: action())
         box.append(btn)
         return box
+
+    def focus_content(self) -> bool:
+        """Entering Home lands on the slide on screen (its Watch button)."""
+        n = self.carousel.get_n_pages()
+        if n:
+            page = self.carousel.get_nth_page(min(n - 1, round(self.carousel.get_position())))
+            if page.child_focus(Gtk.DirectionType.TAB_FORWARD):
+                return True
+        return False
+
+    def _on_slide(self, index: int) -> None:
+        """Only the slide on screen takes the focus (Tab and arrows must not
+        land on a hidden one); a focused button follows the slide."""
+        root = self.get_root()
+        focus = root.get_focus() if root is not None else None
+        had_focus = focus is not None and focus.is_ancestor(self.carousel)
+        for i in range(self.carousel.get_n_pages()):
+            self.carousel.get_nth_page(i).set_can_focus(i == index)
+        if had_focus and index < self.carousel.get_n_pages():
+            self.carousel.get_nth_page(index).child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _advance(self) -> bool:
         n = self.carousel.get_n_pages()
