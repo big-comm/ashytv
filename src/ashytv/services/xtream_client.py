@@ -200,6 +200,12 @@ def _categories(provider: XtreamProvider, action: str) -> dict[str, str]:
             for c in data if isinstance(c, dict)}
 
 
+def _tmdb(item: dict) -> str:
+    """TMDB id of a catalog entry ("tmdb" or "tmdb_id"); "" when absent/invalid."""
+    value = str(item.get("tmdb") or item.get("tmdb_id") or "").strip()
+    return value if value.isdigit() and value != "0" else ""
+
+
 def live_channels(items: list, cats: dict[str, str]) -> list[Channel]:
     out = []
     for it in items:
@@ -243,6 +249,7 @@ def movies(items: list, cats: dict[str, str]) -> list[Channel]:
             plot=str(it.get("plot") or ""),
             genre=str(it.get("genre") or ""),
             added=_int(it.get("added")),
+            tmdb=_tmdb(it),
         ))
     return out
 
@@ -272,6 +279,7 @@ def series(items: list, cats: dict[str, str]) -> list[Channel]:
             genre=str(it.get("genre") or ""),
             backdrop=str(backdrop or ""),
             added=_int(it.get("last_modified")),
+            tmdb=_tmdb(it),
         ))
     return out
 
@@ -381,6 +389,7 @@ def parse_vod_info(data: dict) -> dict:
         "backdrop": _text(backdrop),
         "trailer": trailer,
         "tmdb_url": f"https://www.themoviedb.org/movie/{tmdb}" if tmdb.isdigit() else "",
+        "tmdb_id": tmdb if tmdb.isdigit() else "",
         "video": _media_line(info.get("video")),
         "audio": _media_line(info.get("audio")),
         "subtitles": [s for s in (_subtitle_url(x) for x in subtitles) if s],
@@ -401,7 +410,22 @@ def vod_info(provider: XtreamProvider, vod_id: str) -> dict:
     return parse_vod_info(data)
 
 
+def parse_series_meta(data: dict) -> dict:
+    """get_series_info -> the series' cast text and TMDB id ('' when missing)."""
+    info = data.get("info") if isinstance(data, dict) else None
+    if not isinstance(info, dict):
+        return {}
+    tmdb = _text(info.get("tmdb") or info.get("tmdb_id"))
+    return {"cast": _text(info.get("cast") or info.get("actors")),
+            "tmdb_id": tmdb if tmdb.isdigit() and tmdb != "0" else ""}
+
+
 def series_episodes(provider: XtreamProvider, series_id: str) -> list[Episode]:
+    return series_details(provider, series_id)[0]
+
+
+def series_details(provider: XtreamProvider, series_id: str) -> tuple[list[Episode], dict]:
+    """Episodes and the cast/TMDB data of a series (one request)."""
     data = http.fetch_json(provider.api_url("get_series_info", series_id=series_id),
                            timeout=60)
-    return parse_series_info(data)
+    return parse_series_info(data), parse_series_meta(data)

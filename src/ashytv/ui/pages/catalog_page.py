@@ -9,6 +9,7 @@ from gi.repository import Adw, Gdk, Gio, GObject, Gtk
 from ...i18n import _
 from ...models import Channel, MediaType
 from ..channel_object import ChannelObject
+from ..marquee import FocusMarquee, MarqueeLabel
 from ._common import ChipRow, SearchFilter, page_header, set_picture, update_favorite
 
 _POSTER_W = 150
@@ -59,6 +60,7 @@ class CatalogPage(Gtk.Box):
                                  single_click_activate=True, vexpand=True)
         self.grid.add_css_class("ashy-posters")
         self.grid.connect("activate", self._on_activate)
+        self._focus_marquee = FocusMarquee(self.grid)
         sw = Gtk.ScrolledWindow(hexpand=True, vexpand=True,
                                 hscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(self.grid)
@@ -157,8 +159,11 @@ class CatalogPage(Gtk.Box):
         fav.add_css_class("ashy-badge")
         frame.add_overlay(fav)
 
-        title = Gtk.Label(xalign=0, ellipsize=3, max_width_chars=14, width_chars=14)
+        # Long titles scroll while the card is hovered or focused.
+        title = MarqueeLabel(width_chars=14)
         title.add_css_class("ashy-poster-title")
+        title.attach_hover(card)
+        card._marquee = title  # type: ignore[attr-defined]  # see FocusMarquee
 
         meta = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         year = Gtk.Label(xalign=0, hexpand=True)

@@ -26,6 +26,7 @@ DEFAULTS: dict = {
     "hwdec": True,
     "auto_quality": True,       # adapt between quality variants
     "group_variants": True,     # show "NEWS FHD/HD/SD" as one channel
+    "channel_preview": True,    # live preview next to the TV channel list
     "cache_secs": 20,           # player network buffer (seconds)
     "volume": 100,
     "hide_adult": True,

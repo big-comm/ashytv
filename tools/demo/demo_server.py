@@ -202,6 +202,8 @@ def build_catalog(base: str) -> dict:
             "rating": round(rng.uniform(5.8, 9.4), 1), "year": str(rng.randint(2012, 2026)),
             "category_id": str(MOVIE_GENRES.index(genre) + 1),
             "container_extension": "ts", "added": str(now - i * 3600),
+            # Fictional ids: the demo META API below answers for them.
+            "tmdb": str(MOVIE_TMDB + i),
         })
     series = []
     for i, (title, genre) in enumerate(SERIES):
@@ -214,6 +216,7 @@ def build_catalog(base: str) -> dict:
             "rating": str(round(rng.uniform(6.5, 9.6), 1)),
             "category_id": str(MOVIE_GENRES.index(genre) + 1),
             "last_modified": str(now - i * 7200),
+            "tmdb": str(SERIES_TMDB + i),
         })
     return {"live": live, "movies": movies, "series": series}
 
@@ -232,6 +235,19 @@ ACTORS = ["Ana Bright", "Leo Hart", "Sofia Lane", "Mateo Cruz", "Nina Holt",
           "Victor Shaw", "Clara Moss", "Diego Stone", "Ruth Kim", "Owen Park"]
 
 
+MOVIE_TMDB, SERIES_TMDB, PERSON_ID = 910000, 920000, 930000
+ROLES = ["The Captain", "Dr. Ellis", "The Stranger", "Young Mira", "Officer Lane",
+         "The Narrator", "Grandma Rose", "Agent Kole"]
+
+
+def cast_of(name: str) -> list[str]:
+    """The (fictional) actors of a title: the same in get_vod_info and the
+    META API, so both the TMDB path and the text fallback agree."""
+    rng = _rng(name + "info")
+    rng.choice(DIRECTORS)
+    return rng.sample(ACTORS, 4)
+
+
 def vod_info(item: dict) -> dict:
     """Movie details, all fictional (no real people or titles)."""
     rng = _rng(item["name"] + "info")
@@ -242,6 +258,7 @@ def vod_info(item: dict) -> dict:
                 "night. A fictional story made for the AshyTV demo server.",
         "director": rng.choice(DIRECTORS),
         "cast": ", ".join(rng.sample(ACTORS, 4)),
+        "tmdb_id": item["tmdb"],
         "genre": MOVIE_GENRES[(item["stream_id"] - 500) % len(MOVIE_GENRES)],
         "country": "Demoland",
         "release_date": f"{year}-0{rng.randint(1, 9)}-1{rng.randint(0, 9)}",
@@ -263,7 +280,50 @@ def series_info(item: dict) -> dict:
             "info": {"duration_secs": 2400 + n * 60,
                      "plot": f"Episode {n} of season {season}."},
         } for n in range(1, 7)]
-    return {"info": {"name": item["name"], "plot": item["plot"]}, "episodes": eps}
+    return {"info": {"name": item["name"], "plot": item["plot"], "tmdb": item["tmdb"],
+                     "cast": ", ".join(cast_of(item["name"]))}, "episodes": eps}
+
+
+# ---- META API (cast and filmographies, like painel.ashytv.com) ----------------
+
+def _titles(cat: dict):
+    for m in cat["movies"]:
+        yield "movie", m["tmdb"], m["name"], m["year"]
+    for s in cat["series"]:
+        yield "series", s["tmdb"], s["name"], s["year"]
+
+
+def meta_title(cat: dict, qs: dict, base: str):
+    kind = qs.get("type", "movie")
+    found = next((t for t in _titles(cat) if t[0] == kind and (
+        t[1] == qs.get("tmdb_id") or t[2].casefold() == qs.get("q", "").casefold())), None)
+    if found is None:
+        return None
+    rng = _rng(found[2] + "roles")
+    cast = [{"id": PERSON_ID + ACTORS.index(name), "name": name,
+             "character": rng.choice(ROLES),
+             "profile": f"{base}/img/person/{PERSON_ID + ACTORS.index(name)}.svg"}
+            for name in cast_of(found[2])]
+    return {"tmdb_id": int(found[1]), "type": kind, "title": found[2], "cast": cast}
+
+
+def meta_person(cat: dict, person_id: str, base: str):
+    idx = int(person_id) - PERSON_ID if person_id.isdigit() else -1
+    if not 0 <= idx < len(ACTORS):
+        return None
+    name = ACTORS[idx]
+    credits = [{"type": kind, "tmdb_id": int(tmdb), "title": title, "original_title": title,
+                "year": year, "poster": ""}
+               for kind, tmdb, title, year in _titles(cat) if name in cast_of(title)]
+    # Titles the demo catalog doesn't have: the app must leave them out.
+    credits.append({"type": "movie", "tmdb_id": 999001, "title": "A Film You Don't Have",
+                    "year": "2011", "poster": ""})
+    return {"id": PERSON_ID + idx, "name": name,
+            "profile": f"{base}/img/person/{PERSON_ID + idx}.svg",
+            "biography": f"{name} is a fictional actor invented for the AshyTV demo "
+                         "server, known for quiet dramas and noisy adventures alike. "
+                         "No real person is described here.",
+            "credits": credits}
 
 
 def build_xmltv() -> bytes:
@@ -318,6 +378,7 @@ def ensure_video() -> Path:
 
 
 class Handler(BaseHTTPRequestHandler):
+    base = ""
     catalog: dict = {}
     xmltv: bytes = b""
     video: Path | None = None
@@ -345,6 +406,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._api(qs)
         if url.path == "/xmltv.php":
             return self._send(self.xmltv, "application/xml")
+        if url.path.startswith("/api/v1/meta/"):
+            return self._meta(url.path, qs)
         if parts[0] == "img" and len(parts) == 3:
             kind, ident = parts[1], parts[2].removesuffix(".svg")
             return self._send(self._image(kind, ident).encode(), "image/svg+xml")
@@ -386,7 +449,22 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(series_info(item) if item else {})
         self._json(responses.get(action, []))
 
+    def _meta(self, path: str, qs: dict) -> None:
+        # ASHYTV_DEMO_META=down simulates the panel without TMDB (503).
+        if os.environ.get("ASHYTV_DEMO_META") == "down":
+            return self._send(b'{"error":"meta_unavailable"}', "application/json", 503)
+        base = self.base
+        if path == "/api/v1/meta/title":
+            data = meta_title(self.catalog, qs, base)
+        else:
+            data = meta_person(self.catalog, path.rsplit("/", 1)[-1], base)
+        if data is None:
+            return self._send(b'{"error":"meta_not_found"}', "application/json", 404)
+        self._json(data)
+
     def _image(self, kind: str, ident: str) -> str:
+        if kind == "person":
+            return poster_svg(ACTORS[int(ident) - PERSON_ID], "demo cast")
         if kind == "logo":
             return logo_svg(CHANNELS[int(ident) - 100][0])
         if ident.startswith("m"):
@@ -434,6 +512,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def serve(host: str = "127.0.0.1", port: int = 8765, background: bool = False):
     base = f"http://{host}:{port}"
+    Handler.base = base
     Handler.catalog = build_catalog(base)
     Handler.xmltv = build_xmltv()
     Handler.video = ensure_video()

@@ -400,3 +400,25 @@ gridview.ashy-posters > child:focus-visible .ashy-poster-img {
   font-size: 12px;
   font-weight: 600;
 }
+
+/* ---------------- Channel info panel + live preview ---------------- */
+.ashy-preview { background-color: #000; }
+.ashy-preview-cover { background-color: var(--ashy-panel-2); }
+.ashy-preview-live {
+  background-color: #e01b24; color: #fff; border-radius: 6px;
+  padding: 1px 7px; font-size: 10px; font-weight: 800; letter-spacing: 0.6px;
+}
+.ashy-info-name { font-size: 20px; font-weight: 800; }
+.ashy-info-now {
+  padding: 10px 12px; border-radius: 12px;
+  background-color: alpha(var(--ashy-accent), 0.16);
+}
+.ashy-info-when { color: var(--ashy-accent-2); font-size: 12px; font-weight: 700; }
+.ashy-info-next { color: var(--ashy-fg-dim); font-size: 13px; }
+.ashy-info-desc { color: var(--ashy-fg-dim); font-size: 13px; }
+
+/* ---------------- Cast and actor pages ---------------- */
+.ashy-cast-photo { border-radius: 12px; background-color: var(--ashy-panel-2); }
+button.ashy-cast-card { padding: 6px; border-radius: 14px; }
+button.ashy-cast-card:hover .ashy-cast-photo { box-shadow: 0 0 0 2px var(--ashy-accent); }
+.ashy-cast-name { font-weight: 700; font-size: 13px; }

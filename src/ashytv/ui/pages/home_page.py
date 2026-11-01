@@ -9,6 +9,7 @@ from gi.repository import Adw, GLib, GObject, Gtk
 from ...i18n import _
 from ...models import Channel, MediaType
 from ...services.storage import collapse_variants
+from ..marquee import MarqueeLabel
 from ._common import clear_box, set_logo, set_picture
 
 _HERO_H = 300
@@ -310,8 +311,11 @@ class HomePage(Gtk.Box):
         set_picture(pic, ch.logo, 195)
         frame.append(pic)
         box.append(frame)
-        t = Gtk.Label(label=ch.display_name, xalign=0, ellipsize=3, max_width_chars=14)
+        t = MarqueeLabel(width_chars=14)
+        t.set_text(ch.display_name)
         t.add_css_class("ashy-poster-title")
+        t.attach_hover(card)
+        t.attach_focus(card)
         box.append(t)
         meta = Gtk.Box()
         y = Gtk.Label(label=ch.year, xalign=0, hexpand=True)

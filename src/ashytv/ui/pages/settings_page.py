@@ -139,6 +139,8 @@ class SettingsPage(Gtk.Box):
         channels = Adw.PreferencesGroup(title=_("Channels"))
         self._switch(channels, "group_variants", _("Group qualities of the same channel"),
                      _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
+        self._switch(channels, "channel_preview", _("Live preview"),
+                     _("Plays the selected channel, muted, next to the channel list"))
         self.hidden_row = Adw.ActionRow(title=_("Hidden groups"))
         show_all = Gtk.Button(label=_("Show all"), valign=Gtk.Align.CENTER)
         show_all.connect("clicked", lambda *_: self.settings.set("hidden_groups", []))
@@ -304,6 +306,10 @@ class SettingsPage(Gtk.Box):
             title=_("Disclaimer"),
             subtitle=_("AshyTV does not provide or contain any content: it only plays "
                        "the playlists you add."), subtitle_lines=3))
+        g.add(Adw.ActionRow(
+            title="TMDB",
+            subtitle=_("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
+                       "or certified by TMDB."), subtitle_lines=3))
         about = Adw.ButtonRow(title=_("More information"))
         about.connect("activated", lambda *_: self.activate_action("app.about", None))
         g.add(about)

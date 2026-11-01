@@ -75,7 +75,7 @@ class MpvWidget(Gtk.GLArea):
         "tracks-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
-    def __init__(self, hwdec: bool = True, cache_secs: int = 20):
+    def __init__(self, hwdec: bool = True, cache_secs: int = 20, preview: bool = False):
         super().__init__()
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -84,6 +84,18 @@ class MpvWidget(Gtk.GLArea):
 
         # libmpv requires LC_NUMERIC=C to parse numbers correctly.
         locale.setlocale(locale.LC_NUMERIC, "C")
+        if preview:
+            # Small muted preview (channel list): a short buffer, no
+            # timeshift, and it starts as soon as there is a picture.
+            buffers = {"cache_secs": "4", "demuxer_max_bytes": "8MiB",
+                       "demuxer_max_back_bytes": "0", "cache_pause": "no",
+                       "mute": "yes", "sid": "no"}
+        else:
+            # Timeshift: keep what was already watched so live TV can be
+            # paused and rewound inside the buffer.
+            buffers = {"cache_secs": str(cache_secs), "demuxer_max_bytes": "64MiB",
+                       "demuxer_max_back_bytes": "256MiB",
+                       "demuxer_seekable_cache": "yes", "force_seekable": "yes"}
         self._mpv = mpv.MPV(
             vo="libmpv",
             hwdec="auto-safe" if hwdec else "no",
@@ -91,15 +103,9 @@ class MpvWidget(Gtk.GLArea):
             input_default_bindings=False,
             osc=False,
             cache="yes",
-            cache_secs=str(cache_secs),
-            demuxer_max_bytes="64MiB",
-            # Timeshift: keep what was already watched so live TV can be
-            # paused and rewound inside the buffer.
-            demuxer_max_back_bytes="256MiB",
-            demuxer_seekable_cache="yes",
-            force_seekable="yes",
             network_timeout="20",
             user_agent="AshyTV",
+            **buffers,
         )
         # Audio and subtitles in the user's language when the file has them;
         # subtitles are not forced on when the audio is already in it.

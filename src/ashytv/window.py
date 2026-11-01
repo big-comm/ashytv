@@ -19,10 +19,11 @@ from .services.storage import Storage, collapse_variants
 from .services.xtream_client import (
     XtreamProvider,
     normalize_host,
-    series_episodes,
+    series_details,
     vod_info,
 )
 from .ui import keynav
+from .ui.cast import ActorDialog, CastService
 from .ui.detail_dialog import DetailDialog
 from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
@@ -76,6 +77,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._vod_info: dict[tuple[int, str], dict] = {}
         self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
+        self.cast = CastService(storage)
 
         self._load_providers()
 
@@ -188,7 +190,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("hide-group", self._on_hide_group)
         channels.connect("remind", self._on_remind)
         channels.connect("move-group", self._on_move_group)
-
+        channels.preview_source = self._preview_source
+        if channels.info is not None:
+            channels.info.configure(bool(self.settings.get("hwdec")),
+                                    float(self.settings.get("volume")))
 
         movies = CatalogPage(self.storage, MediaType.MOVIE, _("Movies"),
                              _("The best movies for you"))
@@ -389,6 +394,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _start(self, item: PlayItem, can_zap: bool) -> None:
         if not self._ensure_player():
             return
+        # One stream at a time: providers often allow a single connection.
+        self.pages["channels"].stop_preview()
         if self.mini is not None:
             self._close_mini(stop=False)
         if self.root_stack.get_visible_child_name() == "shell":
@@ -623,12 +630,37 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     # ---- details / series ---------------------------------------------
 
+    def _preview_source(self, channel: Channel) -> tuple[str, str, str] | None:
+        """URL, user agent and referrer of the channel list's live preview."""
+        if not self.settings.get("channel_preview") or self.mini is not None:
+            return None  # off, or the mini player already uses the connection
+        url = self._resolve(channel.url, channel.playlist_id)
+        if url == _BLOCKED_URL:
+            return None
+        return url, channel.user_agent, channel.referrer
+
     def _open_detail(self, channel: Channel) -> None:
         dialog = DetailDialog(self.storage, channel, self._with_episodes,
-                              self._with_vod_info)
+                              self._with_vod_info, self.cast.load_cast)
         dialog.connect("play", self._on_detail_play)
         dialog.connect("favorite-changed", self._on_favorite_changed)
+        dialog.connect("show-person", self._on_show_person)
         dialog.present(self)
+
+    def _on_show_person(self, detail: DetailDialog, member) -> None:
+        actor = ActorDialog(member)
+        actor.connect("open", self._on_actor_title, detail)
+        actor.present(self)
+        self.cast.load_person(member, actor.show_person)
+
+    def _on_actor_title(self, actor: ActorDialog, channel: Channel,
+                        detail: DetailDialog) -> None:
+        actor.close()
+        same = (channel.playlist_id, channel.url) == (detail.channel.playlist_id,
+                                                      detail.channel.url)
+        if not same:
+            detail.close()
+            self._open_detail(channel)
 
     def _on_detail_play(self, _d, channel: Channel, episode: Episode | None) -> None:
         if episode is None:
@@ -650,10 +682,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
         def worker():
             try:
-                eps = series_episodes(prov, series.ext_id)
+                eps, details = series_details(prov, series.ext_id)
             except Exception as exc:
                 GLib.idle_add(self._episodes_done, series, None, exc, on_done, on_error)
                 return
+            GLib.idle_add(self.cast.remember, series, details.get("cast", ""),
+                          details.get("tmdb_id", ""))
             GLib.idle_add(self._episodes_done, series, eps, None, on_done, on_error)
 
         threading.Thread(target=worker, daemon=True).start()
@@ -678,6 +712,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
             def done():
                 self._vod_info[key] = info
+                self.cast.remember(movie, info.get("cast", ""), info.get("tmdb_id", ""))
                 on_done(info)
                 return GLib.SOURCE_REMOVE
             GLib.idle_add(done)
@@ -935,6 +970,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         s.connect("group_variants", self._on_group_variants)
         s.connect("show_logos", lambda _v: self._invalidate_pages(
             "home", "channels", "favorites", "movies", "series"))
+        s.connect("channel_preview", lambda _v: self.pages["channels"].restart_preview())
 
     # ---- reminders ---------------------------------------------------
 
@@ -1146,6 +1182,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         return page.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _on_close_request(self, _w) -> bool:
+        self.pages["channels"].shutdown()
         if self.mini is not None:
             self._close_mini(stop=True)
         if self.player is not None:

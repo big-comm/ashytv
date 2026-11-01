@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 4
+_SCHEMA_VERSION = 5
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -119,6 +119,7 @@ class Storage:
             "quality": "INTEGER DEFAULT 0",
             "base_name": "TEXT DEFAULT ''",
             "base_key": "TEXT DEFAULT ''",
+            "tmdb": "TEXT DEFAULT ''",
         })
         self.db.executescript(
             """
@@ -313,8 +314,8 @@ class Storage:
         insert = """INSERT INTO channel
             (playlist_id, num, name, name_key, url, media_type, grp, tvg_id,
              tvg_name, logo, ext_id, rating, year, plot, genre, backdrop, added,
-             user_agent, referrer, quality, base_name, base_key)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+             user_agent, referrer, tmdb, quality, base_name, base_key)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
         # Build every row before taking the write lock: the transaction then
         # only runs the inserts, so UI writes (history, favorites) wait less.
         rows, series_rows = [], []
@@ -324,7 +325,7 @@ class Storage:
             row = (playlist_id, num, c.name, normalize(c.display_name), c.url,
                    c.media_type.value, c.group, c.tvg_id, c.tvg_name, c.logo,
                    c.ext_id, c.rating, c.year, c.plot, c.genre, c.backdrop,
-                   c.added, c.user_agent, c.referrer, *variant)
+                   c.added, c.user_agent, c.referrer, c.tmdb, *variant)
             (series_rows if c.url in episodes else rows).append(row)
         count = len(rows) + len(series_rows)
         with self.db:
@@ -661,6 +662,7 @@ class Storage:
             referrer=r["referrer"] or "",
             quality=int(r["quality"] or 0),
             base_name=r["base_name"] or "",
+            tmdb=r["tmdb"] or "",
         )
 
 
