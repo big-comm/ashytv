@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 6
+_SCHEMA_VERSION = 7
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -106,7 +106,13 @@ class Storage:
         )
         self._add_columns("playlist", {"updated_at": "INTEGER DEFAULT 0",
                                        "meta": "TEXT DEFAULT '{}'",
-                                       "enabled": "INTEGER DEFAULT 1"})
+                                       "enabled": "INTEGER DEFAULT 1",
+                                       # backup servers (JSON list of base URLs)
+                                       # and the one that worked last (0 = main)
+                                       "backups": "TEXT DEFAULT '[]'",
+                                       "active_server": "INTEGER DEFAULT 0",
+                                       # last health check of each server (JSON)
+                                       "health": "TEXT DEFAULT '[]'"})
         self._add_columns("channel", {
             "num": "INTEGER DEFAULT 0",
             "name_key": "TEXT DEFAULT ''",
@@ -267,6 +273,51 @@ class Storage:
         self.db.execute("UPDATE playlist SET meta = ? WHERE id = ?",
                         (json.dumps(meta), playlist_id))
         self.db.commit()
+
+    def backups(self, playlist_id: int) -> list[str]:
+        row = self.db.execute("SELECT backups FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        try:
+            urls = json.loads(row["backups"] or "[]") if row else []
+        except ValueError:
+            return []
+        return [str(u) for u in urls if isinstance(u, str)] if isinstance(urls, list) else []
+
+    def active_server(self, playlist_id: int) -> int:
+        row = self.db.execute("SELECT active_server FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        return int(row["active_server"] or 0) if row else 0
+
+    def set_servers(self, playlist_id: int, backups: list[str] | None = None,
+                    active: int | None = None) -> None:
+        """Save the backup servers and/or which server is in use."""
+        try:
+            if backups is not None:
+                self.db.execute("UPDATE playlist SET backups = ? WHERE id = ?",
+                                (json.dumps(list(backups)), playlist_id))
+            if active is not None:
+                self.db.execute("UPDATE playlist SET active_server = ? WHERE id = ?",
+                                (int(active), playlist_id))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()  # busy: the choice is kept in memory this time
+
+    def server_health(self, playlist_id: int) -> list:
+        row = self.db.execute("SELECT health FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        try:
+            data = json.loads(row["health"] or "[]") if row else []
+        except ValueError:
+            return []
+        return data if isinstance(data, list) else []
+
+    def set_server_health(self, playlist_id: int, health: list[dict]) -> None:
+        try:
+            self.db.execute("UPDATE playlist SET health = ? WHERE id = ?",
+                            (json.dumps(health), playlist_id))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()
 
     def stale_playlists(self, max_age: int, now: float | None = None) -> list[int]:
         """Playlists due for an automatic refresh, oldest first.

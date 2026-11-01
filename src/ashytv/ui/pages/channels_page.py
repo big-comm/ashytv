@@ -133,6 +133,7 @@ class ChannelsPage(Gtk.Box):
         gpanel.set_hexpand(False)  # don't inherit the inner list's hexpand
         gpanel.set_overflow(Gtk.Overflow.HIDDEN)
         gpanel.append(gscroll)
+        self.group_panel = gpanel
         if not favorites_only:
             body.append(gpanel)
 
@@ -180,6 +181,7 @@ class ChannelsPage(Gtk.Box):
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
+        self.list_panel = cpanel
         self.info: ChannelInfoPanel | None = None
         list_area: Gtk.Widget = cpanel
         if with_panel:
@@ -341,6 +343,10 @@ class ChannelsPage(Gtk.Box):
                              ellipsize=3))
         row.set_child(box)
         self.group_list.append(row)
+
+    def hidden_row(self) -> Gtk.Widget | None:
+        """The 'Hidden (N)' entry, when there is one (guided tour)."""
+        return next((r for r in self._rows() if r._key == _HIDDEN), None)  # type: ignore[attr-defined]
 
     def _on_group_activated(self, _list, row) -> None:
         if getattr(row, "_key", None) == _HIDDEN:

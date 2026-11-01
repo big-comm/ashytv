@@ -297,9 +297,14 @@ class MpvWidget(Gtk.GLArea):
         self._mpv.command("sub-add", path, "select")
 
     def play(self, url: str, start: float = 0, user_agent: str = "",
-             referrer: str = "", sub_files: list[str] | tuple = ()) -> None:
+             referrer: str = "", sub_files: list[str] | tuple = (),
+             host_header: str = "") -> None:
+        """`host_header`: the URL holds an address resolved by the app's
+        secure DNS; the server still needs its name in the Host header."""
         self._pending_subs = list(sub_files)
         options = {}
+        if host_header:
+            options["http_header_fields"] = f"Host: {host_header}"
         if start > 0:
             options["start"] = f"+{start:.0f}"
         if user_agent:

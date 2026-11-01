@@ -116,6 +116,16 @@ def fetch_bytes_keepalive(url: str, timeout: float = 20) -> bytes:
     raise AssertionError("unreachable")
 
 
+def fetch_head(url: str, size: int = 512, timeout: float = 10) -> bytes:
+    """The first bytes of a resource (health checks of big playlists)."""
+    if not url.startswith(("http://", "https://")):
+        raise ValueError(_("Unsupported URL: {url}").format(url=mask_credentials(url)[:60]))
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
+                                               "Range": f"bytes=0-{size - 1}"})
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        return resp.read(size)
+
+
 def fetch_json(url: str, timeout: float = 60):
     return json.loads(fetch_bytes(url, timeout).decode("utf-8", errors="replace"))
 

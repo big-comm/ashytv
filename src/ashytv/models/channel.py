@@ -110,6 +110,7 @@ class PlayItem:
     referrer: str = ""
     variants: list[Variant] = field(default_factory=list)  # best quality first
     sub_files: list[str] = field(default_factory=list)  # provider subtitle URLs
+    failovers: int = 0      # backup servers tried for this playback
 
     @property
     def is_live(self) -> bool:

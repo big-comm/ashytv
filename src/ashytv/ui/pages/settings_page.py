@@ -22,9 +22,13 @@ _CATS = [
     ("reproducao", _("Playback"), "media-playback-start-symbolic"),
     ("atalhos", _("Shortcuts"), "input-keyboard-symbolic"),
     ("pais", _("Parental Controls"), "system-lock-screen-symbolic"),
+    ("rede", _("Network"), "network-wired-symbolic"),
     ("dados", _("Data"), "folder-download-symbolic"),
     ("sobre", _("About"), "dialog-information-symbolic"),
 ]
+# Secure DNS: (setting value, label). "system" = off.
+_DOH = [("system", _("Off (system DNS)")), ("cloudflare", "Cloudflare (1.1.1.1)"),
+        ("google", "Google (8.8.8.8)")]
 _THEMES = [("dark", _("Dark")), ("light", _("Light")), ("system", _("Follow system"))]
 _REFRESH = [6, 12, 24, 48]
 
@@ -85,6 +89,7 @@ class SettingsPage(Gtk.Box):
         self.stack.add_named(self._reproducao(), "reproducao")
         self.stack.add_named(self._atalhos(), "atalhos")
         self.stack.add_named(self._pais(), "pais")
+        self.stack.add_named(self._rede(), "rede")
         self.stack.add_named(self._dados(), "dados")
         self.stack.add_named(self._sobre(), "sobre")
         body.append(self.stack)
@@ -166,6 +171,26 @@ class SettingsPage(Gtk.Box):
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
         return self._page(g, channels, hidden_group, g2)
+
+    def _rede(self) -> Gtk.Widget:
+        g = Adw.PreferencesGroup(
+            title=_("Secure DNS (DNS over HTTPS)"),
+            description=_("Looks up server names over an encrypted connection, for more "
+                          "privacy and fewer failures from the provider's DNS. If it "
+                          "doesn't answer, the system DNS is used. HTTPS videos use the "
+                          "system DNS."))
+        doh = Adw.ComboRow(title=_("Secure DNS"),
+                           model=Gtk.StringList.new([label for _k, label in _DOH]))
+        keys = [k for k, _l in _DOH]
+        cur = self.settings.get("doh")
+        doh.set_selected(keys.index(cur) if cur in keys else 0)
+        doh.connect("notify::selected",
+                    lambda r, _p: self.settings.set("doh", keys[r.get_selected()]))
+        g.add(doh)
+        servers = Adw.PreferencesGroup(title=_("Backup servers"))
+        self._switch(servers, "server_alerts", _("Desktop notifications"),
+                     _("Tell me when a playlist's main server goes down or comes back"))
+        return self._page(g, servers)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))
@@ -314,6 +339,9 @@ class SettingsPage(Gtk.Box):
             title="TMDB",
             subtitle=_("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
                        "or certified by TMDB."), subtitle_lines=3))
+        tour = Adw.ButtonRow(title=_("Guided tour"))
+        tour.connect("activated", lambda *_: self.activate_action("app.tour", None))
+        g.add(tour)
         about = Adw.ButtonRow(title=_("More information"))
         about.connect("activated", lambda *_: self.activate_action("app.about", None))
         g.add(about)

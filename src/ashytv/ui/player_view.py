@@ -10,6 +10,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Graphene, Gtk
 
 from ..i18n import _
 from ..models import PlayItem
+from ..services.failover import NEXT_SERVER, NO_PROGRESS_SECS, RECONNECT, StallGuard
 from ..services.quality import QualityController
 from ..player.mpv_widget import MpvWidget
 from . import keynav
@@ -73,6 +74,16 @@ class PlayerView(Gtk.Overlay):
         self._seeking = False
         self._seek_source = 0
         self._quality: QualityController | None = None
+        # Anti-freeze: frozen playback reconnects, then moves to a backup server.
+        self._guard = StallGuard()
+        self._last_progress = time.monotonic()
+        self._last_pos = -1.0
+        self._doh_host = ""       # Host header of the stream mpv is opening
+        # Set by the window: switch the item to its next server; returns the
+        # message to show, or None when there is no other server.
+        self.server_failover = None
+        # Set by the window: url -> (url for mpv, Host header) (secure DNS).
+        self.stream_target = None
 
         self.mpv = MpvWidget(hwdec=bool(settings.get("hwdec")),
                              cache_secs=int(settings.get("cache_secs")))
@@ -112,6 +123,7 @@ class PlayerView(Gtk.Overlay):
 
         GLib.timeout_add_seconds(30, self._refresh_epg)
         GLib.timeout_add_seconds(_QUALITY_TICK, self._quality_tick)
+        GLib.timeout_add_seconds(1, self._guard_tick)
 
     # ---- construction ----------------------------------------------------
 
@@ -315,8 +327,9 @@ class PlayerView(Gtk.Overlay):
             variant = item.variants[self._quality.index]
             item.url, item.user_agent, item.referrer = (
                 variant.url, variant.user_agent, variant.referrer)
-        self.mpv.play(item.url, start=item.start, user_agent=item.user_agent,
-                      referrer=item.referrer, sub_files=item.sub_files)
+        self._guard.new_stream()
+        self._open(item.url, start=item.start, user_agent=item.user_agent,
+                   referrer=item.referrer, sub_files=item.sub_files)
         self.play_btn.set_icon_name("media-playback-pause-symbolic")
         self._show_controls()
 
@@ -452,9 +465,78 @@ class PlayerView(Gtk.Overlay):
 
     # ---- mpv state -------------------------------------------------
 
+    # Hosts whose resolved-address stream failed: mpv uses the name again.
+    _doh_failed: set[str] = set()
+
+    def _open(self, url: str, start: float = 0, user_agent: str = "", referrer: str = "",
+              sub_files=()) -> None:
+        """Every stream mpv opens goes through here (secure DNS, anti-freeze)."""
+        target, host = url, ""
+        if self.stream_target is not None:
+            target, host = self.stream_target(url)
+            if host in PlayerView._doh_failed:
+                target, host = url, ""
+        self._doh_host = host
+        self._last_progress = time.monotonic()
+        self._last_pos = -1.0
+        self.mpv.play(target, start=start, user_agent=user_agent, referrer=referrer,
+                      sub_files=sub_files, host_header=host)
+
+    def _reopen(self) -> None:
+        """Open the item's stream again (same or new server), keeping the
+        position of a movie/episode."""
+        item = self._item
+        if item is None:
+            return
+        pos = 0.0 if item.is_live else self.mpv.position or item.start
+        self._guard.restarted()
+        self._open(item.url, start=pos, user_agent=item.user_agent,
+                   referrer=item.referrer, sub_files=item.sub_files)
+
+    def _recover(self, action: str | None) -> bool:
+        """Act on a StallGuard decision; False when nothing can be done."""
+        item = self._item
+        if action is None or item is None:
+            return False
+        if self._doh_host:
+            # The stream opened by address failed: retry by name (system DNS).
+            PlayerView._doh_failed.add(self._doh_host)
+            self._flash(_("Reconnecting…"))
+            self._reopen()
+            return True
+        if action == NEXT_SERVER and self.server_failover is not None:
+            message = self.server_failover(item)
+            if message:
+                self._flash(message)
+                self._reopen()
+                return True
+        if action == RECONNECT or (action == NEXT_SERVER and item.is_live
+                                   and self.mpv.state != "error"):
+            self._flash(_("Reconnecting…"))
+            self._reopen()
+            return True
+        return False
+
+    def _guard_tick(self) -> bool:
+        state = self.mpv.state
+        if self._item is None or state in ("idle", "paused", "ended", "error"):
+            self._guard.update(time.monotonic(), False)
+            return GLib.SOURCE_CONTINUE
+        now = time.monotonic()
+        frozen = state == "playing" and now - self._last_progress > NO_PROGRESS_SECS
+        stalled = state in ("loading", "buffering") or frozen
+        self._recover(self._guard.update(now, stalled))
+        return GLib.SOURCE_CONTINUE
+
     def _on_state(self, _mpv, state: str) -> None:
         if self._quality is not None and self._quality_event(state):
+            self._guard.restarted()
             return  # switching to another variant
+        if state == "error" and self._item is not None and self._recover(NEXT_SERVER):
+            return  # trying again on the same or another server
+        if (state == "ended" and self._item is not None and self._item.is_live
+                and self._recover(self._guard.failed(time.monotonic()))):
+            return  # a live stream must not end: reconnect
         if state in ("loading", "buffering"):
             self._show_center(loading=True,
                               title=_("Loading…") if state == "loading" else _("Buffering…"))
@@ -492,11 +574,15 @@ class PlayerView(Gtk.Overlay):
         if self._item:
             item = self._item
             item.start = self.mpv.position if not item.is_live else 0
+            item.failovers = 0  # the user asked: every server may be tried again
             self.play(item, self._can_zap)
 
     def _on_time(self, _mpv, pos: float, dur: float) -> None:
         if self._item is None:
             return
+        if pos != self._last_pos:
+            self._last_pos = pos
+            self._last_progress = time.monotonic()
         if self._item.is_live:
             self._update_live_badge()
         if not self._item.is_live and dur > 0:
@@ -653,7 +739,8 @@ class PlayerView(Gtk.Overlay):
             PlayerView._rank_hint = _RANKS.get(variant.label, PlayerView._rank_hint)
         item.url, item.user_agent, item.referrer = (
             variant.url, variant.user_agent, variant.referrer)
-        self.mpv.play(variant.url, user_agent=variant.user_agent, referrer=variant.referrer)
+        self._guard.restarted()
+        self._open(variant.url, user_agent=variant.user_agent, referrer=variant.referrer)
         label = variant.label or str(index + 1)
         if reason == "manual":
             self._flash(_("Quality: {label}").format(label=label))

@@ -66,6 +66,7 @@ class AshyTvApplication(Adw.Application):
 
         for name, callback, accels in (
             ("about", self._on_about, []),
+            ("tour", lambda *_: self.window and self.window.start_tour(), []),
             ("shortcuts", self._on_shortcuts, ["<Primary>question"]),
             ("quit", lambda *_: self._quit(), ["<Primary>q"]),
         ):

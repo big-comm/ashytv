@@ -27,6 +27,9 @@ DEFAULTS: dict = {
     "auto_quality": True,       # adapt between quality variants
     "group_variants": True,     # show "NEWS FHD/HD/SD" as one channel
     "channel_preview": True,    # live preview next to the TV channel list
+    "doh": "system",            # secure DNS: system | cloudflare | google
+    "server_alerts": True,      # desktop notification when a server goes down/back
+    "tour_version": 0,          # guided tour version already offered/seen
     "cache_secs": 20,           # player network buffer (seconds)
     "volume": 100,
     "hide_adult": True,

@@ -11,7 +11,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 from . import APP_ID
 from .i18n import _, ngettext
 from .models import Channel, Episode, MediaType, PlayItem, Variant
-from .services import epg, http, importer, secrets
+from .services import doh, epg, failover, http, importer, secrets
 from .services.quality import quality_label
 from .services.gamepad import GamepadInput
 from .services.reminders import Reminder, ReminderBook
@@ -34,6 +34,7 @@ from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
 from .ui.pages.settings_page import SettingsPage
 from .ui.schedule_dialog import schedule_dialog
+from .ui.tour import Step, Tour, mark_seen, should_offer
 from .ui.welcome_view import WelcomeView
 
 _SEARCHABLE = {"channels", "movies", "series", "favorites"}
@@ -79,6 +80,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._refresh_queue: list[int] = []
         self._fetched_series: dict[int, float] = {}
         self.cast = CastService(storage)
+        self._servers_before: dict[int, int] = {}
+        self._epg_fallbacks: list[str] = []
+        self._health_running: set[int] = set()
 
         self._load_providers()
 
@@ -112,11 +116,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
         header.set_title_widget(self.search)
 
         menu = Gio.Menu()
+        menu.append(_("Guided tour"), "app.tour")
         menu.append(_("Keyboard Shortcuts"), "app.shortcuts")
         menu.append(_("About AshyTV"), "app.about")
         menu.append(_("Quit"), "app.quit")
-        header.pack_end(Gtk.MenuButton(icon_name="open-menu-symbolic", menu_model=menu,
-                                       tooltip_text=_("Main Menu")))
+        self.menu_btn = Gtk.MenuButton(icon_name="open-menu-symbolic", menu_model=menu,
+                                       tooltip_text=_("Main Menu"))
+        header.pack_end(self.menu_btn)
         self.search_btn = Gtk.ToggleButton(icon_name="system-search-symbolic",
                                            tooltip_text=_("Search (Ctrl+F)"))
         self.search_btn.connect("toggled", self._on_search_toggled)
@@ -152,7 +158,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.root_stack.add_named(self.welcome, "welcome")
         self.root_stack.add_named(shell, "shell")
         self.toasts.set_child(self.root_stack)
-        self.set_content(self.toasts)
+        # The guided tour draws over everything (toasts included).
+        self.tour_layer = Gtk.Overlay(child=self.toasts)
+        self.tour: Tour | None = None
+        self.set_content(self.tour_layer)
 
         bp = Adw.Breakpoint.new(Adw.BreakpointCondition.parse("max-width: 900sp"))
         bp.add_setter(self.split, "collapsed", True)
@@ -173,6 +182,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self.navigate("home")
             self._autoload_epg()
             GLib.timeout_add_seconds(3, self._auto_refresh)
+            GLib.timeout_add(1500, self._offer_tour)
+            # Server status for the Playlists page (then every 15 minutes).
+            GLib.timeout_add_seconds(5, self._check_once,
+                                     [int(r["id"]) for r in storage.list_playlists()
+                                      if r["enabled"]])
         else:
             self.root_stack.set_visible_child_name("welcome")
 
@@ -227,6 +241,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         lists.connect("refresh-requested", lambda _w, pid: self._refresh_playlist(pid))
         lists.connect("delete-requested", self._on_delete_requested)
         lists.connect("enabled-changed", self._on_playlist_enabled)
+        lists.connect("servers-changed", self._on_servers_changed)
+        lists.connect("check-servers", lambda _w, pid: self._check_servers([pid]))
 
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
@@ -312,6 +328,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
                     if key not in self._passwords:
                         self._passwords[key] = secrets.lookup_password(*key) or ""
                     prov.password = self._passwords[key]
+                prov.backups = failover.clean_backups(self.storage.backups(row["id"]),
+                                                      prov.host)
+                prov.active = row["active_server"] or 0
+                if not 0 <= prov.active < len(prov.servers):
+                    prov.active = 0
                 self._providers[int(row["id"])] = prov
             except (ValueError, KeyError):
                 continue
@@ -460,6 +481,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.player.connect("zap-to", lambda _p, index: self._zap_to(index))
         self.player.connect("zap-previous", lambda *_: self._zap_previous())
         self.player.connect("toast", lambda _p, msg: self._toast(msg))
+        self.player.server_failover = self._stream_failover
+        self.player.stream_target = doh.stream_target
         if self._epg_guide is not None:
             self.player.set_guide(self._epg_guide)
         self.root_stack.add_named(self.player, "player")
@@ -720,6 +743,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 return
 
             def done():
+                self._sync_active(movie.playlist_id)
                 self._vod_info[key] = info
                 self.cast.remember(movie, info.get("cast", ""), info.get("tmdb_id", ""))
                 on_done(info)
@@ -736,6 +760,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
             else:
                 on_error(exc)
             return GLib.SOURCE_REMOVE
+        self._sync_active(series.playlist_id)
         # A playlist refresh may have replaced the row: look the series up again.
         current = self.storage.find_channel(series.playlist_id, series.url)
         if current is None:
@@ -773,22 +798,28 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.pages["lists"].set_status(message)
         self.banner.set_title(message)
 
-    def _on_import_requested(self, _w, name: str, source: str) -> None:
+    def _on_import_requested(self, _w, name: str, source: str, backups) -> None:
         if not self._begin_import(_("Importing playlist…")):
             return
         db_path = self.storage.path
+        backups = failover.clean_backups(backups, source) if "://" in source else None
         importer.run_async(
-            lambda progress: importer.import_m3u(db_path, name, source, progress),
+            lambda progress: importer.import_m3u(db_path, name, source, progress,
+                                                 backups=backups),
             self._import_done, self._import_error, self._import_progress)
 
-    def _on_xtream_requested(self, _w, name: str, host: str, user: str, pwd: str) -> None:
-        provider = XtreamProvider(host=normalize_host(host), username=user, password=pwd)
+    def _on_xtream_requested(self, _w, name: str, host: str, user: str, pwd: str,
+                             backups) -> None:
+        host = normalize_host(host)
+        provider = XtreamProvider(host=host, username=user, password=pwd,
+                                  backups=failover.clean_backups(backups, host))
         self._run_xtream_import(name, provider)
 
     def _run_xtream_import(self, name: str, provider: XtreamProvider,
                            quiet_id: int = 0) -> None:
         if not self._begin_import(_("Connecting to the Xtream provider…"), quiet_id):
             return
+        self._servers_before = self._server_snapshot()
         db_path = self.storage.path
         importer.run_async(
             lambda progress: importer.import_xtream(db_path, name, provider, progress),
@@ -811,8 +842,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
             if not self._begin_import(_("Updating playlist…"), quiet_id):
                 return False
             db_path, name, source = self.storage.path, row["name"], row["source"]
+            backups, active = self.storage.backups(playlist_id), row["active_server"] or 0
+            self._servers_before = self._server_snapshot()
             importer.run_async(
-                lambda progress: importer.import_m3u(db_path, name, source, progress),
+                lambda progress: importer.import_m3u(db_path, name, source, progress,
+                                                     backups=backups, active=active),
                 self._import_done, self._import_error, self._import_progress)
         return True
 
@@ -822,7 +856,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.banner.set_revealed(False)
         self._passwords.clear()  # the import may have saved a new password
         self._load_providers()
+        before = self._servers_before
+        before.setdefault(result.playlist_id, 0)  # a new list: did its main server fail?
+        self._announce_server_changes(before)
+        self._servers_before = {}
         self._invalidate_pages()
+        GLib.timeout_add_seconds(2, self._check_once, [result.playlist_id])
         self._epg_source = ""
         self._autoload_epg(force_id=result.playlist_id)
         if quiet_id:
@@ -842,6 +881,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if self._current == "lists":
             self.navigate("channels")
         self._next_auto_refresh()
+        GLib.timeout_add(1500, self._offer_tour)  # right after the first playlist
 
     def _import_error(self, exc: Exception) -> None:
         quiet_id, self._quiet_id = self._quiet_id, 0
@@ -925,20 +965,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
         for row in rows:
             if not row["enabled"]:
                 continue
-            url = ""
+            url, others = "", []
             prov = self._providers.get(int(row["id"]))
             if prov is not None and prov.password:
                 url = prov.xmltv_url()
+                # The guide from a backup server when the one in use fails.
+                others = [prov.at(srv).xmltv_url() for i, srv in enumerate(prov.servers)
+                          if i != prov.active]
             else:
                 url = self.storage.playlist_meta(int(row["id"])).get("epg_url", "")
             if url:
-                self._load_epg(url)
+                self._load_epg(url, others)
                 return
 
-    def _load_epg(self, url: str) -> None:
+    def _load_epg(self, url: str, fallbacks: list[str] | None = None) -> None:
         if url == self._epg_source:
             return
         self._epg_source = url
+        self._epg_fallbacks = list(fallbacks or [])
         # Results of an older request (other playlist, deleted one…) are ignored.
         try:
             channels = self.storage.tvg_ids() or None
@@ -949,6 +993,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
                               channels=channels)
 
     def _on_epg_error(self, exc, url: str) -> bool:
+        if url == self._epg_source and self._epg_fallbacks and failover.is_server_failure(exc):
+            self._epg_source = ""
+            nxt = self._epg_fallbacks.pop(0)
+            self._load_epg(nxt, self._epg_fallbacks)
+            return GLib.SOURCE_REMOVE
         if url == self._epg_source:
             self._epg_source = ""
             self._toast(_("Guide (EPG) unavailable: {error}").format(
@@ -983,6 +1032,250 @@ class AshyTvWindow(Adw.ApplicationWindow):
         s.connect("show_logos", lambda _v: self._invalidate_pages(
             "home", "channels", "favorites", "movies", "series"))
         s.connect("channel_preview", lambda _v: self.pages["channels"].restart_preview())
+        doh.configure(s.get("doh"))
+        s.connect("doh", doh.configure)
+        GLib.timeout_add_seconds(failover.CHECK_EVERY, self._periodic_check)
+
+    # ---- guided tour ----------------------------------------------------------
+
+    def _offer_tour(self) -> bool:
+        if (not should_offer(self.settings, self.storage.has_playlists())
+                or self.root_stack.get_visible_child_name() != "shell"
+                or self.get_visible_dialog() is not None):
+            return GLib.SOURCE_REMOVE
+        mark_seen(self.settings)  # asked once, whatever the answer
+        dialog = Adw.AlertDialog(
+            heading=_("Would you like a quick tour of AshyTV?"),
+            body=_("A few steps over the real screens: channels, guide, movies, "
+                   "playlists and settings. You can reopen it from the main menu."))
+        dialog.add_response("later", _("Not now"))
+        dialog.add_response("start", _("Start"))
+        dialog.set_response_appearance("start", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("start")
+        dialog.connect("response", self._on_tour_answer)
+        dialog.present(self)
+        return GLib.SOURCE_REMOVE
+
+    def _on_tour_answer(self, _dialog, response: str) -> None:
+        if response == "start":
+            self.start_tour()
+
+    def start_tour(self) -> None:
+        if self.tour is not None and self.tour.active:
+            return
+        if self.root_stack.get_visible_child_name() == "player" and self.player:
+            self.player.close()
+        if self.root_stack.get_visible_child_name() != "shell":
+            return
+        dialog = self.get_visible_dialog()
+        if dialog is not None:
+            dialog.force_close()
+        if self.split.get_collapsed():
+            self.split.set_show_sidebar(True)
+        start_page = self._current
+        mark_seen(self.settings)
+        self.tour = Tour(self.tour_layer, self._tour_steps(), self.navigate,
+                         lambda: self.navigate(start_page))
+        self.tour.start()
+
+    def _tour_steps(self) -> list[Step]:
+        ch, nav = self.pages["channels"], self.nav
+        movies, lists, settings = self.pages["movies"], self.pages["lists"], self.pages["settings"]
+
+        def channels_list():
+            ch.set_view("list")
+
+        def guide_buttons():
+            return ch._view_buttons["guide"].get_parent() if ch.guide is not None else None
+
+        return [
+            Step(_("Sections"),
+                 _("Home, TV channels, movies, series, favorites, recordings, playlists "
+                   "and settings. The keyboard, a remote or a game controller work too."),
+                 "home", lambda: nav),
+            Step(_("Channel groups"),
+                 _("Pick a group to see its channels. Right-click (or long-press) a group "
+                   "to move it or hide it."),
+                 "channels", lambda: ch.group_panel, channels_list),
+            Step(_("Channel list"),
+                 _("A click selects a channel; a double-click or Enter opens it. "
+                   "Right-click a channel to hide it or add it to your favorites."),
+                 None, lambda: ch.list_panel),
+            Step(_("Live preview"),
+                 _("The selected channel plays here, muted (the button turns the sound "
+                   "on), with what is on now and next."),
+                 None, lambda: ch.info),
+            Step(_("Hidden items"),
+                 _("Everything you hid is here. Open it to show items again."),
+                 None, ch.hidden_row),
+            Step(_("Program guide"),
+                 _("Switch to Guide to see what is on, hour by hour, and set reminders."),
+                 None, guide_buttons),
+            Step(_("Movies and series"),
+                 _("Posters with long titles scroll when you point at them. Open one to "
+                   "see the details and the cast; click an actor to see their other "
+                   "titles in your playlists."),
+                 "movies", lambda: movies.stack),
+            Step(_("Favorites and recordings"),
+                 _("The heart keeps channels, movies and series here; recordings of live "
+                   "TV are listed in Recordings."),
+                 None, lambda: nav._buttons.get("favorites")),
+            Step(_("Playlists"),
+                 _("Add M3U or Xtream lists. Each list can have backup servers (other "
+                   "DNS of the provider): the dots show if each one is online, slow or "
+                   "down, and AshyTV switches automatically."),
+                 "lists", lambda: lists.existing_box if lists.existing_box.get_visible()
+                 else lists.save_btn),
+            Step(_("Settings"),
+                 _("Themes and colors, hidden channels and groups, secure DNS, parental "
+                   "PIN and more."),
+                 "settings", lambda: settings.cats),
+            Step(_("See it again"),
+                 _("Reopen this tour from the main menu (Guided tour) or from "
+                   "Settings → About."),
+                 None, lambda: self.menu_btn),
+        ]
+
+    # ---- backup servers ----------------------------------------------------
+
+    def _servers_of(self, playlist_id: int) -> list[str]:
+        """Main + backup URLs of a playlist ([] when it has no web source)."""
+        prov = self._providers.get(playlist_id)
+        if prov is not None:
+            return prov.servers
+        row = self.storage.get_playlist(playlist_id)
+        if row is None or row["kind"] == "xtream" or "://" not in row["source"]:
+            return []
+        return [row["source"], *failover.clean_backups(self.storage.backups(playlist_id),
+                                                      row["source"])]
+
+    def _sync_active(self, playlist_id: int) -> None:
+        """A background request moved to another server: keep it (sticky)."""
+        prov = self._providers.get(playlist_id)
+        if prov is not None and prov.active != self.storage.active_server(playlist_id):
+            self._set_active_server(playlist_id, prov.active)
+
+    def _server_snapshot(self) -> dict[int, int]:
+        return {int(r["id"]): int(r["active_server"] or 0)
+                for r in self.storage.list_playlists()}
+
+    def _announce_server_changes(self, before: dict[int, int]) -> None:
+        """Requests in the background moved a playlist to another server."""
+        for pid, old in before.items():
+            row = self.storage.get_playlist(pid)
+            if row is not None and int(row["active_server"] or 0) != old:
+                self._server_switched(pid, old, int(row["active_server"] or 0))
+
+    def _set_active_server(self, playlist_id: int, index: int) -> None:
+        old = self.storage.active_server(playlist_id)
+        prov = self._providers.get(playlist_id)
+        if prov is not None:
+            prov.active = index
+        self.storage.set_servers(playlist_id, active=index)
+        if old != index:
+            self._server_switched(playlist_id, old, index)
+            self.pages["lists"].refresh()
+
+    def _server_switched(self, playlist_id: int, old: int, new: int) -> None:
+        """Tell the user when the main server went down or came back."""
+        row = self.storage.get_playlist(playlist_id)
+        name = row["name"] if row is not None else ""
+        if old == 0 and new != 0:
+            text = _("“{name}”: the main server is not answering. Using the backup "
+                     "server.").format(name=name)
+        elif new == 0:
+            text = _("“{name}”: the main server is back.").format(name=name)
+        else:
+            return
+        self._toast(text)
+        app = self.get_application()
+        if self.settings.get("server_alerts") and app is not None:
+            note = Gio.Notification.new(_("AshyTV servers"))
+            note.set_body(text)
+            app.send_notification(f"server-{playlist_id}", note)
+
+    def _stream_failover(self, item: PlayItem) -> str | None:
+        """Playback failed or kept freezing: rebuild the item's URLs on the
+        next server of its playlist. None when there is no other server."""
+        prov = self._providers.get(item.playlist_id)
+        if prov is None or len(prov.servers) < 2 or item.failovers >= len(prov.servers) - 1:
+            return None
+        old_index, old = prov.active, prov.server
+        nxt = failover.ServerPool(prov.servers, old_index).next_after(old_index)
+        if nxt is None:
+            return None
+        item.failovers += 1
+        prov.active = nxt
+        new = prov.server
+        item.url = failover.swap_server(item.url, old, new)
+        for variant in item.variants:
+            variant.url = failover.swap_server(variant.url, old, new)
+        self._mark_down(item.playlist_id, old)
+        self._set_active_server(item.playlist_id, nxt)
+        return (_("Switching to the main server…") if nxt == 0
+                else _("Switching to the backup server…"))
+
+    def _mark_down(self, playlist_id: int, url: str) -> None:
+        servers = self._servers_of(playlist_id)
+        health = failover.health_list(self.storage.server_health(playlist_id), servers)
+        for h in health:
+            if h.url == url:
+                h.status, h.latency_ms, h.checked = failover.DOWN, 0, time.time()
+        self.storage.set_server_health(playlist_id, [h.to_dict() for h in health])
+
+    def _on_servers_changed(self, _w, playlist_id: int, backups) -> None:
+        servers = self._servers_of(playlist_id)
+        main = servers[0] if servers else ""
+        self.storage.set_servers(playlist_id, failover.clean_backups(backups, main), 0)
+        self._load_providers()
+        self.pages["lists"].refresh()
+        self._check_servers([playlist_id])
+
+    def _periodic_check(self) -> bool:
+        self._check_servers([int(r["id"]) for r in self.storage.list_playlists()
+                             if r["enabled"]])
+        return GLib.SOURCE_CONTINUE
+
+    def _check_once(self, playlist_ids: list[int]) -> bool:
+        self._check_servers(playlist_ids)
+        return GLib.SOURCE_REMOVE
+
+    def _check_servers(self, playlist_ids: list[int]) -> None:
+        """Health check (status, latency) of each server, in the background."""
+        jobs = []
+        for pid in playlist_ids:
+            servers = self._servers_of(pid)
+            if not servers or pid in self._health_running:
+                continue
+            prov = self._providers.get(pid)
+            if prov is not None:
+                probe = failover.xtream_probe(prov.username, prov.password,
+                                              lambda url: http.fetch_bytes(url, 10))
+            else:
+                probe = failover.m3u_probe(lambda url: http.fetch_head(url))
+            self._health_running.add(pid)
+            jobs.append((pid, servers, probe))
+
+        def worker(pid, servers, probe):
+            results = [failover.check(url, probe) for url in servers]
+            GLib.idle_add(self._servers_checked, pid, results)
+
+        for job in jobs:
+            threading.Thread(target=worker, args=job, daemon=True).start()
+
+    def _servers_checked(self, playlist_id: int, results: list) -> bool:
+        self._health_running.discard(playlist_id)
+        if self.storage.get_playlist(playlist_id) is None:
+            return GLib.SOURCE_REMOVE
+        self.storage.set_server_health(playlist_id, [h.to_dict() for h in results])
+        active = self.storage.active_server(playlist_id)
+        up = [i for i, h in enumerate(results) if h.status != failover.DOWN]
+        if up and up[0] == 0 and active != 0:
+            self._set_active_server(playlist_id, 0)  # the main server is back
+        elif up and active < len(results) and results[active].status == failover.DOWN:
+            self._set_active_server(playlist_id, up[0])
+        self.pages["lists"].refresh()
+        return GLib.SOURCE_REMOVE
 
     # ---- reminders ---------------------------------------------------
 
@@ -1140,6 +1433,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.add_controller(nav_keys)
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
+        if self.tour is not None and self.tour.active:
+            return self.tour.handle_key(keyval)
         # A dialog is a child of the window, so this capture-phase handler
         # sees its keys too: leave them to the dialog (typing must not open
         # the search behind it, Esc must close it).

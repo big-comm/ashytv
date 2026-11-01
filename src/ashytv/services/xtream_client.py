@@ -9,12 +9,15 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from collections.abc import Callable
+from dataclasses import dataclass, field, replace
+from typing import TypeVar
 from urllib.parse import quote, unquote, urlencode, urlparse
 
 from ..i18n import _
 from ..models import Channel, Episode, MediaType
 from . import http, languages
+from .failover import AuthFailed, ServerPool
 from .text import episode_title
 
 # get.php?username=...&password=... — the most reliable way to extract everything.
@@ -28,16 +31,47 @@ _PASS_RE = re.compile(r"(?:Senha|password)\s*[:=]?\s*`?([^\s`]+)`?", re.I)
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 
 
+T = TypeVar("T")
+
+
 @dataclass(slots=True)
 class XtreamProvider:
-    host: str          # e.g. http://server.example:8080
+    host: str          # main server, e.g. http://server.example:8080
     username: str
     password: str
+    # Backup servers (other DNS of the same provider, same accounts) and the
+    # index in `servers` of the one in use (0 = main).
+    backups: list[str] = field(default_factory=list)
+    active: int = 0
+
+    @property
+    def servers(self) -> list[str]:
+        return [self.host, *self.backups]
+
+    @property
+    def server(self) -> str:
+        servers = self.servers
+        return servers[self.active] if 0 <= self.active < len(servers) else self.host
+
+    def at(self, server: str) -> XtreamProvider:
+        """The same account on one given server (no backups)."""
+        return replace(self, host=server, backups=[], active=0)
+
+    def run(self, call: Callable[[XtreamProvider], T],
+            on_switch: Callable[[int, int], None] | None = None) -> T:
+        """call(provider) on the server in use, then the others when it is
+        down; the one that answered stays in use. A refused login is raised
+        right away (every server shares the accounts)."""
+        pool = ServerPool(self.servers, self.active)
+        try:
+            return pool.run(lambda server: call(self.at(server)), on_switch)
+        finally:
+            self.active = pool.active
 
     def _base(self, path: str, **params: str) -> str:
         query = urlencode({"username": self.username, "password": self.password,
                            **params})
-        return f"{self.host}/{path}?{query}"
+        return f"{self.server}/{path}?{query}"
 
     def m3u_url(self) -> str:
         return self._base("get.php", type="m3u_plus", output="ts")
@@ -55,7 +89,7 @@ class XtreamProvider:
         kind, _sep, rest = path.partition("/")
         user = quote(self.username, safe="")
         pwd = quote(self.password, safe="")
-        return f"{self.host}/{kind}/{user}/{pwd}/{rest}"
+        return f"{self.server}/{kind}/{user}/{pwd}/{rest}"
 
     def to_json(self, include_password: bool = True) -> str:
         data = {"host": self.host, "username": self.username}
@@ -151,8 +185,8 @@ def _pick_host(text: str) -> str | None:
 
 # ---- player_api.php ----------------------------------------------------
 
-class XtreamError(Exception):
-    pass
+class XtreamError(AuthFailed):
+    """The account was refused (other servers would refuse it too)."""
 
 
 def _float(value) -> float:
@@ -285,7 +319,12 @@ def series(items: list, cats: dict[str, str]) -> list[Channel]:
 
 
 def load_catalog(provider: XtreamProvider) -> tuple[list[Channel], dict]:
-    """Download the full catalog (live + movies + series) and account data."""
+    """Download the full catalog (live + movies + series) and account data,
+    from a backup server when the one in use is down."""
+    return provider.run(_load_catalog)
+
+
+def _load_catalog(provider: XtreamProvider) -> tuple[list[Channel], dict]:
     info = account_info(provider)
     result: list[Channel] = []
     for cat_action, action, convert in (
@@ -406,8 +445,15 @@ def _subtitle_url(item) -> str:
 
 
 def vod_info(provider: XtreamProvider, vod_id: str) -> dict:
-    data = http.fetch_json(provider.api_url("get_vod_info", vod_id=vod_id), timeout=30)
+    data = provider.run(lambda p: _api_json(p.api_url("get_vod_info", vod_id=vod_id), 30))
     return parse_vod_info(data)
+
+
+def _api_json(url: str, timeout: float):
+    data = http.fetch_json(url, timeout=timeout)
+    if not isinstance(data, (dict, list)):
+        raise ValueError("not an API answer")  # garbage: try another server
+    return data
 
 
 def parse_series_meta(data: dict) -> dict:
@@ -426,6 +472,6 @@ def series_episodes(provider: XtreamProvider, series_id: str) -> list[Episode]:
 
 def series_details(provider: XtreamProvider, series_id: str) -> tuple[list[Episode], dict]:
     """Episodes and the cast/TMDB data of a series (one request)."""
-    data = http.fetch_json(provider.api_url("get_series_info", series_id=series_id),
-                           timeout=60)
+    data = provider.run(
+        lambda p: _api_json(p.api_url("get_series_info", series_id=series_id), 60))
     return parse_series_info(data), parse_series_meta(data)

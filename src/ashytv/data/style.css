@@ -423,3 +423,17 @@ button.ashy-cast-card { padding: 6px; border-radius: 14px; }
 button.ashy-cast-card:hover .ashy-cast-photo { box-shadow: 0 0 0 2px var(--ashy-accent); }
 .ashy-cast-name { font-weight: 700; font-size: 13px; }
 .ashy-grouplist > row.ashy-hidden-entry { color: var(--ashy-fg-dim); margin-top: 6px; }
+
+/* ---------------- Server status (backup DNS) ---------------- */
+.ashy-server-dot { font-size: 11px; color: var(--ashy-fg-faint); }
+.ashy-server-dot.online { color: #33d17a; }
+.ashy-server-dot.slow { color: #f6d32d; }
+.ashy-server-dot.down { color: #e01b24; }
+.ashy-server-dot.active { font-size: 14px; }
+
+/* ---------------- Guided tour ---------------- */
+.ashy-tour-card {
+  background-color: var(--ashy-bg); color: var(--ashy-fg);
+  border: 1px solid var(--ashy-border); border-radius: 16px;
+  padding: 16px 18px; box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.6);
+}
