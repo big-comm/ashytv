@@ -81,7 +81,9 @@ class WelcomeView(Gtk.Overlay):
         self.connect("map", lambda *_: GLib.idle_add(lambda: start.grab_focus() and False))
 
         note = Gtk.Label(label=_("AshyTV is only a player: it does not host any content."))
-        note.add_css_class("ashy-faint")
+        # Sits over the backdrop's horizon lines: needs its own backing to stay readable.
+        note.add_css_class("ashy-welcome-note")
+        note.set_halign(Gtk.Align.CENTER)
         content.append(note)
 
         self.add_overlay(content)
