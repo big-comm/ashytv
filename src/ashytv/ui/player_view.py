@@ -50,6 +50,8 @@ class PlayerView(Gtk.Overlay):
         "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
         "channel-list": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "zap-to": (GObject.SignalFlags.RUN_FIRST, None, (int,)),  # index (0-based)
+        # ← again in the channel list: the window fills the groups column
+        "groups-requested": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "zap-previous": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
@@ -364,11 +366,7 @@ class PlayerView(Gtk.Overlay):
     def handle_key(self, keyval: int, state) -> bool:
         k = keyval
         if self.channel_overlay.get_visible():
-            if k in (Gdk.KEY_Escape, Gdk.KEY_Left, Gdk.KEY_BackSpace):
-                self.channel_overlay.hide()
-                self._show_controls()
-                return True
-            return False  # arrows and Enter move/choose in the channel list
+            return self._overlay_key(k)
         if self._handle_bar_key(k):
             return True
         live = self._item is not None and self._item.is_live
@@ -376,8 +374,12 @@ class PlayerView(Gtk.Overlay):
         if digit is not None and live and self._can_zap:
             self._type_digit(digit)
             return True
-        if k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter, Gdk.KEY_ISO_Enter, Gdk.KEY_Menu) \
-                and live and self._can_zap:
+        shift = bool(state & Gdk.ModifierType.SHIFT_MASK) if state else False
+        opens_list = (k in (Gdk.KEY_Return, Gdk.KEY_KP_Enter, Gdk.KEY_ISO_Enter, Gdk.KEY_Menu)
+                      or (k == Gdk.KEY_Left and not shift))
+        if opens_list and live and self._can_zap:
+            # ← on live TV opens the channel list (like the TV apps); ← again
+            # shows the groups. Shift+← rewinds inside the timeshift buffer.
             self.emit("channel-list")
             return True
         if k == Gdk.KEY_BackSpace and live and self._can_zap:
@@ -621,7 +623,7 @@ class PlayerView(Gtk.Overlay):
 
     # ---- channel list, numbers, previous channel ---------------------
 
-    def show_channel_list(self, channels, current: int, guide) -> None:
+    def show_channel_list(self, channels, current: int, guide, title: str = "") -> None:
         # Like TiviMate: the list replaces the control bars over the video.
         if self._hide_source:
             GLib.source_remove(self._hide_source)
@@ -629,11 +631,37 @@ class PlayerView(Gtk.Overlay):
         self.top_bar.set_reveal_child(False)
         self.bottom_bar.set_reveal_child(False)
         self.set_cursor(None)
-        self.channel_overlay.show_channels(channels, current, guide)
+        self.channel_overlay.show_channels(channels, current, guide, title)
+
+    def _overlay_key(self, k: int) -> bool:
+        """Keys over the channel list (and the groups column)."""
+        overlay = self.channel_overlay
+        if k in (Gdk.KEY_Escape, Gdk.KEY_BackSpace):
+            if overlay.groups_visible:
+                overlay.hide_groups()  # first the groups, then the list
+            else:
+                overlay.hide()
+                self._show_controls()
+            return True
+        if k == Gdk.KEY_Left:
+            if overlay.groups_focused:
+                return True
+            if overlay.groups_visible:
+                overlay.focus_groups()
+            else:
+                self.emit("groups-requested")
+            return True
+        if k == Gdk.KEY_Right and overlay.groups_focused:
+            pos = overlay.groups_sel.get_selected()
+            if pos != Gtk.INVALID_LIST_POSITION:
+                overlay.open_group(pos)
+            return True
+        return False  # ↑/↓ and Enter move/choose in the focused list
 
     def _on_overlay_play(self, _overlay, index: int) -> None:
-        self.channel_overlay.hide()
+        # Tune first: the window still knows which group's list was shown.
         self.emit("zap-to", index)
+        self.channel_overlay.hide()
 
     def _type_digit(self, digit: int) -> None:
         """Type a channel number like on a TV remote: 1, 2, 3 -> channel 123."""

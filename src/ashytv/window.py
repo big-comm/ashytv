@@ -38,6 +38,14 @@ from .ui.schedule_dialog import schedule_dialog
 from .ui.tour import Step, Tour, mark_seen, should_offer
 from .ui.welcome_view import WelcomeView
 
+# Modifier keys alone don't start keyboard mode (Ctrl+click, Alt+Tab…).
+_MODIFIER_KEYS = frozenset({
+    Gdk.KEY_Shift_L, Gdk.KEY_Shift_R, Gdk.KEY_Control_L, Gdk.KEY_Control_R,
+    Gdk.KEY_Alt_L, Gdk.KEY_Alt_R, Gdk.KEY_Super_L, Gdk.KEY_Super_R,
+    Gdk.KEY_Meta_L, Gdk.KEY_Meta_R, Gdk.KEY_ISO_Level3_Shift, Gdk.KEY_Caps_Lock,
+})
+# A page switch crossfades this long; then its widgets can take the focus.
+_PAGE_SWITCH_MS = 200
 _SEARCHABLE = {"channels", "movies", "series", "favorites"}
 _EPISODE_CACHE_SECS = 6 * 3600
 
@@ -82,6 +90,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._fetched_series: dict[int, float] = {}
         self.cast = CastService(storage)
         self._servers_before: dict[int, int] = {}
+        self._overlay_zap: list[Channel] | None = None
         self._epg_fallbacks: list[str] = []
         self._health_running: set[int] = set()
 
@@ -100,7 +109,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
         # ---- sidebar ----
         self.nav = NavSidebar()
-        self.nav.connect("navigate", lambda _w, key: self.navigate(key))
+        self.nav.connect("navigate", lambda _w, key: self._on_nav_navigate(key))
         self.nav.connect("compact-changed", self._on_nav_compact)
 
         # ---- header (spans the full width, as in the mockup) ----
@@ -283,6 +292,25 @@ class AshyTvWindow(Adw.ApplicationWindow):
             page.set_search(self.search.get_text())
         if self.split.get_collapsed():
             self.split.set_show_sidebar(False)
+        if getattr(self, "keyboard", None) is not None and self.keyboard.active:
+            GLib.timeout_add(_PAGE_SWITCH_MS + 50, self._keep_focus_on_screen)
+
+    def _on_nav_navigate(self, key: str) -> None:
+        self.navigate(key)
+        if self.keyboard.active:
+            # Enter on a sidebar item: the focus goes into the page opened.
+            GLib.timeout_add(_PAGE_SWITCH_MS, self._enter_page)
+
+    def _keep_focus_on_screen(self) -> bool:
+        """After a page switch by keyboard: if the focused widget went away
+        with the old page (e.g. a "See all" button), land on the new one."""
+        focus = self.get_focus()
+        page = self.pages.get(self._current)
+        on_page = focus is not None and page is not None and focus.is_ancestor(page)
+        elsewhere = focus is not None and not focus.is_ancestor(self.page_stack)
+        if not focus_util.is_visible(focus) or not (on_page or elsewhere):
+            self._enter_page()
+        return GLib.SOURCE_REMOVE
 
     def _on_start(self, _w) -> None:
         self.root_stack.set_visible_child_name("shell")
@@ -484,6 +512,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.player.connect("ended", self._on_ended)
         self.player.connect("pip-requested", self._on_pip)
         self.player.connect("channel-list", self._on_channel_list)
+        self.player.connect("groups-requested", self._on_groups_requested)
+        self.player.channel_overlay.connect("group-selected", self._on_overlay_group)
+        self.player.channel_overlay.connect("notify::visible", self._on_overlay_visible)
         self.player.connect("zap-to", lambda _p, index: self._zap_to(index))
         self.player.connect("zap-previous", lambda *_: self._zap_previous())
         self.player.connect("toast", lambda _p, msg: self._toast(msg))
@@ -511,6 +542,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         """Tune the channel at `index` of the zapping list (0-based)."""
         if self.root_stack.get_visible_child_name() != "player" or self.player is None:
             return  # a number typed just before closing the player
+        if self._overlay_zap is not None:
+            # Chosen from another group in the channel list: zap through it.
+            self._zap, self._overlay_zap = self._overlay_zap, None
+            self._zap_index = -1
         n = self._zap_len()
         if not 0 <= index < n:
             self.player.flash(_("No channel {number}").format(number=index + 1))
@@ -528,10 +563,61 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._zap_to(self._prev_zap_index)
 
     def _on_channel_list(self, _p) -> None:
+        self._overlay_zap = None
         n = self._zap_len()
         if n:
             channels = [self._zap_item(i) for i in range(n)]
-            self.player.show_channel_list(channels, self._zap_index, self._epg_guide)
+            self.player.show_channel_list(channels, self._zap_index, self._epg_guide,
+                                          self._zap_title())
+
+    def _zap_title(self) -> str:
+        """Title of the channel list over the video: the group being zapped."""
+        if self._zap is self.pages["channels"].filter_model:
+            row = self.pages["channels"].group_list.get_selected_row()
+            label = row.get_child().get_first_child().get_label() if row else ""
+            if label:
+                return label
+        return _("Channels")
+
+    # Keys of the groups column besides the group names (no NUL: they go
+    # through a GObject string signal).
+    _FAV_GROUP, _RECENT_GROUP = "\x01fav", "\x01recent"
+
+    def _live_groups(self) -> list[tuple[str, str, int]]:
+        """Favorites, Recent and every visible live group, with counts."""
+        grouped = self.storage.group_variants
+        fav = self.storage.count(MediaType.LIVE, favorites=True, collapse=grouped)
+        recent = len(self._group_channels(self._RECENT_GROUP))
+        return ([(self._FAV_GROUP, _("Favorites"), fav),
+                 (self._RECENT_GROUP, _("Recently watched"), recent)]
+                + [(g, g, n) for g, n in self.storage.groups(MediaType.LIVE, collapse=grouped)])
+
+    def _group_channels(self, key: str) -> list[Channel]:
+        if key == self._FAV_GROUP:
+            chans = self.storage.channels(MediaType.LIVE, favorites=True)
+        elif key == self._RECENT_GROUP:
+            chans = self.storage.recent_channels(MediaType.LIVE)
+        else:
+            chans = self.storage.channels(MediaType.LIVE, group=key)
+        return collapse_variants(chans) if self.storage.group_variants else chans
+
+    def _on_groups_requested(self, _p) -> None:
+        """← again in the channel list: the groups column, on the group of
+        the channel being watched."""
+        item = self.player.item
+        current = item.channel.group if item is not None and item.channel else ""
+        self.player.channel_overlay.show_groups(self._live_groups(), current)
+
+    def _on_overlay_group(self, overlay, key: str) -> None:
+        chans = self._group_channels(key)
+        self._overlay_zap = chans  # zapping follows this group once one is chosen
+        label = {self._FAV_GROUP: _("Favorites"),
+                 self._RECENT_GROUP: _("Recently watched")}.get(key, key)
+        overlay.set_channels(chans, label)
+
+    def _on_overlay_visible(self, overlay, _p) -> None:
+        if not overlay.get_visible():
+            self._overlay_zap = None  # closed without choosing: keep zapping as before
 
     def _on_ended(self, _p, item: PlayItem) -> None:
         if self._series_ctx is None:
@@ -1439,6 +1525,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
     # ---- keyboard / utils ------------------------------------------------
 
     def _install_keys(self) -> None:
+        # Keyboard mode first (capture): it must see every key and pointer
+        # event, including those a dialog or popover handles.
+        self.keyboard = focus_util.KeyboardMode()
+        mode_keys = Gtk.EventControllerKey(propagation_phase=Gtk.PropagationPhase.CAPTURE)
+        mode_keys.connect("key-pressed", self._on_any_key)
+        self.add_controller(mode_keys)
+        pointer = Gtk.EventControllerLegacy(propagation_phase=Gtk.PropagationPhase.CAPTURE)
+        pointer.connect("event", self._on_pointer_event)
+        self.add_controller(pointer)
         keys = Gtk.EventControllerKey()
         keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self._on_key)
@@ -1450,18 +1545,57 @@ class AshyTvWindow(Adw.ApplicationWindow):
         # The focus must stay visible: scroll to it, and never lose it.
         self._focus_check = 0
         self.connect("notify::focus-widget", self._on_focus_changed)
-        # While the keyboard is in use, hover highlights are hidden (CSS):
-        # a resting pointer must not look like a second selection.
+        # GTK turns focus-visible off a few seconds after the last key: keep
+        # it on while the keyboard is in use, so the ring never vanishes.
         self.connect("notify::focus-visible", self._on_focus_visible)
 
-    def _on_focus_visible(self, *_a) -> None:
-        if self.get_focus_visible():
+    _POINTER_EVENTS = (Gdk.EventType.BUTTON_PRESS, Gdk.EventType.SCROLL,
+                       Gdk.EventType.TOUCH_BEGIN)
+
+    def _on_any_key(self, _c, keyval, _code, _state) -> bool:
+        if keyval in _MODIFIER_KEYS:
+            return False
+        if self.keyboard.key():
+            self._set_keyboard_mode(True)
+            if self.get_focus() is None and self.root_stack.get_visible_child_name() == "shell":
+                self.nav.focus_active()  # app start: show where we are
+        return False
+
+    def _on_pointer_event(self, _c, event) -> bool:
+        # GtkEventControllerLegacy may hand over no event (e.g. crossing/grab).
+        if event is None:
+            return False
+        kind = event.get_event_type()
+        if kind == Gdk.EventType.MOTION_NOTIFY:
+            ok, x, y = event.get_position()
+            if ok and self.keyboard.motion(x, y):
+                self._set_keyboard_mode(False)
+        elif kind in self._POINTER_EVENTS and self.keyboard.pointer():
+            self._set_keyboard_mode(False)
+        return False
+
+    def _set_keyboard_mode(self, on: bool) -> None:
+        # Hover highlights are hidden with the keyboard (CSS: .ashy-keyboard):
+        # a resting pointer must not look like a second selection.
+        if on:
             self.add_css_class("ashy-keyboard")
         else:
             self.remove_css_class("ashy-keyboard")
+        self.set_focus_visible(on)
+        if on:
+            self._on_focus_changed()
+
+    def _on_focus_visible(self, *_a) -> None:
+        if self.keyboard.active and not self.get_focus_visible():
+            GLib.idle_add(self._reassert_focus_visible)
+
+    def _reassert_focus_visible(self) -> bool:
+        if self.keyboard.active:
+            self.set_focus_visible(True)
+        return GLib.SOURCE_REMOVE
 
     def _on_focus_changed(self, *_a) -> None:
-        if not self.get_focus_visible() or self._focus_check:
+        if not self.keyboard.active or self._focus_check:
             return  # pointer use: leave scrolling to the user
         self._focus_check = GLib.idle_add(self._check_focus)
 
@@ -1521,14 +1655,27 @@ class AshyTvWindow(Adw.ApplicationWindow):
         focus = self.get_focus()
         if focus is None:
             return self.focus_page() or self.nav.focus_active() or True
-        if direction == Gtk.DirectionType.RIGHT and self.nav.has_focus_within(focus) \
-                and self.focus_page():
-            return True  # leaving the sidebar enters the content
+        if direction == Gtk.DirectionType.RIGHT and self.nav.has_focus_within(focus):
+            # Leaving the sidebar enters the content — of the page whose item
+            # has the focus, opening it first if needed.
+            key = self.nav.key_of(focus)
+            if key is not None and key != self._current:
+                self.navigate(key)
+                GLib.timeout_add(_PAGE_SWITCH_MS, self._enter_page)
+                return True
+            if self.focus_page():
+                return True
         if not focus.get_mapped():
             # The focused widget was hidden (emptied list, closed view…).
             return self.focus_page() or self.nav.focus_active() or True
         return keynav.move(self, direction, prefer={self.nav: self.nav.focus_active},
                            walls=(self.nav,))
+
+    def _enter_page(self) -> bool:
+        """Put the focus on the page just opened (after its transition)."""
+        if not self.focus_page():
+            self.nav.focus_active()
+        return GLib.SOURCE_REMOVE
 
     def _focus_is_editable(self) -> bool:
         focus = self.get_focus()
