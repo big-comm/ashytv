@@ -69,12 +69,12 @@ class WelcomeView(Gtk.Overlay):
         content.append(cards)
 
         start = Gtk.Button(halign=Gtk.Align.CENTER)
-        inner = Gtk.Box(spacing=8)
+        inner = Gtk.Box(spacing=8, halign=Gtk.Align.CENTER)
         inner.append(Gtk.Label(label=_("Get Started")))
         inner.append(Gtk.Image(icon_name="go-next-symbolic"))
         start.set_child(inner)
         start.add_css_class("pill-accent")
-        start.set_size_request(260, -1)
+        start.add_css_class("ashy-welcome-start")
         start.connect("clicked", lambda *_: self.emit("start"))
         content.append(start)
         self.start_btn = start
