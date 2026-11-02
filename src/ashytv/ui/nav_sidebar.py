@@ -112,5 +112,12 @@ class NavSidebar(Gtk.Box):
         if btn is not None:
             btn.grab_focus()
 
+    def key_of(self, widget: Gtk.Widget | None) -> str | None:
+        """The page whose item is (or contains) `widget`."""
+        for key, btn in self._buttons.items():
+            if widget is not None and (widget is btn or widget.is_ancestor(btn)):
+                return key
+        return None
+
     def has_focus_within(self, widget: Gtk.Widget | None) -> bool:
         return widget is not None and (widget is self or widget.is_ancestor(self))

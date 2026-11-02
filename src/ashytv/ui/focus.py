@@ -48,3 +48,45 @@ def reveal(widget: Gtk.Widget) -> None:
 def is_visible(widget: Gtk.Widget | None) -> bool:
     return (widget is not None and widget.get_mapped() and widget.is_drawable()
             and widget.get_width() > 0 and widget.get_height() > 0)
+
+
+class KeyboardMode:
+    """Whether the user is driving the app with the keyboard (or a remote).
+
+    On from any key press; off only on real pointer use — a click, a scroll,
+    or the pointer moving at least MOTION_PX from where it was. GTK sends
+    motion events that don't move (a widget appearing under a resting
+    pointer, content scrolling beneath it): those must not end it. GTK's own
+    "focus-visible" also times out a few seconds after the last key, which
+    made the focus ring vanish while the user was reading the screen; the
+    window re-asserts it while this mode is on.
+    """
+
+    MOTION_PX = 6.0
+
+    def __init__(self) -> None:
+        self.active = False
+        self._anchor: tuple[float, float] | None = None
+
+    def key(self) -> bool:
+        """A key was pressed. Returns True when the mode turned on."""
+        changed = not self.active
+        self.active = True
+        return changed
+
+    def pointer(self) -> bool:
+        """A click/scroll/touch. Returns True when the mode turned off."""
+        changed = self.active
+        self.active = False
+        return changed
+
+    def motion(self, x: float, y: float) -> bool:
+        """Pointer at (x, y). Returns True when the mode turned off."""
+        if self._anchor is None:
+            self._anchor = (x, y)
+            return False
+        ax, ay = self._anchor
+        if (x - ax) ** 2 + (y - ay) ** 2 < self.MOTION_PX ** 2:
+            return False  # jitter or a synthetic event at the same place
+        self._anchor = (x, y)
+        return self.pointer()

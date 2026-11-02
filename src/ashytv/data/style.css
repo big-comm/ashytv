@@ -376,18 +376,20 @@ button.ashy-nav-toggle { color: var(--ashy-fg-faint); }
 /* ---------------- Keyboard / remote focus ----------------
  * Exactly one ring per focused item, drawn inside its bounds: an outline
  * outside them was cut off by the scrolled lists, grids and chip rows.
- * ":focus" too: GTK also marks the focused widget's ancestors focus-visible,
- * which drew a second ring around the row of a focused button.
+ * Drawn while the keyboard is in use (window.ashy-keyboard, see
+ * KeyboardMode), on the focused widget itself (":focus": GTK also marks the
+ * ancestors focus-visible, which drew a second ring around a row). Not tied
+ * to GTK's :focus-visible, which times out seconds after the last key.
  */
-button:focus:focus-visible,
-togglebutton:focus:focus-visible,
-menubutton > button:focus:focus-visible,
-.ashy-chanlist > row:focus:focus-visible,
-.ashy-grouplist > row:focus:focus-visible,
-.ashy-settings-cat > row:focus:focus-visible,
-.ashy-epg-list > row:focus:focus-visible,
-list.boxed-list > row:focus:focus-visible,
-flowboxchild:focus:focus-visible {
+window.ashy-keyboard button:focus,
+window.ashy-keyboard togglebutton:focus,
+window.ashy-keyboard menubutton > button:focus,
+window.ashy-keyboard .ashy-chanlist > row:focus,
+window.ashy-keyboard .ashy-grouplist > row:focus,
+window.ashy-keyboard .ashy-settings-cat > row:focus,
+window.ashy-keyboard .ashy-epg-list > row:focus,
+window.ashy-keyboard list.boxed-list > row:focus,
+window.ashy-keyboard flowboxchild:focus {
   outline: 3px solid var(--ashy-accent-2);
   outline-offset: -3px;
 }
@@ -404,12 +406,12 @@ window.ashy-keyboard gridview.ashy-posters > child:hover:not(:focus) .ashy-poste
 
 /* On an item already filled with the accent color (selected chip, current
  * page, selected row) the ring is white, or it wouldn't show. */
-button.selected:focus:focus-visible,
-togglebutton:checked:focus:focus-visible,
-.ashy-chanlist > row:selected:focus:focus-visible,
-.ashy-grouplist > row:selected:focus:focus-visible,
-.ashy-settings-cat > row:selected:focus:focus-visible,
-.ashy-chanlist > row:selected button:focus:focus-visible {
+window.ashy-keyboard button.selected:focus,
+window.ashy-keyboard togglebutton:checked:focus,
+window.ashy-keyboard .ashy-chanlist > row:selected:focus,
+window.ashy-keyboard .ashy-grouplist > row:selected:focus,
+window.ashy-keyboard .ashy-settings-cat > row:selected:focus,
+window.ashy-keyboard .ashy-chanlist > row:selected button:focus {
   outline-color: alpha(#fff, 0.9);
 }
 /* Posters: the theme's hover/selection tile behind the card looked like a
@@ -418,10 +420,10 @@ togglebutton:checked:focus:focus-visible,
 gridview.ashy-posters > child,
 gridview.ashy-posters > child:hover,
 gridview.ashy-posters > child:selected,
-gridview.ashy-posters > child:focus:focus-visible { background: none; }
+gridview.ashy-posters > child:focus { background: none; }
 /* Posters: the ring goes around the picture (inside the card's margin). */
-gridview.ashy-posters > child:focus:focus-visible { outline: none; }
-gridview.ashy-posters > child:focus:focus-visible .ashy-poster-img {
+gridview.ashy-posters > child:focus { outline: none; }
+window.ashy-keyboard gridview.ashy-posters > child:focus .ashy-poster-img {
   box-shadow: 0 0 0 3px var(--ashy-accent-2);
 }
 /* Hover is only a lift, never a ring: with the keyboard it must not look
@@ -430,7 +432,7 @@ gridview.ashy-posters > child:hover .ashy-poster-img {
   box-shadow: 0 12px 26px -12px rgba(0, 0, 0, 0.85);
   filter: brightness(1.08);
 }
-gridview.ashy-posters > child:focus:focus-visible:hover .ashy-poster-img {
+window.ashy-keyboard gridview.ashy-posters > child:focus:hover .ashy-poster-img {
   box-shadow: 0 0 0 3px var(--ashy-accent-2);
 }
 
@@ -464,8 +466,8 @@ gridview.ashy-posters > child:focus:focus-visible:hover .ashy-poster-img {
 
 /* ---------------- Cast and actor pages ---------------- */
 flowbox.ashy-poster-flow > flowboxchild { padding: 0; border-radius: 14px; background: none; }
-flowbox.ashy-poster-flow > flowboxchild:focus:focus-visible { outline: none; }
-flowbox.ashy-poster-flow > flowboxchild:focus:focus-visible .ashy-poster-img {
+window.ashy-keyboard flowbox.ashy-poster-flow > flowboxchild:focus { outline: none; }
+window.ashy-keyboard flowbox.ashy-poster-flow > flowboxchild:focus .ashy-poster-img {
   box-shadow: 0 0 0 3px var(--ashy-accent-2);
 }
 .ashy-cast-photo { border-radius: 12px; background-color: var(--ashy-panel-2); }
