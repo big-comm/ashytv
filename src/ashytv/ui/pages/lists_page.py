@@ -141,7 +141,7 @@ class ListsPage(Gtk.Box):
                                  "username and password are filled in automatically"))
         paste.connect("clicked", self._paste_detect)
         xbox.append(paste)
-        self.x_backups = backup_entries(xbox, "http://backup-server.com:8080")
+        self.x_backups = backup_entries(xbox, "backup-server.com:8080")
         self.stack.add_named(xbox, "xtream")
 
         # url
@@ -149,7 +149,7 @@ class ListsPage(Gtk.Box):
         self.url_entry = self._field(ubox, _("Playlist URL (M3U)"), "network-server-symbolic",
                                      Gtk.Entry(placeholder_text="http://…/playlist.m3u",
                                                input_purpose=Gtk.InputPurpose.URL))
-        self.u_backups = backup_entries(ubox, "http://…/playlist.m3u")
+        self.u_backups = backup_entries(ubox, "…/playlist.m3u")
         self.stack.add_named(ubox, "url")
 
         # free TV

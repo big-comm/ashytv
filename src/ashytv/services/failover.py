@@ -53,9 +53,13 @@ def is_server_failure(exc: BaseException) -> bool:
 
 
 def clean_url(url: str) -> str:
+    # Same default scheme as the main server field (imported here: the
+    # Xtream client imports this module).
+    from .xtream_client import normalize_host
+
     url = url.strip().rstrip("/")
     if url and "://" not in url:
-        url = "http://" + url
+        url = normalize_host(url)
     parts = urlsplit(url)
     return url if parts.scheme in ("http", "https") and parts.hostname else ""
 
