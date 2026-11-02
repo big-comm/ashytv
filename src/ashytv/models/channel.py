@@ -54,6 +54,7 @@ class Channel:
     referrer: str = ""      # #EXTVLCOPT:http-referrer
     quality: int = 0        # live variants: 4=4K 3=FHD 2=HD 1=SD 0=unknown
     base_name: str = ""     # name without the quality suffix
+    tmdb: str = ""          # TMDB id of a movie/series, when the provider sends it
     # Runtime only: quality labels of the grouped variants ("FHD", "HD"…).
     variant_labels: tuple[str, ...] = ()
 
@@ -109,6 +110,7 @@ class PlayItem:
     referrer: str = ""
     variants: list[Variant] = field(default_factory=list)  # best quality first
     sub_files: list[str] = field(default_factory=list)  # provider subtitle URLs
+    failovers: int = 0      # backup servers tried for this playback
 
     @property
     def is_live(self) -> bool:

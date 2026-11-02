@@ -4,17 +4,33 @@ from __future__ import annotations
 
 import time
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
 from ...services.text import normalize
-from ...services.storage import collapse_variants
+from ...services.storage import channel_key, collapse_variants
+from ..channel_info import ChannelInfoPanel
 from ..channel_object import ChannelObject
 from .epg_page import EpgPage
-from ._common import ChipRow, SearchFilter, page_header, set_logo
+from ._common import (
+    ChipRow,
+    SearchFilter,
+    add_context_menu,
+    fill_menu,
+    is_menu_key,
+    page_header,
+    popup_menu,
+    set_logo,
+    update_favorite,
+)
 
 _ALL = "__all__"
+_HIDDEN = "__hidden__"
+# Arrowing through the list must not open a stream per row.
+PREVIEW_DELAY_MS = 400
+# Below this width of the list area the info panel is hidden.
+_PANEL_MIN_AREA = "max-width: 680px"
 
 # Shortcut chips: (key, label, generic terms matched against the group name).
 _KEYWORD_CHIPS = [
@@ -40,6 +56,8 @@ class ChannelsPage(Gtk.Box):
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "show-schedule": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        "hide-channel": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
         "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
     }
@@ -54,6 +72,11 @@ class ChannelsPage(Gtk.Box):
         self._dirty = True
         self._group_key = _ALL
         self._chip = "all"
+        self._preview_source = 0
+        self._focus_handler = 0
+        self._suspend_handler = 0
+        # channel -> (url, user agent, referrer) of its preview; None = off.
+        self.preview_source = None
 
         title = _("Favorites") if favorites_only else _("TV Channels")
         sub = (_("Channels, movies and series you marked") if favorites_only
@@ -100,6 +123,7 @@ class ChannelsPage(Gtk.Box):
         self.group_list.add_css_class("ashy-grouplist")
         self.group_list.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.group_list.connect("row-selected", self._on_group_selected)
+        self.group_list.connect("row-activated", self._on_group_activated)
         gscroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER,
                                      vexpand=True, hexpand=True)
         gscroll.set_child(self.group_list)
@@ -109,6 +133,7 @@ class ChannelsPage(Gtk.Box):
         gpanel.set_hexpand(False)  # don't inherit the inner list's hexpand
         gpanel.set_overflow(Gtk.Overflow.HIDDEN)
         gpanel.append(gscroll)
+        self.group_panel = gpanel
         if not favorites_only:
             body.append(gpanel)
 
@@ -126,10 +151,18 @@ class ChannelsPage(Gtk.Box):
         factory.connect("unbind", lambda _f, li: self._bound.discard(li))
         self._bound: set[Gtk.ListItem] = set()
 
+        # TV Channels: a click selects (info panel + preview), a double click
+        # or Enter watches. Favorites keep the single click.
+        with_panel = media_type is MediaType.LIVE and not favorites_only
         self.listview = Gtk.ListView(model=self.selection, factory=factory,
-                                     single_click_activate=True, vexpand=True)
+                                     single_click_activate=not with_panel, vexpand=True)
         self.listview.add_css_class("ashy-chanlist")
         self.listview.connect("activate", self._on_activate)
+        # Menu key / Shift+F10 on the focused row (the row items, not our
+        # cards, take the focus, so the key is caught on the list).
+        list_keys = Gtk.EventControllerKey()
+        list_keys.connect("key-pressed", self._on_list_key)
+        self.listview.add_controller(list_keys)
         cscroll = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
         cscroll.set_child(self.listview)
 
@@ -148,9 +181,31 @@ class ChannelsPage(Gtk.Box):
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
-        self.view_stack = Gtk.Stack(hexpand=True,
+        self.list_panel = cpanel
+        self.info: ChannelInfoPanel | None = None
+        list_area: Gtk.Widget = cpanel
+        if with_panel:
+            self.info = ChannelInfoPanel()
+            # Leaving the page, the Guide view, the player covering the
+            # window or a narrow window all unmap the panel: no preview then.
+            self.info.connect("unmap", lambda *_: self._cancel_preview())
+            self.info.connect("map", lambda *_: self._schedule_preview())
+            area = Gtk.Box(spacing=14)
+            area.append(cpanel)
+            area.append(self.info)
+            list_area = Adw.BreakpointBin(width_request=300, height_request=200,
+                                          child=area)
+            bp = Adw.Breakpoint.new(Adw.BreakpointCondition.parse(_PANEL_MIN_AREA))
+            bp.add_setter(self.info, "visible", False)
+            list_area.add_breakpoint(bp)
+            self.selection.connect("notify::selected", self._on_selection)
+            self.filter_model.connect("items-changed", self._on_items_changed)
+            self.connect("map", self._on_map)
+            self.connect("unmap", self._on_unmap)
+        # The list must not inherit the guide's minimum width (narrow windows).
+        self.view_stack = Gtk.Stack(hexpand=True, hhomogeneous=False,
                                     transition_type=Gtk.StackTransitionType.CROSSFADE)
-        self.view_stack.add_named(cpanel, "list")
+        self.view_stack.add_named(list_area, "list")
         if not favorites_only:
             self.guide = EpgPage(storage, embedded=True)
             self.guide.connect("play", lambda _g, ch: self.emit("play", ch))
@@ -186,6 +241,8 @@ class ChannelsPage(Gtk.Box):
         if self.guide is not None:
             self.guide.set_guide(guide)
         self._rebind_visible()
+        if self.info is not None:
+            self.info.update_programme(guide)
 
     def set_search(self, text: str) -> None:
         self.search.set_text(text)
@@ -224,26 +281,25 @@ class ChannelsPage(Gtk.Box):
             return groups
         return [(g, n) for g, n in groups if any(w in normalize(g) for w in words)]
 
+    def _group_entries(self) -> list[tuple[str, int, str]]:
+        """(label, count, key) of the group list for the current chip."""
+        if self._chip == "fav":
+            return [(_("Favorites"), self.storage.count(
+                self.media_type, favorites=True, collapse=self._grouped), _ALL)]
+        if self._chip == "recent":
+            return [(_("Recently watched"), len(self._collapse(
+                self.storage.recent_channels(self.media_type))), _ALL)]
+        groups = self._chip_groups()
+        label = _("All Channels") if self._chip == "all" else _("All in this category")
+        total = (self.storage.count(self.media_type, collapse=self._grouped)
+                 if self._chip == "all" else sum(n for _g, n in groups))
+        return [(label, total, _ALL)] + [(name, count, name) for name, count in groups]
+
     def _build_groups(self) -> None:
         self.group_list.remove_all()
-        if self._chip == "fav":
-            self._add_group_row(_("Favorites"),
-                                self.storage.count(self.media_type, favorites=True,
-                                                   collapse=self._grouped), _ALL)
-        elif self._chip == "recent":
-            self._add_group_row(_("Recently watched"),
-                                len(self._collapse(self.storage.recent_channels(
-                                    self.media_type))), _ALL)
-        else:
-            groups = self._chip_groups()
-            label = (_("All Channels") if self._chip == "all"
-                     else _("All in this category"))
-            total = (self.storage.count(self.media_type, collapse=self._grouped)
-                     if self._chip == "all"
-                     else sum(n for _g, n in groups))
-            self._add_group_row(label, total, _ALL)
-            for name, count in groups:
-                self._add_group_row(name, count, name)
+        for label, count, key in self._group_entries():
+            self._add_group_row(label, count, key)
+        self._add_hidden_row()
         target = 0
         for i, row in enumerate(self._rows()):
             if row._key == self._group_key:  # type: ignore[attr-defined]
@@ -264,40 +320,59 @@ class ChannelsPage(Gtk.Box):
         c = Gtk.Label(label=str(count))
         c.add_css_class("ashy-group-count")
         box.append(c)
+        row._count = c  # type: ignore[attr-defined]
         row.set_child(box)
         self.group_list.append(row)
         if key != _ALL and not self.favorites_only:
-            # Right click or the Menu key: hide / reorder this group.
-            click = Gtk.GestureClick(button=3)
-            click.connect("pressed", lambda *_: self._group_menu(row, key))
-            row.add_controller(click)
-            keys = Gtk.EventControllerKey()
-            keys.connect("key-pressed", self._on_group_key, row, key)
-            row.add_controller(keys)
+            # Right click, long press or the Menu key: hide / reorder it.
+            add_context_menu(row, lambda: self._group_menu(row, key))
 
-    def _on_group_key(self, _c, keyval, _code, _state, row, key) -> bool:
-        if keyval == Gdk.KEY_Menu:
-            self._group_menu(row, key)
-            return True
-        return False
+    def _add_hidden_row(self) -> None:
+        """Last entry: 'Hidden (N)' opens the dialog to show them again."""
+        if self.favorites_only:
+            return
+        n = self.storage.hidden_count(self.media_type)
+        if not n:
+            return
+        row = Gtk.ListBoxRow(selectable=False,
+                             tooltip_text=_("See hidden channels and groups"))
+        row._key = _HIDDEN  # type: ignore[attr-defined]
+        row.add_css_class("ashy-hidden-entry")
+        box = Gtk.Box(spacing=8)
+        box.append(Gtk.Image(icon_name="view-conceal-symbolic"))
+        box.append(Gtk.Label(label=_("Hidden ({n})").format(n=n), xalign=0, hexpand=True,
+                             ellipsize=3))
+        row.set_child(box)
+        self.group_list.append(row)
+
+    def hidden_row(self) -> Gtk.Widget | None:
+        """The 'Hidden (N)' entry, when there is one (guided tour)."""
+        return next((r for r in self._rows() if r._key == _HIDDEN), None)  # type: ignore[attr-defined]
+
+    def _on_group_activated(self, _list, row) -> None:
+        if getattr(row, "_key", None) == _HIDDEN:
+            self.emit("show-hidden")
+
+    def update_hidden_count(self) -> None:
+        """Counts and the 'Hidden (N)' entry right after hiding/showing,
+        without reloading the channel list (scroll and focus stay)."""
+        if self.favorites_only or not self.get_realized():
+            return
+        counts = {key: count for _l, count, key in self._group_entries()}
+        for row in list(self._rows()):
+            key = row._key  # type: ignore[attr-defined]
+            if key == _HIDDEN:
+                self.group_list.remove(row)
+            elif key in counts:
+                row._count.set_text(str(counts[key]))  # type: ignore[attr-defined]
+        self._add_hidden_row()
 
     def _group_menu(self, row: Gtk.ListBoxRow, group: str) -> None:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        popover = Gtk.Popover(child=box)
-        popover.set_parent(row)
-
-        def item(label, callback):
-            b = Gtk.Button(label=label)
-            b.add_css_class("flat")
-            b.get_child().set_xalign(0)
-            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
-            box.append(b)
-
-        item(_("Move up"), lambda: self.emit("move-group", group, -1))
-        item(_("Move down"), lambda: self.emit("move-group", group, 1))
-        item(_("Hide group"), lambda: self.emit("hide-group", group))
-        popover.connect("closed", lambda p: GLib.idle_add(p.unparent))
-        popover.popup()
+        popup_menu(row, [
+            (_("Move up"), lambda: self.emit("move-group", group, -1)),
+            (_("Move down"), lambda: self.emit("move-group", group, 1)),
+            (_("Hide group"), lambda: self.emit("hide-group", group)),
+        ])
 
     def _on_group_selected(self, _list, row) -> None:
         if row is None:
@@ -362,7 +437,113 @@ class ChannelsPage(Gtk.Box):
     def _tick(self) -> bool:
         if self._guide and self.get_mapped():
             self._rebind_visible()
+            if self.info is not None:
+                self.info.update_programme(self._guide)
         return GLib.SOURCE_CONTINUE
+
+    # ---- info panel and live preview ------------------------------------
+
+    def _on_selection(self, *_a) -> None:
+        self._show_info()
+        self._schedule_preview()
+
+    def _on_items_changed(self, *_a) -> None:
+        if self.selection.get_selected() == Gtk.INVALID_LIST_POSITION:
+            self._show_info()
+
+    def _show_info(self) -> None:
+        """The selected channel, or the first one (without preview)."""
+        if self.info is None:
+            return
+        pos = self.selection.get_selected()
+        if pos == Gtk.INVALID_LIST_POSITION:
+            pos = 0
+        obj = self.filter_model.get_item(pos) if self.filter_model.get_n_items() else None
+        self.info.show_channel(obj.channel if obj else None, pos + 1, self._guide)
+
+    def _selected_channel(self) -> Channel | None:
+        obj = self.selection.get_selected_item()
+        return obj.channel if obj is not None else None
+
+    def _schedule_preview(self) -> None:
+        if self._preview_source:
+            GLib.source_remove(self._preview_source)
+            self._preview_source = 0
+        if self.info is not None and self._selected_channel() is not None:
+            self._preview_source = GLib.timeout_add(PREVIEW_DELAY_MS, self._start_preview)
+
+    def _start_preview(self) -> bool:
+        self._preview_source = 0
+        ch = self._selected_channel()
+        root = self.get_root()
+        if (ch is None or self.info is None or not self.info.get_mapped()
+                or self.preview_source is None
+                or (root is not None and root.get_property("suspended"))):
+            return GLib.SOURCE_REMOVE
+        if self.info.channel is not ch:
+            self._show_info()
+        source = self.preview_source(ch)
+        if source:
+            self.info.start_preview(*source)
+        return GLib.SOURCE_REMOVE
+
+    def _cancel_preview(self) -> None:
+        if self._preview_source:
+            GLib.source_remove(self._preview_source)
+            self._preview_source = 0
+        if self.info is not None:
+            self.info.stop_preview()
+
+    def stop_preview(self) -> None:
+        """Before the full player opens (one stream at a time)."""
+        self._cancel_preview()
+
+    def restart_preview(self) -> None:
+        """Preview settings changed: start over with the new ones."""
+        self._cancel_preview()
+        if self.get_mapped():
+            self._schedule_preview()
+
+    def shutdown(self) -> None:
+        self._cancel_preview()
+        if self.info is not None:
+            self.info.shutdown()
+
+    def _on_map(self, _w) -> None:
+        root = self.get_root()
+        if root is None:
+            return
+        if not self._focus_handler:
+            self._focus_handler = root.connect("notify::focus-widget", self._on_focus_moved)
+        if not self._suspend_handler:
+            # Minimized or otherwise hidden by the compositor: stop streaming.
+            self._suspend_handler = root.connect("notify::suspended", self._on_suspended)
+
+    def _on_unmap(self, _w) -> None:
+        root = self.get_root()
+        for attr in ("_focus_handler", "_suspend_handler"):
+            handler = getattr(self, attr)
+            if handler and root is not None:
+                root.disconnect(handler)
+            setattr(self, attr, 0)
+
+    def _on_suspended(self, window, _p) -> None:
+        if window.get_property("suspended"):
+            self._cancel_preview()
+        elif self.get_mapped():
+            self._schedule_preview()
+
+    def _on_focus_moved(self, window, _p) -> None:
+        """Keyboard focus on a row selects it, so the panel follows the focus."""
+        focus = window.get_focus()
+        if focus is None or focus.get_parent() is not self.listview:
+            return
+        list_item = getattr(focus.get_first_child(), "_list_item", None)
+        if list_item is None or list_item.get_item() is None:
+            return
+        pos = list_item.get_position()
+        if pos != Gtk.INVALID_LIST_POSITION and pos != self.selection.get_selected():
+            self.selection.set_selected(pos)
 
     def _rebind_visible(self) -> None:
         # Only bound (visible) rows: doesn't touch scroll/selection.
@@ -416,29 +597,63 @@ class ChannelsPage(Gtk.Box):
         row.append(texts)
         row.append(fav)
         row.append(more)
+        row._list_item = list_item  # type: ignore[attr-defined]  # focus -> row
+        add_context_menu(row, lambda: self._row_menu(list_item), keys=False)
+        # The number is the row's position: it changes when a search filters
+        # the list without the row being bound again.
+        list_item.connect("notify::position",
+                          lambda li, _p: num.set_text(str(li.get_position() + 1)))
         list_item.set_child(row)
+
+    def _menu_items(self, ch: Channel) -> list:
+        items = [(_("Watch"), lambda: self.emit("play", ch)),
+                 (_("Remove from favorites") if ch.favorite else _("Add to favorites"),
+                  lambda: self._toggle_fav(ch))]
+        if ch.media_type is MediaType.LIVE and ch.tvg_id:
+            items.append((_("View schedule"), lambda: self.emit("show-schedule", ch)))
+        if ch.playlist_id:
+            items.append((_("Hide channel"), lambda: self.emit("hide-channel", ch)))
+        return items
 
     def _build_menu(self, button: Gtk.MenuButton, list_item: Gtk.ListItem) -> None:
         obj = list_item.get_item()
         if obj is None:
             return
-        ch = obj.channel
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         popover = Gtk.Popover(child=box)
-
-        def item(label, callback):
-            b = Gtk.Button(label=label)
-            b.add_css_class("flat")
-            b.get_child().set_xalign(0)
-            b.connect("clicked", lambda *_: (popover.popdown(), callback()))
-            box.append(b)
-
-        item(_("Watch"), lambda: self.emit("play", ch))
-        item(_("Remove from favorites") if ch.favorite else _("Add to favorites"),
-             lambda: self._toggle_fav(ch))
-        if ch.media_type is MediaType.LIVE and ch.tvg_id:
-            item(_("View schedule"), lambda: self.emit("show-schedule", ch))
+        fill_menu(box, popover, self._menu_items(obj.channel))
         button.set_popover(popover)
+
+    def _row_menu(self, list_item: Gtk.ListItem) -> None:
+        obj = list_item.get_item()
+        if obj is not None and list_item.get_child() is not None:
+            popup_menu(list_item.get_child(), self._menu_items(obj.channel))
+
+    def _on_list_key(self, _c, keyval, _code, state) -> bool:
+        if not is_menu_key(keyval, state):
+            return False
+        focus = self.get_root().get_focus() if self.get_root() else None
+        while focus is not None and focus.get_parent() is not self.listview:
+            focus = focus.get_parent()
+        list_item = getattr(focus.get_first_child(), "_list_item", None) if focus else None
+        if list_item is None:
+            return False
+        self._row_menu(list_item)
+        return True
+
+    def channel_hidden(self, channel: Channel) -> None:
+        """Drop a hidden channel's rows in place (scroll and focus stay)."""
+        def key(ch: Channel) -> tuple:
+            return (ch.playlist_id, ch.group, ch.base_name or channel_key(ch))
+
+        hidden = key(channel)
+        for i in reversed(range(self.store.get_n_items())):
+            if key(self.store.get_item(i).channel) == hidden:
+                self.store.remove(i)
+        self._update_empty()
+        if self.guide is not None:
+            self.guide.set_channels([self.store.get_item(i).channel
+                                     for i in range(self.store.get_n_items())])
 
     def _on_fav_clicked(self, _button: Gtk.Button, list_item: Gtk.ListItem) -> None:
         obj = list_item.get_item()
@@ -494,15 +709,30 @@ class ChannelsPage(Gtk.Box):
             button.remove_css_class("active")
 
     def _toggle_fav(self, channel: Channel) -> None:
-        self.storage.set_favorite(channel, not channel.favorite)
+        if not self.storage.set_favorite(channel, not channel.favorite):
+            return
         self.emit("favorite-changed", channel)
+        self.favorite_changed(channel)
+
+    def favorite_changed(self, channel: Channel) -> None:
+        """Update the rows of one channel in place: no reload, so the scroll
+        position and the keyboard focus stay where they are."""
         if self.favorites_only and not channel.favorite:
-            self._dirty = True
-            self.refresh()
+            # Removed from Favorites: drop just its rows.
+            for i in reversed(range(self.store.get_n_items())):
+                ch = self.store.get_item(i).channel
+                if ch.playlist_id == channel.playlist_id and ch.url == channel.url:
+                    self.store.remove(i)
+        elif self.favorites_only:
+            self._dirty = True  # a new favorite: its place in the list needs a reload
+            if self.get_mapped():
+                self.refresh()
         else:
+            update_favorite(self.store, channel)
             self._rebind_visible()
 
     def _on_activate(self, _lv, position: int) -> None:
         obj = self.filter_model.get_item(position)
         if obj is not None:
+            self._cancel_preview()
             self.emit("play", obj.channel)

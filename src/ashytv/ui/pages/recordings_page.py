@@ -54,11 +54,18 @@ class RecordingsPage(Gtk.Box):
     def refresh(self) -> None:
         self.list.remove_all()
         folder = recordings_dir()
-        files = sorted((f for f in folder.glob("*") if f.suffix.lower() in _EXTS),
-                       key=lambda f: f.stat().st_mtime, reverse=True) \
-            if folder.exists() else []
-        for f in files:
-            st = f.stat()
+        # One stat() per file, and a file deleted meanwhile is just skipped.
+        entries = []
+        for f in folder.glob("*") if folder.exists() else ():
+            if f.suffix.lower() not in _EXTS:
+                continue
+            try:
+                entries.append((f, f.stat()))
+            except OSError:
+                continue
+        entries.sort(key=lambda e: e[1].st_mtime, reverse=True)
+        files = [f for f, _st in entries]
+        for f, st in entries:
             row = Adw.ActionRow(
                 title=GLib.markup_escape_text(f.stem),
                 subtitle=f"{GLib.DateTime.new_from_unix_local(int(st.st_mtime)).format('%x %R')}"

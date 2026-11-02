@@ -25,7 +25,7 @@ KEYBOARD: list[tuple[str, list[tuple[list[str], str]]]] = [
         (["<Primary>q"], _("Quit")),
     ]),
     (_("While watching"), [
-        (["Return"], _("Channel list")),
+        (["Return", "Left"], _("Channel list (← again: the groups)")),
         (["i"], _("Show programme info and controls")),
         (["Tab"], _("Go to the player buttons (Esc to leave)")),
         (["Up", "Down"], _("Previous/next channel")),
@@ -33,6 +33,7 @@ KEYBOARD: list[tuple[str, list[tuple[list[str], str]]]] = [
         (["BackSpace"], _("Last watched channel")),
         (["space"], _("Pause/resume (also pauses live TV)")),
         (["Left", "Right"], _("Rewind/forward 10 s")),
+        (["<Shift>Left"], _("Live TV: rewind 10 s")),
         (["f"], _("Fullscreen")),
         (["m"], _("Mute")),
         (["plus", "minus"], _("Volume")),

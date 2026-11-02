@@ -12,7 +12,7 @@ from ... import APP_VERSION
 from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
-from ...services.settings import ACCENTS, set_autostart
+from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
 from ._common import page_header
 
@@ -22,9 +22,13 @@ _CATS = [
     ("reproducao", _("Playback"), "media-playback-start-symbolic"),
     ("atalhos", _("Shortcuts"), "input-keyboard-symbolic"),
     ("pais", _("Parental Controls"), "system-lock-screen-symbolic"),
+    ("rede", _("Network"), "network-wired-symbolic"),
     ("dados", _("Data"), "folder-download-symbolic"),
     ("sobre", _("About"), "dialog-information-symbolic"),
 ]
+# Secure DNS: (setting value, label). "system" = off.
+_DOH = [("system", _("Off (system DNS)")), ("cloudflare", "Cloudflare (1.1.1.1)"),
+        ("google", "Google (8.8.8.8)")]
 _THEMES = [("dark", _("Dark")), ("light", _("Light")), ("system", _("Follow system"))]
 _REFRESH = [6, 12, 24, 48]
 
@@ -50,6 +54,8 @@ class SettingsPage(Gtk.Box):
     __gsignals__ = {
         "history-cleared": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "toast": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
+        # open the hidden channels and groups dialog
+        "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, settings, storage):
@@ -83,6 +89,7 @@ class SettingsPage(Gtk.Box):
         self.stack.add_named(self._reproducao(), "reproducao")
         self.stack.add_named(self._atalhos(), "atalhos")
         self.stack.add_named(self._pais(), "pais")
+        self.stack.add_named(self._rede(), "rede")
         self.stack.add_named(self._dados(), "dados")
         self.stack.add_named(self._sobre(), "sobre")
         body.append(self.stack)
@@ -139,13 +146,17 @@ class SettingsPage(Gtk.Box):
         channels = Adw.PreferencesGroup(title=_("Channels"))
         self._switch(channels, "group_variants", _("Group qualities of the same channel"),
                      _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
-        self.hidden_row = Adw.ActionRow(title=_("Hidden groups"))
-        show_all = Gtk.Button(label=_("Show all"), valign=Gtk.Align.CENTER)
-        show_all.connect("clicked", lambda *_: self.settings.set("hidden_groups", []))
-        self.hidden_row.add_suffix(show_all)
-        channels.add(self.hidden_row)
-        self._update_hidden_row()
-        self.settings.connect("hidden_groups", lambda _v: self._update_hidden_row())
+        self._switch(channels, "channel_preview", _("Live preview"),
+                     _("Plays the selected channel, muted, next to the channel list"))
+        # Its own group, so it is easy to find: everything the user hid.
+        hidden_group = Adw.PreferencesGroup(title=_("Hidden channels and groups"))
+        self.hidden_row = Adw.ActionRow(title=_("Hidden channels and groups"),
+                                        activatable=True, subtitle_lines=2)
+        self.hidden_row.add_prefix(Gtk.Image(icon_name="view-conceal-symbolic"))
+        self.hidden_row.add_suffix(Gtk.Image(icon_name="go-next-symbolic"))
+        self.hidden_row.connect("activated", lambda *_: self.emit("show-hidden"))
+        hidden_group.add(self.hidden_row)
+        self.update_hidden()
 
         g2 = Adw.PreferencesGroup(title=_("IPTV Playlists"))
         self._switch(g2, "auto_refresh", _("Reload playlists automatically"),
@@ -159,7 +170,27 @@ class SettingsPage(Gtk.Box):
         every.connect("notify::selected", lambda r, _p: self.settings.set(
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
-        return self._page(g, channels, g2)
+        return self._page(g, channels, hidden_group, g2)
+
+    def _rede(self) -> Gtk.Widget:
+        g = Adw.PreferencesGroup(
+            title=_("Secure DNS (DNS over HTTPS)"),
+            description=_("Looks up server names over an encrypted connection, for more "
+                          "privacy and fewer failures from the provider's DNS. If it "
+                          "doesn't answer, the system DNS is used. HTTPS videos use the "
+                          "system DNS."))
+        doh = Adw.ComboRow(title=_("Secure DNS"),
+                           model=Gtk.StringList.new([label for _k, label in _DOH]))
+        keys = [k for k, _l in _DOH]
+        cur = self.settings.get("doh")
+        doh.set_selected(keys.index(cur) if cur in keys else 0)
+        doh.connect("notify::selected",
+                    lambda r, _p: self.settings.set("doh", keys[r.get_selected()]))
+        g.add(doh)
+        servers = Adw.PreferencesGroup(title=_("Backup servers"))
+        self._switch(servers, "server_alerts", _("Desktop notifications"),
+                     _("Tell me when a playlist's main server goes down or comes back"))
+        return self._page(g, servers)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))
@@ -304,6 +335,13 @@ class SettingsPage(Gtk.Box):
             title=_("Disclaimer"),
             subtitle=_("AshyTV does not provide or contain any content: it only plays "
                        "the playlists you add."), subtitle_lines=3))
+        g.add(Adw.ActionRow(
+            title="TMDB",
+            subtitle=_("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
+                       "or certified by TMDB."), subtitle_lines=3))
+        tour = Adw.ButtonRow(title=_("Guided tour"))
+        tour.connect("activated", lambda *_: self.activate_action("app.tour", None))
+        g.add(tour)
         about = Adw.ButtonRow(title=_("More information"))
         about.connect("activated", lambda *_: self.activate_action("app.about", None))
         g.add(about)
@@ -324,12 +362,13 @@ class SettingsPage(Gtk.Box):
 
     # ---- actions ---------------------------------------------------------
 
-    def _update_hidden_row(self) -> None:
-        n = len(self.settings.get("hidden_groups") or [])
+    def update_hidden(self) -> None:
+        n = len(self.storage.hidden_entries())  # as many as the dialog lists
         self.hidden_row.set_subtitle(
-            ngettext("{n} group hidden — right-click a group in Channels to hide it",
-                     "{n} groups hidden — right-click a group in Channels to hide it",
-                     n).format(n=n))
+            ngettext("{n} hidden item · Click to see it and show it again",
+                     "{n} hidden items · Click to see them and show them again",
+                     n).format(n=n) if n else
+            _("Nothing hidden · Right-click a group or channel to hide it"))
 
     def _update_cache_row(self) -> None:
         # Walking thousands of cached logos is slow: do it off the main thread.
@@ -345,11 +384,22 @@ class SettingsPage(Gtk.Box):
                 size=GLib.format_size(size)))
         return GLib.SOURCE_REMOVE
 
-    def _clear_cache(self, _b) -> None:
-        shutil.rmtree(http.cache_root(), ignore_errors=True)
+    def _clear_cache(self, button) -> None:
+        # Thousands of files: deleting them on the main thread froze the window.
+        button.set_sensitive(False)
         logo_loader.clear_memory()
-        self._update_cache_row()
-        self.emit("toast", _("Cache cleared."))
+
+        def worker():
+            shutil.rmtree(http.cache_root(), ignore_errors=True)
+            GLib.idle_add(done)
+
+        def done():
+            button.set_sensitive(True)
+            self._update_cache_row()
+            self.emit("toast", _("Cache cleared."))
+            return GLib.SOURCE_REMOVE
+
+        threading.Thread(target=worker, daemon=True).start()
 
     def _clear_history(self, _b) -> None:
         self.storage.clear_history()
@@ -396,7 +446,7 @@ class SettingsPage(Gtk.Box):
         def response(_d, r):
             if r != "ok":
                 return
-            if entry.get_text() == self.settings.get("parental_pin"):
+            if check_pin(self.settings.get("parental_pin") or "", entry.get_text()):
                 on_ok()
             else:
                 self.emit("toast", _("Incorrect PIN."))
@@ -410,7 +460,7 @@ class SettingsPage(Gtk.Box):
             self.emit("toast", _("The PIN must have at least 4 digits."))
             return
         def save():
-            self.settings.set("parental_pin", pin)
+            self.settings.set("parental_pin", hash_pin(pin))
             row.set_text("")
             self.emit("toast", _("PIN set."))
 

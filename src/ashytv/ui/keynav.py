@@ -12,6 +12,8 @@ from dataclasses import dataclass
 
 from gi.repository import Adw, Gtk
 
+# Widget name of the stack holding the app's pages (see window.py).
+PAGES_NAME = "ashy-pages"
 _COLLECTIONS = (Gtk.ListView, Gtk.GridView, Gtk.ListBox, Gtk.FlowBox)
 # Widgets that use Left/Right themselves (cursor, value).
 _HORIZONTAL_KEEPERS = (Gtk.Editable, Gtk.Scale)
@@ -107,16 +109,19 @@ def _has_items(collection: Gtk.Widget) -> bool:
     return collection.get_first_child() is not None
 
 
-def _score(src: _Rect, dst: _Rect, direction: Gtk.DirectionType) -> float | None:
-    """Distance to a target in that direction (None = not in that direction)."""
+def _score(src: _Rect, dst: _Rect, direction: Gtk.DirectionType,
+           strict: bool = True) -> float | None:
+    """Distance to a target in that direction (None = not in that direction).
+    `strict`: sideways moves stay on the same line; without it, a target
+    off the line counts too (used only when the line has nothing)."""
     D = Gtk.DirectionType
     if direction in (D.LEFT, D.RIGHT):
         ahead = dst.cx > src.cx + 1 if direction == D.RIGHT else dst.cx < src.cx - 1
         gap = (dst.x1 - src.x2) if direction == D.RIGHT else (src.x1 - dst.x2)
         perp = max(0.0, dst.y1 - src.y2, src.y1 - dst.y2)
         center = abs(dst.cy - src.cy)
-        if perp > 0:
-            return None  # sideways moves stay on the same line
+        if perp > 0 and strict:
+            return None
     else:
         ahead = dst.cy > src.cy + 1 if direction == D.DOWN else dst.cy < src.cy - 1
         gap = (dst.y1 - src.y2) if direction == D.DOWN else (src.y1 - dst.y2)
@@ -184,7 +189,9 @@ def _focus_collection(collection: Gtk.Widget, root: Gtk.Widget, src: _Rect,
                     if r and area and r.intersect(area) and item.get_state_flags() \
                             & Gtk.StateFlags.SELECTED:
                         collection.scroll_to(pos, Gtk.ListScrollFlags.FOCUS, None)
-                        return True
+                        # scroll_to doesn't move the focus when it is outside
+                        # the list (e.g. on the info panel's button).
+                        return item.has_focus() or item.grab_focus() or True
     elif isinstance(collection, Gtk.ListBox):
         row = collection.get_selected_row()
         r = _bounds(row, root) if row is not None else None
@@ -238,7 +245,11 @@ def keeps_key(focus: Gtk.Widget | None, direction: Gtk.DirectionType) -> bool:
         return False
     if direction in (Gtk.DirectionType.LEFT, Gtk.DirectionType.RIGHT):
         return _ancestor(focus, _HORIZONTAL_KEEPERS) is not None
-    return _ancestor(focus, (Gtk.TextView,)) is not None
+    # Spin buttons step with Up/Down, and so does a vertical slider.
+    if _ancestor(focus, (Gtk.TextView, Gtk.SpinButton)) is not None:
+        return True
+    scale = _ancestor(focus, (Gtk.Scale,))
+    return scale is not None and scale.get_orientation() == Gtk.Orientation.VERTICAL
 
 
 def move(window: Gtk.Widget, direction: Gtk.DirectionType,
@@ -274,18 +285,21 @@ def move(window: Gtk.Widget, direction: Gtk.DirectionType,
     src = _bounds(origin or focus, root)
     if src is None:
         return False
-    best, best_score = None, None
-    for cand in _candidates(root, collection or focus):
-        if cand.is_ancestor(focus) or focus.is_ancestor(cand) or cand is focus:
-            continue
-        if vertical and inside is None and any(cand.is_ancestor(w) for w in walls):
-            continue
-        rect = _visible_rect(cand, root, focus)
-        if rect is None:
-            continue
-        score = _score(src, rect, direction)
-        if score is not None and (best_score is None or score < best_score):
-            best, best_score = cand, score
+    best = _best(root, collection or focus, focus, src, direction, vertical, inside,
+                 walls, strict=True)
+    if best is None and not vertical:
+        # Nothing on this line (e.g. Settings categories → the options, which
+        # start lower): the nearest target that way on any line, searched in
+        # ever wider containers but never past the page (no jumping up to
+        # the header or the chips).
+        scope = (origin or focus).get_parent()
+        while best is None and scope is not None and scope is not root:
+            parent = scope.get_parent()
+            if parent is not None and parent.get_name() == PAGES_NAME:
+                break
+            best = _best(root, collection or focus, focus, src, direction, vertical,
+                         inside, walls, strict=False, scope=scope)
+            scope = scope.get_parent()
     if best is None:
         return True  # nothing there: keep the focus where it is
     for container, action in (prefer or {}).items():
@@ -297,6 +311,22 @@ def move(window: Gtk.Widget, direction: Gtk.DirectionType,
         return _focus_collection(best, root, src, direction, focus) or True
     (_selected_sibling(best, focus) or best).grab_focus()
     return True
+
+
+def _best(root, skip, focus, src, direction, vertical, inside, walls, strict, scope=None):
+    best, best_score = None, None
+    for cand in _candidates(scope or root, skip):
+        if cand.is_ancestor(focus) or focus.is_ancestor(cand) or cand is focus:
+            continue
+        if vertical and inside is None and any(cand.is_ancestor(w) for w in walls):
+            continue
+        rect = _visible_rect(cand, root, focus)
+        if rect is None:
+            continue
+        score = _score(src, rect, direction, strict)
+        if score is not None and (best_score is None or score < best_score):
+            best, best_score = cand, score
+    return best
 
 
 def _selected_sibling(widget: Gtk.Widget, focus: Gtk.Widget) -> Gtk.Widget | None:

@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 4
+_SCHEMA_VERSION = 7
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -44,9 +44,12 @@ def default_path() -> Path:
 class Storage:
     """Thin layer over SQLite."""
 
-    def __init__(self, path: Path | None = None):
+    def __init__(self, path: Path | None = None, timeout: float = 30):
         self.path = path or default_path()
-        self.db = sqlite3.connect(self.path, timeout=30)
+        # The UI connection uses a short timeout (see application.py): an
+        # import holds the write lock for a while and the window must not
+        # freeze waiting for it.
+        self.db = sqlite3.connect(self.path, timeout=timeout)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys = ON")
         self.db.execute("PRAGMA journal_mode = WAL")
@@ -54,10 +57,13 @@ class Storage:
         self.hide_adult = False
         # Show "NEWS FHD/HD/SD" as one channel (pages honour it).
         self.group_variants = True
-        # Channel groups the user hid / reordered (names), set by the window.
-        self.hidden_groups: set[str] = set()
+        # Channel group order the user chose (names), set by the window.
         self.group_order: list[str] = []
         self._migrate()
+        # Groups/channels the user hid live in the `hidden` table (per
+        # playlist); the filter is skipped while it is empty.
+        self._any_hidden = self._count_hidden() > 0
+        self.hidden_version = 0     # bumped when something is hidden/shown
         # Playlists switched off in the Playlists page: kept, but not shown.
         self.disabled: set[int] = {
             r["id"] for r in self.db.execute("SELECT id FROM playlist WHERE enabled = 0")}
@@ -100,7 +106,13 @@ class Storage:
         )
         self._add_columns("playlist", {"updated_at": "INTEGER DEFAULT 0",
                                        "meta": "TEXT DEFAULT '{}'",
-                                       "enabled": "INTEGER DEFAULT 1"})
+                                       "enabled": "INTEGER DEFAULT 1",
+                                       # backup servers (JSON list of base URLs)
+                                       # and the one that worked last (0 = main)
+                                       "backups": "TEXT DEFAULT '[]'",
+                                       "active_server": "INTEGER DEFAULT 0",
+                                       # last health check of each server (JSON)
+                                       "health": "TEXT DEFAULT '[]'"})
         self._add_columns("channel", {
             "num": "INTEGER DEFAULT 0",
             "name_key": "TEXT DEFAULT ''",
@@ -116,6 +128,7 @@ class Storage:
             "quality": "INTEGER DEFAULT 0",
             "base_name": "TEXT DEFAULT ''",
             "base_key": "TEXT DEFAULT ''",
+            "tmdb": "TEXT DEFAULT ''",
         })
         self.db.executescript(
             """
@@ -163,6 +176,18 @@ class Storage:
                 ON channel(playlist_id, grp, base_key);
             CREATE INDEX IF NOT EXISTS idx_episode_channel ON episode(channel_id);
             CREATE INDEX IF NOT EXISTS idx_history_time ON history(watched_at);
+            -- Groups and channels the user hid, per playlist. Channels are
+            -- keyed by the provider stream id (Xtream) or their URL, so the
+            -- choice survives a playlist refresh.
+            CREATE TABLE IF NOT EXISTS hidden (
+                playlist_id INTEGER NOT NULL REFERENCES playlist(id) ON DELETE CASCADE,
+                kind        TEXT NOT NULL,        -- group | channel
+                media_type  TEXT NOT NULL,
+                key         TEXT NOT NULL,        -- group name / channel key
+                label       TEXT DEFAULT '',      -- channel name (shown; M3U fallback)
+                added_at    INTEGER DEFAULT (strftime('%s','now')),
+                PRIMARY KEY (playlist_id, kind, media_type, key)
+            );
             """
         )
         if has_v1:
@@ -220,6 +245,13 @@ class Storage:
             "SELECT * FROM playlist WHERE id = ?", (playlist_id,)
         ).fetchone()
 
+    def tvg_ids(self) -> set[str]:
+        """Lowercase guide ids of the live channels (to trim the XMLTV)."""
+        rows = self.db.execute(
+            "SELECT DISTINCT lower(tvg_id) FROM channel WHERE media_type = 'live' "
+            "AND tvg_id != ''")
+        return {r[0] for r in rows}
+
     def playlist_meta(self, playlist_id: int) -> dict:
         row = self.get_playlist(playlist_id)
         try:
@@ -241,6 +273,51 @@ class Storage:
         self.db.execute("UPDATE playlist SET meta = ? WHERE id = ?",
                         (json.dumps(meta), playlist_id))
         self.db.commit()
+
+    def backups(self, playlist_id: int) -> list[str]:
+        row = self.db.execute("SELECT backups FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        try:
+            urls = json.loads(row["backups"] or "[]") if row else []
+        except ValueError:
+            return []
+        return [str(u) for u in urls if isinstance(u, str)] if isinstance(urls, list) else []
+
+    def active_server(self, playlist_id: int) -> int:
+        row = self.db.execute("SELECT active_server FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        return int(row["active_server"] or 0) if row else 0
+
+    def set_servers(self, playlist_id: int, backups: list[str] | None = None,
+                    active: int | None = None) -> None:
+        """Save the backup servers and/or which server is in use."""
+        try:
+            if backups is not None:
+                self.db.execute("UPDATE playlist SET backups = ? WHERE id = ?",
+                                (json.dumps(list(backups)), playlist_id))
+            if active is not None:
+                self.db.execute("UPDATE playlist SET active_server = ? WHERE id = ?",
+                                (int(active), playlist_id))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()  # busy: the choice is kept in memory this time
+
+    def server_health(self, playlist_id: int) -> list:
+        row = self.db.execute("SELECT health FROM playlist WHERE id = ?",
+                              (playlist_id,)).fetchone()
+        try:
+            data = json.loads(row["health"] or "[]") if row else []
+        except ValueError:
+            return []
+        return data if isinstance(data, list) else []
+
+    def set_server_health(self, playlist_id: int, health: list[dict]) -> None:
+        try:
+            self.db.execute("UPDATE playlist SET health = ? WHERE id = ?",
+                            (json.dumps(health), playlist_id))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()
 
     def stale_playlists(self, max_age: int, now: float | None = None) -> list[int]:
         """Playlists due for an automatic refresh, oldest first.
@@ -303,8 +380,8 @@ class Storage:
         insert = """INSERT INTO channel
             (playlist_id, num, name, name_key, url, media_type, grp, tvg_id,
              tvg_name, logo, ext_id, rating, year, plot, genre, backdrop, added,
-             user_agent, referrer, quality, base_name, base_key)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+             user_agent, referrer, tmdb, quality, base_name, base_key)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
         # Build every row before taking the write lock: the transaction then
         # only runs the inserts, so UI writes (history, favorites) wait less.
         rows, series_rows = [], []
@@ -314,7 +391,7 @@ class Storage:
             row = (playlist_id, num, c.name, normalize(c.display_name), c.url,
                    c.media_type.value, c.group, c.tvg_id, c.tvg_name, c.logo,
                    c.ext_id, c.rating, c.year, c.plot, c.genre, c.backdrop,
-                   c.added, c.user_agent, c.referrer, *variant)
+                   c.added, c.user_agent, c.referrer, c.tmdb, *variant)
             (series_rows if c.url in episodes else rows).append(row)
         count = len(rows) + len(series_rows)
         with self.db:
@@ -358,17 +435,51 @@ class Storage:
             clauses.append(f"c.grp IN ({','.join('?' * len(groups))})")
             params.extend(groups)
         if search:
-            clauses.append("c.name_key LIKE ?")
-            params.append(f"%{normalize(search)}%")
-        if self.hide_adult:
-            for kw in ADULT_KEYWORDS:
-                clauses.append("lower(c.grp) NOT LIKE ?")
-                params.append(f"%{kw}%")
-        if self.hidden_groups and group is None:
-            clauses.append(f"c.grp NOT IN ({','.join('?' * len(self.hidden_groups))})")
-            params.extend(sorted(self.hidden_groups))
+            # "%" and "_" typed by the user are text, not wildcards.
+            clauses.append("c.name_key LIKE ? ESCAPE '\\'")
+            params.append(f"%{_like_escape(normalize(search))}%")
+        hide_sql, hide_params = self._hidden_sql("c", groups=group is None)
+        if hide_sql:
+            clauses.append(hide_sql)
+            params.extend(hide_params)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return where, params
+
+    def _hidden_sql(self, alias: str = "c", groups: bool = True) -> tuple[str, list]:
+        """SQL condition (true = visible) on channel `alias` for the parental
+        filter and what the user hid; ("", []) when nothing is hidden.
+        `groups=False`: a group opened explicitly still lists its channels
+        (only hidden channels are left out)."""
+        col = f"{alias}.grp"
+        clauses, params = [], []
+        if self.hide_adult:
+            for kw in ADULT_KEYWORDS:
+                if kw == "adult":
+                    # "Adult Swim" is a cartoon channel.
+                    clauses.append(f"(lower({col}) NOT LIKE ? OR lower({col}) LIKE ?)")
+                    params += ["%adult%", "%adult swim%"]
+                else:
+                    clauses.append(f"lower({col}) NOT LIKE ?")
+                    params.append(f"%{kw}%")
+        if self._any_hidden:
+            group_sql = f" OR (h.kind = 'group' AND h.key = {alias}.grp)" if groups else ""
+            clauses.append(
+                f"""NOT EXISTS (SELECT 1 FROM hidden h
+                    WHERE h.playlist_id = {alias}.playlist_id
+                      AND h.media_type = {alias}.media_type
+                      AND ((h.kind = 'channel' AND (h.key = {_CHANNEL_KEY_SQL.format(a=alias)}
+                            OR ({alias}.ext_id = '' AND h.label = {alias}.name))){group_sql}))""")
+        return " AND ".join(clauses), params
+
+    def _history_visible_sql(self, alias: str) -> tuple[str, list]:
+        """History entries whose channel (or series) is not filtered out."""
+        cond, params = self._hidden_sql("c")
+        if not cond:
+            return "", []
+        return (f"""NOT EXISTS (SELECT 1 FROM channel c
+                    WHERE c.playlist_id = {alias}.playlist_id
+                      AND c.url IN ({alias}.url, {alias}.parent)
+                      AND NOT ({cond}))""", params)
 
     _FROM = """FROM channel c LEFT JOIN favorite f
                ON f.playlist_id = c.playlist_id AND f.url = c.url"""
@@ -466,9 +577,127 @@ class Storage:
         ).fetchone()
         return self._row_to_channel(row) if row else None
 
+    # ---- hidden groups and channels ---------------------------------------
+
+    def _count_hidden(self) -> int:
+        return int(self.db.execute("SELECT COUNT(*) FROM hidden").fetchone()[0])
+
+    def _insert_hidden(self, rows: list[tuple]) -> list[tuple]:
+        """rows = (playlist_id, kind, media_type, key, label); returns the
+        ones actually added (to undo exactly those)."""
+        added = []
+        try:
+            for row in rows:
+                cur = self.db.execute(
+                    """INSERT OR IGNORE INTO hidden (playlist_id, kind, media_type, key, label)
+                       VALUES (?, ?, ?, ?, ?)""", row)
+                if cur.rowcount:
+                    added.append(row[:4])
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()  # busy with an import: nothing changed
+            return []
+        self._any_hidden = self._any_hidden or bool(added)
+        self.hidden_version += 1
+        return added
+
+    def hide_group(self, media_type: MediaType, group: str) -> list[tuple]:
+        """Hide a group (by name) in every playlist that has it."""
+        rows = self.db.execute(
+            "SELECT DISTINCT playlist_id FROM channel WHERE media_type = ? AND grp = ?",
+            (media_type.value, group)).fetchall()
+        return self._insert_hidden([(r[0], "group", media_type.value, group, group)
+                                    for r in rows])
+
+    def hide_channel(self, channel: Channel) -> list[tuple]:
+        """Hide a channel and its quality variants."""
+        return self._insert_hidden([
+            (v.playlist_id, "channel", v.media_type.value, channel_key(v), v.name)
+            for v in self.variants(channel)])
+
+    def unhide(self, entries: Iterable[tuple]) -> None:
+        """entries = (playlist_id, kind, media_type, key)."""
+        try:
+            self.db.executemany(
+                """DELETE FROM hidden WHERE playlist_id = ? AND kind = ?
+                   AND media_type = ? AND key = ?""", list(entries))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()
+        self._any_hidden = self._count_hidden() > 0
+        self.hidden_version += 1
+
+    def unhide_all(self) -> None:
+        self.unhide([tuple(r) for r in self.db.execute(
+            "SELECT playlist_id, kind, media_type, key FROM hidden")])
+
+    def hidden_items(self) -> list[sqlite3.Row]:
+        """Everything hidden, with the playlist name, for Settings."""
+        return self.db.execute(
+            """SELECT h.playlist_id, h.kind, h.media_type, h.key, h.label,
+                      p.name AS playlist
+               FROM hidden h JOIN playlist p ON p.id = h.playlist_id
+               ORDER BY p.name, h.playlist_id, h.kind DESC, h.media_type, h.label""").fetchall()
+
+    def hidden_entries(self, media_type: MediaType | None = None) -> list[dict]:
+        """What the user hid, as shown to them: the quality variants of one
+        channel ("News FHD", "News HD") are a single entry. Each entry has
+        playlist_id, playlist, kind, media_type, name, logo, group and
+        `entries` (the rows to pass to unhide())."""
+        merged: dict[tuple, dict] = {}
+        for r in self.hidden_items():
+            if media_type is not None and r["media_type"] != media_type.value:
+                continue
+            name = r["label"] or r["key"]
+            if r["kind"] == "channel":
+                name = split_quality(name)[0] or name
+            key = (r["playlist_id"], r["kind"], r["media_type"], name)
+            entry = merged.get(key)
+            if entry is None:
+                entry = merged[key] = {
+                    "playlist_id": r["playlist_id"], "playlist": r["playlist"],
+                    "kind": r["kind"], "media_type": MediaType(r["media_type"]),
+                    "name": name, "logo": "", "group": "", "entries": []}
+                if r["kind"] == "channel":
+                    entry["logo"], entry["group"] = self._hidden_channel_info(r)
+            entry["entries"].append((r["playlist_id"], r["kind"], r["media_type"], r["key"]))
+        return list(merged.values())
+
+    def hidden_count(self, media_type: MediaType | None = None) -> int:
+        """Entries hidden in the enabled playlists (variants counted once)."""
+        return sum(1 for e in self.hidden_entries(media_type)
+                   if e["playlist_id"] not in self.disabled)
+
+    def _hidden_channel_info(self, row) -> tuple[str, str]:
+        found = self.db.execute(
+            f"""SELECT c.logo, c.grp FROM channel c
+                WHERE c.playlist_id = ? AND c.media_type = ?
+                  AND ({_CHANNEL_KEY_SQL.format(a="c")} = ?
+                       OR (c.ext_id = '' AND c.name = ?)) LIMIT 1""",
+            (row["playlist_id"], row["media_type"], row["key"], row["label"])).fetchone()
+        return (found["logo"] or "", found["grp"] or "") if found else ("", "")
+
+    def migrate_hidden_groups(self, names: Iterable[str]) -> None:
+        """Group names hidden by older versions (one global list) -> hidden
+        per playlist, in every playlist and section that has them."""
+        for name in names:
+            for mt in MediaType:
+                self.hide_group(mt, name)
+
     # ---- favorites -----------------------------------------------------
 
-    def set_favorite(self, channel: Channel, value: bool) -> None:
+    def set_favorite(self, channel: Channel, value: bool) -> bool:
+        """Save a favorite; False (nothing changed) while the database is
+        busy with an import."""
+        try:
+            self._write_favorite(channel, value)
+        except sqlite3.OperationalError:
+            self.db.rollback()
+            return False
+        channel.favorite = value
+        return True
+
+    def _write_favorite(self, channel: Channel, value: bool) -> None:
         if value:
             self.db.execute(
                 "INSERT OR IGNORE INTO favorite (playlist_id, url) VALUES (?, ?)",
@@ -480,7 +709,6 @@ class Storage:
                 (channel.playlist_id, channel.url),
             )
         self.db.commit()
-        channel.favorite = value
 
     # ---- episodes ------------------------------------------------------
 
@@ -549,6 +777,10 @@ class Storage:
         if media_type is not None:
             clauses.append("media_type = ?")
             params.append(media_type.value)
+        visible, vparams = self._history_visible_sql("history")
+        if visible:
+            clauses.append(visible)
+            params.extend(vparams)
         sql = "SELECT * FROM history"
         if clauses:
             sql += " WHERE " + " AND ".join(clauses)
@@ -570,6 +802,7 @@ class Storage:
 
     def recent_channels(self, media_type: MediaType, limit: int = 50) -> list[Channel]:
         """Recently watched items that still exist, most recent first."""
+        hidden, hparams = self._hidden_sql("c")
         rows = self.db.execute(
             f"""SELECT c.*, f.url IS NOT NULL AS fav
                 FROM history h
@@ -577,8 +810,9 @@ class Storage:
                 LEFT JOIN favorite f ON f.playlist_id = c.playlist_id AND f.url = c.url
                 WHERE h.media_type = ? {"AND " + self._enabled_sql("h.playlist_id")
                                         if self.disabled else ""}
+                {"AND " + hidden if hidden else ""}
                 ORDER BY h.watched_at DESC LIMIT {int(limit)}""",
-            (media_type.value,),
+            (media_type.value, *hparams),
         ).fetchall()
         return [self._row_to_channel(r) for r in rows]
 
@@ -609,7 +843,20 @@ class Storage:
             referrer=r["referrer"] or "",
             quality=int(r["quality"] or 0),
             base_name=r["base_name"] or "",
+            tmdb=r["tmdb"] or "",
         )
+
+
+# The stable key of a channel: the provider stream id, else its URL.
+_CHANNEL_KEY_SQL = "CASE WHEN {a}.ext_id <> '' THEN {a}.ext_id ELSE {a}.url END"
+
+
+def channel_key(channel: Channel) -> str:
+    return channel.ext_id or channel.url
+
+
+def _like_escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
 def collapse_variants(channels: Iterable[Channel]) -> list[Channel]:

@@ -177,3 +177,33 @@ def test_logo_download_survives_cleared_cache(loader, monkeypatch, tmp_path):
     path = loader._ensure_file("http://logo/1.png")
     assert path.read_bytes() == b"data"
     assert loader._url_locks == {}  # the per-URL lock is always released
+
+
+def test_import_rejects_an_error_page(tmp_path):
+    page = tmp_path / "expired.m3u"
+    page.write_text("<html>\n<body>Account expired</body>\n</html>\n")
+    with pytest.raises(ValueError):
+        importer.import_m3u(tmp_path / "t.db", "L", str(page))
+
+
+def test_settings_reject_wrong_types_and_hash_the_pin(tmp_path):
+    from ashytv.services.settings import check_pin, is_hashed
+    path = tmp_path / "s.json"
+    path.write_text('{"window_opacity": "x", "hide_adult": 1, "cache_secs": 30,'
+                    ' "parental_pin": "1234"}')
+    s = Settings(path)
+    assert s.get("window_opacity") == DEFAULTS["window_opacity"]
+    assert s.get("hide_adult") is DEFAULTS["hide_adult"]
+    assert s.get("cache_secs") == 30
+    stored = s.get("parental_pin")
+    assert is_hashed(stored) and "1234" not in path.read_text()
+    assert check_pin(stored, "1234") and not check_pin(stored, "0000")
+    assert not check_pin("", "")
+
+
+def test_credentials_are_masked_in_errors():
+    from ashytv.services import http
+    msg = http.describe_error(ValueError(
+        "bad http://h/player_api.php?username=me&password=secret and "
+        "http://h/live/me/secret/1.ts"))
+    assert "secret" not in msg and "me&" not in msg

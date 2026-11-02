@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import sqlite3
 from pathlib import Path
 
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
@@ -21,6 +22,10 @@ _SCHEMES = {
     "light": Adw.ColorScheme.FORCE_LIGHT,
     "system": Adw.ColorScheme.DEFAULT,
 }
+# The window waits at most this long for the database (an import may hold it).
+_UI_DB_TIMEOUT = 3.0
+
+
 class AshyTvApplication(Adw.Application):
     def __init__(self):
         super().__init__(
@@ -61,6 +66,7 @@ class AshyTvApplication(Adw.Application):
 
         for name, callback, accels in (
             ("about", self._on_about, []),
+            ("tour", lambda *_: self.window and self.window.start_tour(), []),
             ("shortcuts", self._on_shortcuts, ["<Primary>question"]),
             ("quit", lambda *_: self._quit(), ["<Primary>q"]),
         ):
@@ -72,11 +78,25 @@ class AshyTvApplication(Adw.Application):
 
     def do_activate(self) -> None:
         if self.storage is None:
-            self.storage = Storage()
+            try:
+                self.storage = Storage(timeout=_UI_DB_TIMEOUT)
+            except sqlite3.Error as exc:
+                self._fatal(_("AshyTV could not open its database"), str(exc))
+                return
         if self.window is None:
             self.window = AshyTvWindow(storage=self.storage, settings=self.settings,
                                        application=self)
         self.window.present()
+
+    def _fatal(self, title: str, detail: str) -> None:
+        """Say why the app can't start instead of opening nothing."""
+        dialog = Adw.AlertDialog(heading=title, body=detail)
+        dialog.add_response("close", _("Close"))
+        window = Adw.ApplicationWindow(application=self, default_width=480,
+                                       default_height=200)
+        dialog.connect("response", lambda *_a: self.quit())
+        window.present()
+        dialog.present(window)
 
     def do_shutdown(self) -> None:
         if self.storage is not None:
@@ -143,6 +163,10 @@ class AshyTvApplication(Adw.Application):
             website="https://communitybig.org",
             license_type=Gtk.License.GPL_3_0,
         )
+        about.add_legal_section(
+            "TMDB", None, Gtk.License.CUSTOM,
+            _("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
+              "or certified by TMDB."))
         about.present(self.window)
 
     def _on_shortcuts(self, *_args) -> None:

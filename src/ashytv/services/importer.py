@@ -16,7 +16,8 @@ from gi.repository import GLib
 from ..i18n import _
 from . import free_tv, secrets
 from .downloader import read_source
-from .m3u_parser import group_series, header_epg_url, iter_m3u
+from .failover import ServerPool
+from .m3u_parser import group_series, header_epg_url, iter_m3u, looks_like_m3u
 from .storage import Storage
 from .xtream_client import XtreamProvider, load_catalog
 
@@ -29,11 +30,27 @@ class ImportResult:
     meta: dict = field(default_factory=dict)
 
 
+def _read_m3u(source: str) -> str:
+    text = read_source(source)
+    # An expired account often answers with an HTML page and HTTP 200: never
+    # let that replace a good list (and with backup URLs, try the next one).
+    if not looks_like_m3u(text):
+        raise ValueError(_("The address did not return an M3U playlist"))
+    return text
+
+
 def import_m3u(db_path: Path, name: str, source: str,
-               progress: Callable[[str], None] = lambda _m: None) -> ImportResult:
+               progress: Callable[[str], None] = lambda _m: None,
+               backups: list[str] | None = None, active: int = 0) -> ImportResult:
+    """`backups`: other URLs of the same list, tried when `source` fails."""
     progress(_("Downloading playlist…"))
-    text = (free_tv.build_playlist(source, read_source) if free_tv.is_free_tv(source)
-            else read_source(source))
+    pool = ServerPool([source, *(backups or [])], active)
+    if free_tv.is_free_tv(source):
+        text = free_tv.build_playlist(source, read_source)
+        if not looks_like_m3u(text):
+            raise ValueError(_("The address did not return an M3U playlist"))
+    else:
+        text = pool.run(_read_m3u)
     progress(_("Processing playlist…"))
     epg_url = header_epg_url(text)
     channels = list(iter_m3u(text))
@@ -46,6 +63,8 @@ def import_m3u(db_path: Path, name: str, source: str,
     db = Storage(db_path)
     try:
         pid = db.upsert_playlist(name, source, "m3u")
+        if backups is not None:
+            db.set_servers(pid, backups, pool.active)
         progress(_("Saving…"))
         count = db.replace_channels(pid, items, episodes)
         meta = {"epg_url": epg_url} if epg_url else {}
@@ -78,6 +97,7 @@ def import_xtream(db_path: Path, name: str, provider: XtreamProvider,
                 break
         if not pid:
             pid = db.add_playlist(name, source, "xtream")
+        db.set_servers(pid, provider.backups, provider.active)
         progress(_("Saving…"))
         count = db.replace_channels(pid, channels)
         db.set_playlist_meta(pid, meta)

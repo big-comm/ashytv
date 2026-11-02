@@ -8,8 +8,9 @@ import time
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _, ngettext
-from ...services import free_tv
+from ...services import failover, free_tv
 from ...services.xtream_client import XtreamProvider, parse_provider
+from ..servers_dialog import ServersDialog, status_text
 from ._common import page_header
 
 
@@ -17,14 +18,38 @@ def _fmt_time(ts: float) -> str:
     return GLib.DateTime.new_from_unix_local(int(ts)).format("%x %R")
 
 
+def backup_entries(parent: Gtk.Box, placeholder: str) -> list[Gtk.Entry]:
+    """'Backup servers (alternative DNS)': up to MAX_BACKUPS URL entries."""
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8, margin_top=8)
+    hint = Gtk.Label(label=_("Other addresses of the same provider, with the same login. "
+                             "When the main one doesn't answer, AshyTV switches to the "
+                             "next automatically."), xalign=0, wrap=True)
+    hint.add_css_class("ashy-faint")
+    box.append(hint)
+    entries = []
+    for i in range(failover.MAX_BACKUPS):
+        entry = Gtk.Entry(placeholder_text=placeholder, input_purpose=Gtk.InputPurpose.URL,
+                          tooltip_text=_("Backup server {n}").format(n=i + 1))
+        entry.add_css_class("ashy-entry")
+        box.append(entry)
+        entries.append(entry)
+    expander = Gtk.Expander(label=_("Backup servers (alternative DNS)"), child=box)
+    parent.append(expander)
+    return entries
+
+
 class ListsPage(Gtk.Box):
     __gtype_name__ = "AshyListsPage"
 
     __gsignals__ = {
-        # name, source (file/URL)
-        "import-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
-        # name, host, username, password
-        "xtream-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str, str, str)),
+        # name, source (file/URL), backup URLs
+        "import-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str, object)),
+        # name, host, username, password, backup servers
+        "xtream-requested": (GObject.SignalFlags.RUN_FIRST, None,
+                             (str, str, str, str, object)),
+        # playlist id, backup servers (edited in the Servers dialog)
+        "servers-changed": (GObject.SignalFlags.RUN_FIRST, None, (int, object)),
+        "check-servers": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         "refresh-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         "delete-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         # playlist id, enabled
@@ -35,6 +60,8 @@ class ListsPage(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.storage = storage
         self._file_path = ""
+        self._switches: dict[int, Gtk.Switch] = {}
+        self._refocus: int | None = None  # playlist whose switch gets the focus back
         self._busy = False
 
         self.append(page_header(_("Playlists"),
@@ -114,6 +141,7 @@ class ListsPage(Gtk.Box):
                                  "username and password are filled in automatically"))
         paste.connect("clicked", self._paste_detect)
         xbox.append(paste)
+        self.x_backups = backup_entries(xbox, "backup-server.com:8080")
         self.stack.add_named(xbox, "xtream")
 
         # url
@@ -121,6 +149,7 @@ class ListsPage(Gtk.Box):
         self.url_entry = self._field(ubox, _("Playlist URL (M3U)"), "network-server-symbolic",
                                      Gtk.Entry(placeholder_text="http://…/playlist.m3u",
                                                input_purpose=Gtk.InputPurpose.URL))
+        self.u_backups = backup_entries(ubox, "…/playlist.m3u")
         self.stack.add_named(ubox, "url")
 
         # free TV
@@ -265,16 +294,31 @@ class ListsPage(Gtk.Box):
 
     def refresh(self) -> None:
         self.existing.remove_all()
+        self._switches = {}
         playlists = self.storage.list_playlists()
         for pl in playlists:
             self.existing.append(self._playlist_row(pl))
         self.existing_box.set_visible(bool(playlists))
         self.add_head.set_label(_("Add Another Playlist") if playlists else _("Add Playlist"))
+        # The rows are rebuilt: give the keyboard focus back to the switch
+        # the user just flipped.
+        refocus, self._refocus = self._refocus, None
+        if refocus in self._switches:
+            self._switches[refocus].grab_focus()
+
+    def _on_switch(self, switch: Gtk.Switch, playlist_id: int) -> None:
+        self._refocus = playlist_id
+        self.emit("enabled-changed", playlist_id, switch.get_active())
+        GLib.idle_add(self._refresh_once)
+
+    def _refresh_once(self) -> bool:
+        self.refresh()
+        return GLib.SOURCE_REMOVE
 
     def clear_form(self) -> None:
         """Empty the "add" form after a playlist was saved."""
         for entry in (self.name_entry, self.host_entry, self.user_entry,
-                      self.pass_entry, self.url_entry):
+                      self.pass_entry, self.url_entry, *self.x_backups, *self.u_backups):
             entry.set_text("")
         self._file_path = ""
         self.file_label.set_text(_("No file selected"))
@@ -330,8 +374,11 @@ class ListsPage(Gtk.Box):
             row.add_css_class("ashy-row-off")
         switch = Gtk.Switch(active=enabled, valign=Gtk.Align.CENTER,
                             tooltip_text=_("Show this playlist's channels"))
-        switch.connect("notify::active", lambda sw, _p: self.emit(
-            "enabled-changed", pl["id"], sw.get_active()) or GLib.idle_add(self.refresh))
+        switch.connect("notify::active", lambda sw, _p: self._on_switch(sw, pl["id"]))
+        self._switches[pl["id"]] = switch
+        servers = self._servers(pl)
+        if servers:
+            row.add_suffix(self._server_button(pl, servers))
         refresh = Gtk.Button(icon_name="view-refresh-symbolic", valign=Gtk.Align.CENTER,
                              tooltip_text=_("Refresh playlist"))
         refresh.add_css_class("flat")
@@ -344,6 +391,50 @@ class ListsPage(Gtk.Box):
         row.add_suffix(refresh)
         row.add_suffix(delete)
         return row
+
+    def _servers(self, pl) -> list[str]:
+        """Main + backup URLs of a playlist ([] for files and Free TV)."""
+        if pl["kind"] == "xtream":
+            try:
+                main = XtreamProvider.from_json(pl["source"], "").host
+            except (ValueError, KeyError):
+                return []
+        elif "://" in pl["source"] and not free_tv.is_free_tv(pl["source"]):
+            main = pl["source"]
+        else:
+            return []
+        return [main, *failover.clean_backups(self.storage.backups(pl["id"]), main)]
+
+    def _server_button(self, pl, servers: list[str]) -> Gtk.Widget:
+        """One status dot per server; opens the Servers dialog."""
+        health = failover.health_list(self.storage.server_health(pl["id"]), servers)
+        active = pl["active_server"] or 0
+        dots = Gtk.Box(spacing=3)
+        for i, h in enumerate(health):
+            dot = Gtk.Label(label="●")
+            dot.add_css_class("ashy-server-dot")
+            dot.add_css_class(h.status or "unknown")
+            if i == active:
+                dot.add_css_class("active")
+            dots.append(dot)
+        box = Gtk.Box(spacing=6)
+        box.append(Gtk.Image(icon_name="network-server-symbolic"))
+        box.append(dots)
+        cur = health[active] if active < len(health) else health[0]
+        tip = _("Servers: {status} — click for details").format(
+            status=status_text(cur) if cur.status else _("not checked yet"))
+        btn = Gtk.Button(child=box, valign=Gtk.Align.CENTER, tooltip_text=tip)
+        btn.add_css_class("flat")
+        btn.connect("clicked", lambda *_: self._open_servers(pl, servers))
+        return btn
+
+    def _open_servers(self, pl, servers: list[str]) -> None:
+        dialog = ServersDialog(self.storage, pl["id"], pl["name"], servers,
+                               pl["active_server"] or 0)
+        dialog.connect("save", lambda _d, backups: self.emit("servers-changed",
+                                                             pl["id"], backups))
+        dialog.connect("check", lambda _d: self.emit("check-servers", pl["id"]))
+        dialog.present(self)
 
     def _confirm_delete(self, pl) -> None:
         dialog = Adw.AlertDialog(
@@ -432,18 +523,19 @@ class ListsPage(Gtk.Box):
             if not self._file_path:
                 self.set_status(_("Choose an .m3u file."), error=True)
                 return
-            self.emit("import-requested", name or _("My Playlist"), self._file_path)
+            self.emit("import-requested", name or _("My Playlist"), self._file_path, [])
         elif key == "url":
             url = self.url_entry.get_text().strip()
             if not url.startswith(("http://", "https://")):
                 self.set_status(_("Enter a URL starting with http:// or https://."),
                                 error=True)
                 return
-            self.emit("import-requested", name or _("My Playlist"), url)
+            self.emit("import-requested", name or _("My Playlist"), url,
+                      [e.get_text().strip() for e in self.u_backups])
         elif key == "free":
             source = free_tv.make_source(self._free_codes[self.free_drop.get_selected()],
                                          self.free_catalog.get_active())
-            self.emit("import-requested", name or self._free_tv_name(), source)
+            self.emit("import-requested", name or self._free_tv_name(), source, [])
         elif key == "xtream":
             host = self.host_entry.get_text().strip()
             user = self.user_entry.get_text().strip()
@@ -451,4 +543,5 @@ class ListsPage(Gtk.Box):
             if host in ("", "http://", "https://") or not user or not pwd:
                 self.set_status(_("Fill in server, username and password."), error=True)
                 return
-            self.emit("xtream-requested", name or _("Xtream Provider"), host, user, pwd)
+            self.emit("xtream-requested", name or _("Xtream Provider"), host, user, pwd,
+                      [e.get_text().strip() for e in self.x_backups])

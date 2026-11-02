@@ -3,6 +3,7 @@
 from ashytv.models import MediaType
 from ashytv.services.m3u_parser import (
     group_series,
+    looks_like_m3u,
     header_epg_url,
     parse_m3u,
     split_episode,
@@ -92,3 +93,29 @@ def test_several_categories_keep_the_first():
     text = ('#EXTM3U\n#EXTINF:-1 group-title="Entertainment;Music",Demo\n'
             "https://example.com/demo.m3u8\n")
     assert parse_m3u(text)[0].group == "Entertainment"
+
+
+def test_error_page_lines_are_not_channels():
+    # An expired account often answers with an HTML page and HTTP 200.
+    html = "<html>\n<body>Account expired</body>\n</html>\n"
+    assert parse_m3u(html) == []
+    assert not looks_like_m3u(html)
+    assert looks_like_m3u("#EXTM3U\n#EXTINF:-1,A\nhttp://h/a\n")
+
+
+def test_utf8_bom_is_ignored():
+    text = '﻿#EXTM3U url-tvg="http://g/x.xml"\n#EXTINF:-1,A\nhttp://h/a\n'
+    assert header_epg_url(text) == "http://g/x.xml"
+    assert [c.name for c in parse_m3u(text)] == ["A"]
+
+
+def test_kodi_pipe_options():
+    ch = _one("#EXTINF:-1,Channel",
+              "http://h/live.m3u8|User-Agent=Bar%2F2&Referer=http%3A%2F%2Fr%2F")
+    assert (ch.url, ch.user_agent, ch.referrer) == ("http://h/live.m3u8", "Bar/2", "http://r/")
+
+
+def test_extgrp_is_only_a_fallback():
+    with_title = '#EXTM3U\n#EXTINF:-1 group-title="News",A\n#EXTGRP:Other\nhttp://h/a\n'
+    assert parse_m3u(with_title)[0].group == "News"
+    assert parse_m3u("#EXTM3U\n#EXTINF:-1,A\n#EXTGRP:Other\nhttp://h/a\n")[0].group == "Other"

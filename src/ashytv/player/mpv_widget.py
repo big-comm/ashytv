@@ -75,7 +75,7 @@ class MpvWidget(Gtk.GLArea):
         "tracks-changed": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
-    def __init__(self, hwdec: bool = True, cache_secs: int = 20):
+    def __init__(self, hwdec: bool = True, cache_secs: int = 20, preview: bool = False):
         super().__init__()
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -84,6 +84,18 @@ class MpvWidget(Gtk.GLArea):
 
         # libmpv requires LC_NUMERIC=C to parse numbers correctly.
         locale.setlocale(locale.LC_NUMERIC, "C")
+        if preview:
+            # Small muted preview (channel list): a short buffer, no
+            # timeshift, and it starts as soon as there is a picture.
+            buffers = {"cache_secs": "4", "demuxer_max_bytes": "8MiB",
+                       "demuxer_max_back_bytes": "0", "cache_pause": "no",
+                       "mute": "yes", "sid": "no"}
+        else:
+            # Timeshift: keep what was already watched so live TV can be
+            # paused and rewound inside the buffer.
+            buffers = {"cache_secs": str(cache_secs), "demuxer_max_bytes": "64MiB",
+                       "demuxer_max_back_bytes": "256MiB",
+                       "demuxer_seekable_cache": "yes", "force_seekable": "yes"}
         self._mpv = mpv.MPV(
             vo="libmpv",
             hwdec="auto-safe" if hwdec else "no",
@@ -91,15 +103,9 @@ class MpvWidget(Gtk.GLArea):
             input_default_bindings=False,
             osc=False,
             cache="yes",
-            cache_secs=str(cache_secs),
-            demuxer_max_bytes="64MiB",
-            # Timeshift: keep what was already watched so live TV can be
-            # paused and rewound inside the buffer.
-            demuxer_max_back_bytes="256MiB",
-            demuxer_seekable_cache="yes",
-            force_seekable="yes",
             network_timeout="20",
             user_agent="AshyTV",
+            **buffers,
         )
         # Audio and subtitles in the user's language when the file has them;
         # subtitles are not forced on when the audio is already in it.
@@ -114,6 +120,9 @@ class MpvWidget(Gtk.GLArea):
         self._pending_subs: list[str] = []
         self._ctx: mpv.MpvRenderContext | None = None
         self._state = "idle"
+        # Bumped by play()/stop(): mpv events queued for an older file (an
+        # error of the channel being left) must not change the new state.
+        self._generation = 0
         self._duration = 0.0
         self._render_pending = False
         self._last_time_emit = 0.0
@@ -204,17 +213,24 @@ class MpvWidget(Gtk.GLArea):
 
     def _on_mpv_event(self, event) -> None:
         eid = event.event_id.value
+        gen = self._generation
         if eid == mpv.MpvEventID.START_FILE:
-            GLib.idle_add(self._set_state, "loading")
+            GLib.idle_add(self._state_from_event, gen, "loading")
         elif eid == mpv.MpvEventID.FILE_LOADED:
-            GLib.idle_add(self._set_state, "paused" if self._mpv_pause() else "playing")
+            GLib.idle_add(self._state_from_event, gen,
+                          "paused" if self._mpv_pause() else "playing")
             GLib.idle_add(self._add_pending_subs)
         elif eid == mpv.MpvEventID.END_FILE:
             reason = event.data.reason
             if reason == mpv.MpvEventEndFile.ERROR:
-                GLib.idle_add(self._set_state, "error")
+                GLib.idle_add(self._state_from_event, gen, "error")
             elif reason == mpv.MpvEventEndFile.EOF:
-                GLib.idle_add(self._set_state, "ended")
+                GLib.idle_add(self._state_from_event, gen, "ended")
+
+    def _state_from_event(self, gen: int, state: str) -> bool:
+        if gen == self._generation:
+            self._set_state(state)
+        return GLib.SOURCE_REMOVE
 
     def _mpv_pause(self) -> bool:
         try:
@@ -281,9 +297,14 @@ class MpvWidget(Gtk.GLArea):
         self._mpv.command("sub-add", path, "select")
 
     def play(self, url: str, start: float = 0, user_agent: str = "",
-             referrer: str = "", sub_files: list[str] | tuple = ()) -> None:
+             referrer: str = "", sub_files: list[str] | tuple = (),
+             host_header: str = "") -> None:
+        """`host_header`: the URL holds an address resolved by the app's
+        secure DNS; the server still needs its name in the Host header."""
         self._pending_subs = list(sub_files)
         options = {}
+        if host_header:
+            options["http_header_fields"] = f"Host: {host_header}"
         if start > 0:
             options["start"] = f"+{start:.0f}"
         if user_agent:
@@ -291,11 +312,13 @@ class MpvWidget(Gtk.GLArea):
         if referrer:
             options["referrer"] = referrer
         self._duration = 0.0
+        self._generation += 1
         self._set_state("loading")
         self._mpv.loadfile(url, "replace", **options)
         self._mpv.pause = False
 
     def stop(self) -> None:
+        self._generation += 1
         try:
             self._mpv.command("stop")
         except Exception:

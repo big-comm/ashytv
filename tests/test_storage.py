@@ -3,7 +3,7 @@
 import sqlite3
 
 from ashytv.models import Channel, Episode, MediaType
-from ashytv.services.storage import Storage
+from ashytv.services.storage import Storage, collapse_variants
 
 
 def _ch(name, url, mt=MediaType.LIVE, group="G", **kw):
@@ -116,7 +116,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 4
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 7
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -183,7 +183,7 @@ def test_hidden_and_reordered_groups(tmp_path):
     pid = db.add_playlist("L", "src")
     db.replace_channels(pid, [_ch("1", "u/1", group="News"), _ch("2", "u/2", group="Sports"),
                               _ch("3", "u/3", group="Kids")])
-    db.hidden_groups = {"Sports"}
+    db.hide_group(MediaType.LIVE, "Sports")
     assert [g for g, _n in db.groups(MediaType.LIVE)] == ["News", "Kids"]
     assert [c.name for c in db.channels(MediaType.LIVE)] == ["1", "3"]
     # Opening a hidden group explicitly still lists its channels.
@@ -209,4 +209,126 @@ def test_disabled_playlist_is_hidden_but_kept(tmp_path):
     db = Storage(tmp_path / "t.db")
     assert db.disabled == {p2} and db.count_channels(p2) == 1
     db.set_playlist_enabled(p2, True)
+    assert db.count(MediaType.LIVE) == 2
+
+
+def test_search_wildcards_are_literal(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("100% News", "u/a"), _ch("Sports", "u/b"),
+                              _ch("Big_Show", "u/c")])
+    assert [c.name for c in db.channels(search="%")] == ["100% News"]
+    assert [c.name for c in db.channels(search="_")] == ["Big_Show"]
+
+
+def test_parental_filter_covers_history_and_recents(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a", group="News"), _ch("X", "u/x", group="XXX Adult"),
+                              _ch("Toon", "u/t", group="Adult Swim")])
+    for url, title in (("u/a", "A"), ("u/x", "X"), ("u/t", "Toon")):
+        db.record_history(pid, url, MediaType.LIVE, title)
+    db.hide_adult = True
+    assert sorted(r["url"] for r in db.history()) == ["u/a", "u/t"]
+    assert sorted(c.name for c in db.recent_channels(MediaType.LIVE)) == ["A", "Toon"]
+    db.hide_group(MediaType.LIVE, "News")
+    assert [r["url"] for r in db.history()] == ["u/t"]
+
+
+def test_favorite_while_database_is_busy(tmp_path):
+    path = tmp_path / "t.db"
+    db = Storage(path, timeout=0.1)
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a")])
+    ch = db.channels()[0]
+    writer = sqlite3.connect(path)
+    writer.execute("BEGIN IMMEDIATE")  # an import holding the write lock
+    assert db.set_favorite(ch, True) is False and not ch.favorite
+    writer.rollback()
+    assert db.set_favorite(ch, True) is True and ch.favorite
+
+
+def test_hidden_groups_are_per_playlist_and_section(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    p1 = db.add_playlist("One", "s1")
+    p2 = db.add_playlist("Two", "s2")
+    db.replace_channels(p1, [_ch("A", "u/a", group="BAND TV"),
+                             _ch("M", "m/1", MediaType.MOVIE, group="BAND TV")])
+    db.replace_channels(p2, [_ch("B", "u/b", group="Other")])
+    added = db.hide_group(MediaType.LIVE, "BAND TV")
+    assert added == [(p1, "group", "live", "BAND TV")]
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["B"]
+    assert [c.name for c in db.channels(MediaType.MOVIE)] == ["M"]  # other section
+    db.unhide(added)
+    assert db.count(MediaType.LIVE) == 2
+
+
+def test_hidden_channel_survives_refresh_and_hides_its_variants(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    chans = [_ch("News FHD", "live/1.ts", ext_id="1"), _ch("News HD", "live/2.ts", ext_id="2"),
+             _ch("Kids", "live/3.ts", ext_id="3")]
+    db.replace_channels(pid, chans)
+    news = collapse_variants(db.channels(MediaType.LIVE))[0]
+    entries = db.hide_channel(news)
+    assert len(entries) == 2
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["Kids"]
+    # Explicitly opening its group still leaves the hidden channel out.
+    assert [c.name for c in db.channels(MediaType.LIVE, group="G")] == ["Kids"]
+    # A refresh rewrites every row (new ids, even new URLs): still hidden by stream id.
+    db.replace_channels(pid, [_ch("News FHD", "live/1.m3u8", ext_id="1"),
+                              _ch("News HD", "live/2.m3u8", ext_id="2"),
+                              _ch("Kids", "live/3.m3u8", ext_id="3")])
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["Kids"]
+    assert db.count(MediaType.LIVE, collapse=True) == 1
+    items = db.hidden_items()
+    assert {r["label"] for r in items} == {"News FHD", "News HD"}
+    db.close()
+    db = Storage(tmp_path / "t.db")  # remembered across restarts
+    assert db.count(MediaType.LIVE) == 1
+    db.unhide_all()
+    assert db.count(MediaType.LIVE) == 3
+    assert db.hidden_items() == []
+
+
+def test_hidden_m3u_channel_matches_by_name_when_its_url_changes(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("Shop", "http://h/shop.m3u8?token=1"), _ch("B", "u/b")])
+    db.hide_channel(db.channels(MediaType.LIVE)[0])
+    db.replace_channels(pid, [_ch("Shop", "http://h/shop.m3u8?token=2"), _ch("B", "u/b")])
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["B"]
+
+
+def test_hidden_rows_go_with_their_playlist_and_legacy_names_migrate(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a", group="DISCOVERY"), _ch("B", "u/b")])
+    db.migrate_hidden_groups(["DISCOVERY", "Not there"])
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["B"]
+    db.delete_playlist(pid)
+    assert db.hidden_items() == []
+
+
+def test_hidden_entries_count_variants_once_with_logo_and_group(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    p1 = db.add_playlist("One", "s1")
+    p2 = db.add_playlist("Two", "s2")
+    db.replace_channels(p1, [_ch("News FHD", "live/1.ts", group="BR", ext_id="1", logo="L"),
+                             _ch("News HD", "live/2.ts", group="BR", ext_id="2"),
+                             _ch("M", "m/1", MediaType.MOVIE, group="Drama")])
+    db.replace_channels(p2, [_ch("X", "u/x", group="Kids")])
+    db.hide_channel(collapse_variants(db.channels(MediaType.LIVE))[0])
+    db.hide_group(MediaType.MOVIE, "Drama")
+    db.hide_group(MediaType.LIVE, "Kids")
+    entries = db.hidden_entries(MediaType.LIVE)
+    news = next(e for e in entries if e["kind"] == "channel")
+    assert news["name"] == "News"
+    assert len(news["entries"]) == 2
+    assert (news["logo"], news["group"]) == ("L", "BR")
+    assert db.hidden_count() == 3
+    assert db.hidden_count(MediaType.MOVIE) == 1
+    db.set_playlist_enabled(p2, False)  # the disabled playlist's items don't count
+    assert db.hidden_count(MediaType.LIVE) == 1
+    db.unhide(news["entries"])
     assert db.count(MediaType.LIVE) == 2

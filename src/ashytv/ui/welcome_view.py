@@ -69,19 +69,21 @@ class WelcomeView(Gtk.Overlay):
         content.append(cards)
 
         start = Gtk.Button(halign=Gtk.Align.CENTER)
-        inner = Gtk.Box(spacing=8)
+        inner = Gtk.Box(spacing=8, halign=Gtk.Align.CENTER)
         inner.append(Gtk.Label(label=_("Get Started")))
         inner.append(Gtk.Image(icon_name="go-next-symbolic"))
         start.set_child(inner)
         start.add_css_class("pill-accent")
-        start.set_size_request(260, -1)
+        start.add_css_class("ashy-welcome-start")
         start.connect("clicked", lambda *_: self.emit("start"))
         content.append(start)
         self.start_btn = start
         self.connect("map", lambda *_: GLib.idle_add(lambda: start.grab_focus() and False))
 
         note = Gtk.Label(label=_("AshyTV is only a player: it does not host any content."))
-        note.add_css_class("ashy-faint")
+        # Sits over the backdrop's horizon lines: needs its own backing to stay readable.
+        note.add_css_class("ashy-welcome-note")
+        note.set_halign(Gtk.Align.CENTER)
         content.append(note)
 
         self.add_overlay(content)

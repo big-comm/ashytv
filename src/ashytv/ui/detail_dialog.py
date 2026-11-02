@@ -11,6 +11,7 @@ from gi.repository import Adw, GLib, GObject, Gtk
 from ..i18n import _, ngettext
 from ..services import http
 from ..models import Channel, Episode, MediaType
+from .cast import CastRow
 from .pages._common import set_picture
 
 
@@ -27,11 +28,14 @@ class DetailDialog(Adw.Dialog):
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # a CastMember was clicked
+        "show-person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
     def __init__(self, storage, channel: Channel,
                  load_episodes: Callable[[Channel, Callable, Callable], None],
-                 load_info: Callable[[Channel, Callable, Callable], None] | None = None):
+                 load_info: Callable[[Channel, Callable, Callable], None] | None = None,
+                 load_cast: Callable[[Channel, dict, Callable], None] | None = None):
         is_series = channel.media_type is MediaType.SERIES
         super().__init__(title=channel.display_name, content_width=920,
                          content_height=640 if is_series else -1)
@@ -39,6 +43,8 @@ class DetailDialog(Adw.Dialog):
         self.channel = channel
         self._episodes: list[Episode] = []
         self._seasons: list[int] = []
+        self._load_cast = load_cast
+        self._cast_cards = load_cast is not None
 
         view = Adw.ToolbarView()
         header = Adw.HeaderBar(show_title=False)
@@ -119,7 +125,7 @@ class DetailDialog(Adw.Dialog):
         body.set_margin_end(28)
         body.set_margin_bottom(24)
         self.plot_lbl = Gtk.Label(label=channel.plot, xalign=0, wrap=True,
-                                  selectable=True, visible=bool(channel.plot))
+                                  visible=bool(channel.plot))
         self.plot_lbl.add_css_class("ashy-page-subtitle")
         body.append(self.plot_lbl)
 
@@ -159,6 +165,11 @@ class DetailDialog(Adw.Dialog):
                                             visible=load_info is not None)
             body.append(self.info_spinner)
 
+        # Cast: actor cards (photos from TMDB, or names from the provider).
+        self.cast_row = CastRow()
+        self.cast_row.connect("person", lambda _r, member: self.emit("show-person", member))
+        body.append(self.cast_row)
+
         page.append(body)
         # Fixed height with a scrolling body: the details arrive later and a
         # long synopsis or cast must not push the dialog off screen.
@@ -173,6 +184,8 @@ class DetailDialog(Adw.Dialog):
             # already be built when they arrive.
             if load_info is not None:
                 load_info(channel, self._info_loaded, self._info_failed)
+            else:
+                self._request_cast({})
 
     # ---- movie ---------------------------------------------------------
 
@@ -187,8 +200,19 @@ class DetailDialog(Adw.Dialog):
         _min, nat, _b1, _b2 = self._page.measure(Gtk.Orientation.VERTICAL, 920)
         self.set_content_height(min(640, nat))
 
+    def _request_cast(self, info: dict) -> None:
+        load, self._load_cast = self._load_cast, None  # once per dialog
+        if load is not None:
+            load(self.channel, info, self._cast_loaded)
+
+    def _cast_loaded(self, members: list, _from_tmdb: bool) -> None:
+        self.cast_row.set_cast(members)
+        if members and self.channel.media_type is not MediaType.SERIES:
+            self._fit_height()
+
     def _info_loaded(self, info: dict) -> None:
         self.info_spinner.set_visible(False)
+        self._request_cast(info or {})
         if not info:
             self._fit_height()
             return
@@ -217,7 +241,9 @@ class DetailDialog(Adw.Dialog):
         self.meta_lbl.set_label("  •  ".join(meta))
 
         rows = [(_("Video"), info.get("video")), (_("Audio"), info.get("audio")),
-                (_("Director"), info.get("director")), (_("Cast"), info.get("cast")),
+                (_("Director"), info.get("director")),
+                # With a cast loader the names are cards below, not a line here.
+                (_("Cast"), "" if self._cast_cards else info.get("cast")),
                 (_("Genres"), info.get("genre")), (_("Country"), info.get("country")),
                 (_("Released"), _format_date(info.get("released", ""))),
                 (_("Subtitles"), ngettext("{n} file", "{n} files",
@@ -230,7 +256,9 @@ class DetailDialog(Adw.Dialog):
                 continue
             key = Gtk.Label(label=name, xalign=0, valign=Gtk.Align.START)
             key.add_css_class("dim-label")
-            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True, selectable=True)
+            # Not selectable: a selectable label is a Tab stop with no visible
+            # focus, and one made unfocusable traps Tab (GTK keeps it).
+            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True)
             self.facts.attach(key, 0, row, 1, 1)
             self.facts.attach(val, 1, row, 1, 1)
             row += 1
@@ -243,6 +271,7 @@ class DetailDialog(Adw.Dialog):
 
     def _info_failed(self, _exc: Exception) -> None:
         self.info_spinner.set_visible(False)  # the basic data is still shown
+        self._request_cast({})
         self._fit_height()
 
     def _on_play_main(self, _b) -> None:
@@ -257,6 +286,7 @@ class DetailDialog(Adw.Dialog):
     # ---- series --------------------------------------------------------
 
     def _episodes_loaded(self, episodes: list[Episode]) -> None:
+        self._request_cast({})  # after the episodes: their request brings the cast text
         self._episodes = episodes
         if not episodes:
             self.ep_error.set_title(_("No episodes available"))
@@ -275,6 +305,7 @@ class DetailDialog(Adw.Dialog):
             self.play_btn.set_label(_("Watch {label}").format(label=nxt.label))
 
     def _episodes_failed(self, exc: Exception) -> None:
+        self._request_cast({})
         self.ep_error.set_description(GLib.markup_escape_text(http.describe_error(exc)))
         self.ep_stack.set_visible_child_name("error")
 
@@ -343,7 +374,8 @@ class DetailDialog(Adw.Dialog):
     # ---- favorite ------------------------------------------------------
 
     def _toggle_fav(self, _b) -> None:
-        self.storage.set_favorite(self.channel, not self.channel.favorite)
+        if not self.storage.set_favorite(self.channel, not self.channel.favorite):
+            return
         self._paint_fav()
         self.emit("favorite-changed", self.channel)
 

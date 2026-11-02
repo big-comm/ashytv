@@ -35,5 +35,5 @@ def fetch_playlist_async(
 def read_source(source: str) -> str:
     if source.startswith(("http://", "https://")):
         data = http.fetch_bytes(source, timeout=120)
-        return data.decode("utf-8", errors="replace")
-    return Path(source).expanduser().read_text(encoding="utf-8", errors="replace")
+        return data.decode("utf-8-sig", errors="replace")
+    return Path(source).expanduser().read_text(encoding="utf-8-sig", errors="replace")

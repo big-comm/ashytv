@@ -9,7 +9,8 @@ from gi.repository import Adw, Gdk, Gio, GObject, Gtk
 from ...i18n import _
 from ...models import Channel, MediaType
 from ..channel_object import ChannelObject
-from ._common import ChipRow, SearchFilter, page_header, set_picture
+from ..marquee import FocusMarquee, MarqueeLabel
+from ._common import ChipRow, SearchFilter, page_header, set_picture, update_favorite
 
 _POSTER_W = 150
 _POSTER_H = 225
@@ -29,6 +30,9 @@ class CatalogPage(Gtk.Box):
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # (media type, category): hide a category
+        "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (object, str)),
+        "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self, storage, media_type: MediaType, title: str, subtitle: str):
@@ -39,7 +43,7 @@ class CatalogPage(Gtk.Box):
         self._chip = "all"
 
         self.append(page_header(title, subtitle))
-        self.chips = ChipRow(self._on_chip)
+        self.chips = ChipRow(self._on_chip, self._chip_menu)
         self.append(self.chips)
 
         self.store = Gio.ListStore.new(ChannelObject)
@@ -51,12 +55,15 @@ class CatalogPage(Gtk.Box):
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_setup)
         factory.connect("bind", self._on_bind)
+        factory.connect("unbind", lambda _f, li: self._bound.discard(li))
+        self._bound: set[Gtk.ListItem] = set()
 
         self.grid = Gtk.GridView(model=selection, factory=factory,
                                  max_columns=12, min_columns=2,
                                  single_click_activate=True, vexpand=True)
         self.grid.add_css_class("ashy-posters")
         self.grid.connect("activate", self._on_activate)
+        self._focus_marquee = FocusMarquee(self.grid)
         sw = Gtk.ScrolledWindow(hexpand=True, vexpand=True,
                                 hscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(self.grid)
@@ -80,6 +87,14 @@ class CatalogPage(Gtk.Box):
             return False
         return self.grid.grab_focus()
 
+    def favorite_changed(self, channel: Channel) -> None:
+        """A favorite changed elsewhere: repaint the cards on screen only
+        (a GridView doesn't rebind a row whose item is the same object)."""
+        update_favorite(self.store, channel)
+        for list_item in list(self._bound):
+            if list_item.get_item() is not None:
+                self._on_bind(None, list_item)
+
     def invalidate(self) -> None:
         self._dirty = True
         if self.get_mapped():
@@ -94,6 +109,7 @@ class CatalogPage(Gtk.Box):
         chips += [(g, chip_label(g)) for g, _n in groups]
         if self._chip not in {k for k, _l in chips}:
             self._chip = "all"
+        self.update_hidden_count()
         self.chips.set_chips(chips, self._chip)
         self._load()
 
@@ -101,6 +117,19 @@ class CatalogPage(Gtk.Box):
         self.search.set_text(text)
 
     # ---- data ---------------------------------------------------------
+
+    def update_hidden_count(self) -> None:
+        """Last chip: 'Hidden (N)' when categories of this section are hidden."""
+        n = self.storage.hidden_count(self.media_type)
+        self.chips.set_extra(_("Hidden ({n})").format(n=n), "view-conceal-symbolic",
+                             (lambda: self.emit("show-hidden")) if n else None,
+                             _("See hidden channels and groups"))
+
+    def _chip_menu(self, key: str) -> list:
+        """Categories (not All / New / Trending) can be hidden."""
+        if key in ("all", "new", "top"):
+            return []
+        return [(_("Hide category"), lambda: self.emit("hide-group", self.media_type, key))]
 
     def _on_chip(self, key: str) -> None:
         self._chip = key
@@ -147,8 +176,11 @@ class CatalogPage(Gtk.Box):
         fav.add_css_class("ashy-badge")
         frame.add_overlay(fav)
 
-        title = Gtk.Label(xalign=0, ellipsize=3, max_width_chars=14, width_chars=14)
+        # Long titles scroll while the card is hovered or focused.
+        title = MarqueeLabel(width_chars=14)
         title.add_css_class("ashy-poster-title")
+        title.attach_hover(card)
+        card._marquee = title  # type: ignore[attr-defined]  # see FocusMarquee
 
         meta = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         year = Gtk.Label(xalign=0, hexpand=True)
@@ -170,6 +202,7 @@ class CatalogPage(Gtk.Box):
 
     def _on_bind(self, _f, list_item: Gtk.ListItem) -> None:
         obj: ChannelObject = list_item.get_item()
+        self._bound.add(list_item)
         ch = obj.channel
         card = list_item.get_child()
         frame = card.get_first_child()
@@ -209,7 +242,8 @@ class CatalogPage(Gtk.Box):
 
         def toggle(*_a):
             popover.popdown()
-            self.storage.set_favorite(ch, not ch.favorite)
+            if not self.storage.set_favorite(ch, not ch.favorite):
+                return
             self.emit("favorite-changed", ch)
             frame = card.get_first_child()
             frame.get_child().get_next_sibling().get_next_sibling().set_visible(ch.favorite)
