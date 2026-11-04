@@ -11,10 +11,10 @@ from ..i18n import _
 # (page key, label, icon) — None becomes a separator.
 NAV_ITEMS = [
     ("home", _("Home"), "go-home-symbolic"),
+    ("favorites", _("Favorites"), "ashy-heart-symbolic"),
     ("channels", _("Channels"), "tv-symbolic"),
     ("movies", _("Movies"), "ashy-film-symbolic"),
     ("series", _("Series"), "ashy-series-symbolic"),
-    ("favorites", _("Favorites"), "ashy-heart-symbolic"),
     ("recordings", _("Recordings"), "ashy-record-symbolic"),
     None,
     ("lists", _("Playlists"), "view-list-symbolic"),
@@ -66,7 +66,8 @@ class NavSidebar(Gtk.Box):
         box.append(text)
 
         # A click must not leave the focus here (the menu stays open while it has it).
-        btn = Gtk.Button(child=box, tooltip_text=label, focus_on_click=False)
+        # No tooltip: the menu opens with the names as soon as the pointer is on it.
+        btn = Gtk.Button(child=box, focus_on_click=False)
         btn.add_css_class("ashy-nav-item")
         btn.connect("clicked", lambda *_: self._select(key))
         return btn
