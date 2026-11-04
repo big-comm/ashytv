@@ -39,10 +39,17 @@ def _read_m3u(source: str) -> str:
     return text
 
 
+# Playlist metadata set by the user (or computed from the guide), not by the
+# playlist file: kept when the playlist is imported again.
+KEPT_META = ("epg_override", "epg_coverage")
+
+
 def import_m3u(db_path: Path, name: str, source: str,
                progress: Callable[[str], None] = lambda _m: None,
-               backups: list[str] | None = None, active: int = 0) -> ImportResult:
-    """`backups`: other URLs of the same list, tried when `source` fails."""
+               backups: list[str] | None = None, active: int = 0,
+               epg_override: str | None = None) -> ImportResult:
+    """`backups`: other URLs of the same list, tried when `source` fails.
+    `epg_override`: the guide link typed by the user (wins over url-tvg)."""
     progress(_("Downloading playlist…"))
     pool = ServerPool([source, *(backups or [])], active)
     if free_tv.is_free_tv(source):
@@ -68,6 +75,10 @@ def import_m3u(db_path: Path, name: str, source: str,
         progress(_("Saving…"))
         count = db.replace_channels(pid, items, episodes)
         meta = {"epg_url": epg_url} if epg_url else {}
+        # What the user set on the playlist survives a refresh.
+        meta.update({k: v for k, v in db.playlist_meta(pid).items() if k in KEPT_META})
+        if epg_override:
+            meta["epg_override"] = epg_override
         db.set_playlist_meta(pid, meta)
     finally:
         db.close()

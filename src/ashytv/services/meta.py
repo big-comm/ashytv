@@ -5,6 +5,8 @@
     GET {base}/api/v1/meta/person/{id}?lang=
         -> {id, name, profile, biography,
             credits: [{type, tmdb_id, title, original_title, year, poster}]}
+    GET {base}/api/v1/meta/people?q=&lang=
+        -> {items: [{id, name, profile, known_for}]}   (actors and directors)
 
 The API is public (no credentials). 404 (meta_not_found) is remembered on
 disk like an answer; 503 (meta_unavailable), 429 and network errors are not
@@ -37,6 +39,9 @@ META_BASE_URL = os.environ.get("ASHYTV_META_URL", "https://painel.ashytv.com").r
 
 TITLE_TTL = 7 * 86400       # cast lists hardly change
 PERSON_TTL = 7 * 86400
+PEOPLE_TTL = 86400          # name searches (the panel caches them a day too)
+PEOPLE_MIN, PEOPLE_MAX = 2, 80  # query length the panel accepts (else 400)
+_MAX_PEOPLE = 20
 MISS_TTL = 86400            # "not found" is asked again the next day
 OFFLINE_SECS = 300          # after a 503/429/network error
 _TIMEOUT = 15
@@ -153,6 +158,29 @@ def parse_person(data) -> Person:
                   biography=_str(data.get("biography"), 4000), credits=credits)
 
 
+def parse_people(data) -> list[CastMember]:
+    """/meta/people -> people with an id (`character` holds `known_for`:
+    "Acting", "Directing"…)."""
+    items = data.get("items") if isinstance(data, dict) else None
+    people = []
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        name, pid = _str(item.get("name"), 120), _id(item.get("id"))
+        if name and pid:
+            people.append(CastMember(name=name, character=_str(item.get("known_for"), 40),
+                                     profile=image_url(item.get("profile")), id=pid))
+        if len(people) >= _MAX_PEOPLE:
+            break
+    return people
+
+
+def people_query(text: str) -> str:
+    """The query sent to /meta/people, or "" when the panel would refuse it."""
+    query = " ".join(text.split())
+    return query if PEOPLE_MIN <= len(query) <= PEOPLE_MAX else ""
+
+
 def split_cast(text: str) -> list[CastMember]:
     """Provider text cast ('A, B, C') -> names only, no duplicates."""
     names = [n.strip(" .") for n in re.split(r"[,;/|\n]", text or "")]
@@ -212,6 +240,16 @@ class MetaClient:
         params = {"lang": lang} if lang else {}
         return parse_person(self._get(f"/api/v1/meta/person/{quote(person_id)}",
                                       params, PERSON_TTL))
+
+    def people(self, query: str, lang: str = "") -> list[CastMember]:
+        """Actors and directors whose name matches, the most popular first."""
+        query = people_query(query)
+        if not query:
+            return []
+        params = {"q": query}
+        if lang:
+            params["lang"] = lang
+        return parse_people(self._get("/api/v1/meta/people", params, PEOPLE_TTL))
 
     def _get(self, path: str, params: dict, ttl: int):
         url = f"{self.base_url}{path}"

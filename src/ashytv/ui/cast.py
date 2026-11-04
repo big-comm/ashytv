@@ -96,6 +96,22 @@ class CastService:
 
         threading.Thread(target=worker, daemon=True, name="ashytv-cast").start()
 
+    # ---- people by name ------------------------------------------------------
+
+    def search_people(self, query: str,
+                      on_done: Callable[[str, list[CastMember]], None]) -> None:
+        """on_done(query, people) — [] when the panel can't help."""
+        lang = _lang()
+
+        def worker():
+            try:
+                people = self.client.people(query, lang)
+            except MetaError:
+                people = []
+            GLib.idle_add(_call, on_done, query, people)
+
+        threading.Thread(target=worker, daemon=True, name="ashytv-people").start()
+
     # ---- a person's titles -------------------------------------------------
 
     def load_person(self, member: CastMember,
@@ -162,6 +178,9 @@ def _call(callback, *args) -> bool:
 # ---- widgets ------------------------------------------------------------------
 
 _PHOTO_W, _PHOTO_H = 104, 156
+# TMDB "known_for" departments of people found by name.
+_ROLES = {"Acting": _("Actor"), "Directing": _("Director"), "Writing": _("Writer"),
+          "Production": _("Producer")}
 
 
 def _photo(url: str, name: str, width: int, height: int) -> Gtk.Widget:
@@ -190,9 +209,9 @@ class CastRow(Gtk.Box):
         "person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
-    def __init__(self):
+    def __init__(self, title: str = ""):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=8, visible=False)
-        title = Gtk.Label(label=_("Cast"), xalign=0)
+        title = Gtk.Label(label=title or _("Cast"), xalign=0)
         title.add_css_class("ashy-section-title")
         self.append(title)
         self._cards = Gtk.Box(spacing=12, margin_bottom=10)
@@ -217,7 +236,8 @@ class CastRow(Gtk.Box):
         name.add_css_class("ashy-cast-name")
         box.append(name)
         if member.character:
-            role = Gtk.Label(label=member.character, wrap=True, lines=2, ellipsize=3,
+            role = Gtk.Label(label=_ROLES.get(member.character, member.character),
+                             wrap=True, lines=2, ellipsize=3,
                              justify=Gtk.Justification.CENTER, max_width_chars=12,
                              width_chars=12)
             role.add_css_class(_FAINT)

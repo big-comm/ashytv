@@ -14,6 +14,7 @@ from ...services import http
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
+from ..speed_test import SpeedTestGroup
 from ._common import page_header
 
 _CATS = [
@@ -190,7 +191,7 @@ class SettingsPage(Gtk.Box):
         servers = Adw.PreferencesGroup(title=_("Backup servers"))
         self._switch(servers, "server_alerts", _("Desktop notifications"),
                      _("Tell me when a playlist's main server goes down or comes back"))
-        return self._page(g, servers)
+        return self._page(SpeedTestGroup(self.storage), g, servers)
 
     def _aparencia(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(title=_("Appearance"))

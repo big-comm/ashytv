@@ -31,6 +31,15 @@ def cache_root() -> Path:
     return Path(GLib.get_user_cache_dir()) / "ashytv"
 
 
+def is_web_url(text: str) -> bool:
+    """An http(s) address with a host (what a playlist or guide link must be)."""
+    try:
+        parts = urlsplit(text.strip())
+    except ValueError:
+        return False
+    return parts.scheme in ("http", "https") and bool(parts.hostname)
+
+
 def open_url(url: str, timeout: float = 30, encoding: str = "identity"):
     """Open an http(s) URL with the app's User-Agent."""
     if not url.startswith(("http://", "https://")):

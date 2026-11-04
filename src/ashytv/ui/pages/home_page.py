@@ -1,4 +1,5 @@
-"""Home page — featured carousel, continue watching and shortcuts."""
+"""Home page — featured carousel, continue watching and poster rails
+(the newest titles, then one rail per playlist group)."""
 
 from __future__ import annotations
 
@@ -8,9 +9,13 @@ from gi.repository import Adw, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
+from ...services import home
 from ...services.storage import collapse_variants
 from ..marquee import MarqueeLabel
 from ._common import clear_box, set_logo, set_picture
+from .catalog_page import chip_label
+
+_POSTER_W, _POSTER_H = 130, 195
 
 _HERO_H = 300
 _SLIDE_SECS = 7
@@ -20,7 +25,13 @@ class HomePage(Gtk.Box):
     __gtype_name__ = "AshyHomePage"
 
     __gsignals__ = {
+        # a channel to watch; a movie or series opens its details
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # a movie to play right away (the featured box's Watch)
+        "watch": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # "See more": Movies or Series (media type value) on a chip
+        # (a group, or "new" for the recently added)
+        "open-group": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
         # history item (sqlite3.Row) to resume
         "resume": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "navigate": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
@@ -61,8 +72,11 @@ class HomePage(Gtk.Box):
                                                      _("See all"), "channels")
         self.movies_box, self.movies_row = self._section(inner, _("Recently Added Movies"),
                                                          _("See all"), "movies")
-        self.series_box, self.series_row = self._section(inner, _("Trending Series"),
+        self.series_box, self.series_row = self._section(inner, _("Recently Added Series"),
                                                          _("See all"), "series")
+        # One rail per group of the playlists (rebuilt with the catalog).
+        self.groups_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
+        inner.append(self.groups_box)
 
     def _section(self, parent, title, link=None, target=None):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
@@ -111,12 +125,29 @@ class HomePage(Gtk.Box):
         self._build_continue()
         self._fill(self.live_box, self.live_row,
                    self._live_channels(16), self._channel_card)
-        self._fill(self.movies_box, self.movies_row,
-                   self.storage.channels(MediaType.MOVIE, order="added", limit=16),
-                   self._poster_card)
-        series = [c for c in self.storage.channels(MediaType.SERIES, order="added",
-                                                   limit=200) if c.rating >= 7][:16]
-        self._fill(self.series_box, self.series_row, series, self._poster_card)
+        for mt, box, row in ((MediaType.MOVIE, self.movies_box, self.movies_row),
+                             (MediaType.SERIES, self.series_box, self.series_row)):
+            items = self.storage.channels(mt, order="added", limit=home.RAIL_TITLES + 1)
+            self._fill_rail(box, row, items, mt, "new")
+        self._build_group_rails()
+
+    def _fill_rail(self, box, row, items, media_type: MediaType, chip: str) -> None:
+        """Up to RAIL_TITLES posters, then "See more" when there are more."""
+        shown, more = home.rail(items)
+        self._fill(box, row, shown, self._poster_card)
+        if more:
+            row.append(self._more_card(media_type, chip))
+
+    def _build_group_rails(self) -> None:
+        clear_box(self.groups_box)
+        rails = home.group_rails(self.storage.groups(MediaType.MOVIE),
+                                 self.storage.groups(MediaType.SERIES))
+        for mt, group, count in rails:
+            box, row = self._section(self.groups_box, chip_label(group))
+            items = self.storage.channels(mt, group=group, limit=home.RAIL_TITLES)
+            self._fill(box, row, items, self._poster_card)
+            if count > home.RAIL_TITLES:
+                row.append(self._more_card(mt, group))
 
     def _live_channels(self, limit: int) -> list[Channel]:
         chans = self.storage.channels(MediaType.LIVE, limit=limit * 4)
@@ -136,12 +167,10 @@ class HomePage(Gtk.Box):
     def _build_hero(self) -> None:
         while self.carousel.get_n_pages():
             self.carousel.remove(self.carousel.get_nth_page(0))
-        featured = [c for c in self.storage.channels(MediaType.SERIES, order="added",
-                                                     limit=80)
-                    if c.backdrop and c.rating >= 6][:3]
-        featured += [c for c in self.storage.channels(MediaType.MOVIE, order="added",
-                                                      limit=80)
-                     if c.logo and c.rating >= 6][:3]
+        # The newest titles with a picture, movies and series in turns.
+        featured = home.featured(
+            self.storage.channels(MediaType.MOVIE, order="added", limit=40),
+            self.storage.channels(MediaType.SERIES, order="added", limit=40))
         if not featured:
             self.carousel.append(self._welcome_slide())
             return
@@ -157,7 +186,7 @@ class HomePage(Gtk.Box):
         slide.add_overlay(self._hero_text(
             _("Welcome to AshyTV"),
             _("Your channels, movies and series in one place"),
-            _("View channels"), lambda: self.emit("navigate", "channels")))
+            [(_("View channels"), lambda: self.emit("navigate", "channels"))]))
         return slide
 
     def _slide(self, ch: Channel) -> Gtk.Widget:
@@ -188,12 +217,13 @@ class HomePage(Gtk.Box):
         meta = "  •  ".join(p for p in (
             ch.media_type.label, ch.year,
             f"★ {ch.rating:.1f}" if ch.rating else "", ch.genre) if p)
-        slide.add_overlay(self._hero_text(ch.display_name, meta, _("Watch now"),
-                                          lambda: self.emit("play", ch),
-                                          ch.plot))
+        buttons = [(_("Details"), lambda: self.emit("play", ch))]
+        if ch.media_type is MediaType.MOVIE:
+            buttons.insert(0, (_("Watch now"), lambda: self.emit("watch", ch)))
+        slide.add_overlay(self._hero_text(ch.display_name, meta, buttons, ch.plot))
         return slide
 
-    def _hero_text(self, title, sub, button, action, plot="") -> Gtk.Widget:
+    def _hero_text(self, title, sub, buttons, plot="") -> Gtk.Widget:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
                       valign=Gtk.Align.CENTER, halign=Gtk.Align.START)
         box.set_margin_start(36)
@@ -210,10 +240,13 @@ class HomePage(Gtk.Box):
                           lines=2, ellipsize=3)
             p.add_css_class("ashy-faint")
             box.append(p)
-        btn = Gtk.Button(label=button, halign=Gtk.Align.START, margin_top=6)
-        btn.add_css_class("pill-light")
-        btn.connect("clicked", lambda *_: action())
-        box.append(btn)
+        row = Gtk.Box(spacing=10, halign=Gtk.Align.START, margin_top=6)
+        for i, (label, action) in enumerate(buttons):
+            btn = Gtk.Button(label=label)
+            btn.add_css_class("pill-light" if i == 0 else "pill-ghost")
+            btn.connect("clicked", lambda _b, a=action: a())
+            row.append(btn)
+        box.append(row)
         return box
 
     def focus_content(self) -> bool:
@@ -322,15 +355,17 @@ class HomePage(Gtk.Box):
         return card
 
     def _poster_card(self, ch: Channel) -> Gtk.Widget:
-        card = Gtk.Button()
+        # Not expanding (the year label inside does): in a short rail the
+        # card took the spare width and stretched the poster frame.
+        card = Gtk.Button(hexpand=False)
         card.add_css_class("flat")
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
         frame = Gtk.Box()
         frame.set_overflow(Gtk.Overflow.HIDDEN)
         frame.add_css_class("ashy-poster-img")
         pic = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
-        pic.set_size_request(130, 195)
-        set_picture(pic, ch.logo, 195)
+        pic.set_size_request(_POSTER_W, _POSTER_H)
+        set_picture(pic, ch.logo, _POSTER_H)
         frame.append(pic)
         box.append(frame)
         t = MarqueeLabel(width_chars=14)
@@ -349,4 +384,26 @@ class HomePage(Gtk.Box):
         box.append(meta)
         card.set_child(box)
         card.connect("clicked", lambda *_: self.emit("play", ch))
+        return card
+
+    def _more_card(self, media_type: MediaType, chip: str) -> Gtk.Widget:
+        """Poster-sized "See more" at the end of a rail: Movies or Series on
+        that group (or on the recently added)."""
+        card = Gtk.Button(valign=Gtk.Align.START,
+                          tooltip_text=_("See more in {section}").format(
+                              section=media_type.label))
+        card.add_css_class("flat")
+        frame = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
+                        valign=Gtk.Align.CENTER)
+        frame.set_size_request(_POSTER_W, _POSTER_H)
+        frame.add_css_class("ashy-poster-img")
+        frame.add_css_class("ashy-more-card")
+        icon = Gtk.Image(icon_name="list-add-symbolic", pixel_size=40,
+                         vexpand=True, valign=Gtk.Align.END)
+        label = Gtk.Label(label=_("See more"), vexpand=True, valign=Gtk.Align.START)
+        label.add_css_class("ashy-poster-title")
+        frame.append(icon)
+        frame.append(label)
+        card.set_child(frame)
+        card.connect("clicked", lambda *_: self.emit("open-group", media_type.value, chip))
         return card

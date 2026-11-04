@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import time
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import replace
 from pathlib import Path
 
@@ -251,6 +251,38 @@ class Storage:
             "SELECT DISTINCT lower(tvg_id) FROM channel WHERE media_type = 'live' "
             "AND tvg_id != ''")
         return {r[0] for r in rows}
+
+    def live_names(self) -> list[tuple[str, str]]:
+        """(name, tvg-id) of the live channels, to link them to the guide by name."""
+        rows = self.db.execute(
+            "SELECT DISTINCT name, tvg_id FROM channel WHERE media_type = 'live'")
+        return [(r[0], r[1] or "") for r in rows]
+
+    def relink_guide(self, links: dict[tuple[str, str], str]) -> int:
+        """Give the channels linked to the guide by name their guide id
+        (the next import brings back the playlist's own tvg-id)."""
+        if not links:
+            return 0
+        with self.db:
+            cur = self.db.executemany(
+                "UPDATE channel SET tvg_id = ? WHERE media_type = 'live' "
+                "AND name = ? AND tvg_id = ?",
+                [(gid, name, tvg) for (name, tvg), gid in links.items()])
+        return cur.rowcount
+
+    def guide_coverage(self, has_guide: Callable[[str], bool]) -> dict[int, tuple[int, int]]:
+        """playlist id -> (live channels with a guide, live channels)."""
+        out: dict[int, list[int]] = {}
+        cache: dict[str, bool] = {}
+        for pid, tvg in self.db.execute(
+                "SELECT playlist_id, lower(tvg_id) FROM channel WHERE media_type = 'live'"):
+            counts = out.setdefault(int(pid), [0, 0])
+            counts[1] += 1
+            if tvg:
+                if tvg not in cache:
+                    cache[tvg] = has_guide(tvg)
+                counts[0] += cache[tvg]
+        return {pid: (n, m) for pid, (n, m) in out.items()}
 
     def playlist_meta(self, playlist_id: int) -> dict:
         row = self.get_playlist(playlist_id)

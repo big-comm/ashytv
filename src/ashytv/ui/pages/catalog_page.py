@@ -4,14 +4,17 @@ from __future__ import annotations
 
 import re
 
-from gi.repository import Adw, Gdk, Gio, GObject, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
+from ...services.meta import people_query
+from ..cast import CastRow
 from ..channel_object import ChannelObject
 from ..marquee import FocusMarquee, MarqueeLabel
 from ._common import ChipRow, SearchFilter, page_header, set_picture, update_favorite
 
+_PEOPLE_DELAY_MS = 600  # typing pause before asking the panel for people
 _POSTER_W = 150
 _POSTER_H = 225
 # "FILMES - AÇÃO" -> "Ação"; "SERIES - DORAMAS" -> "Doramas"
@@ -33,6 +36,8 @@ class CatalogPage(Gtk.Box):
         # (media type, category): hide a category
         "hide-group": (GObject.SignalFlags.RUN_FIRST, None, (object, str)),
         "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        # an actor or director found by the search (meta.CastMember)
+        "show-person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
     def __init__(self, storage, media_type: MediaType, title: str, subtitle: str):
@@ -45,6 +50,17 @@ class CatalogPage(Gtk.Box):
         self.append(page_header(title, subtitle))
         self.chips = ChipRow(self._on_chip, self._chip_menu)
         self.append(self.chips)
+
+        # Actors and directors whose name matches the search (panel /meta/people).
+        # people_search(query, on_done(query, people)) is set by the window.
+        self.people_search = None
+        self._people_query = ""
+        self._people_source = 0
+        self.people = CastRow(_("People"))
+        self.people.set_margin_start(28)
+        self.people.set_margin_end(28)
+        self.people.connect("person", lambda _r, m: self.emit("show-person", m))
+        self.append(self.people)
 
         self.store = Gio.ListStore.new(ChannelObject)
         self.search = SearchFilter(self._update_empty)
@@ -113,8 +129,38 @@ class CatalogPage(Gtk.Box):
         self.chips.set_chips(chips, self._chip)
         self._load()
 
+    def open_chip(self, key: str) -> None:
+        """Show one chip's titles (a group, "new" or "top"), e.g. from Home."""
+        self._chip = key
+        self._dirty = True
+        if self.get_mapped():
+            self.refresh()
+        if self.filter_model.get_n_items():
+            self.grid.scroll_to(0, Gtk.ListScrollFlags.NONE, None)
+
     def set_search(self, text: str) -> None:
         self.search.set_text(text)
+        query = people_query(text)
+        if query == self._people_query:
+            return
+        self._people_query = query
+        if self._people_source:
+            GLib.source_remove(self._people_source)
+            self._people_source = 0
+        if not query or self.people_search is None:
+            self.people.set_cast([])
+            return
+        self._people_source = GLib.timeout_add(_PEOPLE_DELAY_MS, self._ask_people)
+
+    def _ask_people(self) -> bool:
+        self._people_source = 0
+        if self.people_search is not None and self._people_query:
+            self.people_search(self._people_query, self._on_people)
+        return GLib.SOURCE_REMOVE
+
+    def _on_people(self, query: str, people: list) -> None:
+        if query == self._people_query:  # an older answer is dropped
+            self.people.set_cast(people)
 
     # ---- data ---------------------------------------------------------
 
