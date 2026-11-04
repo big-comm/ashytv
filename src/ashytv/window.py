@@ -6,7 +6,7 @@ import sqlite3
 import threading
 import time
 
-from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
+from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
 from . import APP_ID
 from .i18n import _, ngettext
@@ -27,7 +27,7 @@ from .ui import keynav
 from .ui.cast import ActorDialog, CastService
 from .ui.detail_dialog import DetailDialog
 from .ui.hidden_dialog import HiddenDialog
-from .ui.nav_sidebar import COMPACT_WIDTH, FULL_WIDTH, NavSidebar
+from .ui.nav_sidebar import NavRail, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
 from .ui.pages.home_page import HomePage
@@ -110,13 +110,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         # ---- sidebar ----
         self.nav = NavSidebar()
         self.nav.connect("navigate", lambda _w, key: self._on_nav_navigate(key))
-        self.nav.connect("compact-changed", self._on_nav_compact)
 
         # ---- header (spans the full width, as in the mockup) ----
         header = Adw.HeaderBar()
-        self.sidebar_btn = Gtk.ToggleButton(icon_name="sidebar-show-symbolic",
-                                            tooltip_text=_("Menu"), visible=False)
-        header.pack_start(self.sidebar_btn)
         brand = Gtk.Box(spacing=8)
         brand.append(Gtk.Image(icon_name=APP_ID, pixel_size=22))
         title = Gtk.Label(label="AshyTV")
@@ -149,20 +145,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         content.append(self.page_stack)
         self.page_stack.set_vexpand(True)
 
-        self.split = Adw.OverlaySplitView(show_sidebar=True, sidebar_width_fraction=0.18,
-                                          min_sidebar_width=FULL_WIDTH,
-                                          max_sidebar_width=FULL_WIDTH)
-        self.split.set_sidebar(self.nav)
-        self.split.set_content(content)
-        self.split.bind_property("show-sidebar", self.sidebar_btn, "active",
-                                 GObject.BindingFlags.BIDIRECTIONAL
-                                 | GObject.BindingFlags.SYNC_CREATE)
-        self.split.connect("notify::collapsed", self._on_collapsed)
-        self.nav.set_compact(bool(self.settings.get("sidebar_compact")))
+        # The menu: a rail of icons that opens over the page (as on the TVs).
+        self.rail = NavRail(self.nav, content)
 
         shell = Adw.ToolbarView()
         shell.add_top_bar(header)
-        shell.set_content(self.split)
+        shell.set_content(self.rail)
 
         # ---- welcome + shell + player (root stack) ----
         self.welcome = WelcomeView()
@@ -178,10 +166,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.tour: Tour | None = None
         self.set_content(self.tour_layer)
 
-        bp = Adw.Breakpoint.new(Adw.BreakpointCondition.parse("max-width: 900sp"))
-        bp.add_setter(self.split, "collapsed", True)
-        self.add_breakpoint(bp)
-
         self._install_keys()
         self.gamepad = GamepadInput(self.handle_remote_key)
         self.reminders = ReminderBook(self.settings.get("reminders"))
@@ -195,6 +179,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if self.storage.has_playlists():
             self.root_stack.set_visible_child_name("shell")
             self.navigate("home")
+            # The app opens with the focus on the banner (not on the menu, which would open).
+            GLib.idle_add(lambda: self.focus_page() and False)
             self._autoload_epg()
             GLib.timeout_add_seconds(3, self._auto_refresh)
             GLib.timeout_add(1500, self._offer_tour)
@@ -297,8 +283,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         elif hasattr(page, "set_search"):
             # The new page filters by the text already in the search box.
             page.set_search(self.search.get_text())
-        if self.split.get_collapsed():
-            self.split.set_show_sidebar(False)
         if getattr(self, "keyboard", None) is not None and self.keyboard.active:
             GLib.timeout_add(_PAGE_SWITCH_MS + 50, self._keep_focus_on_screen)
 
@@ -330,17 +314,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_start(self, _w) -> None:
         self.root_stack.set_visible_child_name("shell")
         self.navigate("lists" if not self.storage.has_playlists() else "home")
-
-    def _on_nav_compact(self, _nav, compact: bool) -> None:
-        width = COMPACT_WIDTH if compact else FULL_WIDTH
-        self.split.set_min_sidebar_width(width)
-        self.split.set_max_sidebar_width(width)
-        self.settings.set("sidebar_compact", compact)
-
-    def _on_collapsed(self, split, _p) -> None:
-        collapsed = split.get_collapsed()
-        self.sidebar_btn.set_visible(collapsed)
-        split.set_show_sidebar(not collapsed)
+        GLib.idle_add(lambda: self.focus_page() and False)
 
     def _on_search_toggled(self, button) -> None:
         active = button.get_active()
@@ -1206,8 +1180,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         dialog = self.get_visible_dialog()
         if dialog is not None:
             dialog.force_close()
-        if self.split.get_collapsed():
-            self.split.set_show_sidebar(True)
         start_page = self._current
         mark_seen(self.settings)
         self.tour = Tour(self.tour_layer, self._tour_steps(), self.navigate,
@@ -1709,6 +1681,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 return True
             if self.focus_page():
                 return True
+        home = self.pages.get("home")
+        if (direction in (Gtk.DirectionType.LEFT, Gtk.DirectionType.RIGHT)
+                and home is not None and home.hero_has_focus(focus)
+                and home.hero_step(-1 if direction == Gtk.DirectionType.LEFT else 1)):
+            return True  # the featured banner: previous / next title
         if not focus.get_mapped():
             # The focused widget was hidden (emptied list, closed view…).
             return self.focus_page() or self.nav.focus_active() or True
@@ -1755,8 +1732,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if not in_nav and keyval in (Gdk.KEY_BackSpace, Gdk.KEY_Escape):
             if keyval == Gdk.KEY_BackSpace and self._focus_is_editable():
                 return False
-            if self.split.get_collapsed():
-                self.split.set_show_sidebar(True)
             self.nav.focus_active()
             return True
         return False

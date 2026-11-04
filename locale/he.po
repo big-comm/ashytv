@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 13:13-0300\n"
+"POT-Creation-Date: 2026-11-04 15:41-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -46,14 +46,14 @@ msgid "Live TV"
 msgstr "טלוויזיה חיה"
 
 #: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:314
-#: src/ashytv/ui/nav_sidebar.py:13 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/window.py:232
+#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:41
+#: src/ashytv/window.py:218
 msgid "Movies"
 msgstr "סרטים"
 
 #: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:314
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/window.py:241
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:42
+#: src/ashytv/window.py:227
 msgid "Series"
 msgstr "סדרות"
 
@@ -180,43 +180,43 @@ msgstr "מתחבר לספק…"
 msgid "The provider returned no content"
 msgstr "הספק לא החזיר תוכן"
 
-#: src/ashytv/services/settings.py:49
+#: src/ashytv/services/settings.py:48
 msgid "Blue"
 msgstr "כחול"
 
-#: src/ashytv/services/settings.py:50
+#: src/ashytv/services/settings.py:49
 msgid "Teal"
 msgstr "כחול-ירקרק"
 
-#: src/ashytv/services/settings.py:51
+#: src/ashytv/services/settings.py:50
 msgid "Green"
 msgstr "ירוק"
 
-#: src/ashytv/services/settings.py:52
+#: src/ashytv/services/settings.py:51
 msgid "Yellow"
 msgstr "צהוב"
 
-#: src/ashytv/services/settings.py:53
+#: src/ashytv/services/settings.py:52
 msgid "Orange"
 msgstr "כתום"
 
-#: src/ashytv/services/settings.py:54
+#: src/ashytv/services/settings.py:53
 msgid "Red"
 msgstr "אדום"
 
-#: src/ashytv/services/settings.py:55
+#: src/ashytv/services/settings.py:54
 msgid "Pink"
 msgstr "ורוד"
 
-#: src/ashytv/services/settings.py:56
+#: src/ashytv/services/settings.py:55
 msgid "Purple"
 msgstr "סגול"
 
-#: src/ashytv/services/settings.py:57
+#: src/ashytv/services/settings.py:56
 msgid "Slate"
 msgstr "אפור צפחה"
 
-#: src/ashytv/services/settings.py:58
+#: src/ashytv/services/settings.py:57
 msgid "Emerald"
 msgstr "אמרלד"
 
@@ -321,8 +321,8 @@ msgid "→ or Enter: channels  •  Esc: back"
 msgstr "→ או Enter: ערוצים  •  Esc: חזרה"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
-#: src/ashytv/ui/nav_sidebar.py:12 src/ashytv/ui/pages/settings_page.py:147
-#: src/ashytv/window.py:595
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/settings_page.py:147
+#: src/ashytv/window.py:569
 msgid "Channels"
 msgstr "ערוצים"
 
@@ -332,7 +332,7 @@ msgstr "Enter: צפייה  •  ←: קבוצות  •  Esc: סגירה"
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
 #: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1455 src/ashytv/window.py:1461
+#: src/ashytv/window.py:1427 src/ashytv/window.py:1433
 msgid "Watch"
 msgstr "צפייה"
 
@@ -470,38 +470,30 @@ msgstr "חזרה ל-AshyTV"
 msgid "Stop"
 msgstr "עצירה"
 
-#: src/ashytv/ui/nav_sidebar.py:11
+#: src/ashytv/ui/nav_sidebar.py:13
 msgid "Home"
 msgstr "דף הבית"
 
-#: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:81
 #: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287 src/ashytv/window.py:606
-#: src/ashytv/window.py:629
+#: src/ashytv/ui/pages/channels_page.py:287 src/ashytv/window.py:580
+#: src/ashytv/window.py:603
 msgid "Favorites"
 msgstr "מועדפים"
 
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/recordings_page.py:25
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/recordings_page.py:25
 msgid "Recordings"
 msgstr "הקלטות"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/lists_page.py:72
-#: src/ashytv/window.py:1269
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:72
+#: src/ashytv/window.py:1241
 msgid "Playlists"
 msgstr "רשימות השמעה"
 
-#: src/ashytv/ui/nav_sidebar.py:19 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1275
+#: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
+#: src/ashytv/window.py:1247
 msgid "Settings"
 msgstr "הגדרות"
-
-#: src/ashytv/ui/nav_sidebar.py:56 src/ashytv/ui/nav_sidebar.py:92
-msgid "Collapse menu"
-msgstr "כיווץ התפריט"
-
-#: src/ashytv/ui/nav_sidebar.py:92
-msgid "Expand menu"
-msgstr "הרחבת התפריט"
 
 #: src/ashytv/ui/pages/catalog_page.py:59
 msgid "People"
@@ -591,8 +583,8 @@ msgstr "אין ערוצים בקטגוריה זו."
 msgid "Recent"
 msgstr "אחרונים"
 
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:607
-#: src/ashytv/window.py:630
+#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:581
+#: src/ashytv/window.py:604
 msgid "Recently watched"
 msgstr "נצפו לאחרונה"
 
@@ -679,53 +671,53 @@ msgstr "ביטול תזכורת"
 msgid "Remind me"
 msgstr "הזכירו לי"
 
-#: src/ashytv/ui/pages/home_page.py:70
+#: src/ashytv/ui/pages/home_page.py:88
 msgid "Continue Watching"
 msgstr "המשך צפייה"
 
-#: src/ashytv/ui/pages/home_page.py:71 src/ashytv/ui/welcome_view.py:62
+#: src/ashytv/ui/pages/home_page.py:89 src/ashytv/ui/welcome_view.py:62
 msgid "Live Channels"
 msgstr "ערוצים חיים"
 
-#: src/ashytv/ui/pages/home_page.py:72 src/ashytv/ui/pages/home_page.py:74
-#: src/ashytv/ui/pages/home_page.py:76
+#: src/ashytv/ui/pages/home_page.py:90 src/ashytv/ui/pages/home_page.py:92
+#: src/ashytv/ui/pages/home_page.py:94
 msgid "See all"
 msgstr "הצג הכול"
 
-#: src/ashytv/ui/pages/home_page.py:73
+#: src/ashytv/ui/pages/home_page.py:91
 msgid "Recently Added Movies"
 msgstr "סרטים שנוספו לאחרונה"
 
-#: src/ashytv/ui/pages/home_page.py:75
+#: src/ashytv/ui/pages/home_page.py:93
 msgid "Recently Added Series"
 msgstr "סדרות שנוספו לאחרונה"
 
-#: src/ashytv/ui/pages/home_page.py:187
+#: src/ashytv/ui/pages/home_page.py:208
 msgid "Welcome to AshyTV"
 msgstr "ברוכים הבאים ל-AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:188
+#: src/ashytv/ui/pages/home_page.py:209
 msgid "Your channels, movies and series in one place"
 msgstr "הערוצים, הסרטים והסדרות שלכם במקום אחד"
 
-#: src/ashytv/ui/pages/home_page.py:189
-msgid "View channels"
-msgstr "צפייה בערוצים"
+#: src/ashytv/ui/pages/home_page.py:210
+msgid "Enter: view channels"
+msgstr "Enter: הצגת ערוצים"
 
-#: src/ashytv/ui/pages/home_page.py:220
-msgid "Details"
-msgstr "פרטים"
+#: src/ashytv/ui/pages/home_page.py:241
+msgid "Enter: details"
+msgstr "Enter: פרטים"
 
-#: src/ashytv/ui/pages/home_page.py:222
-msgid "Watch now"
-msgstr "צפו עכשיו"
+#: src/ashytv/ui/pages/home_page.py:241
+msgid "← → more titles"
+msgstr "← → עוד כותרים"
 
-#: src/ashytv/ui/pages/home_page.py:393
+#: src/ashytv/ui/pages/home_page.py:424
 #, python-brace-format
 msgid "See more in {section}"
 msgstr "עוד ב{section}"
 
-#: src/ashytv/ui/pages/home_page.py:403
+#: src/ashytv/ui/pages/home_page.py:434
 msgid "See more"
 msgstr "עוד"
 
@@ -1111,7 +1103,7 @@ msgstr "קבץ איכויות של אותו ערוץ"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "מציג את ”News FHD”, ”News HD” ו־”News SD” כערוץ אחד"
 
-#: src/ashytv/ui/pages/settings_page.py:150 src/ashytv/window.py:1250
+#: src/ashytv/ui/pages/settings_page.py:150 src/ashytv/window.py:1222
 msgid "Live preview"
 msgstr "תצוגה מקדימה חיה"
 
@@ -1314,7 +1306,7 @@ msgstr ""
 "AshyTV אינה מספקת או מכילה תוכן כלשהו: היא רק מנגנת את רשימות ההשמעה שאתם "
 "מוסיפים."
 
-#: src/ashytv/ui/pages/settings_page.py:343 src/ashytv/window.py:134
+#: src/ashytv/ui/pages/settings_page.py:343 src/ashytv/window.py:130
 msgid "Guided tour"
 msgstr "סיור מודרך"
 
@@ -1628,7 +1620,7 @@ msgstr "אפשרויות קבוצה (העברה, הסתרה)"
 msgid "Keyboard shortcuts"
 msgstr "קיצורי מקלדת"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:137
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:133
 msgid "Quit"
 msgstr "יציאה"
 
@@ -1704,7 +1696,7 @@ msgstr "חזרה"
 msgid "Pause/resume"
 msgstr "השהיה/המשך"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1246
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1218
 msgid "Channel list"
 msgstr "רשימת ערוצים"
 
@@ -1844,145 +1836,141 @@ msgstr "בואו נתחיל"
 msgid "AshyTV is only a player: it does not host any content."
 msgstr "AshyTV הוא נגן בלבד: הוא אינו מארח שום תוכן."
 
-#: src/ashytv/window.py:118
-msgid "Menu"
-msgstr "תפריט"
-
-#: src/ashytv/window.py:127
+#: src/ashytv/window.py:123
 msgid "Search…"
 msgstr "חיפוש…"
 
-#: src/ashytv/window.py:135
+#: src/ashytv/window.py:131
 msgid "Keyboard Shortcuts"
 msgstr "קיצורי מקלדת"
 
-#: src/ashytv/window.py:136
+#: src/ashytv/window.py:132
 msgid "About AshyTV"
 msgstr "אודות AshyTV"
 
-#: src/ashytv/window.py:139
+#: src/ashytv/window.py:135
 msgid "Main Menu"
 msgstr "תפריט ראשי"
 
-#: src/ashytv/window.py:142
+#: src/ashytv/window.py:138
 msgid "Search (Ctrl+F)"
 msgstr "חיפוש (Ctrl+F)"
 
-#: src/ashytv/window.py:233
+#: src/ashytv/window.py:219
 msgid "The best movies for you"
 msgstr "הסרטים הטובים ביותר בשבילכם"
 
-#: src/ashytv/window.py:242
+#: src/ashytv/window.py:228
 msgid "Your favorite series in one place"
 msgstr "הסדרות האהובות עליכם במקום אחד"
 
-#: src/ashytv/window.py:517
+#: src/ashytv/window.py:491
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "הנגן אינו זמין: התקינו את mpv ו-python-mpv ({error})"
 
-#: src/ashytv/window.py:566
+#: src/ashytv/window.py:540
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "אין ערוץ {number}"
 
-#: src/ashytv/window.py:643
+#: src/ashytv/window.py:617
 msgid "Next episode…"
 msgstr "הפרק הבא…"
 
-#: src/ashytv/window.py:674 src/ashytv/window.py:683
+#: src/ashytv/window.py:648 src/ashytv/window.py:657
 msgid "This item is no longer in the playlist."
 msgstr "פריט זה כבר אינו ברשימת ההשמעה."
 
-#: src/ashytv/window.py:679
+#: src/ashytv/window.py:653
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "הפתיחה נכשלה: {error}"
 
-#: src/ashytv/window.py:690
+#: src/ashytv/window.py:664
 msgid "This episode is no longer available."
 msgstr "הפרק הזה כבר לא זמין."
 
-#: src/ashytv/window.py:726
+#: src/ashytv/window.py:700
 msgid "Added to favorites"
 msgstr "נוסף למועדפים"
 
-#: src/ashytv/window.py:726
+#: src/ashytv/window.py:700
 msgid "Removed from favorites"
 msgstr "הוסר מהמועדפים"
 
-#: src/ashytv/window.py:899
+#: src/ashytv/window.py:873
 msgid "Please wait: an import is already in progress."
 msgstr "נא להמתין: ייבוא כבר מתבצע."
 
-#: src/ashytv/window.py:917
+#: src/ashytv/window.py:891
 msgid "Importing playlist…"
 msgstr "מייבא רשימת השמעה…"
 
-#: src/ashytv/window.py:936
+#: src/ashytv/window.py:910
 msgid "Connecting to the Xtream provider…"
 msgstr "מתחבר לספק Xtream…"
 
-#: src/ashytv/window.py:954
+#: src/ashytv/window.py:928
 msgid "Provider password not found; add the playlist again."
 msgstr "סיסמת הספק לא נמצאה; הוסיפו את רשימת ההשמעה מחדש."
 
-#: src/ashytv/window.py:958
+#: src/ashytv/window.py:932
 msgid "Updating playlist…"
 msgstr "מעדכן רשימת השמעה…"
 
-#: src/ashytv/window.py:987
+#: src/ashytv/window.py:961
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "רשימת ההשמעה “{name}” עודכנה."
 
-#: src/ashytv/window.py:991
+#: src/ashytv/window.py:965
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "פריט {n} יובא."
 msgstr[1] "{n} פריטים יובאו."
 
-#: src/ashytv/window.py:992
+#: src/ashytv/window.py:966
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "רשימת ההשמעה מוכנה: פריט {n}."
 msgstr[1] "רשימת ההשמעה מוכנה: {n} פריטים."
 
-#: src/ashytv/window.py:1014
+#: src/ashytv/window.py:988
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "לא ניתן לעדכן את “{name}”: {error}"
 
-#: src/ashytv/window.py:1018
+#: src/ashytv/window.py:992
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "נכשל: {error}"
 
-#: src/ashytv/window.py:1019
+#: src/ashytv/window.py:993
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "הייבוא נכשל: {error}"
 
-#: src/ashytv/window.py:1025
+#: src/ashytv/window.py:999
 msgid "Please wait for the import to finish."
 msgstr "נא להמתין לסיום הייבוא."
 
-#: src/ashytv/window.py:1044
+#: src/ashytv/window.py:1018
 msgid "Playlist removed."
 msgstr "רשימת ההשמעה הוסרה."
 
-#: src/ashytv/window.py:1122
+#: src/ashytv/window.py:1096
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "מדריך השידורים (EPG) אינו זמין: {error}"
 
-#: src/ashytv/window.py:1184
+#: src/ashytv/window.py:1158
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "רוצים סיור קצר ב-AshyTV?"
 
-#: src/ashytv/window.py:1185
+#: src/ashytv/window.py:1159
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -1990,19 +1978,19 @@ msgstr ""
 "כמה צעדים על המסכים האמיתיים: ערוצים, מדריך שידורים, סרטים, רשימות השמעה "
 "והגדרות. אפשר לפתוח אותו שוב מהתפריט הראשי."
 
-#: src/ashytv/window.py:1187
+#: src/ashytv/window.py:1161
 msgid "Not now"
 msgstr "לא עכשיו"
 
-#: src/ashytv/window.py:1188
+#: src/ashytv/window.py:1162
 msgid "Start"
 msgstr "התחלה"
 
-#: src/ashytv/window.py:1238
+#: src/ashytv/window.py:1210
 msgid "Sections"
 msgstr "אזורים"
 
-#: src/ashytv/window.py:1239
+#: src/ashytv/window.py:1211
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2010,11 +1998,11 @@ msgstr ""
 "דף הבית, ערוצי טלוויזיה, סרטים, סדרות, מועדפים, הקלטות, רשימות השמעה "
 "והגדרות. גם המקלדת, שלט רחוק או בקר משחקים עובדים."
 
-#: src/ashytv/window.py:1242
+#: src/ashytv/window.py:1214
 msgid "Channel groups"
 msgstr "קבוצות ערוצים"
 
-#: src/ashytv/window.py:1243
+#: src/ashytv/window.py:1215
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
@@ -2022,7 +2010,7 @@ msgstr ""
 "בחרו קבוצה כדי לראות את הערוצים שלה. לחיצה ימנית (או לחיצה ארוכה) על קבוצה "
 "מאפשרת להזיז או להסתיר אותה."
 
-#: src/ashytv/window.py:1247
+#: src/ashytv/window.py:1219
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
@@ -2030,7 +2018,7 @@ msgstr ""
 "לחיצה בוחרת ערוץ; לחיצה כפולה או Enter פותחת אותו. לחיצה ימנית על ערוץ "
 "מאפשרת להסתיר אותו או להוסיף אותו למועדפים."
 
-#: src/ashytv/window.py:1251
+#: src/ashytv/window.py:1223
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
@@ -2038,27 +2026,27 @@ msgstr ""
 "הערוץ שנבחר מתנגן כאן מושתק (הכפתור מפעיל את הקול), יחד עם מה שמשודר עכשיו "
 "ובהמשך."
 
-#: src/ashytv/window.py:1254
+#: src/ashytv/window.py:1226
 msgid "Hidden items"
 msgstr "פריטים מוסתרים"
 
-#: src/ashytv/window.py:1255
+#: src/ashytv/window.py:1227
 msgid "Everything you hid is here. Open it to show items again."
 msgstr "כל מה שהסתרתם נמצא כאן. פתחו כדי להציג פריטים שוב."
 
-#: src/ashytv/window.py:1257
+#: src/ashytv/window.py:1229
 msgid "Program guide"
 msgstr "מדריך שידורים"
 
-#: src/ashytv/window.py:1258
+#: src/ashytv/window.py:1230
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr "עברו למדריך השידורים כדי לראות מה משודר, שעה אחר שעה, ולהגדיר תזכורות."
 
-#: src/ashytv/window.py:1260
+#: src/ashytv/window.py:1232
 msgid "Movies and series"
 msgstr "סרטים וסדרות"
 
-#: src/ashytv/window.py:1261
+#: src/ashytv/window.py:1233
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2067,18 +2055,18 @@ msgstr ""
 "פוסטרים עם כותרות ארוכות גוללים כשמצביעים עליהם. פתחו אחד כדי לראות פרטים "
 "ושחקנים; לחצו על שחקן כדי לראות כותרים נוספים שלו ברשימות שלכם."
 
-#: src/ashytv/window.py:1265
+#: src/ashytv/window.py:1237
 msgid "Favorites and recordings"
 msgstr "מועדפים והקלטות"
 
-#: src/ashytv/window.py:1266
+#: src/ashytv/window.py:1238
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
 msgstr ""
 "הלב שומר כאן ערוצים, סרטים וסדרות; הקלטות של שידורים חיים מופיעות בהקלטות."
 
-#: src/ashytv/window.py:1270
+#: src/ashytv/window.py:1242
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2088,97 +2076,97 @@ msgstr ""
 "הספק): הנקודות מראות אם כל אחד מקוון, איטי או לא זמין, ו-AshyTV עובר ביניהם "
 "אוטומטית."
 
-#: src/ashytv/window.py:1276
+#: src/ashytv/window.py:1248
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
 msgstr "ערכות נושא וצבעים, ערוצים וקבוצות מוסתרים, DNS מאובטח, קוד הורים ועוד."
 
-#: src/ashytv/window.py:1279
+#: src/ashytv/window.py:1251
 msgid "See it again"
 msgstr "לצפות שוב"
 
-#: src/ashytv/window.py:1280
+#: src/ashytv/window.py:1252
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr "אפשר לפתוח את הסיור שוב מהתפריט הראשי (סיור מודרך) או מהגדרות ← אודות."
 
-#: src/ashytv/window.py:1330
+#: src/ashytv/window.py:1302
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr "„{name}”: השרת הראשי לא עונה. נעשה שימוש בשרת הגיבוי."
 
-#: src/ashytv/window.py:1333
+#: src/ashytv/window.py:1305
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "„{name}”: השרת הראשי חזר."
 
-#: src/ashytv/window.py:1339
+#: src/ashytv/window.py:1311
 msgid "AshyTV servers"
 msgstr "שרתי AshyTV"
 
-#: src/ashytv/window.py:1361
+#: src/ashytv/window.py:1333
 msgid "Switching to the main server…"
 msgstr "עובר לשרת הראשי…"
 
-#: src/ashytv/window.py:1362
+#: src/ashytv/window.py:1334
 msgid "Switching to the backup server…"
 msgstr "עובר לשרת הגיבוי…"
 
-#: src/ashytv/window.py:1432
+#: src/ashytv/window.py:1404
 msgid "Programme"
 msgstr "תוכנית"
 
-#: src/ashytv/window.py:1436
+#: src/ashytv/window.py:1408
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "תקבלו תזכורת ל-“{title}” בשעה {time}"
 
-#: src/ashytv/window.py:1437
+#: src/ashytv/window.py:1409
 msgid "Reminder cancelled"
 msgstr "התזכורת בוטלה"
 
-#: src/ashytv/window.py:1449
+#: src/ashytv/window.py:1421
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "“{title}” מתחילה בקרוב ב-{channel}"
 
-#: src/ashytv/window.py:1451
+#: src/ashytv/window.py:1423
 msgid "AshyTV reminder"
 msgstr "תזכורת של AshyTV"
 
-#: src/ashytv/window.py:1470
+#: src/ashytv/window.py:1442
 msgid "This channel is no longer in your playlists."
 msgstr "ערוץ זה כבר אינו ברשימות ההשמעה שלכם."
 
-#: src/ashytv/window.py:1510
+#: src/ashytv/window.py:1482
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "הקבוצה “{name}” הוסתרה"
 
-#: src/ashytv/window.py:1511
+#: src/ashytv/window.py:1483
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "הקטגוריה „{name}” הוסתרה"
 
-#: src/ashytv/window.py:1525
+#: src/ashytv/window.py:1497
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "הערוץ „{name}” הוסתר"
 
-#: src/ashytv/window.py:1531
+#: src/ashytv/window.py:1503
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "כדי להציג שוב: הגדרות ← ערוצים וקבוצות מוסתרים"
 
-#: src/ashytv/window.py:1533
+#: src/ashytv/window.py:1505
 msgid "See hidden"
 msgstr "הצגת מוסתרים"
 
-#: src/ashytv/window.py:1538
+#: src/ashytv/window.py:1510
 msgid "Undo"
 msgstr "ביטול"
 
-#: src/ashytv/window.py:1817
+#: src/ashytv/window.py:1792
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr "אי אפשר לשמור כעת: רשימה מתעדכנת. נסו שוב."
 
@@ -2245,6 +2233,24 @@ msgstr "קטלוג סרטים וסדרות עם המשך צפייה והפרק �
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "ניגון באמצעות libmpv עם פענוח חומרה, תמונה בתוך תמונה והקלטה"
+
+#~ msgid "Collapse menu"
+#~ msgstr "כיווץ התפריט"
+
+#~ msgid "Expand menu"
+#~ msgstr "הרחבת התפריט"
+
+#~ msgid "View channels"
+#~ msgstr "צפייה בערוצים"
+
+#~ msgid "Details"
+#~ msgstr "פרטים"
+
+#~ msgid "Watch now"
+#~ msgstr "צפו עכשיו"
+
+#~ msgid "Menu"
+#~ msgstr "תפריט"
 
 #~ msgid "Trending Series"
 #~ msgstr "סדרות פופולריות"

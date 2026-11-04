@@ -63,7 +63,7 @@ window.ashy-window headerbar {
 }
 button.ashy-nav-item {
   border-radius: 10px;
-  padding: 9px 12px;
+  padding: 9px 18px;
   margin: 2px 0;
   color: var(--ashy-fg-dim);
   background: transparent;
@@ -174,6 +174,20 @@ button.ashy-card:hover { background-color: var(--ashy-panel-2); border-color: al
 
 /* ---------------- Hero / destaque ---------------- */
 .ashy-hero { border-radius: 20px; }
+/* The banner is one button: no button look, a ring when focused. */
+button.ashy-hero-btn {
+  padding: 0; border-radius: 20px; background: none; box-shadow: none; border: none;
+  outline: 3px solid transparent; outline-offset: 3px;
+}
+button.ashy-hero-btn:focus-visible { outline-color: #ffffff; }
+.ashy-hero-hint { color: alpha(#fff, 0.75); font-size: 13px; }
+button.ashy-hero-arrow {
+  min-width: 44px; min-height: 44px; opacity: 0;
+  background-color: alpha(black, 0.45); color: #fff;
+  transition: opacity 150ms ease-out;
+}
+.ashy-hero-box:hover button.ashy-hero-arrow { opacity: 1; }
+button.ashy-hero-arrow:hover { background-color: alpha(black, 0.7); }
 .ashy-hero-shade {
   border-radius: 20px;
   background-image: linear-gradient(to right, rgba(6, 10, 22, 0.92) 0%,
@@ -381,11 +395,21 @@ button.ashy-swatch image { color: #fff; }
   border-radius: 999px; padding: 2px 14px; font-weight: 700;
 }
 
-/* ---------------- Compact sidebar (icons only) ---------------- */
-.ashy-nav.compact { padding: 8px 6px; }
-.ashy-nav.compact button.ashy-nav-item { padding: 10px; }
-.ashy-nav.compact button.ashy-nav-item > box { margin-left: 4px; }
-button.ashy-nav-toggle { color: var(--ashy-fg-faint); }
+/* ---------------- Side menu: rail that opens over the page ----------------
+   Same padding open and closed, so the icons stay put while it widens. */
+.ashy-nav { min-width: 0; }
+.ashy-nav label { opacity: 0; transition: opacity 120ms ease-out; }
+.ashy-nav.open label { opacity: 1; transition: opacity 160ms ease-out 80ms; }
+.ashy-nav.open {
+  /* Over the page: opaque (the sidebar tint on the window colour). */
+  background-color: var(--ashy-bg);
+  background-image: linear-gradient(var(--ashy-sidebar), var(--ashy-sidebar));
+  box-shadow: 12px 0 40px -8px alpha(black, 0.55);
+}
+.ashy-nav-clip, .ashy-nav-clip > viewport { background: transparent; }
+.ashy-nav-scrim {
+  background-image: linear-gradient(to right, alpha(black, 0.75), alpha(black, 0.35) 45%, alpha(black, 0.1));
+}
 
 /* ---------------- Keyboard / remote focus ----------------
  * Exactly one ring per focused item, drawn inside its bounds: an outline

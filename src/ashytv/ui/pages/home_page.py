@@ -54,15 +54,33 @@ class HomePage(Gtk.Box):
         self.append(sw)
 
         # ---- carousel ----
-        self.carousel = Adw.Carousel(allow_scroll_wheel=False, spacing=12)
+        # The whole banner is one item, as on the TV apps: ← → go through the
+        # titles (← on the first one: the menu), Enter or a click opens it; with
+        # the mouse, the arrows at its sides.
+        self.carousel = Adw.Carousel(allow_scroll_wheel=False, allow_mouse_drag=False,
+                                     spacing=12)
         self.carousel.set_size_request(-1, _HERO_H)
-        hero = Gtk.Overlay()
-        hero.set_child(self.carousel)
+        self.hero = Gtk.Button(child=self.carousel, focus_on_click=False)
+        self.hero.add_css_class("ashy-hero-btn")
+        self.hero.connect("clicked", lambda *_a: self._open_slide())
+        hero = Gtk.Overlay(child=self.hero)
+        hero.add_css_class("ashy-hero-box")
         dots = Adw.CarouselIndicatorDots(carousel=self.carousel,
                                          halign=Gtk.Align.CENTER,
                                          valign=Gtk.Align.END, margin_bottom=8)
         hero.add_overlay(dots)
+        self._arrows: list[Gtk.Button] = []
+        for icon, step, align in (("go-previous-symbolic", -1, Gtk.Align.START),
+                                  ("go-next-symbolic", 1, Gtk.Align.END)):
+            arrow = Gtk.Button(icon_name=icon, focusable=False, halign=align,
+                               valign=Gtk.Align.CENTER, margin_start=12, margin_end=12)
+            arrow.add_css_class("ashy-hero-arrow")
+            arrow.add_css_class("circular")
+            arrow.connect("clicked", lambda _b, d=step: self.hero_step(d, wrap=True))
+            hero.add_overlay(arrow)
+            self._arrows.append(arrow)
         inner.append(hero)
+        self._slides: list = []
         self.carousel.connect("page-changed", lambda _c, index: self._on_slide(index))
         GLib.timeout_add_seconds(_SLIDE_SECS, self._advance)
 
@@ -171,11 +189,14 @@ class HomePage(Gtk.Box):
         featured = home.featured(
             self.storage.channels(MediaType.MOVIE, order="added", limit=40),
             self.storage.channels(MediaType.SERIES, order="added", limit=40))
+        self._slides = list(featured)
+        for arrow in self._arrows:
+            arrow.set_visible(len(featured) > 1)
         if not featured:
             self.carousel.append(self._welcome_slide())
             return
         for ch in featured:
-            self.carousel.append(self._slide(ch))
+            self.carousel.append(self._slide(ch, len(featured) > 1))
         self._on_slide(0)
 
     def _welcome_slide(self) -> Gtk.Widget:
@@ -186,10 +207,10 @@ class HomePage(Gtk.Box):
         slide.add_overlay(self._hero_text(
             _("Welcome to AshyTV"),
             _("Your channels, movies and series in one place"),
-            [(_("View channels"), lambda: self.emit("navigate", "channels"))]))
+            _("Enter: view channels")))
         return slide
 
-    def _slide(self, ch: Channel) -> Gtk.Widget:
+    def _slide(self, ch: Channel, several: bool) -> Gtk.Widget:
         slide = Gtk.Overlay(hexpand=True)
         slide.add_css_class("ashy-hero")
         slide.set_overflow(Gtk.Overflow.HIDDEN)
@@ -217,13 +238,11 @@ class HomePage(Gtk.Box):
         meta = "  •  ".join(p for p in (
             ch.media_type.label, ch.year,
             f"★ {ch.rating:.1f}" if ch.rating else "", ch.genre) if p)
-        buttons = [(_("Details"), lambda: self.emit("play", ch))]
-        if ch.media_type is MediaType.MOVIE:
-            buttons.insert(0, (_("Watch now"), lambda: self.emit("watch", ch)))
-        slide.add_overlay(self._hero_text(ch.display_name, meta, buttons, ch.plot))
+        hint = _("Enter: details") + ("  ·  " + _("← → more titles") if several else "")
+        slide.add_overlay(self._hero_text(ch.display_name, meta, hint, ch.plot))
         return slide
 
-    def _hero_text(self, title, sub, buttons, plot="") -> Gtk.Widget:
+    def _hero_text(self, title, sub, hint, plot="") -> Gtk.Widget:
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
                       valign=Gtk.Align.CENTER, halign=Gtk.Align.START)
         box.set_margin_start(36)
@@ -240,39 +259,51 @@ class HomePage(Gtk.Box):
                           lines=2, ellipsize=3)
             p.add_css_class("ashy-faint")
             box.append(p)
-        row = Gtk.Box(spacing=10, halign=Gtk.Align.START, margin_top=6)
-        for i, (label, action) in enumerate(buttons):
-            btn = Gtk.Button(label=label)
-            btn.add_css_class("pill-light" if i == 0 else "pill-ghost")
-            btn.connect("clicked", lambda _b, a=action: a())
-            row.append(btn)
-        box.append(row)
+        h = Gtk.Label(label=hint, xalign=0, margin_top=6)
+        h.add_css_class("ashy-hero-hint")
+        box.append(h)
         return box
 
     def focus_content(self) -> bool:
-        """Entering Home lands on the slide on screen (its Watch button)."""
+        """Entering Home (and opening the app) lands on the banner."""
+        return self.hero.grab_focus()
+
+    def hero_has_focus(self, widget) -> bool:
+        return widget is self.hero
+
+    def _index(self) -> int:
+        return round(self.carousel.get_position())
+
+    def hero_step(self, step: int, wrap: bool = False) -> bool:
+        """← / →: the previous / next title. False on ← at the first one
+        (the focus goes on to the menu)."""
         n = self.carousel.get_n_pages()
-        if n:
-            page = self.carousel.get_nth_page(min(n - 1, round(self.carousel.get_position())))
-            if page.child_focus(Gtk.DirectionType.TAB_FORWARD):
-                return True
-        return False
+        if n < 2:
+            return False
+        i = self._index() + step
+        if i < 0 and not wrap:
+            return False
+        i %= n
+        self._moved_at = GLib.get_monotonic_time()
+        self.carousel.scroll_to(self.carousel.get_nth_page(i), True)
+        return True
+
+    def _open_slide(self) -> None:
+        if not self._slides:
+            self.emit("navigate", "channels")
+            return
+        self.emit("play", self._slides[min(self._index(), len(self._slides) - 1)])
 
     def _on_slide(self, index: int) -> None:
-        """Only the slide on screen takes the focus (Tab and arrows must not
-        land on a hidden one); a focused button follows the slide."""
-        root = self.get_root()
-        focus = root.get_focus() if root is not None else None
-        had_focus = focus is not None and focus.is_ancestor(self.carousel)
         for i in range(self.carousel.get_n_pages()):
-            self.carousel.get_nth_page(i).set_can_focus(i == index)
-        if had_focus and index < self.carousel.get_n_pages():
-            self.carousel.get_nth_page(index).child_focus(Gtk.DirectionType.TAB_FORWARD)
+            self.carousel.get_nth_page(i).set_can_focus(False)
 
     def _advance(self) -> bool:
         n = self.carousel.get_n_pages()
-        if n > 1 and self.get_mapped():
-            nxt = (round(self.carousel.get_position()) + 1) % n
+        # A title picked by hand stays a full turn before the next one.
+        recent = GLib.get_monotonic_time() - getattr(self, "_moved_at", 0) < _SLIDE_SECS * 1_000_000
+        if n > 1 and self.get_mapped() and not recent:
+            nxt = (self._index() + 1) % n
             self.carousel.scroll_to(self.carousel.get_nth_page(nxt), True)
         return GLib.SOURCE_CONTINUE
 
