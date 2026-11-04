@@ -309,3 +309,24 @@ def test_marquee_offset_pauses_scrolls_and_returns():
     assert marquee_offset(5.0, 80, speed=40, pause=1) == pytest.approx(40)
     assert marquee_offset(6.5, 80, speed=40, pause=1) == 0  # next cycle
     assert marquee_offset(3.0, 0) == 0
+
+
+def test_backdrop_shares_the_title_cache_and_refreshes_old_answers(tmp_path):
+    # An answer cached before the panel sent pictures (no "backdrop" key) is asked again.
+    old = FakeServer({"/meta/title": TITLE})
+    client(tmp_path, old).title(MOVIE, tmdb_id="603")
+    new = FakeServer({"/meta/title": {**TITLE, "backdrop": "https://image.tmdb.org/t/p/w780/bg.jpg"}})
+    c = client(tmp_path, new)
+    assert c.backdrop(MOVIE, tmdb_id="603") == "https://image.tmdb.org/t/p/w780/bg.jpg"
+    assert len(new.calls) == 1
+    # Now cached with the picture: the cast and the backdrop need no request.
+    assert c.backdrop(MOVIE, tmdb_id="603").endswith("/bg.jpg")
+    assert c.title(MOVIE, tmdb_id="603")[0].name == "Ana Bright"
+    assert len(new.calls) == 1
+
+
+def test_backdrop_ignores_none_and_unsafe_urls(tmp_path):
+    for value in (None, "", "file:///etc/passwd", "http://x/y.jpg"):
+        server = FakeServer({"/meta/title": {**TITLE, "backdrop": value}})
+        c = client(tmp_path / str(value).replace("/", "_"), server)
+        assert c.backdrop(MOVIE, tmdb_id="603") == ""

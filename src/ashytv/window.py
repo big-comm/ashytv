@@ -202,6 +202,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         home.connect("navigate", lambda _w, k: self.navigate(k))
         home.connect("watch", lambda _w, ch: self._play_channel(ch))
         home.connect("open-group", self._on_home_group)
+        home.backdrop_lookup = self.cast.load_backdrop
 
         channels = ChannelsPage(self.storage, MediaType.LIVE)
         channels.connect("play", self._on_play)

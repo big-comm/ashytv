@@ -96,6 +96,22 @@ class CastService:
 
         threading.Thread(target=worker, daemon=True, name="ashytv-cast").start()
 
+    def load_backdrop(self, ch: Channel, on_done: Callable[[Channel, str], None]) -> None:
+        """on_done(channel, url) with TMDB's landscape picture, only when found."""
+        kind = MediaType.SERIES if ch.media_type is MediaType.SERIES else MediaType.MOVIE
+        tmdb = self.tmdb_ids.get(self._key(ch)) or ch.tmdb
+        query, year, lang = search_title(ch.display_name), meta.channel_year(ch), _lang()
+
+        def worker():
+            try:
+                url = self.client.backdrop(kind, tmdb_id=tmdb, query=query, year=year, lang=lang)
+            except MetaError:
+                url = ""
+            if url:
+                GLib.idle_add(_call, on_done, ch, url)
+
+        threading.Thread(target=worker, daemon=True, name="ashytv-backdrop").start()
+
     # ---- people by name ------------------------------------------------------
 
     def search_people(self, query: str,

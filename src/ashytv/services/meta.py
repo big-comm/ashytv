@@ -234,6 +234,28 @@ class MetaClient:
             params["lang"] = lang
         return parse_title(self._get("/api/v1/meta/title", params, TITLE_TTL))
 
+    def backdrop(self, kind: MediaType, tmdb_id: str = "", query: str = "",
+                 year: str = "", lang: str = "") -> str:
+        """The title's landscape picture (w780) for the featured banner, or ""
+        (same request and cache as `title`)."""
+        params = {"type": "series" if kind is MediaType.SERIES else "movie"}
+        if tmdb_id:
+            params["tmdb_id"] = tmdb_id
+        else:
+            if not query.strip():
+                raise MetaNotFound("no title")
+            params["q"] = query.strip()
+            if year:
+                params["year"] = year
+        if lang:
+            params["lang"] = lang
+        data = self._get("/api/v1/meta/title", params, TITLE_TTL)
+        if isinstance(data, dict) and "backdrop" not in data:
+            # Cached before the panel sent pictures: ask again (and update the cache).
+            data = self._get("/api/v1/meta/title", params, -1)
+        url = data.get("backdrop") if isinstance(data, dict) else None
+        return url if isinstance(url, str) and url.startswith("https://") else ""
+
     def person(self, person_id: str, lang: str = "") -> Person:
         if not _id(person_id):
             raise MetaNotFound("no person id")
