@@ -326,6 +326,17 @@ def meta_person(cat: dict, person_id: str, base: str):
             "credits": credits}
 
 
+def meta_people(qs: dict, base: str):
+    """Name search, like the panel's /meta/people (actors only here)."""
+    query = qs.get("q", "").strip().casefold()
+    if not 2 <= len(query) <= 80:
+        return None
+    return {"items": [{"id": PERSON_ID + i, "name": name,
+                       "profile": f"{base}/img/person/{PERSON_ID + i}.svg",
+                       "known_for": "Acting"}
+                      for i, name in enumerate(ACTORS) if query in name.casefold()]}
+
+
 def build_xmltv() -> bytes:
     now = int(time.time())
     start_day = now - now % 1800 - 6 * 3600
@@ -456,6 +467,10 @@ class Handler(BaseHTTPRequestHandler):
         base = self.base
         if path == "/api/v1/meta/title":
             data = meta_title(self.catalog, qs, base)
+        elif path == "/api/v1/meta/people":
+            data = meta_people(qs, base)
+            if data is None:
+                return self._send(b'{"error":"bad_request"}', "application/json", 400)
         else:
             data = meta_person(self.catalog, path.rsplit("/", 1)[-1], base)
         if data is None:

@@ -202,6 +202,18 @@ button.pill-light {
   padding: 8px 20px; font-weight: 700; box-shadow: none;
 }
 button.pill-light:hover { background-color: alpha(#fff, 0.85); }
+button.pill-ghost {
+  background-color: alpha(#fff, 0.16); color: #fff; border-radius: 999px;
+  padding: 8px 20px; font-weight: 700; box-shadow: none;
+  border: 1px solid alpha(#fff, 0.35);
+}
+button.pill-ghost:hover { background-color: alpha(#fff, 0.26); }
+/* "See more" at the end of a Home rail: a poster-sized card with a + */
+.ashy-more-card { border: 1px dashed alpha(var(--ashy-accent-2), 0.55); }
+button:hover .ashy-more-card { background-color: alpha(var(--ashy-accent-2), 0.18); }
+.ashy-more-card image { color: var(--ashy-accent-2); }
+/* Speed test */
+.ashy-speed-value { font-size: 28px; font-weight: 800; }
 
 /* ---------------- Welcome ---------------- */
 .ashy-welcome-title { font-size: 64px; font-weight: 900; color: #fff; letter-spacing: -1px; }

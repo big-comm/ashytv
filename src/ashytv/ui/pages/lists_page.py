@@ -8,10 +8,13 @@ import time
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
 from ...i18n import _, ngettext
-from ...services import failover, free_tv
+from ...services import failover, free_tv, http
 from ...services.xtream_client import XtreamProvider, parse_provider
 from ..servers_dialog import ServersDialog, status_text
 from ._common import page_header
+
+
+_GUIDE_LINK_ERROR = _("The guide link must be a web address (http or https).")
 
 
 def _fmt_time(ts: float) -> str:
@@ -42,8 +45,10 @@ class ListsPage(Gtk.Box):
     __gtype_name__ = "AshyListsPage"
 
     __gsignals__ = {
-        # name, source (file/URL), backup URLs
-        "import-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str, object)),
+        # name, source (file/URL), backup URLs, guide link ("" = the playlist's)
+        "import-requested": (GObject.SignalFlags.RUN_FIRST, None, (str, str, object, str)),
+        # playlist id, guide link ("" = the playlist's own url-tvg)
+        "guide-link-changed": (GObject.SignalFlags.RUN_FIRST, None, (int, str)),
         # name, host, username, password, backup servers
         "xtream-requested": (GObject.SignalFlags.RUN_FIRST, None,
                              (str, str, str, str, object)),
@@ -155,6 +160,16 @@ class ListsPage(Gtk.Box):
         # free TV
         self.stack.add_named(self._free_tv_box(), "free")
         inner.append(self.stack)
+
+        # M3U file or URL: the guide may come from elsewhere.
+        self.guide_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.guide_entry = self._field(self.guide_box, _("Guide link (EPG) — optional"),
+                                       "x-office-calendar-symbolic",
+                                       Gtk.Entry(placeholder_text="https://…/guide.xml",
+                                                 input_purpose=Gtk.InputPurpose.URL))
+        self.guide_entry.set_tooltip_text(_("An XMLTV guide; it replaces the one named "
+                                            "in the playlist (url-tvg)"))
+        inner.append(self.guide_box)
 
         self.status = Gtk.Label(xalign=0, wrap=True, visible=False)
         self.status.add_css_class("ashy-faint")
@@ -318,7 +333,8 @@ class ListsPage(Gtk.Box):
     def clear_form(self) -> None:
         """Empty the "add" form after a playlist was saved."""
         for entry in (self.name_entry, self.host_entry, self.user_entry,
-                      self.pass_entry, self.url_entry, *self.x_backups, *self.u_backups):
+                      self.pass_entry, self.url_entry, self.guide_entry,
+                      *self.x_backups, *self.u_backups):
             entry.set_text("")
         self._file_path = ""
         self.file_label.set_text(_("No file selected"))
@@ -350,6 +366,10 @@ class ListsPage(Gtk.Box):
         if pl["updated_at"]:
             parts.append(_("updated {when}").format(when=_fmt_time(pl["updated_at"])))
         meta = self.storage.playlist_meta(pl["id"])
+        coverage = meta.get("epg_coverage")
+        if (isinstance(coverage, list) and len(coverage) == 2
+                and all(isinstance(n, int) for n in coverage) and coverage[1]):
+            parts.append(_("Guide: {n} of {m} channels").format(n=coverage[0], m=coverage[1]))
         if meta.get("exp_date"):
             exp = int(meta["exp_date"])
             left = exp - time.time()
@@ -379,6 +399,13 @@ class ListsPage(Gtk.Box):
         servers = self._servers(pl)
         if servers:
             row.add_suffix(self._server_button(pl, servers))
+        if kind == "m3u" and not free:
+            guide = Gtk.Button(icon_name="x-office-calendar-symbolic",
+                               valign=Gtk.Align.CENTER,
+                               tooltip_text=_("Guide link (EPG)"))
+            guide.add_css_class("flat")
+            guide.connect("clicked", lambda *_: self._edit_guide_link(pl, meta))
+            row.add_suffix(guide)
         refresh = Gtk.Button(icon_name="view-refresh-symbolic", valign=Gtk.Align.CENTER,
                              tooltip_text=_("Refresh playlist"))
         refresh.add_css_class("flat")
@@ -436,6 +463,43 @@ class ListsPage(Gtk.Box):
         dialog.connect("check", lambda _d: self.emit("check-servers", pl["id"]))
         dialog.present(self)
 
+    def _edit_guide_link(self, pl, meta: dict) -> None:
+        own = meta.get("epg_url", "")
+        entry = Gtk.Entry(text=meta.get("epg_override", ""), hexpand=True,
+                          placeholder_text=own or "https://…/guide.xml",
+                          input_purpose=Gtk.InputPurpose.URL, activates_default=True)
+        error = Gtk.Label(xalign=0, wrap=True, visible=False)
+        error.add_css_class("error")
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        box.append(entry)
+        box.append(error)
+        body = _("An XMLTV guide for “{name}”. It replaces the one named in the "
+                 "playlist; leave it empty to use the playlist's own.").format(name=pl["name"])
+        dialog = Adw.AlertDialog(heading=_("Guide link (EPG) — optional"), body=body,
+                                 extra_child=box)
+        dialog.add_response("cancel", _("Cancel"))
+        dialog.add_response("save", _("Save"))
+        dialog.set_response_appearance("save", Adw.ResponseAppearance.SUGGESTED)
+        dialog.set_default_response("save")
+        dialog.set_close_response("cancel")
+
+        def check(*_a):
+            text = entry.get_text().strip()
+            ok = not text or http.is_web_url(text)
+            error.set_text("" if ok else _GUIDE_LINK_ERROR)
+            error.set_visible(not ok)
+            dialog.set_response_enabled("save", ok)
+
+        def response(_d, answer):
+            if answer == "save":
+                text = entry.get_text().strip()
+                if text != meta.get("epg_override", ""):
+                    self.emit("guide-link-changed", pl["id"], text)
+
+        entry.connect("changed", check)
+        dialog.connect("response", response)
+        dialog.present(self)
+
     def _confirm_delete(self, pl) -> None:
         dialog = Adw.AlertDialog(
             heading=_("Remove playlist?"),
@@ -457,6 +521,7 @@ class ListsPage(Gtk.Box):
     def _on_tab(self, button: Gtk.ToggleButton, key: str) -> None:
         if button.get_active():
             self.stack.set_visible_child_name(key)
+            self.guide_box.set_visible(key in ("file", "url"))
             self.set_status("")
             self.name_entry.set_placeholder_text(
                 self._free_tv_name() if key == "free" else _("My Playlist"))
@@ -519,11 +584,16 @@ class ListsPage(Gtk.Box):
             return
         name = self.name_entry.get_text().strip()
         key = self.stack.get_visible_child_name()
+        guide = self.guide_entry.get_text().strip() if key in ("file", "url") else ""
+        if guide and not http.is_web_url(guide):
+            self.set_status(_GUIDE_LINK_ERROR, error=True)
+            return
         if key == "file":
             if not self._file_path:
                 self.set_status(_("Choose an .m3u file."), error=True)
                 return
-            self.emit("import-requested", name or _("My Playlist"), self._file_path, [])
+            self.emit("import-requested", name or _("My Playlist"), self._file_path, [],
+                      guide)
         elif key == "url":
             url = self.url_entry.get_text().strip()
             if not url.startswith(("http://", "https://")):
@@ -531,11 +601,11 @@ class ListsPage(Gtk.Box):
                                 error=True)
                 return
             self.emit("import-requested", name or _("My Playlist"), url,
-                      [e.get_text().strip() for e in self.u_backups])
+                      [e.get_text().strip() for e in self.u_backups], guide)
         elif key == "free":
             source = free_tv.make_source(self._free_codes[self.free_drop.get_selected()],
                                          self.free_catalog.get_active())
-            self.emit("import-requested", name or self._free_tv_name(), source, [])
+            self.emit("import-requested", name or self._free_tv_name(), source, [], "")
         elif key == "xtream":
             host = self.host_entry.get_text().strip()
             user = self.user_entry.get_text().strip()

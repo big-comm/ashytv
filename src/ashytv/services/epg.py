@@ -21,6 +21,7 @@ from xml.etree import ElementTree as ET
 from gi.repository import GLib
 
 from . import http
+from .guide_names import GuideNameIndex, normalize_name
 
 # A cached guide is valid for this long before being downloaded again.
 CACHE_TTL = 6 * 3600
@@ -49,6 +50,8 @@ class EpgGuide:
     def __init__(self) -> None:
         self._by_channel: dict[str, list[Programme]] = {}
         self._starts: dict[str, list[int]] = {}
+        # (channel name, its tvg-id) -> guide id, for channels linked by name.
+        self.links: dict[tuple[str, str], str] = {}
 
     def __bool__(self) -> bool:
         return bool(self._by_channel)
@@ -65,17 +68,30 @@ class EpgGuide:
         return tvg_id.lower() in self._by_channel
 
     def load_xmltv(self, data, channels: set[str] | None = None,
-                   now: int | None = None) -> None:
+                   now: int | None = None,
+                   names: list[tuple[str, str]] | None = None) -> None:
         """Load from bytes or a binary file (stream), gzipped or not.
 
         `channels` (lowercase tvg-ids) keeps only the channels of the user's
         playlists; programmes far from `now` are dropped too. Big guides
         carry thousands of channels and weeks of programmes: keeping them all
         cost hundreds of MB.
+
+        `names`: (name, tvg-id) of the live channels. Those without a tvg-id,
+        or with one the guide lacks, are linked by name to the one guide
+        channel of the same name (see guide_names); the result is in `links`.
         """
         stream = io.BytesIO(data) if isinstance(data, (bytes, bytearray)) else data
         stream = _maybe_gunzip(stream)
         index: dict[str, list[Programme]] = {}
+        names_index = GuideNameIndex() if names else None
+        # Guide channels that may end up linked by name: their programmes are
+        # kept until the whole guide is read (guides don't always list every
+        # <channel> before the programmes, and a name may turn out ambiguous).
+        user_keys = {normalize_name(n) for n, _t in names or ()} - {""}
+        candidates: set[str] = set()
+        if channels is not None:
+            channels = set(channels)
         lo = hi = 0
         if now is not None:
             lo, hi = now - KEEP_BEFORE, now + KEEP_AFTER
@@ -90,7 +106,8 @@ class EpgGuide:
                 cid = elem.get("channel", "")
                 start = _parse_ts(elem.get("start_timestamp"), elem.get("start"))
                 stop = _parse_ts(elem.get("stop_timestamp"), elem.get("stop"))
-                wanted = channels is None or cid.lower() in channels
+                wanted = (channels is None or cid.lower() in channels
+                          or cid.lower() in candidates)
                 in_window = not hi or (start < hi and (stop or start) > lo)
                 if cid and start and wanted and in_window:
                     title = (elem.findtext("title") or "").strip()
@@ -103,7 +120,19 @@ class EpgGuide:
                 if root is not None:
                     root.clear()  # discard already-processed children
             elif elem.tag == "channel":
+                if names_index is not None:
+                    cid = elem.get("id", "")
+                    labels = [(n.text or "").strip() for n in elem.findall("display-name")]
+                    names_index.add(cid, labels)
+                    if cid and any(normalize_name(n) in user_keys for n in labels):
+                        candidates.add(cid.lower())
                 elem.clear()
+        if names_index is not None:
+            self.links = names_index.links(names)
+            if channels is not None:
+                linked = set(self.links.values())
+                for cid in candidates - channels - linked:
+                    index.pop(cid, None)  # same name, but not linked after all
         for cid, progs in index.items():
             index[cid] = _dedupe(progs)
         self._by_channel = index
@@ -247,11 +276,13 @@ def download_guide(url: str, path, max_age: int = CACHE_TTL) -> None:
 
 
 def fetch_guide_async(url, on_done, on_error=None, max_age: int = CACHE_TTL,
-                      channels: set[str] | None = None) -> None:
+                      channels: set[str] | None = None,
+                      names: list[tuple[str, str]] | None = None) -> None:
     """Load the XMLTV (disk cache or network) in the background.
 
     on_done(guide) and on_error(exc) are called on the main thread.
     `channels`: lowercase tvg-ids to keep (None keeps every channel).
+    `names`: (name, tvg-id) of the live channels, to link by name.
     """
 
     def worker() -> None:
@@ -261,7 +292,7 @@ def fetch_guide_async(url, on_done, on_error=None, max_age: int = CACHE_TTL,
             guide = EpgGuide()
             try:
                 with open(path, "rb") as fh:
-                    guide.load_xmltv(fh, channels, int(time.time()))
+                    guide.load_xmltv(fh, channels, int(time.time()), names)
             except Exception:
                 # A broken file must not stay "fresh" for hours.
                 path.unlink(missing_ok=True)

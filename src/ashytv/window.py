@@ -212,6 +212,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         home.connect("play", self._on_play)
         home.connect("resume", self._on_resume)
         home.connect("navigate", lambda _w, k: self.navigate(k))
+        home.connect("watch", lambda _w, ch: self._play_channel(ch))
+        home.connect("open-group", self._on_home_group)
 
         channels = ChannelsPage(self.storage, MediaType.LIVE)
         channels.connect("play", self._on_play)
@@ -233,6 +235,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         movies.connect("favorite-changed", self._on_favorite_changed)
         movies.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
         movies.connect("show-hidden", lambda *_: self.show_hidden())
+        movies.connect("show-person", self._on_search_person)
+        movies.people_search = self.cast.search_people
 
         series = CatalogPage(self.storage, MediaType.SERIES, _("Series"),
                              _("Your favorite series in one place"))
@@ -240,6 +244,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         series.connect("favorite-changed", self._on_favorite_changed)
         series.connect("hide-group", lambda _p, mt, group: self._hide_group(mt, group))
         series.connect("show-hidden", lambda *_: self.show_hidden())
+        series.connect("show-person", self._on_search_person)
+        series.people_search = self.cast.search_people
 
         favorites = ChannelsPage(self.storage, favorites_only=True)
         favorites.connect("play", self._on_play)
@@ -258,6 +264,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         lists.connect("enabled-changed", self._on_playlist_enabled)
         lists.connect("servers-changed", self._on_servers_changed)
         lists.connect("check-servers", lambda _w, pid: self._check_servers([pid]))
+        lists.connect("guide-link-changed", self._on_guide_link)
 
         settings = SettingsPage(self.settings, self.storage)
         settings.connect("toast", lambda _w, msg: self._toast(msg))
@@ -294,6 +301,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self.split.set_show_sidebar(False)
         if getattr(self, "keyboard", None) is not None and self.keyboard.active:
             GLib.timeout_add(_PAGE_SWITCH_MS + 50, self._keep_focus_on_screen)
+
+    def _on_home_group(self, _home, media_type: str, chip: str) -> None:
+        """Home's "See more": Movies or Series on that group."""
+        key = "series" if media_type == MediaType.SERIES.value else "movies"
+        self.pages[key].open_chip(chip)
+        self.navigate(key)
+        if self.keyboard.active:
+            GLib.timeout_add(_PAGE_SWITCH_MS, self._enter_page)
 
     def _on_nav_navigate(self, key: str) -> None:
         self.navigate(key)
@@ -777,6 +792,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
         actor.present(self)
         self.cast.load_person(member, actor.show_person)
 
+    def _on_search_person(self, _page, member) -> None:
+        """A person found by the search on Movies or Series."""
+        actor = ActorDialog(member)
+        actor.connect("open", lambda a, ch: (a.close(), self._open_detail(ch)))
+        actor.present(self)
+        self.cast.load_person(member, actor.show_person)
+
     def _on_actor_title(self, actor: ActorDialog, channel: Channel,
                         detail: DetailDialog) -> None:
         actor.close()
@@ -890,14 +912,16 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.pages["lists"].set_status(message)
         self.banner.set_title(message)
 
-    def _on_import_requested(self, _w, name: str, source: str, backups) -> None:
+    def _on_import_requested(self, _w, name: str, source: str, backups,
+                             guide_link: str) -> None:
         if not self._begin_import(_("Importing playlist…")):
             return
         db_path = self.storage.path
         backups = failover.clean_backups(backups, source) if "://" in source else None
         importer.run_async(
             lambda progress: importer.import_m3u(db_path, name, source, progress,
-                                                 backups=backups),
+                                                 backups=backups,
+                                                 epg_override=guide_link or None),
             self._import_done, self._import_error, self._import_progress)
 
     def _on_xtream_requested(self, _w, name: str, host: str, user: str, pwd: str,
@@ -1065,7 +1089,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 others = [prov.at(srv).xmltv_url() for i, srv in enumerate(prov.servers)
                           if i != prov.active]
             else:
-                url = self.storage.playlist_meta(int(row["id"])).get("epg_url", "")
+                # The guide link set on the playlist wins over its url-tvg.
+                meta = self.storage.playlist_meta(int(row["id"]))
+                url = meta.get("epg_override") or meta.get("epg_url", "")
             if url:
                 self._load_epg(url, others)
                 return
@@ -1078,11 +1104,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         # Results of an older request (other playlist, deleted one…) are ignored.
         try:
             channels = self.storage.tvg_ids() or None
+            names = self.storage.live_names()
         except sqlite3.Error:
-            channels = None
+            channels, names = None, None
         epg.fetch_guide_async(url, on_done=lambda g: self._on_epg_ready(g, url),
                               on_error=lambda e: self._on_epg_error(e, url),
-                              channels=channels)
+                              channels=channels, names=names)
 
     def _on_epg_error(self, exc, url: str) -> bool:
         if url == self._epg_source and self._epg_fallbacks and failover.is_server_failure(exc):
@@ -1100,11 +1127,28 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if url != self._epg_source:
             return GLib.SOURCE_REMOVE
         self._epg_guide = guide
+        try:
+            # Channels linked to the guide by name get the guide's id.
+            relinked = self.storage.relink_guide(guide.links)
+            for pid, coverage in self.storage.guide_coverage(guide.has_channel).items():
+                self.storage.update_playlist_meta(pid, epg_coverage=list(coverage))
+        except sqlite3.Error:
+            relinked = 0
+        if relinked:
+            self._invalidate_pages("channels", "favorites", "home")
         for key in ("home", "channels", "favorites"):
             self.pages[key].set_guide(guide)
+        self.pages["lists"].invalidate()
         if self.player is not None:
             self.player.set_guide(guide)
         return GLib.SOURCE_REMOVE
+
+    def _on_guide_link(self, _w, playlist_id: int, url: str) -> None:
+        """The guide link of an M3U playlist changed: load that guide now."""
+        self.storage.update_playlist_meta(playlist_id, epg_override=url)
+        self.pages["lists"].invalidate()
+        self._epg_source = ""
+        self._autoload_epg(force_id=playlist_id)
 
     # ---- preferences --------------------------------------------------
 
