@@ -11,6 +11,7 @@ from ...i18n import _
 from ...models import Channel, MediaType
 from ...services import home
 from ...services.storage import collapse_variants
+from ..cast import CastRow
 from ..marquee import MarqueeLabel
 from ._common import clear_box, set_logo, set_picture
 from .catalog_page import chip_label
@@ -29,6 +30,8 @@ class HomePage(Gtk.Box):
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # a movie to play right away (the featured box's Watch)
         "watch": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # a favorite person (CastMember) to open
+        "person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # "See more": Movies or Series (media type value) on a chip
         # (a group, or "new" for the recently added)
         "open-group": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
@@ -86,6 +89,11 @@ class HomePage(Gtk.Box):
 
         # ---- sections ----
         self.continue_box, self.continue_row = self._section(inner, _("Continue Watching"))
+        # Actors and directors the user follows (heart on their page).
+        self.people = CastRow(_("Favorite people"))
+        self.people.set_margin_top(10)
+        self.people.connect("person", lambda _r, m: self.emit("person", m))
+        inner.append(self.people)
         self.live_box, self.live_row = self._section(inner, _("Live Channels"),
                                                      _("See all"), "channels")
         self.movies_box, self.movies_row = self._section(inner, _("Recently Added Movies"),
@@ -141,6 +149,7 @@ class HomePage(Gtk.Box):
         self._dirty = False
         self._build_hero()
         self._build_continue()
+        self.people.set_cast(self.storage.favorite_people())
         self._fill(self.live_box, self.live_row,
                    self._live_channels(16), self._channel_card)
         for mt, box, row in ((MediaType.MOVIE, self.movies_box, self.movies_row),

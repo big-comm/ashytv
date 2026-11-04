@@ -200,6 +200,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         home.connect("navigate", lambda _w, k: self.navigate(k))
         home.connect("watch", lambda _w, ch: self._play_channel(ch))
         home.connect("open-group", self._on_home_group)
+        home.connect("person", self._on_search_person)
 
         channels = ChannelsPage(self.storage, MediaType.LIVE)
         channels.connect("play", self._on_play)
@@ -238,6 +239,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         favorites.connect("favorite-changed", self._on_favorite_changed)
         favorites.connect("show-schedule", self._on_show_schedule)
         favorites.connect("hide-channel", self._on_hide_channel)
+        favorites.connect("person", self._on_search_person)
 
         recordings = RecordingsPage()
         recordings.connect("play", self._on_play)
@@ -760,15 +762,26 @@ class AshyTvWindow(Adw.ApplicationWindow):
         dialog.connect("show-person", self._on_show_person)
         dialog.present(self)
 
+    def _actor_dialog(self, member) -> ActorDialog:
+        actor = ActorDialog(member, self.storage)
+        actor.connect("favorite-changed", self._on_person_favorite)
+        return actor
+
+    def _on_person_favorite(self, _actor, member) -> None:
+        followed = self.storage.is_favorite_person(member)
+        self._toast(_("Added to favorites") if followed else _("Removed from favorites"))
+        for key in ("home", "favorites"):
+            self.pages[key].invalidate()
+
     def _on_show_person(self, detail: DetailDialog, member) -> None:
-        actor = ActorDialog(member)
+        actor = self._actor_dialog(member)
         actor.connect("open", self._on_actor_title, detail)
         actor.present(self)
         self.cast.load_person(member, actor.show_person)
 
     def _on_search_person(self, _page, member) -> None:
-        """A person found by the search on Movies or Series."""
-        actor = ActorDialog(member)
+        """A person found by the search on Movies or Series (or a favorite one)."""
+        actor = self._actor_dialog(member)
         actor.connect("open", lambda a, ch: (a.close(), self._open_detail(ch)))
         actor.present(self)
         self.cast.load_person(member, actor.show_person)

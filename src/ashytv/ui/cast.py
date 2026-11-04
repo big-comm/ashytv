@@ -258,9 +258,11 @@ class ActorDialog(Adw.Dialog):
 
     __gsignals__ = {
         "open": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # The person was added to / removed from "Favorite people".
+        "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
-    def __init__(self, member: CastMember):
+    def __init__(self, member: CastMember, storage: Storage | None = None):
         super().__init__(title=member.name, content_width=880, content_height=640)
         view = Adw.ToolbarView()
         header = Adw.HeaderBar()
@@ -279,7 +281,16 @@ class ActorDialog(Adw.Dialog):
                         valign=Gtk.Align.CENTER)
         name = Gtk.Label(label=member.name, xalign=0, wrap=True)
         name.add_css_class("ashy-page-title")
-        texts.append(name)
+        name_row = Gtk.Box(spacing=12)
+        name_row.append(name)
+        self._storage = storage
+        # Follow the person: "Favorite people" on Home and in Favorites.
+        self.fav_btn = Gtk.Button(valign=Gtk.Align.CENTER, visible=storage is not None)
+        self.fav_btn.add_css_class("circular")
+        self.fav_btn.add_css_class("ashy-heart")
+        self.fav_btn.connect("clicked", self._toggle_fav)
+        name_row.append(self.fav_btn)
+        texts.append(name_row)
         self._bio = Gtk.Label(xalign=0, wrap=True, lines=8, ellipsize=3, visible=False)
         self._bio.add_css_class("ashy-page-subtitle")
         texts.append(self._bio)
@@ -300,6 +311,27 @@ class ActorDialog(Adw.Dialog):
         view.set_content(scroll)
         self.set_child(view)
         self._member = member
+        self._paint_fav()
+
+    def _toggle_fav(self, _b) -> None:
+        if self._storage is None:
+            return
+        value = not self._storage.is_favorite_person(self._member)
+        if not self._storage.set_favorite_person(self._member, value):
+            return
+        self._paint_fav()
+        self.emit("favorite-changed", self._member)
+
+    def _paint_fav(self) -> None:
+        active = self._storage is not None and self._storage.is_favorite_person(self._member)
+        self.fav_btn.set_icon_name("ashy-heart-filled-symbolic" if active
+                                   else "ashy-heart-symbolic")
+        self.fav_btn.set_tooltip_text(_("Remove from favorites") if active
+                                      else _("Add to favorites"))
+        if active:
+            self.fav_btn.add_css_class("active")
+        else:
+            self.fav_btn.remove_css_class("active")
 
     def show_person(self, person: Person, movies: list[Channel], series: list[Channel],
                     from_tmdb: bool) -> None:
@@ -308,6 +340,11 @@ class ActorDialog(Adw.Dialog):
             while (child := self._photo_slot.get_first_child()) is not None:
                 self._photo_slot.remove(child)
             self._photo_slot.append(_photo(person.profile, person.name, 140, 210))
+        if person.profile and not self._member.profile:
+            # A favorite saved without a photo (found by name) gets this one.
+            self._member.profile = person.profile
+            if self._storage is not None and self._storage.is_favorite_person(self._member):
+                self._storage.set_favorite_person(self._member, True)
         self._bio.set_text(person.biography)
         self._bio.set_tooltip_text(person.biography or None)
         self._bio.set_visible(bool(person.biography))
