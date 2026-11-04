@@ -11,7 +11,6 @@ from ...i18n import _
 from ...models import Channel, MediaType
 from ...services import home
 from ...services.storage import collapse_variants
-from ..cast import CastRow
 from ..marquee import MarqueeLabel
 from ._common import clear_box, set_logo, set_picture
 from .catalog_page import chip_label
@@ -22,7 +21,121 @@ _HERO_H = 300
 _SLIDE_SECS = 7
 
 
-class HomePage(Gtk.Box):
+class RailCards:
+    """Titled horizontal rails of channel and poster cards (Home, Favorites).
+    The class using it emits "play" (a channel; a movie or series opens its
+    details) and "open-group", and may set `_guide` for what is on now."""
+
+    _guide = None
+
+    def _section(self, parent, title, link=None, target=None):
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        box.set_margin_top(10)
+        head = Gtk.Box()
+        lbl = Gtk.Label(label=title, xalign=0, hexpand=True)
+        lbl.add_css_class("ashy-section-title")
+        head.append(lbl)
+        if link:
+            btn = Gtk.Button(label=link)
+            btn.add_css_class("flat")
+            btn.connect("clicked", lambda *_: self.emit("navigate", target))
+            head.append(btn)
+        box.append(head)
+        # Room under the cards for the overlay scrollbar, so it never covers them.
+        row = Gtk.Box(spacing=14, margin_bottom=10)
+        sw = Gtk.ScrolledWindow(vscrollbar_policy=Gtk.PolicyType.NEVER)
+        sw.set_child(row)
+        box.append(sw)
+        parent.append(box)
+        return box, row
+
+    @staticmethod
+    def _fill(box, row, items, make) -> None:
+        clear_box(row)
+        for item in items:
+            row.append(make(item))
+        box.set_visible(bool(items))
+
+    # ---- cards ---------------------------------------------------------
+
+    def _channel_card(self, ch: Channel) -> Gtk.Widget:
+        card = Gtk.Button()
+        card.add_css_class("ashy-card")
+        card.set_size_request(150, 120)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8,
+                      margin_top=14, margin_bottom=12, margin_start=10, margin_end=10)
+        img = Gtk.Image(pixel_size=52)
+        set_logo(img, ch.logo, 52, "tv-symbolic")
+        name = Gtk.Label(label=ch.display_name, ellipsize=3, max_width_chars=16)
+        name.add_css_class("caption")
+        box.append(img)
+        box.append(name)
+        if self._guide and ch.tvg_id:
+            cur, _n = self._guide.now_next(ch.tvg_id)
+            if cur:
+                p = Gtk.Label(label=cur.title, ellipsize=3, max_width_chars=16)
+                p.add_css_class("ashy-faint")
+                box.append(p)
+        card.set_child(box)
+        card.connect("clicked", lambda *_: self.emit("play", ch))
+        return card
+
+    def _poster_card(self, ch: Channel) -> Gtk.Widget:
+        # Not expanding (the year label inside does): in a short rail the
+        # card took the spare width and stretched the poster frame.
+        card = Gtk.Button(hexpand=False)
+        card.add_css_class("flat")
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        frame = Gtk.Box()
+        frame.set_overflow(Gtk.Overflow.HIDDEN)
+        frame.add_css_class("ashy-poster-img")
+        pic = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
+        pic.set_size_request(_POSTER_W, _POSTER_H)
+        set_picture(pic, ch.logo, _POSTER_H)
+        frame.append(pic)
+        box.append(frame)
+        t = MarqueeLabel(width_chars=14)
+        t.set_text(ch.display_name)
+        t.add_css_class("ashy-poster-title")
+        t.attach_hover(card)
+        t.attach_focus(card)
+        box.append(t)
+        meta = Gtk.Box()
+        y = Gtk.Label(label=ch.year, xalign=0, hexpand=True)
+        y.add_css_class("ashy-year")
+        r = Gtk.Label(label=f"★ {ch.rating:.1f}" if ch.rating else "")
+        r.add_css_class("ashy-rating")
+        meta.append(y)
+        meta.append(r)
+        box.append(meta)
+        card.set_child(box)
+        card.connect("clicked", lambda *_: self.emit("play", ch))
+        return card
+
+    def _more_card(self, media_type: MediaType, chip: str) -> Gtk.Widget:
+        """Poster-sized "See more" at the end of a rail: Movies or Series on
+        that group (or on the recently added)."""
+        card = Gtk.Button(valign=Gtk.Align.START,
+                          tooltip_text=_("See more in {section}").format(
+                              section=media_type.label))
+        card.add_css_class("flat")
+        frame = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
+                        valign=Gtk.Align.CENTER)
+        frame.set_size_request(_POSTER_W, _POSTER_H)
+        frame.add_css_class("ashy-poster-img")
+        frame.add_css_class("ashy-more-card")
+        icon = Gtk.Image(icon_name="list-add-symbolic", pixel_size=40,
+                         vexpand=True, valign=Gtk.Align.END)
+        label = Gtk.Label(label=_("See more"), vexpand=True, valign=Gtk.Align.START)
+        label.add_css_class("ashy-poster-title")
+        frame.append(icon)
+        frame.append(label)
+        card.set_child(frame)
+        card.connect("clicked", lambda *_: self.emit("open-group", media_type.value, chip))
+        return card
+
+
+class HomePage(RailCards, Gtk.Box):
     __gtype_name__ = "AshyHomePage"
 
     __gsignals__ = {
@@ -30,8 +143,6 @@ class HomePage(Gtk.Box):
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # a movie to play right away (the featured box's Watch)
         "watch": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
-        # a favorite person (CastMember) to open
-        "person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # "See more": Movies or Series (media type value) on a chip
         # (a group, or "new" for the recently added)
         "open-group": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
@@ -89,11 +200,6 @@ class HomePage(Gtk.Box):
 
         # ---- sections ----
         self.continue_box, self.continue_row = self._section(inner, _("Continue Watching"))
-        # Actors and directors the user follows (heart on their page).
-        self.people = CastRow(_("Favorite people"))
-        self.people.set_margin_top(10)
-        self.people.connect("person", lambda _r, m: self.emit("person", m))
-        inner.append(self.people)
         self.live_box, self.live_row = self._section(inner, _("Live Channels"),
                                                      _("See all"), "channels")
         self.movies_box, self.movies_row = self._section(inner, _("Recently Added Movies"),
@@ -103,27 +209,6 @@ class HomePage(Gtk.Box):
         # One rail per group of the playlists (rebuilt with the catalog).
         self.groups_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         inner.append(self.groups_box)
-
-    def _section(self, parent, title, link=None, target=None):
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
-        box.set_margin_top(10)
-        head = Gtk.Box()
-        lbl = Gtk.Label(label=title, xalign=0, hexpand=True)
-        lbl.add_css_class("ashy-section-title")
-        head.append(lbl)
-        if link:
-            btn = Gtk.Button(label=link)
-            btn.add_css_class("flat")
-            btn.connect("clicked", lambda *_: self.emit("navigate", target))
-            head.append(btn)
-        box.append(head)
-        # Room under the cards for the overlay scrollbar, so it never covers them.
-        row = Gtk.Box(spacing=14, margin_bottom=10)
-        sw = Gtk.ScrolledWindow(vscrollbar_policy=Gtk.PolicyType.NEVER)
-        sw.set_child(row)
-        box.append(sw)
-        parent.append(box)
-        return box, row
 
     # ---- API -----------------------------------------------------------
 
@@ -149,7 +234,6 @@ class HomePage(Gtk.Box):
         self._dirty = False
         self._build_hero()
         self._build_continue()
-        self.people.set_cast(self.storage.favorite_people())
         self._fill(self.live_box, self.live_row,
                    self._live_channels(16), self._channel_card)
         for mt, box, row in ((MediaType.MOVIE, self.movies_box, self.movies_row),
@@ -181,13 +265,6 @@ class HomePage(Gtk.Box):
         if self.storage.group_variants:
             chans = collapse_variants(chans)
         return chans[:limit]
-
-    @staticmethod
-    def _fill(box, row, items, make) -> None:
-        clear_box(row)
-        for item in items:
-            row.append(make(item))
-        box.set_visible(bool(items))
 
     # ---- hero ----------------------------------------------------------
 
@@ -368,82 +445,4 @@ class HomePage(Gtk.Box):
             bar.add_css_class("ashy-progress-mini")
             box.append(bar)
         card.set_child(box)
-        return card
-
-    # ---- cards ---------------------------------------------------------
-
-    def _channel_card(self, ch: Channel) -> Gtk.Widget:
-        card = Gtk.Button()
-        card.add_css_class("ashy-card")
-        card.set_size_request(150, 120)
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8,
-                      margin_top=14, margin_bottom=12, margin_start=10, margin_end=10)
-        img = Gtk.Image(pixel_size=52)
-        set_logo(img, ch.logo, 52, "tv-symbolic")
-        name = Gtk.Label(label=ch.display_name, ellipsize=3, max_width_chars=16)
-        name.add_css_class("caption")
-        box.append(img)
-        box.append(name)
-        if self._guide and ch.tvg_id:
-            cur, _n = self._guide.now_next(ch.tvg_id)
-            if cur:
-                p = Gtk.Label(label=cur.title, ellipsize=3, max_width_chars=16)
-                p.add_css_class("ashy-faint")
-                box.append(p)
-        card.set_child(box)
-        card.connect("clicked", lambda *_: self.emit("play", ch))
-        return card
-
-    def _poster_card(self, ch: Channel) -> Gtk.Widget:
-        # Not expanding (the year label inside does): in a short rail the
-        # card took the spare width and stretched the poster frame.
-        card = Gtk.Button(hexpand=False)
-        card.add_css_class("flat")
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        frame = Gtk.Box()
-        frame.set_overflow(Gtk.Overflow.HIDDEN)
-        frame.add_css_class("ashy-poster-img")
-        pic = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
-        pic.set_size_request(_POSTER_W, _POSTER_H)
-        set_picture(pic, ch.logo, _POSTER_H)
-        frame.append(pic)
-        box.append(frame)
-        t = MarqueeLabel(width_chars=14)
-        t.set_text(ch.display_name)
-        t.add_css_class("ashy-poster-title")
-        t.attach_hover(card)
-        t.attach_focus(card)
-        box.append(t)
-        meta = Gtk.Box()
-        y = Gtk.Label(label=ch.year, xalign=0, hexpand=True)
-        y.add_css_class("ashy-year")
-        r = Gtk.Label(label=f"★ {ch.rating:.1f}" if ch.rating else "")
-        r.add_css_class("ashy-rating")
-        meta.append(y)
-        meta.append(r)
-        box.append(meta)
-        card.set_child(box)
-        card.connect("clicked", lambda *_: self.emit("play", ch))
-        return card
-
-    def _more_card(self, media_type: MediaType, chip: str) -> Gtk.Widget:
-        """Poster-sized "See more" at the end of a rail: Movies or Series on
-        that group (or on the recently added)."""
-        card = Gtk.Button(valign=Gtk.Align.START,
-                          tooltip_text=_("See more in {section}").format(
-                              section=media_type.label))
-        card.add_css_class("flat")
-        frame = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
-                        valign=Gtk.Align.CENTER)
-        frame.set_size_request(_POSTER_W, _POSTER_H)
-        frame.add_css_class("ashy-poster-img")
-        frame.add_css_class("ashy-more-card")
-        icon = Gtk.Image(icon_name="list-add-symbolic", pixel_size=40,
-                         vexpand=True, valign=Gtk.Align.END)
-        label = Gtk.Label(label=_("See more"), vexpand=True, valign=Gtk.Align.START)
-        label.add_css_class("ashy-poster-title")
-        frame.append(icon)
-        frame.append(label)
-        card.set_child(frame)
-        card.connect("clicked", lambda *_: self.emit("open-group", media_type.value, chip))
         return card

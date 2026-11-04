@@ -60,8 +60,6 @@ class ChannelsPage(Gtk.Box):
         "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
         "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
-        # Favorites: a favorite person (CastMember) to open
-        "person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
     def __init__(self, storage, media_type: MediaType = MediaType.LIVE,
@@ -113,15 +111,6 @@ class ChannelsPage(Gtk.Box):
         self.chips = ChipRow(self._on_chip)
         if not favorites_only:
             self.append(self.chips)
-        self.people = None
-        if favorites_only:
-            # Actors and directors the user follows, above the titles.
-            from ..cast import CastRow
-            self.people = CastRow(_("Favorite people"))
-            self.people.set_margin_start(28)
-            self.people.set_margin_end(28)
-            self.people.connect("person", lambda _r, m: self.emit("person", m))
-            self.append(self.people)
 
         body = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=14)
         body.set_margin_start(28)
@@ -241,7 +230,6 @@ class ChannelsPage(Gtk.Box):
             return
         self._dirty = False
         if self.favorites_only:
-            self.people.set_cast(self.storage.favorite_people())
             self._load_channels(self._collapse(
                 self.storage.channels(favorites=True, order="favorite")))
             return

@@ -30,6 +30,7 @@ from .ui.hidden_dialog import HiddenDialog
 from .ui.nav_sidebar import NavRail, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
+from .ui.pages.favorites_page import FavoritesPage
 from .ui.pages.home_page import HomePage
 from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
@@ -200,7 +201,6 @@ class AshyTvWindow(Adw.ApplicationWindow):
         home.connect("navigate", lambda _w, k: self.navigate(k))
         home.connect("watch", lambda _w, ch: self._play_channel(ch))
         home.connect("open-group", self._on_home_group)
-        home.connect("person", self._on_search_person)
 
         channels = ChannelsPage(self.storage, MediaType.LIVE)
         channels.connect("play", self._on_play)
@@ -234,11 +234,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         series.connect("show-person", self._on_search_person)
         series.people_search = self.cast.search_people
 
-        favorites = ChannelsPage(self.storage, favorites_only=True)
+        # Favorites: channels, movies, series and people, one rail each.
+        favorites = FavoritesPage(self.storage)
         favorites.connect("play", self._on_play)
-        favorites.connect("favorite-changed", self._on_favorite_changed)
-        favorites.connect("show-schedule", self._on_show_schedule)
-        favorites.connect("hide-channel", self._on_hide_channel)
         favorites.connect("person", self._on_search_person)
 
         recordings = RecordingsPage()
@@ -770,8 +768,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_person_favorite(self, _actor, member) -> None:
         followed = self.storage.is_favorite_person(member)
         self._toast(_("Added to favorites") if followed else _("Removed from favorites"))
-        for key in ("home", "favorites"):
-            self.pages[key].invalidate()
+        self.pages["favorites"].invalidate()
 
     def _on_show_person(self, detail: DetailDialog, member) -> None:
         actor = self._actor_dialog(member)
