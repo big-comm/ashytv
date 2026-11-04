@@ -31,6 +31,7 @@ from .ui.nav_sidebar import NavRail, NavSidebar
 from .ui.pages.catalog_page import CatalogPage
 from .ui.pages.channels_page import ChannelsPage
 from .ui.pages.favorites_page import FavoritesPage
+from .ui.pages.search_page import SearchPage
 from .ui.pages.home_page import HomePage
 from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
@@ -239,6 +240,12 @@ class AshyTvWindow(Adw.ApplicationWindow):
         favorites.connect("play", self._on_play)
         favorites.connect("person", self._on_search_person)
 
+        # Search from the pages without a list of their own (🔍 / typing).
+        search = SearchPage(self.storage)
+        search.people_search = self.cast.search_people
+        search.connect("play", self._on_play)
+        search.connect("person", self._on_search_person)
+
         recordings = RecordingsPage()
         recordings.connect("play", self._on_play)
 
@@ -261,6 +268,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
             "home": home, "channels": channels,
             "movies": movies, "series": series, "favorites": favorites,
             "recordings": recordings, "lists": lists, "settings": settings,
+            "search": search,
         }
         for key, page in self.pages.items():
             self.page_stack.add_named(page, key)
@@ -271,13 +279,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if key not in self.pages:
             return
         self._current = key
-        self.nav.set_active(key)
+        if key != "search":  # not a menu item: the page searched from stays marked
+            self.nav.set_active(key)
         self.page_stack.set_visible_child_name(key)
         page = self.pages[key]
         if hasattr(page, "refresh"):
             page.refresh()
-        searchable = key in _SEARCHABLE
-        self.search_btn.set_visible(searchable)
+        # The 🔍 is on every page: it filters the pages with a list and, on the
+        # others, opens the search of everything (the "search" page).
+        searchable = key in _SEARCHABLE or key == "search"
         if not searchable:
             self.search_btn.set_active(False)
         elif hasattr(page, "set_search"):
@@ -320,9 +330,20 @@ class AshyTvWindow(Adw.ApplicationWindow):
         active = button.get_active()
         self.search.set_visible(active)
         if active:
+            if self._current not in _SEARCHABLE and self._current != "search":
+                self._search_return = self._current
+                self.navigate("search")
             self.search.grab_focus()
         else:
             self.search.set_text("")
+            if self._current == "search":
+                # Closing the search goes back to the page it was opened from.
+                self.navigate(getattr(self, "_search_return", "home") or "home")
+                if self.keyboard.active:
+                    GLib.timeout_add(_PAGE_SWITCH_MS, self._enter_page)
+            elif self.keyboard.active:
+                # Esc on a page's own search: back into the page (not the 🔍).
+                GLib.idle_add(self._enter_page)
 
     def _on_search(self, entry: Gtk.SearchEntry) -> None:
         page = self.pages.get(self._current)
@@ -687,9 +708,30 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _restore_focus(self) -> bool:
         """Back from the player: the keyboard focus returns where it was."""
         widget, self._focus_before_player = self._focus_before_player, None
-        if not (widget is not None and widget.get_mapped() and widget.grab_focus()):
-            self.focus_page() or self.nav.focus_active()
+        if widget is not None and widget.get_mapped() and widget.grab_focus():
+            return GLib.SOURCE_REMOVE
+        # The page was rebuilt (Home's "Continue watching" changed): the card
+        # of the same channel/title in the new one.
+        key = getattr(widget, "ashy_key", None)
+        twin = self._find_card(self.pages.get(self._current), key) if key else None
+        if twin is not None and twin.grab_focus():
+            focus_util.reveal(twin)
+            return GLib.SOURCE_REMOVE
+        self.focus_page() or self.nav.focus_active()
         return GLib.SOURCE_REMOVE
+
+    @staticmethod
+    def _find_card(root: Gtk.Widget | None, key) -> Gtk.Widget | None:
+        stack = [root] if root is not None else []
+        while stack:
+            node = stack.pop(0)
+            if getattr(node, "ashy_key", None) == key and node.get_mapped():
+                return node
+            child = node.get_first_child()
+            while child is not None:
+                stack.append(child)
+                child = child.get_next_sibling()
+        return None
 
     def _on_player_fav(self, _p, item: PlayItem) -> None:
         ch = item.channel
@@ -1650,6 +1692,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _on_key(self, _c, keyval, _code, state) -> bool:
+        # Keyboard mode (visible focus ring) first: GTK runs this controller
+        # before the one installed for it, and an arrow handled here stopped
+        # there — the focus moved but its ring never showed.
+        self._on_any_key(None, keyval, _code, state)
         if self.tour is not None and self.tour.active:
             return self.tour.handle_key(keyval)
         # A dialog is a child of the window, so this capture-phase handler
@@ -1689,6 +1735,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 self.navigate(key)
                 GLib.timeout_add(_PAGE_SWITCH_MS, self._enter_page)
                 return True
+            # Back to the item it left the page from (as on the TVs), else the page.
+            left = getattr(self, "_left_from", None)
+            page = self.pages.get(self._current)
+            if (left is not None and page is not None and left.is_ancestor(page)
+                    and focus_util.is_visible(left) and left.grab_focus()):
+                focus_util.reveal(left)
+                return True
             if self.focus_page():
                 return True
         home = self.pages.get("home")
@@ -1699,8 +1752,17 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if not focus.get_mapped():
             # The focused widget was hidden (emptied list, closed view…).
             return self.focus_page() or self.nav.focus_active() or True
-        return keynav.move(self, direction, prefer={self.nav: self.nav.focus_active},
-                           walls=(self.nav,))
+        moved = keynav.move(self, direction, prefer={self.nav: self.nav.focus_active},
+                            walls=(self.nav,))
+        in_page = focus.is_ancestor(self.page_stack)
+        if (direction == Gtk.DirectionType.LEFT and in_page and self.get_focus() is focus
+                and not keynav.keeps_key(focus, direction)):
+            # Nothing more to the left on the page (the start of a row lower
+            # than the menu's items): ← opens the menu, on the current page.
+            self.nav.focus_active()
+        if in_page and self.nav.has_focus_within(self.get_focus()):
+            self._left_from = focus  # → comes back here
+        return moved
 
     def _enter_page(self) -> bool:
         """Put the focus on the page just opened (after its transition)."""

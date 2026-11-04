@@ -11,6 +11,7 @@ from ...models import Channel, MediaType
 from ...services.storage import collapse_variants
 from ...services.text import normalize
 from ..cast import CastRow
+from .. import keynav
 from ._common import page_header
 from .home_page import RailCards
 
@@ -39,6 +40,7 @@ class FavoritesPage(RailCards, Gtk.Box):
                                 _("Channels, movies, series and people you marked")))
 
         inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
+        inner.add_css_class(keynav.RAILS_CLASS)
         inner.set_margin_start(28)
         inner.set_margin_end(28)
         inner.set_margin_bottom(24)

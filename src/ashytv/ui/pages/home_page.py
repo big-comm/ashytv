@@ -12,6 +12,7 @@ from ...models import Channel, MediaType
 from ...services import home
 from ...services.storage import collapse_variants
 from ..marquee import MarqueeLabel
+from .. import keynav
 from ._common import clear_box, set_logo, set_picture
 from .catalog_page import chip_label
 
@@ -36,7 +37,10 @@ class RailCards:
         lbl.add_css_class("ashy-section-title")
         head.append(lbl)
         if link:
-            btn = Gtk.Button(label=link)
+            # For the mouse: with the keyboard ▼ goes rail to rail (this link,
+            # at the right end of the title, pulled the focus to the edge) and
+            # the menu opens the section.
+            btn = Gtk.Button(label=link, focusable=False)
             btn.add_css_class("flat")
             btn.connect("clicked", lambda *_: self.emit("navigate", target))
             head.append(btn)
@@ -78,6 +82,7 @@ class RailCards:
                 box.append(p)
         card.set_child(box)
         card.connect("clicked", lambda *_: self.emit("play", ch))
+        card.ashy_key = (ch.playlist_id, ch.url)  # found again after a rebuild
         return card
 
     def _poster_card(self, ch: Channel) -> Gtk.Widget:
@@ -110,6 +115,7 @@ class RailCards:
         box.append(meta)
         card.set_child(box)
         card.connect("clicked", lambda *_: self.emit("play", ch))
+        card.ashy_key = (ch.playlist_id, ch.url)  # found again after a rebuild
         return card
 
     def _more_card(self, media_type: MediaType, chip: str) -> Gtk.Widget:
@@ -158,6 +164,7 @@ class HomePage(RailCards, Gtk.Box):
         self._dirty = True
 
         inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
+        inner.add_css_class(keynav.RAILS_CLASS)
         inner.set_margin_top(10)
         inner.set_margin_start(28)
         inner.set_margin_end(28)
