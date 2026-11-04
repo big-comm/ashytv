@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from gi.repository import Adw, Gtk
 
 # Widget name of the stack holding the app's pages (see window.py).
+# Container of horizontal rails: sideways moves never leave their row.
+RAILS_CLASS = "ashy-rails"
 PAGES_NAME = "ashy-pages"
 _COLLECTIONS = (Gtk.ListView, Gtk.GridView, Gtk.ListBox, Gtk.FlowBox)
 # Widgets that use Left/Right themselves (cursor, value).
@@ -122,11 +124,19 @@ def _score(src: _Rect, dst: _Rect, direction: Gtk.DirectionType,
         center = abs(dst.cy - src.cy)
         if perp > 0 and strict:
             return None
+        if perp > 0 and gap < -4:
+            # Off the line (the fallback for Settings' categories → options):
+            # only what is wholly that way — not a card of the row above that
+            # merely sticks out a little to the right.
+            return None
     else:
         ahead = dst.cy > src.cy + 1 if direction == D.DOWN else dst.cy < src.cy - 1
         gap = (dst.y1 - src.y2) if direction == D.DOWN else (src.y1 - dst.y2)
         perp = max(0.0, dst.x1 - src.x2, src.x1 - dst.x2)
-        center = abs(dst.cx - src.cx)
+        # Left edges too, not only centers: down from a wide item (the
+        # featured banner) the first card of the row is the expected target,
+        # not the one under the banner's middle.
+        center = min(abs(dst.cx - src.cx), abs(dst.x1 - src.x1))
     if not ahead:
         return None
     # Targets in line with the focus always win over ones off to the side.
@@ -297,6 +307,8 @@ def move(window: Gtk.Widget, direction: Gtk.DirectionType,
             parent = scope.get_parent()
             if parent is not None and parent.get_name() == PAGES_NAME:
                 break
+            if scope.has_css_class(RAILS_CLASS):
+                break  # rails (Home, Favorites): → at the end of a row stays there
             best = _best(root, collection or focus, focus, src, direction, vertical,
                          inside, walls, strict=False, scope=scope)
             scope = scope.get_parent()

@@ -20,7 +20,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 7
+_SCHEMA_VERSION = 8
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -176,6 +176,15 @@ class Storage:
                 ON channel(playlist_id, grp, base_key);
             CREATE INDEX IF NOT EXISTS idx_episode_channel ON episode(channel_id);
             CREATE INDEX IF NOT EXISTS idx_history_time ON history(watched_at);
+            -- Actors and directors the user follows ("Favorite people"); not
+            -- tied to a playlist. key: TMDB person id, or "n:" + their name.
+            CREATE TABLE IF NOT EXISTS favorite_person (
+                key         TEXT PRIMARY KEY,
+                name        TEXT NOT NULL,
+                profile     TEXT DEFAULT '',
+                person_id   TEXT DEFAULT '',
+                added_at    INTEGER DEFAULT (strftime('%s','now'))
+            );
             -- Groups and channels the user hid, per playlist. Channels are
             -- keyed by the provider stream id (Xtream) or their URL, so the
             -- choice survives a playlist refresh.
@@ -741,6 +750,46 @@ class Storage:
                 (channel.playlist_id, channel.url),
             )
         self.db.commit()
+
+    # ---- favorite people -----------------------------------------------
+
+    @staticmethod
+    def person_key(member) -> str:
+        return member.id or "n:" + normalize(member.name)
+
+    def favorite_people(self) -> list:
+        """The people the user follows, most recent first (CastMember)."""
+        from .meta import CastMember
+        rows = self.db.execute(
+            "SELECT name, profile, person_id FROM favorite_person"
+            " ORDER BY added_at DESC, rowid DESC"
+        ).fetchall()
+        return [CastMember(name=r["name"], profile=r["profile"], id=r["person_id"])
+                for r in rows]
+
+    def is_favorite_person(self, member) -> bool:
+        return self.db.execute("SELECT 1 FROM favorite_person WHERE key = ?",
+                               (self.person_key(member),)).fetchone() is not None
+
+    def set_favorite_person(self, member, value: bool) -> bool:
+        """False (nothing changed) while the database is busy with an import."""
+        try:
+            if value:
+                self.db.execute(
+                    """INSERT INTO favorite_person (key, name, profile, person_id)
+                       VALUES (?, ?, ?, ?)
+                       ON CONFLICT(key) DO UPDATE SET name = excluded.name,
+                           profile = CASE WHEN excluded.profile != '' THEN excluded.profile
+                                          ELSE favorite_person.profile END""",
+                    (self.person_key(member), member.name, member.profile or "", member.id or ""))
+            else:
+                self.db.execute("DELETE FROM favorite_person WHERE key = ?",
+                                (self.person_key(member),))
+            self.db.commit()
+        except sqlite3.OperationalError:
+            self.db.rollback()
+            return False
+        return True
 
     # ---- episodes ------------------------------------------------------
 

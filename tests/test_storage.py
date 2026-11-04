@@ -116,7 +116,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 7
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 8
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -332,3 +332,22 @@ def test_hidden_entries_count_variants_once_with_logo_and_group(tmp_path):
     assert db.hidden_count(MediaType.LIVE) == 1
     db.unhide(news["entries"])
     assert db.count(MediaType.LIVE) == 2
+
+
+def test_favorite_people(tmp_path):
+    from ashytv.services.meta import CastMember
+    db = Storage(tmp_path / "a.db")
+    tom = CastMember(name="Tom Holland", profile="", id="1136406")
+    by_name = CastMember(name="Zendaya Coleman")
+    assert db.favorite_people() == []
+    assert db.set_favorite_person(tom, True)
+    assert db.set_favorite_person(by_name, True)
+    assert db.is_favorite_person(tom) and db.is_favorite_person(CastMember(name="zendaya coleman"))
+    # Saving again with a photo keeps one entry and takes the photo.
+    tom.profile = "https://image.tmdb.org/t/p/w185/tom.jpg"
+    db.set_favorite_person(tom, True)
+    people = db.favorite_people()
+    assert [p.name for p in people] == ["Zendaya Coleman", "Tom Holland"]
+    assert people[1].profile.endswith("tom.jpg") and people[1].id == "1136406"
+    db.set_favorite_person(tom, False)
+    assert [p.name for p in db.favorite_people()] == ["Zendaya Coleman"]
