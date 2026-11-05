@@ -134,8 +134,22 @@ class ChannelsPage(Gtk.Box):
         gpanel.set_overflow(Gtk.Overflow.HIDDEN)
         gpanel.append(gscroll)
         self.group_panel = gpanel
+        # Folded while the focus is in the channel list (as on the TV apps):
+        # a narrow "Groups" strip; a click (or reaching it with the keyboard)
+        # opens the column again, on the selected group.
+        rail_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4,
+                           valign=Gtk.Align.START, margin_top=14)
+        rail_box.append(Gtk.Image(icon_name="view-list-symbolic", pixel_size=22))
+        rail_box.append(Gtk.Label(label=_("Groups")))
+        self.group_rail = Gtk.Button(child=rail_box, visible=False,
+                                     tooltip_text=_("Groups"))
+        self.group_rail.add_css_class("ashy-panel")
+        self.group_rail.add_css_class("ashy-group-rail")
+        self.group_rail.set_size_request(76, -1)
+        self.group_rail.connect("clicked", lambda _b: self._unfold_groups())
         if not favorites_only:
             body.append(gpanel)
+            body.append(self.group_rail)
 
         # ---- channel list (virtualized) ----
         self.store = Gio.ListStore.new(ChannelObject)
@@ -178,6 +192,10 @@ class ChannelsPage(Gtk.Box):
         self.list_stack.add_named(self.empty, "empty")
 
         cpanel = Gtk.Box(hexpand=True)
+        if not favorites_only:
+            fold = Gtk.EventControllerFocus()
+            fold.connect("enter", lambda _c: self._fold_groups())
+            cpanel.add_controller(fold)
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
@@ -348,6 +366,27 @@ class ChannelsPage(Gtk.Box):
     def hidden_row(self) -> Gtk.Widget | None:
         """The 'Hidden (N)' entry, when there is one (guided tour)."""
         return next((r for r in self._rows() if r._key == _HIDDEN), None)  # type: ignore[attr-defined]
+
+    def _fold_groups(self) -> None:
+        if self.group_panel.get_visible():
+            self.group_panel.set_visible(False)
+            self.group_rail.set_visible(True)
+
+    def show_groups(self) -> Gtk.Widget:
+        """The group column, opened if it was folded (the guided tour points at it)."""
+        if not self.group_panel.get_visible():
+            self.group_rail.set_visible(False)
+            self.group_panel.set_visible(True)
+        return self.group_panel
+
+    def _unfold_groups(self) -> None:
+        self.group_rail.set_visible(False)
+        self.group_panel.set_visible(True)
+        row = self.group_list.get_selected_row()
+        if row is not None:
+            row.grab_focus()
+        else:
+            self.group_list.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _on_group_activated(self, _list, row) -> None:
         if getattr(row, "_key", None) == _HIDDEN:

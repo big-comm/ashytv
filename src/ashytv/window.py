@@ -1270,7 +1270,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
             Step(_("Channel groups"),
                  _("Pick a group to see its channels. Right-click (or long-press) a group "
                    "to move it or hide it."),
-                 "channels", lambda: ch.group_panel, channels_list),
+                 "channels", lambda: ch.show_groups(), channels_list),
             Step(_("Channel list"),
                  _("A click selects a channel; a double-click or Enter opens it. "
                    "Right-click a channel to hide it or add it to your favorites."),
