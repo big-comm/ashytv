@@ -149,7 +149,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 8
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 9
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -384,3 +384,20 @@ def test_favorite_people(tmp_path):
     assert people[1].profile.endswith("tom.jpg") and people[1].id == "1136406"
     db.set_favorite_person(tom, False)
     assert [p.name for p in db.favorite_people()] == ["Zendaya Coleman"]
+
+
+def test_an_existing_database_gets_the_new_columns(tmp_path):
+    # A database from the previous version (schema 8, no grp_rank) opens and
+    # lists its groups — the column comes with the schema bump.
+    path = tmp_path / "old.db"
+    db = Storage(path)
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("A", "u/a", group="News")])
+    db.close()
+    raw = sqlite3.connect(path)
+    raw.execute("ALTER TABLE channel DROP COLUMN grp_rank")
+    raw.execute("PRAGMA user_version = 8")
+    raw.commit()
+    raw.close()
+    db = Storage(path)
+    assert db.groups(MediaType.LIVE) == [("News", 1)]

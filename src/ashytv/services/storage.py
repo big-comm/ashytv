@@ -21,7 +21,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 8
+_SCHEMA_VERSION = 9  # 9: channel.grp_rank (provider group order)
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
