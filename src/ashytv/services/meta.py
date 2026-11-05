@@ -81,6 +81,25 @@ class Credit:
 
 
 @dataclass(slots=True)
+class TitleDetails:
+    """The panel's TMDB data of a title for the details page (META-API §1.1).
+    Older panels send only the cast: the rest stays empty."""
+    cast: list[CastMember] = field(default_factory=list)
+    original_title: str = ""
+    tagline: str = ""
+    overview: str = ""
+    runtime: int = 0            # minutes (series: an episode)
+    rating: float = 0.0         # TMDB users, 0-10; 0 = none
+    genres: list[str] = field(default_factory=list)
+    directors: list[str] = field(default_factory=list)   # series: the creators
+    writers: list[str] = field(default_factory=list)
+    studios: list[str] = field(default_factory=list)
+    keywords: list[str] = field(default_factory=list)
+    backdrop: str = ""
+    recommendations: list[Credit] = field(default_factory=list)
+
+
+@dataclass(slots=True)
 class Person:
     name: str
     id: str = ""
@@ -135,11 +154,43 @@ def parse_title(data) -> list[CastMember]:
     return cast
 
 
-def parse_person(data) -> Person:
-    if not isinstance(data, dict) or not _str(data.get("name")):
-        raise MetaNotFound("no person")
+def _strings(value, limit: int = 12, named: bool = False) -> list[str]:
+    """A list of texts, or of {id, name} people when `named`."""
+    out = []
+    for item in value if isinstance(value, list) else []:
+        if named != isinstance(item, dict):
+            continue
+        text = _str(item.get("name") if named else item, 120)
+        if text and text not in out:
+            out.append(text)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def parse_details(data) -> TitleDetails:
+    cast = parse_title(data)
+    rating = data.get("rating")
+    runtime = data.get("runtime")
+    backdrop = data.get("backdrop")
+    return TitleDetails(
+        cast=cast, original_title=_str(data.get("original_title"), 200),
+        tagline=_str(data.get("tagline"), 300), overview=_str(data.get("overview"), 4000),
+        runtime=int(runtime) if isinstance(runtime, (int, float)) and 0 < runtime < 1000 else 0,
+        rating=round(float(rating), 1) if isinstance(rating, (int, float))
+        and not isinstance(rating, bool) and 0 < rating <= 10 else 0.0,
+        genres=_strings(data.get("genres"), 8),
+        directors=_strings(data.get("directors"), 6, named=True),
+        writers=_strings(data.get("writers"), 6, named=True),
+        studios=_strings(data.get("studios"), 6),
+        keywords=_strings(data.get("keywords"), 12),
+        backdrop=backdrop if isinstance(backdrop, str) and backdrop.startswith("https://") else "",
+        recommendations=_credits(data.get("recommendations")))
+
+
+def _credits(value) -> list[Credit]:
     credits = []
-    for item in data.get("credits") if isinstance(data.get("credits"), list) else []:
+    for item in value if isinstance(value, list) else []:
         if not isinstance(item, dict):
             continue
         kind = {"movie": MediaType.MOVIE, "series": MediaType.SERIES,
@@ -153,9 +204,16 @@ def parse_person(data) -> Person:
                               poster=image_url(item.get("poster"))))
         if len(credits) >= _MAX_CREDITS:
             break
+    return credits
+
+
+def parse_person(data) -> Person:
+    if not isinstance(data, dict) or not _str(data.get("name")):
+        raise MetaNotFound("no person")
     return Person(name=_str(data.get("name"), 120), id=_id(data.get("id")),
                   profile=image_url(data.get("profile")),
-                  biography=_str(data.get("biography"), 4000), credits=credits)
+                  biography=_str(data.get("biography"), 4000),
+                  credits=_credits(data.get("credits")))
 
 
 def parse_people(data) -> list[CastMember]:
@@ -221,6 +279,15 @@ class MetaClient:
 
     def title(self, kind: MediaType, tmdb_id: str = "", query: str = "",
               year: str = "", lang: str = "") -> list[CastMember]:
+        return parse_title(self._title_data(kind, tmdb_id, query, year, lang))
+
+    def details(self, kind: MediaType, tmdb_id: str = "", query: str = "",
+                year: str = "", lang: str = "") -> TitleDetails:
+        """Cast plus the details page (rating, crew, studios, "more like this")."""
+        return parse_details(self._title_data(kind, tmdb_id, query, year, lang, details=True))
+
+    def _title_data(self, kind: MediaType, tmdb_id: str, query: str, year: str, lang: str,
+                    details: bool = False):
         params = {"type": "series" if kind is MediaType.SERIES else "movie"}
         if tmdb_id:
             params["tmdb_id"] = tmdb_id
@@ -232,7 +299,11 @@ class MetaClient:
                 params["year"] = year
         if lang:
             params["lang"] = lang
-        return parse_title(self._get("/api/v1/meta/title", params, TITLE_TTL))
+        data = self._get("/api/v1/meta/title", params, TITLE_TTL)
+        if details and isinstance(data, dict) and "recommendations" not in data:
+            # Cached before the panel sent the details: ask again (and update the cache).
+            data = self._get("/api/v1/meta/title", params, -1)
+        return data
 
     def backdrop(self, kind: MediaType, tmdb_id: str = "", query: str = "",
                  year: str = "", lang: str = "") -> str:
@@ -423,6 +494,28 @@ class CatalogIndex:
         movies = [ch for _y, ch in ordered if ch.media_type is MediaType.MOVIE]
         series = [ch for _y, ch in ordered if ch.media_type is MediaType.SERIES]
         return movies, series
+
+
+def more_like_this(index: CatalogIndex, credits: Iterable[Credit], own: Channel,
+                   limit: int = 20) -> list[Channel]:
+    """TMDB's recommendations the user has, in TMDB's order, one entry per
+    title (several playlists or qualities) and never the title itself."""
+    seen = {(own.media_type, own.tmdb or title_key(own.display_name))}
+    out = []
+    for credit in credits:
+        if credit.type is not own.media_type:
+            continue
+        ch = index.find(credit)
+        if ch is None:
+            continue
+        key = (ch.media_type, ch.tmdb or title_key(ch.display_name))
+        if key in seen or (ch.playlist_id, ch.url) == (own.playlist_id, own.url):
+            continue
+        seen.add(key)
+        out.append(ch)
+        if len(out) >= limit:
+            break
+    return out
 
 
 def titles_with_cast(name: str, cast_texts: dict, lookup: Callable[[object], Channel | None]

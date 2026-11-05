@@ -202,6 +202,8 @@ button.ashy-hero-arrow:hover { background-color: alpha(black, 0.7); }
 .ashy-hero-sub { color: alpha(#fff, 0.78); }
 .ashy-hero-orig { color: alpha(#fff, 0.85); font-weight: 600; }
 .ashy-facts label.dim-label { min-width: 90px; }
+.ashy-fact-value { font-weight: 600; }
+.ashy-tagline { font-style: italic; opacity: 0.75; }
 .ashy-hero .ashy-faint { color: alpha(#fff, 0.6); }
 carouselindicatordots { color: #fff; }
 

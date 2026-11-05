@@ -801,6 +801,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         dialog.connect("play", self._on_detail_play)
         dialog.connect("favorite-changed", self._on_favorite_changed)
         dialog.connect("show-person", self._on_show_person)
+        dialog.connect("open-title", lambda d, ch: (d.close(), self._open_detail(ch)))
         dialog.present(self)
 
     def _actor_dialog(self, member) -> ActorDialog:

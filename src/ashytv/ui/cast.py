@@ -17,7 +17,7 @@ from gi.repository import Adw, GLib, GObject, Gtk
 from ..i18n import _
 from ..models import Channel, MediaType
 from ..services import languages, meta
-from ..services.meta import CastMember, CatalogIndex, MetaError, Person
+from ..services.meta import CastMember, CatalogIndex, MetaError, Person, TitleDetails
 from ..services.storage import Storage
 from .marquee import MarqueeLabel
 from .pages._common import set_picture
@@ -72,9 +72,10 @@ class CastService:
 
     # ---- cast of a title ---------------------------------------------------
 
-    def load_cast(self, ch: Channel, info: dict,
-                  on_done: Callable[[list[CastMember], bool], None]) -> None:
-        """on_done(members, from_tmdb) — an empty list when there is nothing."""
+    def load_cast(self, ch: Channel, info: dict, on_done: Callable[
+            [list[CastMember], bool, TitleDetails | None, list[Channel]], None]) -> None:
+        """on_done(members, from_tmdb, details, more_like_this): members is an
+        empty list when there is nothing; details None without the panel."""
         key = self._key(ch)
         tmdb = info.get("tmdb_id") or self.tmdb_ids.get(key) or ch.tmdb
         text = info.get("cast") or self.cast_texts.get(key, "")
@@ -82,17 +83,26 @@ class CastService:
             self.remember(ch, info["cast"], info.get("tmdb_id", ""))
         kind = MediaType.SERIES if ch.media_type is MediaType.SERIES else MediaType.MOVIE
         query, year, lang = search_title(ch.display_name), meta.channel_year(ch), _lang()
+        index_key = self._catalog_key()
 
         def worker():
             try:
-                members = self.client.title(kind, tmdb_id=tmdb, query=query, year=year,
-                                            lang=lang)
+                details = self.client.details(kind, tmdb_id=tmdb, query=query, year=year,
+                                              lang=lang)
             except MetaError:
-                members = []
+                details = None
+            similar: list[Channel] = []
+            if details is not None and details.recommendations:
+                try:
+                    similar = meta.more_like_this(self._catalog_index(index_key),
+                                                  details.recommendations, ch)
+                except Exception:  # the database is busy or gone: no row
+                    similar = []
+            members = details.cast if details is not None else []
             if members:
-                GLib.idle_add(_call, on_done, members, True)
+                GLib.idle_add(_call, on_done, members, True, details, similar)
             else:
-                GLib.idle_add(_call, on_done, meta.split_cast(text), False)
+                GLib.idle_add(_call, on_done, meta.split_cast(text), False, details, similar)
 
         threading.Thread(target=worker, daemon=True, name="ashytv-cast").start()
 
@@ -387,47 +397,53 @@ class ActorDialog(Adw.Dialog):
             self._sections.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
     def _section(self, title: str, items: list[Channel]) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        label = Gtk.Label(label=f"{title}  ({len(items)})", xalign=0)
-        label.add_css_class("ashy-section-title")
-        box.append(label)
-        # The FlowBox children are the focus/activation targets (one ring
-        # each, arrows move in 2D); a button inside them was a second stop.
-        flow = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE, homogeneous=True,
-                           max_children_per_line=8, min_children_per_line=2,
-                           column_spacing=6, row_spacing=6)
-        flow.add_css_class("ashy-poster-flow")
-        for ch in items:
-            child = Gtk.FlowBoxChild(child=self._poster(ch))
-            child._channel = ch  # type: ignore[attr-defined]
-            child.get_child()._marquee.attach_focus(child)  # type: ignore[attr-defined]
-            flow.append(child)
-        flow.connect("child-activated",
-                     lambda _f, child: self.emit("open", child._channel))
-        box.append(flow)
-        return box
+        return poster_section(f"{title}  ({len(items)})", items, lambda ch: self.emit("open", ch))
 
-    def _poster(self, ch: Channel) -> Gtk.Widget:
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        frame = Gtk.Box()
-        frame.set_overflow(Gtk.Overflow.HIDDEN)
-        frame.add_css_class("ashy-poster-img")
-        pic = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
-        pic.set_size_request(120, 180)
-        set_picture(pic, ch.logo, 180)
-        frame.append(pic)
-        box.append(frame)
-        title = MarqueeLabel(width_chars=13)
-        title.set_text(ch.display_name)
-        title.add_css_class("ashy-poster-title")
-        box.append(title)
-        year = Gtk.Label(label=meta.channel_year(ch), xalign=0)
-        year.add_css_class("ashy-year")
-        box.append(year)
-        # Natural width: a wider FlowBox column must not stretch the poster.
-        box.set_halign(Gtk.Align.CENTER)
-        box.set_margin_top(6)
-        box.set_margin_bottom(6)
-        title.attach_hover(box)
-        box._marquee = title  # type: ignore[attr-defined]
-        return box
+
+def poster_section(title: str, items: list[Channel],
+                   on_open: Callable[[Channel], None]) -> Gtk.Widget:
+    """A titled grid of posters (an actor's titles, "More like this")."""
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+    label = Gtk.Label(label=title, xalign=0)
+    label.add_css_class("ashy-section-title")
+    box.append(label)
+    # The FlowBox children are the focus/activation targets (one ring
+    # each, arrows move in 2D); a button inside them was a second stop.
+    flow = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE, homogeneous=True,
+                       max_children_per_line=8, min_children_per_line=2,
+                       column_spacing=6, row_spacing=6)
+    flow.add_css_class("ashy-poster-flow")
+    for ch in items:
+        child = Gtk.FlowBoxChild(child=_poster(ch))
+        child._channel = ch  # type: ignore[attr-defined]
+        child.get_child()._marquee.attach_focus(child)  # type: ignore[attr-defined]
+        flow.append(child)
+    flow.connect("child-activated", lambda _f, child: on_open(child._channel))
+    box.append(flow)
+    return box
+
+
+def _poster(ch: Channel) -> Gtk.Widget:
+    box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+    frame = Gtk.Box()
+    frame.set_overflow(Gtk.Overflow.HIDDEN)
+    frame.add_css_class("ashy-poster-img")
+    pic = Gtk.Picture(content_fit=Gtk.ContentFit.COVER, can_shrink=True)
+    pic.set_size_request(120, 180)
+    set_picture(pic, ch.logo, 180)
+    frame.append(pic)
+    box.append(frame)
+    title = MarqueeLabel(width_chars=13)
+    title.set_text(ch.display_name)
+    title.add_css_class("ashy-poster-title")
+    box.append(title)
+    year = Gtk.Label(label=meta.channel_year(ch), xalign=0)
+    year.add_css_class("ashy-year")
+    box.append(year)
+    # Natural width: a wider FlowBox column must not stretch the poster.
+    box.set_halign(Gtk.Align.CENTER)
+    box.set_margin_top(6)
+    box.set_margin_bottom(6)
+    title.attach_hover(box)
+    box._marquee = title  # type: ignore[attr-defined]
+    return box

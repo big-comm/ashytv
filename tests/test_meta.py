@@ -354,3 +354,54 @@ def test_backdrop_falls_back_to_the_title_when_the_playlist_id_has_none(tmp_path
     assert url.endswith("/bg.jpg")
     # Without a title, only the id.
     assert client(tmp_path / "c", ByQuery()).backdrop(MOVIE, tmdb_id="999") == ""
+
+
+# ---- details page and "more like this" ---------------------------------------
+
+DETAILS = {**TITLE, "original_title": "The Demo", "tagline": "Wake up.", "overview": "A hacker.",
+           "runtime": 136, "rating": 8.2, "votes": 26000, "genres": ["Action", "Sci-Fi", ""],
+           "directors": [{"id": 1, "name": "Lana W."}, {"id": 2, "name": "Lilly W."}, "junk"],
+           "writers": [{"id": 1, "name": "Lana W."}], "studios": ["Warner Bros."],
+           "keywords": ["hacker", "simulation"], "backdrop": "https://image.tmdb.org/t/p/w780/b.jpg",
+           "recommendations": [
+               {"type": "movie", "tmdb_id": 604, "title": "Demo Reloaded", "year": 2003},
+               {"type": "person", "title": "ignored"}]}
+
+
+def test_parse_details_and_older_panels():
+    d = meta.parse_details(DETAILS)
+    assert (d.original_title, d.tagline, d.runtime, d.rating) == ("The Demo", "Wake up.", 136, 8.2)
+    assert d.genres == ["Action", "Sci-Fi"]
+    assert d.directors == ["Lana W.", "Lilly W."]
+    assert d.writers == ["Lana W."] and d.studios == ["Warner Bros."]
+    assert d.keywords == ["hacker", "simulation"]
+    assert [(c.tmdb_id, c.year) for c in d.recommendations] == [("604", "2003")]
+    assert [m.name for m in d.cast] == ["Ana Bright", "Leo Hart"]
+    old = meta.parse_details(TITLE)  # a panel before the details
+    assert old.rating == 0 and old.directors == [] and old.recommendations == []
+    bad = meta.parse_details({**TITLE, "rating": "9", "runtime": -5, "backdrop": "file:///x"})
+    assert bad.rating == 0 and bad.runtime == 0 and bad.backdrop == ""
+
+
+def test_details_refresh_an_answer_cached_before_them(tmp_path):
+    server = FakeServer({"/meta/title": TITLE})
+    c = client(tmp_path, server)
+    c.title(MOVIE, tmdb_id="603")
+    server.routes = {"/meta/title": DETAILS}
+    assert c.details(MOVIE, tmdb_id="603").rating == 8.2
+    assert len(server.calls) == 2
+    assert c.details(MOVIE, tmdb_id="603").rating == 8.2  # now cached
+    assert len(server.calls) == 2
+
+
+def test_more_like_this_only_the_catalog_once_per_title():
+    own = _ch("Demo", "u1", year="1999", tmdb="603")
+    index = CatalogIndex([own, _ch("Demo Reloaded", "u2", year="2003", tmdb="604"),
+                          _ch("Demo Reloaded [4K]", "u3", year="2003", tmdb="604", pid=2),
+                          _ch("Heat", "u4", year="1995"), _ch("Heat", "s1", mt=SERIES)])
+    credits = [Credit(MOVIE, "Demo", year="1999", tmdb_id="603"),
+               Credit(MOVIE, "Demo Reloaded", year="2003", tmdb_id="604"),
+               Credit(MOVIE, "Heat", year="1995", tmdb_id="949"),
+               Credit(MOVIE, "Not here", year="2001", tmdb_id="7"),
+               Credit(SERIES, "Heat", tmdb_id="5")]
+    assert [ch.url for ch in meta.more_like_this(index, credits, own)] == ["u2", "u4"]
