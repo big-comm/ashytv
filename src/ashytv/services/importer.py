@@ -19,7 +19,8 @@ from .downloader import read_source
 from .failover import ServerPool
 from .m3u_parser import group_series, header_epg_url, iter_m3u, looks_like_m3u
 from .storage import Storage
-from .xtream_client import XtreamProvider, load_catalog
+from ..models import Channel
+from .xtream_client import XtreamProvider, category_order, load_catalog, parse_provider
 
 
 @dataclass(slots=True)
@@ -63,6 +64,8 @@ def import_m3u(db_path: Path, name: str, source: str,
     channels = list(iter_m3u(text))
     if free_tv.is_free_tv(source):
         free_tv.localize_groups(channels)
+    else:
+        _provider_group_order(pool.current, channels)
     del text
     if not channels:
         raise ValueError(_("No channels found in the playlist"))
@@ -83,6 +86,25 @@ def import_m3u(db_path: Path, name: str, source: str,
     finally:
         db.close()
     return ImportResult(pid, count, "m3u", meta)
+
+
+def _provider_group_order(source: str, channels: list[Channel]) -> None:
+    """An M3U link of an Xtream server (get.php) comes A–Z by channel, so its
+    groups would come in the order their first channel appears: ask the
+    server for its own category order (the file order stays without it)."""
+    if "get.php" not in source.lower():
+        return
+    provider = parse_provider(source)
+    if provider is None:
+        return
+    order = category_order(provider)
+    for media_type, names in order.items():
+        rank: dict[str, int] = {}
+        for name in names:
+            rank.setdefault(name, len(rank) + 1)
+        for c in channels:
+            if c.media_type is media_type:
+                c.group_rank = rank.get(c.group, 0)
 
 
 def import_xtream(db_path: Path, name: str, provider: XtreamProvider,

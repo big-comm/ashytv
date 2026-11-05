@@ -72,6 +72,39 @@ def test_groups_keep_provider_order(tmp_path):
     assert db.groups(MediaType.LIVE) == [("Zeta", 2), ("Alpha", 1)]
 
 
+def test_groups_follow_the_provider_category_order(tmp_path):
+    # The streams come A–Z (as many providers send them); the category list
+    # says Globo first, Portugal last. Unlisted groups go after, in file order.
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [
+        _ch("(Des)encanto", "u/1", group="Portugal", group_rank=3),
+        _ch("A Fazenda", "u/2", group="Extra"),
+        _ch("Bom Dia", "u/3", group="Globo", group_rank=1),
+        _ch("Cartoon", "u/4", group="Infantil", group_rank=2),
+        _ch("Zeta", "u/5", group="Outro"),
+    ])
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == [
+        "Globo", "Infantil", "Portugal", "Extra", "Outro"]
+    # Channels keep the playlist order.
+    assert [c.name for c in db.channels(MediaType.LIVE)][:2] == ["(Des)encanto", "A Fazenda"]
+
+
+def test_sort_az_orders_groups_and_channels(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("L", "src")
+    db.replace_channels(pid, [_ch("Zulu", "u/1", group="Esportes"),
+                              _ch("Alfa", "u/2", group="Abertos"),
+                              _ch("Ônibus", "u/3", group="🇧🇷 Ébano")])
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["Zulu", "Alfa", "Ônibus"]
+    db.sort_az = True
+    assert [g for g, _n in db.groups(MediaType.LIVE)] == ["Abertos", "🇧🇷 Ébano", "Esportes"]
+    assert [c.name for c in db.channels(MediaType.LIVE)] == ["Alfa", "Ônibus", "Zulu"]
+    # The groups the user moved still come first.
+    db.group_order = ["Esportes"]
+    assert db.groups(MediaType.LIVE)[0][0] == "Esportes"
+
+
 def test_history_and_resume(tmp_path):
     db = Storage(tmp_path / "t.db")
     pid = db.add_playlist("L", "src")

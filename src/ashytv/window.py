@@ -1184,6 +1184,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.storage.hide_adult = bool(s.get("hide_adult"))
         s.connect("hide_adult", self._on_hide_adult)
         self.storage.group_variants = bool(s.get("group_variants"))
+        self.storage.sort_az = bool(s.get("sort_az"))
+        s.connect("sort_az", self._on_sort_az)
         if s.get("hidden_groups"):
             # Older versions kept one global list of group names: now they
             # are hidden per playlist in the database.
@@ -1586,6 +1588,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_group_variants(self, value) -> None:
         self.storage.group_variants = bool(value)
         self._invalidate_pages("home", "channels", "favorites")
+
+    def _on_sort_az(self, value) -> None:
+        self.storage.sort_az = bool(value)
+        self._invalidate_pages()
 
     def _on_hide_adult(self, value) -> None:
         self.storage.hide_adult = bool(value)

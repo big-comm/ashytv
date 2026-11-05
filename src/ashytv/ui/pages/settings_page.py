@@ -147,6 +147,9 @@ class SettingsPage(Gtk.Box):
         channels = Adw.PreferencesGroup(title=_("Channels"))
         self._switch(channels, "group_variants", _("Group qualities of the same channel"),
                      _("Shows “News FHD”, “News HD” and “News SD” as a single channel"))
+        self._switch(channels, "sort_az", _("Sort from A to Z"),
+                     _("Groups and channels in alphabetical order. Off, they keep "
+                       "the playlist's order"))
         self._switch(channels, "channel_preview", _("Live preview"),
                      _("Plays the selected channel, muted, next to the channel list"))
         # Its own group, so it is easy to find: everything the user hid.
