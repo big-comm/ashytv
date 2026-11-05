@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-05 17:50-0300\n"
+"POT-Creation-Date: 2026-11-05 19:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -45,15 +45,15 @@ msgstr ""
 msgid "Live TV"
 msgstr "Direkte-TV"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/ui/pages/favorites_page.py:48 src/ashytv/window.py:221
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:377
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
+#: src/ashytv/window.py:221
 msgid "Movies"
 msgstr "Filmer"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/ui/pages/favorites_page.py:49 src/ashytv/window.py:230
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:377
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
+#: src/ashytv/window.py:230
 msgid "Series"
 msgstr "Serier"
 
@@ -99,11 +99,11 @@ msgstr "Tegnefilm"
 msgid "Business"
 msgstr "Næringsliv"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:39
+#: src/ashytv/services/free_tv.py:157
 msgid "News"
 msgstr "Nyheter"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:45
+#: src/ashytv/services/free_tv.py:158
 msgid "Documentaries"
 msgstr "Dokumentarer"
 
@@ -111,7 +111,7 @@ msgstr "Dokumentarer"
 msgid "Weather"
 msgstr "Vær"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:47
+#: src/ashytv/services/free_tv.py:159
 msgid "Music"
 msgstr "Musikk"
 
@@ -234,56 +234,56 @@ msgstr "Ugyldig brukernavn eller passord"
 msgid "Account status: {status}"
 msgstr "Kontostatus: {status}"
 
-#: src/ashytv/ui/cast.py:209
+#: src/ashytv/ui/cast.py:208
 msgid "Actor"
 msgstr "Skuespill"
 
-#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:279
+#: src/ashytv/ui/cast.py:208 src/ashytv/ui/detail_dialog.py:279
 msgid "Director"
 msgstr "Regi"
 
-#: src/ashytv/ui/cast.py:209
+#: src/ashytv/ui/cast.py:208
 msgid "Writer"
 msgstr "Manus"
 
-#: src/ashytv/ui/cast.py:210
+#: src/ashytv/ui/cast.py:209
 msgid "Producer"
 msgstr "Produksjon"
 
-#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:288
+#: src/ashytv/ui/cast.py:240 src/ashytv/ui/detail_dialog.py:288
 msgid "Cast"
 msgstr "Rolleliste"
 
-#: src/ashytv/ui/cast.py:273
+#: src/ashytv/ui/cast.py:272
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Titler med {name}"
 
-#: src/ashytv/ui/cast.py:332
+#: src/ashytv/ui/cast.py:331
 msgid "Cast data: TMDB"
 msgstr "Rolledata: TMDB"
 
-#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:450
-#: src/ashytv/ui/pages/catalog_page.py:280
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:355 src/ashytv/ui/detail_dialog.py:450
+#: src/ashytv/ui/pages/catalog_page.py:353
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "Fjern fra favoritter"
 
-#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:451
-#: src/ashytv/ui/pages/catalog_page.py:281
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/pages/catalog_page.py:354
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "Legg til i favoritter"
 
-#: src/ashytv/ui/cast.py:383
+#: src/ashytv/ui/cast.py:382
 msgid "Nothing in your playlists"
 msgstr "Ingenting i spillelistene dine"
 
-#: src/ashytv/ui/cast.py:384
+#: src/ashytv/ui/cast.py:383
 msgid "None of this person's movies or series are in your playlists."
 msgstr "Ingen av denne personens filmer eller serier er i spillelistene dine."
 
-#: src/ashytv/ui/cast.py:389
+#: src/ashytv/ui/cast.py:388
 msgid "Found in the details of the titles you opened."
 msgstr "Funnet i detaljene for titlene du har åpnet."
 
@@ -324,7 +324,8 @@ msgstr "Neste: {title}"
 msgid "Mute"
 msgstr "Demp"
 
-#: src/ashytv/ui/channel_overlay.py:58
+#: src/ashytv/ui/channel_overlay.py:58 src/ashytv/ui/pages/_common.py:37
+#: src/ashytv/ui/pages/_common.py:38
 msgid "Groups"
 msgstr "Grupper"
 
@@ -343,7 +344,7 @@ msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: se  •  ←: grupper  •  Esc: lukk"
 
 #: src/ashytv/ui/detail_dialog.py:107 src/ashytv/ui/detail_dialog.py:201
-#: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
 #: src/ashytv/window.py:1483 src/ashytv/window.py:1489
 msgid "Watch"
 msgstr "Se"
@@ -502,9 +503,8 @@ msgstr "Stopp"
 msgid "Home"
 msgstr "Hjem"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:81
-#: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:242
 #: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:602
 #: src/ashytv/window.py:625
 msgid "Favorites"
@@ -524,135 +524,114 @@ msgstr "Spillelister"
 msgid "Settings"
 msgstr "Innstillinger"
 
-#: src/ashytv/ui/pages/catalog_page.py:59
+#: src/ashytv/ui/pages/catalog_page.py:85
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "Personer"
 
-#: src/ashytv/ui/pages/catalog_page.py:90
+#: src/ashytv/ui/pages/catalog_page.py:114
 msgid "Nothing found"
 msgstr "Ingenting funnet"
 
-#: src/ashytv/ui/pages/catalog_page.py:91
+#: src/ashytv/ui/pages/catalog_page.py:115
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Legg til en spilleliste under «Spillelister», eller endre filteret."
 
-#: src/ashytv/ui/pages/catalog_page.py:124
-#: src/ashytv/ui/pages/channels_page.py:264
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "All"
 msgstr "Alle"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "New Releases"
 msgstr "Nye utgivelser"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:197
 msgid "Trending"
 msgstr "Populært"
 
-#: src/ashytv/ui/pages/catalog_page.py:170
-#: src/ashytv/ui/pages/channels_page.py:343
+#: src/ashytv/ui/pages/catalog_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:286
+msgid "See hidden channels and groups"
+msgstr "Se skjulte kanaler og grupper"
+
+#: src/ashytv/ui/pages/catalog_page.py:212
+#: src/ashytv/ui/pages/channels_page.py:291
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "Skjult ({n})"
 
-#: src/ashytv/ui/pages/catalog_page.py:172
-#: src/ashytv/ui/pages/channels_page.py:338
-msgid "See hidden channels and groups"
-msgstr "Se skjulte kanaler og grupper"
-
-#: src/ashytv/ui/pages/catalog_page.py:178
+#: src/ashytv/ui/pages/catalog_page.py:235
 msgid "Hide category"
 msgstr "Skjul kategori"
 
-#: src/ashytv/ui/pages/channels_page.py:37
-msgid "Sports"
-msgstr "Sport"
-
-#: src/ashytv/ui/pages/channels_page.py:40
-msgid "Free-to-air"
-msgstr "Åpne kanaler"
-
-#: src/ashytv/ui/pages/channels_page.py:43
-msgid "Kids"
-msgstr "Barn"
-
-#: src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/pages/channels_page.py:68
 msgid "TV Channels"
 msgstr "TV-kanaler"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "Channels, movies and series you marked"
 msgstr "Kanaler, filmer og serier du har merket"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "All your channels organized by category"
 msgstr "Alle kanalene dine ordnet etter kategori"
 
-#: src/ashytv/ui/pages/channels_page.py:95
+#: src/ashytv/ui/pages/channels_page.py:82
 msgid "List"
 msgstr "Liste"
 
-#: src/ashytv/ui/pages/channels_page.py:96
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "Guide"
 msgstr "Guide"
 
-#: src/ashytv/ui/pages/channels_page.py:171
+#: src/ashytv/ui/pages/channels_page.py:146
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "Ingenting her ennå"
 
-#: src/ashytv/ui/pages/channels_page.py:172
+#: src/ashytv/ui/pages/channels_page.py:147
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "Trykk på hjertet på en kanal, film eller serie for å ha den her."
 
-#: src/ashytv/ui/pages/channels_page.py:174
+#: src/ashytv/ui/pages/channels_page.py:149
 msgid "No channels in this category."
 msgstr "Ingen kanaler i denne kategorien."
 
-#: src/ashytv/ui/pages/channels_page.py:264
-msgid "Recent"
-msgstr "Nylig"
+#: src/ashytv/ui/pages/channels_page.py:241
+msgid "All Channels"
+msgstr "Alle kanaler"
 
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:603
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:603
 #: src/ashytv/window.py:626
 msgid "Recently watched"
 msgstr "Nylig sett"
 
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All Channels"
-msgstr "Alle kanaler"
-
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All in this category"
-msgstr "Alle i denne kategorien"
-
-#: src/ashytv/ui/pages/channels_page.py:372
+#: src/ashytv/ui/pages/channels_page.py:324
 msgid "Move up"
 msgstr "Flytt opp"
 
-#: src/ashytv/ui/pages/channels_page.py:373
+#: src/ashytv/ui/pages/channels_page.py:325
 msgid "Move down"
 msgstr "Flytt ned"
 
-#: src/ashytv/ui/pages/channels_page.py:374
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Hide group"
 msgstr "Skjul gruppe"
 
-#: src/ashytv/ui/pages/channels_page.py:583 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:177
 msgid "Favorite"
 msgstr "Favoritt"
 
-#: src/ashytv/ui/pages/channels_page.py:590
+#: src/ashytv/ui/pages/channels_page.py:539
 msgid "More options"
 msgstr "Flere alternativer"
 
-#: src/ashytv/ui/pages/channels_page.py:613
+#: src/ashytv/ui/pages/channels_page.py:562
 msgid "View schedule"
 msgstr "Vis program"
 
-#: src/ashytv/ui/pages/channels_page.py:615
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Hide channel"
 msgstr "Skjul kanal"
 
@@ -2328,6 +2307,21 @@ msgstr "Katalog over filmer og serier med fortsettelse og neste episode"
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "Avspilling med libmpv med maskinvaredekoding, bilde-i-bilde og opptak"
+
+#~ msgid "Sports"
+#~ msgstr "Sport"
+
+#~ msgid "Free-to-air"
+#~ msgstr "Åpne kanaler"
+
+#~ msgid "Kids"
+#~ msgstr "Barn"
+
+#~ msgid "Recent"
+#~ msgstr "Nylig"
+
+#~ msgid "All in this category"
+#~ msgstr "Alle i denne kategorien"
 
 #~ msgid "Favorite people"
 #~ msgstr "Favorittpersoner"

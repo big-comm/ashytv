@@ -6,10 +6,78 @@ from collections.abc import Callable
 
 from gi.repository import Gdk, GLib, Gtk
 
+from ...i18n import _
 from ...services.logos import logo_loader
 from ...services.text import normalize
 
 SEARCH_DELAY_MS = 220
+
+
+class GroupColumn:
+    """The group list beside the content (TV channels, movies, series), as on
+    the TV apps: while the focus is in the content it folds to a narrow
+    "Groups" strip, so the list or the posters get the room; a click on the
+    strip (or reaching it with the keyboard) opens it again on the selected
+    group."""
+
+    def __init__(self, listbox: Gtk.ListBox, width: int = 250):
+        self.list = listbox
+        scroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER,
+                                    vexpand=True, hexpand=True)
+        scroll.set_child(listbox)
+        self.panel = Gtk.Box()
+        self.panel.add_css_class("ashy-panel")
+        self.panel.set_size_request(width, -1)
+        self.panel.set_hexpand(False)  # don't inherit the inner list's hexpand
+        self.panel.set_overflow(Gtk.Overflow.HIDDEN)
+        self.panel.append(scroll)
+        strip = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4,
+                        valign=Gtk.Align.START, margin_top=14)
+        strip.append(Gtk.Image(icon_name="view-list-symbolic", pixel_size=22))
+        strip.append(Gtk.Label(label=_("Groups")))
+        self.rail = Gtk.Button(child=strip, visible=False, tooltip_text=_("Groups"))
+        self.rail.add_css_class("ashy-panel")
+        self.rail.add_css_class("ashy-group-rail")
+        self.rail.set_size_request(76, -1)
+        self.rail.connect("clicked", lambda _b: self.unfold())
+        # Reached with the keyboard (◀ from the list, Tab): open at once.
+        keys = Gtk.EventControllerFocus()
+        keys.connect("enter", lambda _c: GLib.idle_add(self._unfold_once))
+        self.rail.add_controller(keys)
+
+    def append_to(self, box: Gtk.Box) -> None:
+        box.append(self.panel)
+        box.append(self.rail)
+
+    def watch(self, content: Gtk.Widget) -> None:
+        """The focus entering `content` folds the column."""
+        ctl = Gtk.EventControllerFocus()
+        ctl.connect("enter", lambda _c: self.fold())
+        content.add_controller(ctl)
+
+    def fold(self) -> None:
+        if self.panel.get_visible():
+            self.panel.set_visible(False)
+            self.rail.set_visible(True)
+
+    def show(self) -> Gtk.Widget:
+        """Open (without moving the focus) and return the column (guided tour)."""
+        self.rail.set_visible(False)
+        self.panel.set_visible(True)
+        return self.panel
+
+    def _unfold_once(self) -> bool:
+        if self.rail.get_visible():
+            self.unfold()
+        return GLib.SOURCE_REMOVE
+
+    def unfold(self) -> None:
+        self.show()
+        row = self.list.get_selected_row()
+        if row is not None:
+            row.grab_focus()
+        else:
+            self.list.child_focus(Gtk.DirectionType.TAB_FORWARD)
 
 
 def page_header(title: str, subtitle: str = "") -> Gtk.Box:
@@ -28,78 +96,6 @@ def page_header(title: str, subtitle: str = "") -> Gtk.Box:
         s.add_css_class("ashy-page-subtitle")
         box.append(s)
     return box
-
-
-class ChipRow(Gtk.ScrolledWindow):
-    """Scrollable row of filter chips (single selection)."""
-
-    def __init__(self, on_selected: Callable[[str], None],
-                 menu_items: Callable[[str], list] | None = None):
-        super().__init__(vscrollbar_policy=Gtk.PolicyType.NEVER,
-                         hscrollbar_policy=Gtk.PolicyType.AUTOMATIC)
-        self.set_margin_start(28)
-        self.set_margin_end(28)
-        self.set_margin_bottom(2)
-        # Room under the chips for the overlay scrollbar, so it never covers them.
-        self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8,
-                            margin_bottom=10)
-        self.set_child(self._box)
-        self._on_selected = on_selected
-        # key -> [(label, callback)] of its context menu ([] = none)
-        self._menu_items = menu_items
-        self._buttons: dict[str, Gtk.Button] = {}
-        self._extra: Gtk.Button | None = None
-        self.active = ""
-
-    def set_chips(self, chips: list[tuple[str, str]], active: str = "") -> None:
-        """chips = [(key, label)]."""
-        while (child := self._box.get_first_child()) is not None:
-            self._box.remove(child)
-        self._buttons.clear()
-        for key, label in chips:
-            btn = Gtk.Button(label=label)
-            btn.add_css_class("ashy-chip")
-            btn.connect("clicked", lambda _b, k=key: self.select(k))
-            if self._menu_items is not None:
-                add_context_menu(btn, lambda b=btn, k=key: self._open_menu(b, k))
-            self._buttons[key] = btn
-            self._box.append(btn)
-        if self._extra is not None:
-            self._box.append(self._extra)
-        self._mark(active or (chips[0][0] if chips else ""))
-
-    def set_extra(self, label: str, icon: str, callback: Callable[[], None] | None,
-                  tooltip: str = "") -> None:
-        """An action chip after the others (not a filter); None removes it."""
-        if self._extra is not None:
-            self._box.remove(self._extra)
-            self._extra = None
-        if callback is None:
-            return
-        content = Gtk.Box(spacing=6)
-        content.append(Gtk.Image(icon_name=icon))
-        content.append(Gtk.Label(label=label))
-        self._extra = Gtk.Button(child=content, tooltip_text=tooltip or None)
-        self._extra.add_css_class("ashy-chip")
-        self._extra.connect("clicked", lambda *_: callback())
-        self._box.append(self._extra)
-
-    def _open_menu(self, button: Gtk.Button, key: str) -> None:
-        items = self._menu_items(key) if self._menu_items else []
-        if items:
-            popup_menu(button, items)
-
-    def select(self, key: str) -> None:
-        self._mark(key)
-        self._on_selected(key)
-
-    def _mark(self, key: str) -> None:
-        self.active = key
-        for k, btn in self._buttons.items():
-            if k == key:
-                btn.add_css_class("selected")
-            else:
-                btn.remove_css_class("selected")
 
 
 class SearchFilter:

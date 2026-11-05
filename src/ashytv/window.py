@@ -1281,7 +1281,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
                  None, lambda: ch.info),
             Step(_("Hidden items"),
                  _("Everything you hid is here. Open it to show items again."),
-                 None, ch.hidden_row),
+                 None, lambda: (ch.show_groups(), ch.hidden_row())[1]),
             Step(_("Program guide"),
                  _("Switch to Guide to see what is on, hour by hour, and set reminders."),
                  None, guide_buttons),

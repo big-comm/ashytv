@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-05 17:50-0300\n"
+"POT-Creation-Date: 2026-11-05 19:53-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -45,15 +45,15 @@ msgstr ""
 msgid "Live TV"
 msgstr "Canlı TV"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/ui/pages/favorites_page.py:48 src/ashytv/window.py:221
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:377
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
+#: src/ashytv/window.py:221
 msgid "Movies"
 msgstr "Filmler"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/ui/pages/favorites_page.py:49 src/ashytv/window.py:230
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:377
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
+#: src/ashytv/window.py:230
 msgid "Series"
 msgstr "Diziler"
 
@@ -99,11 +99,11 @@ msgstr "Çizgi filmler"
 msgid "Business"
 msgstr "İş dünyası"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:39
+#: src/ashytv/services/free_tv.py:157
 msgid "News"
 msgstr "Haber"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:45
+#: src/ashytv/services/free_tv.py:158
 msgid "Documentaries"
 msgstr "Belgesel"
 
@@ -111,7 +111,7 @@ msgstr "Belgesel"
 msgid "Weather"
 msgstr "Hava durumu"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:47
+#: src/ashytv/services/free_tv.py:159
 msgid "Music"
 msgstr "Müzik"
 
@@ -234,56 +234,56 @@ msgstr "Kullanıcı adı veya parola geçersiz"
 msgid "Account status: {status}"
 msgstr "Hesap durumu: {status}"
 
-#: src/ashytv/ui/cast.py:209
+#: src/ashytv/ui/cast.py:208
 msgid "Actor"
 msgstr "Oyuncu"
 
-#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:279
+#: src/ashytv/ui/cast.py:208 src/ashytv/ui/detail_dialog.py:279
 msgid "Director"
 msgstr "Yönetmen"
 
-#: src/ashytv/ui/cast.py:209
+#: src/ashytv/ui/cast.py:208
 msgid "Writer"
 msgstr "Senarist"
 
-#: src/ashytv/ui/cast.py:210
+#: src/ashytv/ui/cast.py:209
 msgid "Producer"
 msgstr "Yapımcı"
 
-#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:288
+#: src/ashytv/ui/cast.py:240 src/ashytv/ui/detail_dialog.py:288
 msgid "Cast"
 msgstr "Oyuncular"
 
-#: src/ashytv/ui/cast.py:273
+#: src/ashytv/ui/cast.py:272
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} oynadığı yapımlar"
 
-#: src/ashytv/ui/cast.py:332
+#: src/ashytv/ui/cast.py:331
 msgid "Cast data: TMDB"
 msgstr "Oyuncu verileri: TMDB"
 
-#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:450
-#: src/ashytv/ui/pages/catalog_page.py:280
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:355 src/ashytv/ui/detail_dialog.py:450
+#: src/ashytv/ui/pages/catalog_page.py:353
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "Sık kullanılanlardan kaldır"
 
-#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:451
-#: src/ashytv/ui/pages/catalog_page.py:281
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/pages/catalog_page.py:354
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "Sık kullanılanlara ekle"
 
-#: src/ashytv/ui/cast.py:383
+#: src/ashytv/ui/cast.py:382
 msgid "Nothing in your playlists"
 msgstr "Oynatma listelerinizde yok"
 
-#: src/ashytv/ui/cast.py:384
+#: src/ashytv/ui/cast.py:383
 msgid "None of this person's movies or series are in your playlists."
 msgstr "Bu kişinin hiçbir filmi veya dizisi oynatma listelerinizde yok."
 
-#: src/ashytv/ui/cast.py:389
+#: src/ashytv/ui/cast.py:388
 msgid "Found in the details of the titles you opened."
 msgstr "Açtığınız yapımların ayrıntılarında bulundu."
 
@@ -324,7 +324,8 @@ msgstr "Sıradaki: {title}"
 msgid "Mute"
 msgstr "Sesi kapat"
 
-#: src/ashytv/ui/channel_overlay.py:58
+#: src/ashytv/ui/channel_overlay.py:58 src/ashytv/ui/pages/_common.py:37
+#: src/ashytv/ui/pages/_common.py:38
 msgid "Groups"
 msgstr "Gruplar"
 
@@ -343,7 +344,7 @@ msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: izle  •  ←: gruplar  •  Esc: kapat"
 
 #: src/ashytv/ui/detail_dialog.py:107 src/ashytv/ui/detail_dialog.py:201
-#: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
 #: src/ashytv/window.py:1483 src/ashytv/window.py:1489
 msgid "Watch"
 msgstr "İzle"
@@ -501,9 +502,8 @@ msgstr "Durdur"
 msgid "Home"
 msgstr "Ana sayfa"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:81
-#: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:242
 #: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:602
 #: src/ashytv/window.py:625
 msgid "Favorites"
@@ -523,137 +523,116 @@ msgstr "Oynatma Listeleri"
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: src/ashytv/ui/pages/catalog_page.py:59
+#: src/ashytv/ui/pages/catalog_page.py:85
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "Kişiler"
 
-#: src/ashytv/ui/pages/catalog_page.py:90
+#: src/ashytv/ui/pages/catalog_page.py:114
 msgid "Nothing found"
 msgstr "Hiçbir şey bulunamadı"
 
-#: src/ashytv/ui/pages/catalog_page.py:91
+#: src/ashytv/ui/pages/catalog_page.py:115
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr ""
 "“Oynatma Listeleri” bölümünden bir oynatma listesi ekleyin veya filtreyi "
 "değiştirin."
 
-#: src/ashytv/ui/pages/catalog_page.py:124
-#: src/ashytv/ui/pages/channels_page.py:264
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "All"
 msgstr "Tümü"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "New Releases"
 msgstr "Yeni Çıkanlar"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:197
 msgid "Trending"
 msgstr "Öne Çıkanlar"
 
-#: src/ashytv/ui/pages/catalog_page.py:170
-#: src/ashytv/ui/pages/channels_page.py:343
+#: src/ashytv/ui/pages/catalog_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:286
+msgid "See hidden channels and groups"
+msgstr "Gizli kanalları ve grupları gör"
+
+#: src/ashytv/ui/pages/catalog_page.py:212
+#: src/ashytv/ui/pages/channels_page.py:291
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "Gizli ({n})"
 
-#: src/ashytv/ui/pages/catalog_page.py:172
-#: src/ashytv/ui/pages/channels_page.py:338
-msgid "See hidden channels and groups"
-msgstr "Gizli kanalları ve grupları gör"
-
-#: src/ashytv/ui/pages/catalog_page.py:178
+#: src/ashytv/ui/pages/catalog_page.py:235
 msgid "Hide category"
 msgstr "Kategoriyi gizle"
 
-#: src/ashytv/ui/pages/channels_page.py:37
-msgid "Sports"
-msgstr "Spor"
-
-#: src/ashytv/ui/pages/channels_page.py:40
-msgid "Free-to-air"
-msgstr "Şifresiz"
-
-#: src/ashytv/ui/pages/channels_page.py:43
-msgid "Kids"
-msgstr "Çocuk"
-
-#: src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/pages/channels_page.py:68
 msgid "TV Channels"
 msgstr "TV Kanalları"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "Channels, movies and series you marked"
 msgstr "İşaretlediğiniz kanallar, filmler ve diziler"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "All your channels organized by category"
 msgstr "Tüm kanallarınız kategorilere göre düzenlenmiş"
 
-#: src/ashytv/ui/pages/channels_page.py:95
+#: src/ashytv/ui/pages/channels_page.py:82
 msgid "List"
 msgstr "Liste"
 
-#: src/ashytv/ui/pages/channels_page.py:96
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "Guide"
 msgstr "Rehber"
 
-#: src/ashytv/ui/pages/channels_page.py:171
+#: src/ashytv/ui/pages/channels_page.py:146
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "Henüz burada bir şey yok"
 
-#: src/ashytv/ui/pages/channels_page.py:172
+#: src/ashytv/ui/pages/channels_page.py:147
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "Burada tutmak için bir kanal, film veya dizideki kalbe dokunun."
 
-#: src/ashytv/ui/pages/channels_page.py:174
+#: src/ashytv/ui/pages/channels_page.py:149
 msgid "No channels in this category."
 msgstr "Bu kategoride kanal yok."
 
-#: src/ashytv/ui/pages/channels_page.py:264
-msgid "Recent"
-msgstr "Son"
+#: src/ashytv/ui/pages/channels_page.py:241
+msgid "All Channels"
+msgstr "Tüm Kanallar"
 
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:603
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:603
 #: src/ashytv/window.py:626
 msgid "Recently watched"
 msgstr "Son izlenenler"
 
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All Channels"
-msgstr "Tüm Kanallar"
-
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All in this category"
-msgstr "Bu kategorideki tümü"
-
-#: src/ashytv/ui/pages/channels_page.py:372
+#: src/ashytv/ui/pages/channels_page.py:324
 msgid "Move up"
 msgstr "Yukarı taşı"
 
-#: src/ashytv/ui/pages/channels_page.py:373
+#: src/ashytv/ui/pages/channels_page.py:325
 msgid "Move down"
 msgstr "Aşağı taşı"
 
-#: src/ashytv/ui/pages/channels_page.py:374
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Hide group"
 msgstr "Grubu gizle"
 
-#: src/ashytv/ui/pages/channels_page.py:583 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:177
 msgid "Favorite"
 msgstr "Sık kullanılan"
 
-#: src/ashytv/ui/pages/channels_page.py:590
+#: src/ashytv/ui/pages/channels_page.py:539
 msgid "More options"
 msgstr "Daha fazla seçenek"
 
-#: src/ashytv/ui/pages/channels_page.py:613
+#: src/ashytv/ui/pages/channels_page.py:562
 msgid "View schedule"
 msgstr "Yayın akışını görüntüle"
 
-#: src/ashytv/ui/pages/channels_page.py:615
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Hide channel"
 msgstr "Kanalı gizle"
 
@@ -2333,6 +2312,21 @@ msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr ""
 "Donanımsal çözme, pencere içinde pencere ve kayıt destekli libmpv oynatma"
+
+#~ msgid "Sports"
+#~ msgstr "Spor"
+
+#~ msgid "Free-to-air"
+#~ msgstr "Şifresiz"
+
+#~ msgid "Kids"
+#~ msgstr "Çocuk"
+
+#~ msgid "Recent"
+#~ msgstr "Son"
+
+#~ msgid "All in this category"
+#~ msgstr "Bu kategorideki tümü"
 
 #~ msgid "Favorite people"
 #~ msgstr "Favori kişiler"
