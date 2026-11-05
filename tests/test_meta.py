@@ -330,3 +330,27 @@ def test_backdrop_ignores_none_and_unsafe_urls(tmp_path):
         server = FakeServer({"/meta/title": {**TITLE, "backdrop": value}})
         c = client(tmp_path / str(value).replace("/", "_"), server)
         assert c.backdrop(MOVIE, tmdb_id="603") == ""
+
+
+class ByQuery(FakeServer):
+    """The id points to a title without a picture; the search finds one."""
+
+    def __call__(self, url: str) -> bytes:
+        self.calls.append(url)
+        pic = "https://image.tmdb.org/t/p/w780/bg.jpg" if "q=" in url else None
+        return json.dumps({**TITLE, "backdrop": pic}).encode()
+
+
+def test_backdrop_falls_back_to_the_title_when_the_playlist_id_has_none(tmp_path):
+    server = ByQuery()
+    c = client(tmp_path, server)
+    url = c.backdrop(MOVIE, tmdb_id="999", query="O Shaolin do Sertao 2", year="2026")
+    assert url.endswith("/bg.jpg")
+    assert len(server.calls) == 2
+    assert "tmdb_id=999" in server.calls[0] and "q=" in server.calls[1]
+    # An unknown id (404) also tries the title.
+    gone = FakeServer({"q=": {**TITLE, "backdrop": "https://image.tmdb.org/t/p/w780/bg.jpg"}})
+    url = client(tmp_path / "b", gone).backdrop(MOVIE, tmdb_id="1", query="Filme")
+    assert url.endswith("/bg.jpg")
+    # Without a title, only the id.
+    assert client(tmp_path / "c", ByQuery()).backdrop(MOVIE, tmdb_id="999") == ""

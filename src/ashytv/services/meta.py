@@ -237,16 +237,24 @@ class MetaClient:
     def backdrop(self, kind: MediaType, tmdb_id: str = "", query: str = "",
                  year: str = "", lang: str = "") -> str:
         """The title's landscape picture (w780) for the featured banner, or ""
-        (same request and cache as `title`)."""
-        params = {"type": "series" if kind is MediaType.SERIES else "movie"}
+        (same request and cache as `title`). The playlist's TMDB id first; when
+        it finds no picture (a wrong id is common), the title search."""
         if tmdb_id:
-            params["tmdb_id"] = tmdb_id
-        else:
-            if not query.strip():
-                raise MetaNotFound("no title")
-            params["q"] = query.strip()
-            if year:
-                params["year"] = year
+            try:
+                url = self._backdrop(kind, {"tmdb_id": tmdb_id}, lang)
+            except MetaNotFound:
+                url = ""
+            if url or not query.strip():
+                return url
+        if not query.strip():
+            raise MetaNotFound("no title")
+        params = {"q": query.strip()}
+        if year:
+            params["year"] = year
+        return self._backdrop(kind, params, lang)
+
+    def _backdrop(self, kind: MediaType, params: dict, lang: str) -> str:
+        params = {"type": "series" if kind is MediaType.SERIES else "movie", **params}
         if lang:
             params["lang"] = lang
         data = self._get("/api/v1/meta/title", params, TITLE_TTL)
