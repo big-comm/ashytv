@@ -8,7 +8,7 @@ from pathlib import Path
 
 from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
-from ... import APP_VERSION
+from ... import APP_VERSION, compat
 from ...i18n import _, ngettext
 from ...services import http
 from ...services.logos import logo_loader
@@ -299,7 +299,7 @@ class SettingsPage(Gtk.Box):
         self.pin_row.set_show_apply_button(True)
         self.pin_row.connect("apply", self._on_pin_apply)
         g2.add(self.pin_row)
-        clear = Adw.ButtonRow(title=_("Remove PIN"))
+        clear = compat.button_row(_("Remove PIN"))
         clear.connect("activated", self._on_pin_clear)
         g2.add(clear)
         return self._page(g, g2)
@@ -343,10 +343,10 @@ class SettingsPage(Gtk.Box):
             title="TMDB",
             subtitle=_("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
                        "or certified by TMDB."), subtitle_lines=3))
-        tour = Adw.ButtonRow(title=_("Guided tour"))
+        tour = compat.button_row(_("Guided tour"))
         tour.connect("activated", lambda *_: self.activate_action("app.tour", None))
         g.add(tour)
-        about = Adw.ButtonRow(title=_("More information"))
+        about = compat.button_row(_("More information"))
         about.connect("activated", lambda *_: self.activate_action("app.about", None))
         g.add(about)
         return self._page(g)

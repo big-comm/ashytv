@@ -8,6 +8,7 @@ import time
 
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Graphene, Gtk
 
+from .. import compat
 from ..i18n import _
 from ..models import PlayItem
 from ..services.failover import NEXT_SERVER, NO_PROGRESS_SECS, RECONNECT, StallGuard
@@ -257,7 +258,7 @@ class PlayerView(Gtk.Overlay):
                               halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER,
                               visible=False)
         self.center.add_css_class("ashy-player-center")
-        self.spinner = Adw.Spinner(width_request=42, height_request=42)
+        self.spinner = compat.spinner(width_request=42, height_request=42)
         self.center_icon = Gtk.Image(icon_name="network-error-symbolic", pixel_size=40)
         self.center_title = Gtk.Label()
         self.center_title.add_css_class("ashy-poster-title")

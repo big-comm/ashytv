@@ -8,6 +8,7 @@ from datetime import date
 
 from gi.repository import Adw, GLib, GObject, Gtk
 
+from .. import compat
 from ..i18n import _, ngettext
 from ..services import http
 from ..models import Channel, Episode, MediaType
@@ -148,7 +149,7 @@ class DetailDialog(Adw.Dialog):
             self.ep_list.add_css_class("boxed-list")
             self.ep_list.connect("row-activated", self._on_episode_row)
             self.ep_stack = Gtk.Stack()
-            spinner = Adw.Spinner(height_request=48, width_request=48)
+            spinner = compat.spinner(height_request=48, width_request=48)
             self.ep_stack.add_named(spinner, "loading")
             self.ep_stack.add_named(self.ep_list, "list")
             self.ep_error = Adw.StatusPage(icon_name="network-error-symbolic",
@@ -162,7 +163,7 @@ class DetailDialog(Adw.Dialog):
             self._update_resume_label()
             self.links = Gtk.Box(spacing=6, visible=False)
             body.append(self.links)
-            self.info_spinner = Adw.Spinner(height_request=24, width_request=24,
+            self.info_spinner = compat.spinner(height_request=24, width_request=24,
                                             halign=Gtk.Align.START,
                                             visible=load_info is not None)
             body.append(self.info_spinner)

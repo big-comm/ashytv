@@ -11,8 +11,9 @@ from __future__ import annotations
 
 import time
 
-from gi.repository import Adw, Gtk
+from gi.repository import Gtk
 
+from .. import compat
 from ..i18n import _
 from ..models import Channel
 from .pages._common import set_logo
@@ -63,7 +64,7 @@ class ChannelInfoPanel(Gtk.Box):
         cover.append(self._logo)
         self._cover = cover
         self._stage.add_overlay(cover)
-        self._spinner = Adw.Spinner(width_request=28, height_request=28, visible=False,
+        self._spinner = compat.spinner(width_request=28, height_request=28, visible=False,
                                     halign=Gtk.Align.START, valign=Gtk.Align.END,
                                     margin_start=10, margin_bottom=10)
         self._stage.add_overlay(self._spinner)

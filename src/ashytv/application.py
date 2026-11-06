@@ -7,7 +7,7 @@ from pathlib import Path
 
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
-from . import APP_ID, APP_VERSION
+from . import APP_ID, APP_VERSION, compat
 from .i18n import _
 from .services.logos import logo_loader
 from .services.settings import ACCENTS, Settings
@@ -37,6 +37,8 @@ class AshyTvApplication(Adw.Application):
         self.window: AshyTvWindow | None = None
         self._dyn_css = Gtk.CssProvider()
         self._css = Gtk.CssProvider()
+        # GTK < 4.20: settings-driven custom properties, baked into the CSS
+        self._css_overrides: dict[str, str] = {}
 
     def do_startup(self) -> None:
         Adw.Application.do_startup(self)
@@ -120,7 +122,10 @@ class AshyTvApplication(Adw.Application):
         if display is None:
             return
         if _CSS.exists():
-            self._css.load_from_path(str(_CSS))
+            if compat.MODERN_CSS:
+                self._css.load_from_path(str(_CSS))
+            else:
+                self._load_flat_css()
             Gtk.StyleContext.add_provider_for_display(
                 display, self._css, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         Gtk.StyleContext.add_provider_for_display(
@@ -130,7 +135,16 @@ class AshyTvApplication(Adw.Application):
         Adw.StyleManager.get_default().set_color_scheme(
             _SCHEMES.get(value, Adw.ColorScheme.FORCE_DARK))
 
+    def _load_flat_css(self) -> None:
+        dark = Adw.StyleManager.get_default().get_dark()
+        text = _CSS.read_text(encoding="utf-8")
+        self._css.load_from_string(compat.flatten_css(text, dark, self._css_overrides))
+
     def _sync_scheme(self, *_args) -> None:
+        if not compat.MODERN_CSS:
+            if _CSS.exists():
+                self._load_flat_css()
+            return
         dark = Adw.StyleManager.get_default().get_dark()
         scheme = Gtk.InterfaceColorScheme.DARK if dark else Gtk.InterfaceColorScheme.LIGHT
         for provider in (self._css, self._dyn_css):
@@ -140,8 +154,15 @@ class AshyTvApplication(Adw.Application):
         s = self.settings
         _label, accent, accent2 = ACCENTS.get(s.get("accent"), ACCENTS["blue"])
         alpha = float(s.get("window_opacity")) if s.get("translucent") else 1.0
-        css = [f":root {{ --ashy-accent: {accent}; --ashy-accent-2: {accent2}; "
-               f"--ashy-window-alpha: {alpha:.2f}; }}"]
+        root = {"--ashy-accent": accent, "--ashy-accent-2": accent2,
+                "--ashy-window-alpha": f"{alpha:.2f}"}
+        css = []
+        if compat.MODERN_CSS:
+            css.append(":root { " + " ".join(f"{k}: {v};" for k, v in root.items()) + " }")
+        else:
+            self._css_overrides = root
+            if _CSS.exists():
+                self._load_flat_css()
         # Color swatches in Settings.
         css += [f"button.ashy-accent-{k} {{ background: {c}; }}"
                 for k, (_l, c, _c2) in ACCENTS.items()]
@@ -170,6 +191,9 @@ class AshyTvApplication(Adw.Application):
         about.present(self.window)
 
     def _on_shortcuts(self, *_args) -> None:
+        if not hasattr(Adw, "ShortcutsDialog"):  # libadwaita < 1.8
+            self._show_shortcuts_legacy()
+            return
         dialog = Adw.ShortcutsDialog()
         for title, items in shortcuts.KEYBOARD:
             section = Adw.ShortcutsSection(title=title)
@@ -177,4 +201,20 @@ class AshyTvApplication(Adw.Application):
                 section.add(Adw.ShortcutsItem(
                     title=label, accelerator=shortcuts.dialog_accelerator(accels)))
             dialog.add(section)
+        dialog.present(self.window)
+
+    def _show_shortcuts_legacy(self) -> None:
+        """Same list as a preferences dialog, for libadwaita < 1.8."""
+        dialog = Adw.PreferencesDialog(title=_("Keyboard Shortcuts"))
+        page = Adw.PreferencesPage()
+        for title, items in shortcuts.KEYBOARD:
+            group = Adw.PreferencesGroup(title=title)
+            for accels, label in items:
+                row = Adw.ActionRow(title=label)
+                row.add_suffix(Gtk.ShortcutLabel(
+                    accelerator=shortcuts.dialog_accelerator(accels),
+                    valign=Gtk.Align.CENTER))
+                group.add(row)
+            page.add(group)
+        dialog.add(page)
         dialog.present(self.window)

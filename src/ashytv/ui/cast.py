@@ -14,6 +14,7 @@ from collections.abc import Callable
 
 from gi.repository import Adw, GLib, GObject, Gtk
 
+from .. import compat
 from ..i18n import _
 from ..models import Channel, MediaType
 from ..services import languages, meta
@@ -323,7 +324,7 @@ class ActorDialog(Adw.Dialog):
         top.append(texts)
         page.append(top)
 
-        self._spinner = Adw.Spinner(height_request=32, width_request=32,
+        self._spinner = compat.spinner(height_request=32, width_request=32,
                                     halign=Gtk.Align.CENTER)
         page.append(self._spinner)
         self._sections = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)

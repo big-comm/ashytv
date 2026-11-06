@@ -7,6 +7,7 @@ import time
 
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
+from ... import compat
 from ...i18n import _, ngettext
 from ...services import failover, free_tv, http
 from ...services.xtream_client import XtreamProvider, parse_provider
@@ -177,7 +178,7 @@ class ListsPage(Gtk.Box):
 
         self.save_btn = Gtk.Button()
         sbox = Gtk.Box(spacing=8, halign=Gtk.Align.CENTER)
-        self.save_spinner = Adw.Spinner(visible=False)
+        self.save_spinner = compat.spinner(visible=False)
         sbox.append(self.save_spinner)
         sbox.append(Gtk.Label(label=_("Save and Connect")))
         self.save_btn.set_child(sbox)
