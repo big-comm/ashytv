@@ -224,7 +224,8 @@ def test_edited_xtream_playlist_keeps_its_place_and_favorites(tmp_path, monkeypa
     r2 = importer.import_xtream(db_path, "Renamed", XtreamProvider("http://new", "u2", "p2"),
                                 playlist_id=r1.playlist_id)
     db = Storage(db_path)
-    assert r2.playlist_id == r1.playlist_id and len(db.list_playlists()) == 1
+    assert r2.playlist_id == r1.playlist_id
+    assert len(db.list_playlists()) == 1
     row = db.get_playlist(r1.playlist_id)
     prov = XtreamProvider.from_json(row["source"])
     assert (row["name"], prov.host, prov.username) == ("Renamed", "http://new", "u2")
@@ -245,7 +246,8 @@ def test_edited_xtream_login_kept_by_another_playlist_stays_in_keyring(tmp_path,
     db.close()
     importer.import_xtream(db_path, "A", XtreamProvider("http://h2", "u", "p"),
                            playlist_id=a.playlist_id)
-    assert other and cleared == []
+    assert other
+    assert cleared == []
 
 
 def test_edited_m3u_playlist_takes_the_new_address(tmp_path):
@@ -255,7 +257,8 @@ def test_edited_m3u_playlist_takes_the_new_address(tmp_path):
     copy.write_text(SAMPLE.read_text())
     r2 = importer.import_m3u(db_path, "New name", str(copy), playlist_id=r1.playlist_id)
     db = Storage(db_path)
-    assert r2.playlist_id == r1.playlist_id and len(db.list_playlists()) == 1
+    assert r2.playlist_id == r1.playlist_id
+    assert len(db.list_playlists()) == 1
     row = db.get_playlist(r1.playlist_id)
     assert (row["name"], row["source"]) == ("New name", str(copy))
 

@@ -479,8 +479,8 @@ class ListsPage(Gtk.Box):
         source = pl["source"]
         backups = failover.clean_backups(self.storage.backups(pl["id"]),
                                          source if "://" in source else "")
-        guide = dict(guide=meta.get("epg_override", ""),
-                     guide_placeholder=meta.get("epg_url", ""))
+        guide = {"guide": meta.get("epg_override", ""),
+                 "guide_placeholder": meta.get("epg_url", "")}
         if pl["kind"] == "xtream":
             prov = self.provider_lookup(pl["id"])
             if prov is None:

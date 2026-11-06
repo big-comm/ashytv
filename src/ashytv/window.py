@@ -48,6 +48,7 @@ _MODIFIER_KEYS = frozenset({
 })
 # A page switch crossfades this long; then its widgets can take the focus.
 _PAGE_SWITCH_MS = 200
+_IMPORT_BUSY = _("Please wait: an import is already in progress.")
 _SEARCHABLE = {"channels", "movies", "series", "favorites"}
 _EPISODE_CACHE_SECS = 6 * 3600
 
@@ -927,7 +928,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         of that playlist: no banner or form status, only a toast at the end."""
         if self._importing:
             if not quiet_id:
-                self._toast(_("Please wait: an import is already in progress."))
+                self._toast(_IMPORT_BUSY)
             return False
         self._importing = True
         self._quiet_id = quiet_id
@@ -984,47 +985,59 @@ class AshyTvWindow(Adw.ApplicationWindow):
             return
         name = v["name"] or row["name"]
         if row["kind"] == "xtream":
-            old = self._providers.get(playlist_id)
-            host = normalize_host(v["host"])
-            backups = failover.clean_backups(v["backups"], host)
-            login = (host, v["username"], v["password"])
-            if old is None or login != (old.host, old.username, old.password):
-                key = XtreamProvider.source_key(
-                    XtreamProvider(host, v["username"], "").to_json())
-                if any(r["kind"] == "xtream" and int(r["id"]) != playlist_id
-                       and XtreamProvider.source_key(r["source"]) == key
-                       for r in self.storage.list_playlists()):
-                    dialog.finish(_("Another playlist already uses this server and user."))
-                    return
-                provider = XtreamProvider(host=host, username=v["username"],
-                                          password=v["password"], backups=backups)
-                self._start_edit_import(dialog, lambda: self._run_xtream_import(
-                    name, provider, playlist_id=playlist_id))
-                return
-            self._apply_edit(playlist_id, name, backups if backups != old.backups else None)
+            error = self._edit_xtream(playlist_id, name, v, dialog)
         elif row["kind"] == "m3u" and "://" in row["source"] \
                 and not free_tv.is_free_tv(row["source"]):
-            url = v["url"]
-            backups = failover.clean_backups(v["backups"], url)
-            if url != row["source"]:
-                if any(r["kind"] == "m3u" and int(r["id"]) != playlist_id
-                       and r["source"] == url for r in self.storage.list_playlists()):
-                    dialog.finish(_("Another playlist already uses this address."))
-                    return
-                if self._importing:
-                    dialog.finish(_("Please wait: an import is already in progress."))
-                    return
-                self.storage.update_playlist_meta(playlist_id, epg_override=v["guide"])
-                self._start_edit_import(dialog, lambda: self._run_m3u_edit(
-                    playlist_id, name, url, backups))
-                return
-            old_backups = failover.clean_backups(self.storage.backups(playlist_id), url)
-            self._apply_edit(playlist_id, name,
-                             backups if backups != old_backups else None, v["guide"])
+            error = self._edit_m3u_url(playlist_id, row["source"], name, v, dialog)
         else:
-            self._apply_edit(playlist_id, name,
-                             guide=None if free_tv.is_free_tv(row["source"]) else v["guide"])
-        dialog.finish(None)
+            free = free_tv.is_free_tv(row["source"])
+            self._apply_edit(playlist_id, name, guide=None if free else v["guide"])
+            error = None
+        if error != "":  # "" = an import is running and answers the dialog later
+            dialog.finish(error)
+
+    def _source_taken(self, playlist_id: int, kind: str, key: str) -> bool:
+        """Another playlist already has this source (Xtream: server + user)."""
+        for r in self.storage.list_playlists():
+            if r["kind"] != kind or int(r["id"]) == playlist_id:
+                continue
+            other = XtreamProvider.source_key(r["source"]) if kind == "xtream" else r["source"]
+            if other == key:
+                return True
+        return False
+
+    def _edit_xtream(self, playlist_id: int, name: str, v: dict, dialog) -> str | None:
+        old = self._providers.get(playlist_id)
+        host = normalize_host(v["host"])
+        backups = failover.clean_backups(v["backups"], host)
+        if old is not None and (host, v["username"], v["password"]) == \
+                (old.host, old.username, old.password):
+            self._apply_edit(playlist_id, name, backups if backups != old.backups else None)
+            return None
+        key = XtreamProvider.source_key(XtreamProvider(host, v["username"], "").to_json())
+        if self._source_taken(playlist_id, "xtream", key):
+            return _("Another playlist already uses this server and user.")
+        provider = XtreamProvider(host=host, username=v["username"],
+                                  password=v["password"], backups=backups)
+        return self._start_edit_import(dialog, lambda: self._run_xtream_import(
+            name, provider, playlist_id=playlist_id))
+
+    def _edit_m3u_url(self, playlist_id: int, source: str, name: str, v: dict,
+                      dialog) -> str | None:
+        url = v["url"]
+        backups = failover.clean_backups(v["backups"], url)
+        if url == source:
+            old = failover.clean_backups(self.storage.backups(playlist_id), url)
+            self._apply_edit(playlist_id, name, backups if backups != old else None,
+                             v["guide"])
+            return None
+        if self._source_taken(playlist_id, "m3u", url):
+            return _("Another playlist already uses this address.")
+        if self._importing:
+            return _IMPORT_BUSY
+        self.storage.update_playlist_meta(playlist_id, epg_override=v["guide"])
+        return self._start_edit_import(dialog, lambda: self._run_m3u_edit(
+            playlist_id, name, url, backups))
 
     def _apply_edit(self, playlist_id: int, name: str, backups: list[str] | None = None,
                     guide: str | None = None) -> None:
@@ -1037,11 +1050,13 @@ class AshyTvWindow(Adw.ApplicationWindow):
             self._on_guide_link(None, playlist_id, guide)
         self._invalidate_pages()
 
-    def _start_edit_import(self, dialog, start) -> None:
+    def _start_edit_import(self, dialog, start) -> str | None:
+        """"" when the import started (it answers the dialog when done)."""
         self._edit_dialog = dialog
-        if not start():
-            self._edit_dialog = None
-            dialog.finish(_("Please wait: an import is already in progress."))
+        if start():
+            return ""
+        self._edit_dialog = None
+        return _IMPORT_BUSY
 
     def _run_m3u_edit(self, playlist_id: int, name: str, url: str,
                       backups: list[str]) -> bool:

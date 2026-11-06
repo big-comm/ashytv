@@ -113,10 +113,11 @@ class PlaylistDialog(Adw.Dialog):
 
     def validate(self, v: dict) -> str:
         """An error message, or "" when the values can be saved."""
-        if self.kind == XTREAM and (v["host"] in ("", "http://", "https://")
-                                    or not v["username"] or not v["password"]):
+        # The server may come without a scheme; only a scheme is empty too.
+        server = v["host"].partition("://")[2] if "://" in v["host"] else v["host"]
+        if self.kind == XTREAM and (not server or not v["username"] or not v["password"]):
             return _("Fill in server, username and password.")
-        if self.kind == URL and not v["url"].startswith(("http://", "https://")):
+        if self.kind == URL and not http.is_web_url(v["url"]):
             return _("Enter a URL starting with http:// or https://.")
         if v["guide"] and not http.is_web_url(v["guide"]):
             return _("The guide link must be a web address (http or https).")
