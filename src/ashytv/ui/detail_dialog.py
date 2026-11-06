@@ -260,7 +260,8 @@ class DetailDialog(Adw.Dialog):
         add(info.get("age", ""))
         add(ch.group)
         markup = [GLib.markup_escape_text(p) for p in parts]
-        rating = d.rating if d is not None and d.rating else ch.rating
+        # The poster's rating (the provider's); TMDB only when it has none.
+        rating = ch.rating or (d.rating if d is not None else 0)
         if rating:
             star = f'<span foreground="#f5c518">★</span> <b>{rating:.1f}</b>'
             markup.insert(min(len(markup), 2 if duration else 1), star)
