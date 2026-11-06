@@ -362,6 +362,31 @@ button.ashy-swatch:checked {
 }
 button.ashy-swatch image { color: #fff; }
 
+/* Dialogs with the app's look (Edit playlist, Servers): the window
+   background and glow, translucent panels instead of libadwaita's grey. */
+dialog.ashy-dialog sheet {
+  background-color: var(--ashy-bg);
+  background-image:
+    radial-gradient(ellipse at 85% 0%, var(--ashy-glow-1), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, var(--ashy-glow-2), transparent 50%);
+  color: var(--ashy-fg);
+  border: 1px solid var(--ashy-border);
+}
+dialog.ashy-dialog headerbar { background: transparent; box-shadow: none; color: var(--ashy-fg); }
+dialog.ashy-dialog preferencespage, dialog.ashy-dialog scrolledwindow { background: transparent; }
+dialog.ashy-dialog headerbar button:not(.suggested-action) {
+  background-color: var(--ashy-panel-2); border: 1px solid var(--ashy-border); box-shadow: none;
+}
+dialog.ashy-dialog headerbar button:not(.suggested-action):hover { background-color: alpha(var(--ashy-fg), 0.14); }
+dialog.ashy-dialog list.boxed-list {
+  background-color: var(--ashy-panel);
+  border: 1px solid var(--ashy-border);
+  box-shadow: none;
+}
+dialog.ashy-dialog list.boxed-list > row { background-color: transparent; }
+dialog.ashy-dialog list.boxed-list > row:hover { background-color: var(--ashy-panel-2); }
+dialog.ashy-dialog preferencesgroup .description { color: var(--ashy-fg-dim); }
+
 /* Series dialog */
 .ashy-series-backdrop { border-radius: 0; }
 .ashy-episode-row { padding: 8px; border-radius: 12px; }

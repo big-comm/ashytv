@@ -36,6 +36,7 @@ class ServersDialog(Adw.Dialog):
         super().__init__(title=_("Servers of “{name}”").format(name=name),
                          content_width=600, content_height=600)
         self.storage = storage
+        self.add_css_class("ashy-dialog")
         self.playlist_id = playlist_id
         self.servers = servers
         view = Adw.ToolbarView()

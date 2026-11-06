@@ -27,6 +27,7 @@ class PlaylistDialog(Adw.Dialog):
                  guide: str = "", guide_placeholder: str = ""):
         super().__init__(title=_("Edit playlist"), content_width=560)
         self.kind = kind
+        self.add_css_class("ashy-dialog")
         view = Adw.ToolbarView()
         header = Adw.HeaderBar(show_end_title_buttons=False, show_start_title_buttons=False)
         cancel = Gtk.Button(label=_("Cancel"))
