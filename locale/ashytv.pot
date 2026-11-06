@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ashytv 0.24.1\n"
+"Project-Id-Version: ashytv 0.24.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 15:10-0300\n"
+"POT-Creation-Date: 2026-11-06 15:42-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgid ""
 "certified by TMDB."
 msgstr ""
 
-#: src/ashytv/application.py:241 src/ashytv/window.py:134
+#: src/ashytv/application.py:241 src/ashytv/window.py:135
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -58,13 +58,13 @@ msgstr ""
 
 #: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
-#: src/ashytv/window.py:222
+#: src/ashytv/window.py:223
 msgid "Movies"
 msgstr ""
 
 #: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
-#: src/ashytv/window.py:231
+#: src/ashytv/window.py:232
 msgid "Series"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgstr ""
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:595
 msgid "Channels"
 msgstr ""
 
@@ -370,7 +370,7 @@ msgstr ""
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
 #: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
+#: src/ashytv/window.py:1600 src/ashytv/window.py:1606
 msgid "Watch"
 msgstr ""
 
@@ -570,8 +570,8 @@ msgstr ""
 
 #: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
 #: src/ashytv/ui/pages/channels_page.py:242
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
-#: src/ashytv/window.py:628
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:606
+#: src/ashytv/window.py:629
 msgid "Favorites"
 msgstr ""
 
@@ -580,12 +580,12 @@ msgid "Recordings"
 msgstr ""
 
 #: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
-#: src/ashytv/window.py:1399
+#: src/ashytv/window.py:1414
 msgid "Playlists"
 msgstr ""
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1405
+#: src/ashytv/window.py:1420
 msgid "Settings"
 msgstr ""
 
@@ -667,8 +667,8 @@ msgstr ""
 msgid "All Channels"
 msgstr ""
 
-#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
-#: src/ashytv/window.py:629
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:607
+#: src/ashytv/window.py:630
 msgid "Recently watched"
 msgstr ""
 
@@ -810,7 +810,7 @@ msgstr ""
 msgid "← → more titles"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:122
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:123
 msgid "The guide link must be a web address (http or https)."
 msgstr ""
 
@@ -1078,11 +1078,11 @@ msgstr ""
 msgid "Choose an .m3u file."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:120
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:121
 msgid "Enter a URL starting with http:// or https://."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:118
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:119
 msgid "Fill in server, username and password."
 msgstr ""
 
@@ -1220,7 +1220,7 @@ msgid ""
 "order"
 msgstr ""
 
-#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1395
 msgid "Live preview"
 msgstr ""
 
@@ -1418,7 +1418,7 @@ msgid ""
 "you add."
 msgstr ""
 
-#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
+#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:134
 msgid "Guided tour"
 msgstr ""
 
@@ -1731,7 +1731,7 @@ msgstr ""
 msgid "Keyboard shortcuts"
 msgstr ""
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:137
 msgid "Quit"
 msgstr ""
 
@@ -1807,7 +1807,7 @@ msgstr ""
 msgid "Pause/resume"
 msgstr ""
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1391
 msgid "Channel list"
 msgstr ""
 
@@ -1945,325 +1945,325 @@ msgstr ""
 msgid "AshyTV is only a player: it does not host any content."
 msgstr ""
 
-#: src/ashytv/window.py:126
+#: src/ashytv/window.py:51
+msgid "Please wait: an import is already in progress."
+msgstr ""
+
+#: src/ashytv/window.py:127
 msgid "Search…"
 msgstr ""
 
-#: src/ashytv/window.py:135
+#: src/ashytv/window.py:136
 msgid "About AshyTV"
 msgstr ""
 
-#: src/ashytv/window.py:138
+#: src/ashytv/window.py:139
 msgid "Main Menu"
 msgstr ""
 
-#: src/ashytv/window.py:141
+#: src/ashytv/window.py:142
 msgid "Search (Ctrl+F)"
 msgstr ""
 
-#: src/ashytv/window.py:223
+#: src/ashytv/window.py:224
 msgid "The best movies for you"
 msgstr ""
 
-#: src/ashytv/window.py:232
+#: src/ashytv/window.py:233
 msgid "Your favorite series in one place"
 msgstr ""
 
-#: src/ashytv/window.py:516
+#: src/ashytv/window.py:517
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr ""
 
-#: src/ashytv/window.py:565
+#: src/ashytv/window.py:566
 #, python-brace-format
 msgid "No channel {number}"
 msgstr ""
 
-#: src/ashytv/window.py:642
+#: src/ashytv/window.py:643
 msgid "Next episode…"
 msgstr ""
 
-#: src/ashytv/window.py:673 src/ashytv/window.py:682
+#: src/ashytv/window.py:674 src/ashytv/window.py:683
 msgid "This item is no longer in the playlist."
 msgstr ""
 
-#: src/ashytv/window.py:678
+#: src/ashytv/window.py:679
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr ""
 
-#: src/ashytv/window.py:689
+#: src/ashytv/window.py:690
 msgid "This episode is no longer available."
 msgstr ""
 
-#: src/ashytv/window.py:746 src/ashytv/window.py:817
+#: src/ashytv/window.py:747 src/ashytv/window.py:818
 msgid "Added to favorites"
 msgstr ""
 
-#: src/ashytv/window.py:746 src/ashytv/window.py:817
+#: src/ashytv/window.py:747 src/ashytv/window.py:818
 msgid "Removed from favorites"
 msgstr ""
 
-#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
-msgid "Please wait: an import is already in progress."
-msgstr ""
-
-#: src/ashytv/window.py:948
+#: src/ashytv/window.py:949
 msgid "Importing playlist…"
 msgstr ""
 
-#: src/ashytv/window.py:967
+#: src/ashytv/window.py:968
 msgid "Connecting to the Xtream provider…"
 msgstr ""
 
-#: src/ashytv/window.py:997
+#: src/ashytv/window.py:1019
 msgid "Another playlist already uses this server and user."
 msgstr ""
 
-#: src/ashytv/window.py:1012
+#: src/ashytv/window.py:1035
 msgid "Another playlist already uses this address."
 msgstr ""
 
-#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
+#: src/ashytv/window.py:1063 src/ashytv/window.py:1087
 msgid "Updating playlist…"
 msgstr ""
 
-#: src/ashytv/window.py:1068
+#: src/ashytv/window.py:1083
 msgid "Provider password not found; add the playlist again."
 msgstr ""
 
-#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
+#: src/ashytv/window.py:1117 src/ashytv/window.py:1126
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr ""
 
-#: src/ashytv/window.py:1115
+#: src/ashytv/window.py:1130
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ashytv/window.py:1116
+#: src/ashytv/window.py:1131
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ashytv/window.py:1139
+#: src/ashytv/window.py:1154
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr ""
 
-#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
+#: src/ashytv/window.py:1160 src/ashytv/window.py:1163
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr ""
 
-#: src/ashytv/window.py:1149
+#: src/ashytv/window.py:1164
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr ""
 
-#: src/ashytv/window.py:1155
+#: src/ashytv/window.py:1170
 msgid "Please wait for the import to finish."
 msgstr ""
 
-#: src/ashytv/window.py:1174
+#: src/ashytv/window.py:1189
 msgid "Playlist removed."
 msgstr ""
 
-#: src/ashytv/window.py:1252
+#: src/ashytv/window.py:1267
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr ""
 
-#: src/ashytv/window.py:1316
+#: src/ashytv/window.py:1331
 msgid "Would you like a quick tour of AshyTV?"
 msgstr ""
 
-#: src/ashytv/window.py:1317
+#: src/ashytv/window.py:1332
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
 msgstr ""
 
-#: src/ashytv/window.py:1319
+#: src/ashytv/window.py:1334
 msgid "Not now"
 msgstr ""
 
-#: src/ashytv/window.py:1320
+#: src/ashytv/window.py:1335
 msgid "Start"
 msgstr ""
 
-#: src/ashytv/window.py:1368
+#: src/ashytv/window.py:1383
 msgid "Sections"
 msgstr ""
 
-#: src/ashytv/window.py:1369
+#: src/ashytv/window.py:1384
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
 msgstr ""
 
-#: src/ashytv/window.py:1372
+#: src/ashytv/window.py:1387
 msgid "Channel groups"
 msgstr ""
 
-#: src/ashytv/window.py:1373
+#: src/ashytv/window.py:1388
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
 msgstr ""
 
-#: src/ashytv/window.py:1377
+#: src/ashytv/window.py:1392
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
 msgstr ""
 
-#: src/ashytv/window.py:1381
+#: src/ashytv/window.py:1396
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
 msgstr ""
 
-#: src/ashytv/window.py:1384
+#: src/ashytv/window.py:1399
 msgid "Hidden items"
 msgstr ""
 
-#: src/ashytv/window.py:1385
+#: src/ashytv/window.py:1400
 msgid "Everything you hid is here. Open it to show items again."
 msgstr ""
 
-#: src/ashytv/window.py:1387
+#: src/ashytv/window.py:1402
 msgid "Program guide"
 msgstr ""
 
-#: src/ashytv/window.py:1388
+#: src/ashytv/window.py:1403
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr ""
 
-#: src/ashytv/window.py:1390
+#: src/ashytv/window.py:1405
 msgid "Movies and series"
 msgstr ""
 
-#: src/ashytv/window.py:1391
+#: src/ashytv/window.py:1406
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
 "playlists."
 msgstr ""
 
-#: src/ashytv/window.py:1395
+#: src/ashytv/window.py:1410
 msgid "Favorites and recordings"
 msgstr ""
 
-#: src/ashytv/window.py:1396
+#: src/ashytv/window.py:1411
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
 msgstr ""
 
-#: src/ashytv/window.py:1400
+#: src/ashytv/window.py:1415
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
 "switches automatically."
 msgstr ""
 
-#: src/ashytv/window.py:1406
+#: src/ashytv/window.py:1421
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
 msgstr ""
 
-#: src/ashytv/window.py:1409
+#: src/ashytv/window.py:1424
 msgid "See it again"
 msgstr ""
 
-#: src/ashytv/window.py:1410
+#: src/ashytv/window.py:1425
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr ""
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1475
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr ""
 
-#: src/ashytv/window.py:1463
+#: src/ashytv/window.py:1478
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr ""
 
-#: src/ashytv/window.py:1469
+#: src/ashytv/window.py:1484
 msgid "AshyTV servers"
 msgstr ""
 
-#: src/ashytv/window.py:1491
+#: src/ashytv/window.py:1506
 msgid "Switching to the main server…"
 msgstr ""
 
-#: src/ashytv/window.py:1492
+#: src/ashytv/window.py:1507
 msgid "Switching to the backup server…"
 msgstr ""
 
-#: src/ashytv/window.py:1562
+#: src/ashytv/window.py:1577
 msgid "Programme"
 msgstr ""
 
-#: src/ashytv/window.py:1566
+#: src/ashytv/window.py:1581
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr ""
 
-#: src/ashytv/window.py:1567
+#: src/ashytv/window.py:1582
 msgid "Reminder cancelled"
 msgstr ""
 
-#: src/ashytv/window.py:1579
+#: src/ashytv/window.py:1594
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr ""
 
-#: src/ashytv/window.py:1581
+#: src/ashytv/window.py:1596
 msgid "AshyTV reminder"
 msgstr ""
 
-#: src/ashytv/window.py:1600
+#: src/ashytv/window.py:1615
 msgid "This channel is no longer in your playlists."
-msgstr ""
-
-#: src/ashytv/window.py:1640
-#, python-brace-format
-msgid "Group “{name}” hidden"
-msgstr ""
-
-#: src/ashytv/window.py:1641
-#, python-brace-format
-msgid "Category “{name}” hidden"
 msgstr ""
 
 #: src/ashytv/window.py:1655
 #, python-brace-format
+msgid "Group “{name}” hidden"
+msgstr ""
+
+#: src/ashytv/window.py:1656
+#, python-brace-format
+msgid "Category “{name}” hidden"
+msgstr ""
+
+#: src/ashytv/window.py:1670
+#, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr ""
 
-#: src/ashytv/window.py:1661
+#: src/ashytv/window.py:1676
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr ""
 
-#: src/ashytv/window.py:1663
+#: src/ashytv/window.py:1678
 msgid "See hidden"
 msgstr ""
 
-#: src/ashytv/window.py:1668
+#: src/ashytv/window.py:1683
 msgid "Undo"
 msgstr ""
 
-#: src/ashytv/window.py:1974
+#: src/ashytv/window.py:1989
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr ""
 
