@@ -202,6 +202,10 @@ button.ashy-hero-arrow:hover { background-color: alpha(black, 0.7); }
 .ashy-hero-sub { color: alpha(#fff, 0.78); }
 .ashy-hero-orig { color: alpha(#fff, 0.85); font-weight: 600; }
 .ashy-facts label.dim-label { min-width: 90px; }
+.ashy-fact-value { font-weight: 600; }
+.ashy-group-rail { padding: 0; font-size: 0.85em; }
+.ashy-group-rail image { color: @accent_color; }
+.ashy-tagline { font-style: italic; opacity: 0.75; }
 .ashy-hero .ashy-faint { color: alpha(#fff, 0.6); }
 carouselindicatordots { color: #fff; }
 
@@ -357,6 +361,31 @@ button.ashy-swatch:checked {
   box-shadow: 0 0 0 3px var(--ashy-bg), 0 0 0 5px var(--ashy-accent-2);
 }
 button.ashy-swatch image { color: #fff; }
+
+/* Dialogs with the app's look (Edit playlist, Servers): the window
+   background and glow, translucent panels instead of libadwaita's grey. */
+dialog.ashy-dialog sheet {
+  background-color: var(--ashy-bg);
+  background-image:
+    radial-gradient(ellipse at 85% 0%, var(--ashy-glow-1), transparent 55%),
+    radial-gradient(ellipse at 0% 100%, var(--ashy-glow-2), transparent 50%);
+  color: var(--ashy-fg);
+  border: 1px solid var(--ashy-border);
+}
+dialog.ashy-dialog headerbar { background: transparent; box-shadow: none; color: var(--ashy-fg); }
+dialog.ashy-dialog preferencespage, dialog.ashy-dialog scrolledwindow { background: transparent; }
+dialog.ashy-dialog headerbar button:not(.suggested-action) {
+  background-color: var(--ashy-panel-2); border: 1px solid var(--ashy-border); box-shadow: none;
+}
+dialog.ashy-dialog headerbar button:not(.suggested-action):hover { background-color: alpha(var(--ashy-fg), 0.14); }
+dialog.ashy-dialog list.boxed-list {
+  background-color: var(--ashy-panel);
+  border: 1px solid var(--ashy-border);
+  box-shadow: none;
+}
+dialog.ashy-dialog list.boxed-list > row { background-color: transparent; }
+dialog.ashy-dialog list.boxed-list > row:hover { background-color: var(--ashy-panel-2); }
+dialog.ashy-dialog preferencesgroup .description { color: var(--ashy-fg-dim); }
 
 /* Series dialog */
 .ashy-series-backdrop { border-radius: 0; }

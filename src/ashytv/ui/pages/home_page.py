@@ -162,6 +162,9 @@ class HomePage(RailCards, Gtk.Box):
         self.storage = storage
         self._guide = None
         self._dirty = True
+        # backdrop_lookup(channel, on_done(channel, url)) is set by the window.
+        self.backdrop_lookup = None
+        self._pending: dict = {}
 
         inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         inner.add_css_class(keynav.RAILS_CLASS)
@@ -283,6 +286,7 @@ class HomePage(RailCards, Gtk.Box):
             self.storage.channels(MediaType.MOVIE, order="added", limit=40),
             self.storage.channels(MediaType.SERIES, order="added", limit=40))
         self._slides = list(featured)
+        self._pending = {}
         for arrow in self._arrows:
             arrow.set_visible(len(featured) > 1)
         if not featured:
@@ -291,6 +295,20 @@ class HomePage(RailCards, Gtk.Box):
         for ch in featured:
             self.carousel.append(self._slide(ch, len(featured) > 1))
         self._on_slide(0)
+        # Titles with only a poster: TMDB's landscape picture, through the panel.
+        if self.backdrop_lookup is not None:
+            for ch in featured:
+                if not ch.backdrop:
+                    self.backdrop_lookup(ch, self.set_backdrop)
+
+    def set_backdrop(self, ch: Channel, url: str) -> None:
+        """The landscape picture arrived: it fills the banner, the poster goes."""
+        widgets = self._pending.pop((ch.playlist_id, ch.url), None)
+        if widgets is None:
+            return  # the banner was rebuilt meanwhile
+        bg, frame = widgets
+        set_picture(bg, url, 780)
+        frame.set_visible(False)
 
     def _welcome_slide(self) -> Gtk.Widget:
         slide = Gtk.Overlay(hexpand=True)
@@ -318,7 +336,8 @@ class HomePage(RailCards, Gtk.Box):
         shade.add_css_class("ashy-hero-shade")
         slide.add_overlay(shade)
         if not ch.backdrop:
-            # No backdrop: sharp poster on the right over the enlarged background.
+            # No backdrop: sharp poster on the right over the enlarged background
+            # (until TMDB's landscape picture arrives, see set_backdrop).
             frame = Gtk.Box(halign=Gtk.Align.END, valign=Gtk.Align.CENTER,
                             margin_end=40)
             frame.set_overflow(Gtk.Overflow.HIDDEN)
@@ -328,6 +347,7 @@ class HomePage(RailCards, Gtk.Box):
             set_picture(poster, ch.logo, 240)
             frame.append(poster)
             slide.add_overlay(frame)
+            self._pending[(ch.playlist_id, ch.url)] = (bg, frame)
         meta = "  •  ".join(p for p in (
             ch.media_type.label, ch.year,
             f"★ {ch.rating:.1f}" if ch.rating else "", ch.genre) if p)

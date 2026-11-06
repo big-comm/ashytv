@@ -1,4 +1,4 @@
-"""Catalog page (Movies/Series) — poster grid."""
+"""Catalog page (Movies/Series) — groups (beside, folding) + poster grid."""
 
 from __future__ import annotations
 
@@ -12,7 +12,15 @@ from ...services.meta import people_query
 from ..cast import CastRow
 from ..channel_object import ChannelObject
 from ..marquee import FocusMarquee, MarqueeLabel
-from ._common import ChipRow, SearchFilter, page_header, set_picture, update_favorite
+from ._common import (
+    GroupColumn,
+    SearchFilter,
+    add_context_menu,
+    page_header,
+    popup_menu,
+    set_picture,
+    update_favorite,
+)
 
 _PEOPLE_DELAY_MS = 600  # typing pause before asking the panel for people
 _POSTER_W = 150
@@ -20,6 +28,8 @@ _POSTER_H = 225
 # "FILMES - AÇÃO" -> "Ação"; "SERIES - DORAMAS" -> "Doramas"
 _PREFIX_RE = re.compile(r"^\s*(filmes?|movies?|vod|s[ée]ries?)\s*[-|:/]\s*", re.I)
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
+_HIDDEN = "__hidden__"
+_SPECIAL = ("all", "new", "top", _HIDDEN)
 
 
 def chip_label(group: str) -> str:
@@ -48,8 +58,24 @@ class CatalogPage(Gtk.Box):
         self._chip = "all"
 
         self.append(page_header(title, subtitle))
-        self.chips = ChipRow(self._on_chip, self._chip_menu)
-        self.append(self.chips)
+
+        # Groups beside the posters (as on the TV apps), folding while the
+        # focus is in the posters.
+        body = Gtk.Box(spacing=14, vexpand=True)
+        body.set_margin_start(28)
+        body.set_margin_bottom(22)
+        self.group_list = Gtk.ListBox()
+        self.group_list.add_css_class("ashy-grouplist")
+        self.group_list.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        self.group_list.connect("row-selected", self._on_group_selected)
+        self.group_list.connect("row-activated", self._on_group_activated)
+        self.groups = GroupColumn(self.group_list)
+        self.groups.append_to(body)
+        content = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, hexpand=True)
+        self.groups.watch(content)
+        body.append(content)
+        self.append(body)
+        self._building = False
 
         # Actors and directors whose name matches the search (panel /meta/people).
         # people_search(query, on_done(query, people)) is set by the window.
@@ -57,10 +83,9 @@ class CatalogPage(Gtk.Box):
         self._people_query = ""
         self._people_source = 0
         self.people = CastRow(_("People"))
-        self.people.set_margin_start(28)
         self.people.set_margin_end(28)
         self.people.connect("person", lambda _r, m: self.emit("show-person", m))
-        self.append(self.people)
+        content.append(self.people)
 
         self.store = Gio.ListStore.new(ChannelObject)
         self.search = SearchFilter(self._update_empty)
@@ -83,7 +108,6 @@ class CatalogPage(Gtk.Box):
         sw = Gtk.ScrolledWindow(hexpand=True, vexpand=True,
                                 hscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(self.grid)
-        sw.set_margin_start(22)
         sw.set_margin_end(22)
 
         icon = "ashy-film-symbolic" if media_type is MediaType.MOVIE else "ashy-series-symbolic"
@@ -93,7 +117,7 @@ class CatalogPage(Gtk.Box):
         self.stack = Gtk.Stack(vexpand=True)
         self.stack.add_named(sw, "grid")
         self.stack.add_named(self.empty, "empty")
-        self.append(self.stack)
+        content.append(self.stack)
 
     # ---- API -----------------------------------------------------------
 
@@ -120,14 +144,7 @@ class CatalogPage(Gtk.Box):
         if not self._dirty:
             return
         self._dirty = False
-        groups = self.storage.groups(self.media_type)
-        chips = [("all", _("All")), ("new", _("New Releases")), ("top", _("Trending"))]
-        chips += [(g, chip_label(g)) for g, _n in groups]
-        if self._chip not in {k for k, _l in chips}:
-            self._chip = "all"
-        self.update_hidden_count()
-        self.chips.set_chips(chips, self._chip)
-        self._load()
+        self._build_groups()
 
     def open_chip(self, key: str) -> None:
         """Show one chip's titles (a group, "new" or "top"), e.g. from Home."""
@@ -135,6 +152,7 @@ class CatalogPage(Gtk.Box):
         self._dirty = True
         if self.get_mapped():
             self.refresh()
+        self._select_group(key)
         if self.filter_model.get_n_items():
             self.grid.scroll_to(0, Gtk.ListScrollFlags.NONE, None)
 
@@ -165,23 +183,78 @@ class CatalogPage(Gtk.Box):
     # ---- data ---------------------------------------------------------
 
     def update_hidden_count(self) -> None:
-        """Last chip: 'Hidden (N)' when categories of this section are hidden."""
-        n = self.storage.hidden_count(self.media_type)
-        self.chips.set_extra(_("Hidden ({n})").format(n=n), "view-conceal-symbolic",
-                             (lambda: self.emit("show-hidden")) if n else None,
-                             _("See hidden channels and groups"))
+        """The groups and their 'Hidden (N)' entry after hiding/showing."""
+        if self.get_realized():
+            self._build_groups()
 
-    def _chip_menu(self, key: str) -> list:
-        """Categories (not All / New / Trending) can be hidden."""
-        if key in ("all", "new", "top"):
-            return []
-        return [(_("Hide category"), lambda: self.emit("hide-group", self.media_type, key))]
+    def show_groups(self) -> Gtk.Widget:
+        return self.groups.show()
 
-    def _on_chip(self, key: str) -> None:
-        self._chip = key
+    def _build_groups(self) -> None:
+        mt = self.media_type
+        groups = self.storage.groups(mt)
+        entries = [("all", _("All"), self.storage.count(mt)), ("new", _("New Releases"), None),
+                   ("top", _("Trending"), None)]
+        entries += [(g, chip_label(g), n) for g, n in groups]
+        if self._chip not in {k for k, _l, _n in entries}:
+            self._chip = "all"
+        self._building = True
+        self.group_list.remove_all()
+        for key, label, count in entries:
+            self._add_group_row(key, label, count)
+        hidden = self.storage.hidden_count(mt)
+        if hidden:
+            row = Gtk.ListBoxRow(selectable=False, tooltip_text=_("See hidden channels and groups"))
+            row._key = _HIDDEN  # type: ignore[attr-defined]
+            row.add_css_class("ashy-hidden-entry")
+            box = Gtk.Box(spacing=8)
+            box.append(Gtk.Image(icon_name="view-conceal-symbolic"))
+            box.append(Gtk.Label(label=_("Hidden ({n})").format(n=hidden), xalign=0,
+                                 hexpand=True, ellipsize=3))
+            row.set_child(box)
+            self.group_list.append(row)
+        self._building = False
+        self._select_group(self._chip)
+        self._load()
+
+    def _add_group_row(self, key: str, label: str, count: int | None) -> None:
+        row = Gtk.ListBoxRow()
+        row._key = key  # type: ignore[attr-defined]
+        box = Gtk.Box(spacing=8)
+        box.append(Gtk.Label(label=label, xalign=0, hexpand=True, ellipsize=3,
+                             tooltip_text=label))
+        if count is not None:
+            c = Gtk.Label(label=str(count))
+            c.add_css_class("ashy-group-count")
+            box.append(c)
+        row.set_child(box)
+        self.group_list.append(row)
+        if key not in _SPECIAL:
+            # Right click, long press or the Menu key: hide it.
+            add_context_menu(row, lambda: popup_menu(row, [
+                (_("Hide category"), lambda: self.emit("hide-group", self.media_type, key))]))
+
+    def _select_group(self, key: str) -> None:
+        row = self.group_list.get_first_child()
+        while row is not None:
+            if getattr(row, "_key", None) == key:
+                self._building = True
+                self.group_list.select_row(row)
+                self._building = False
+                return
+            row = row.get_next_sibling()
+
+    def _on_group_selected(self, _list, row) -> None:
+        if row is None or self._building:
+            return
+        self._chip = row._key  # type: ignore[attr-defined]
         self._load()
         if self.filter_model.get_n_items():
             self.grid.scroll_to(0, Gtk.ListScrollFlags.NONE, None)
+
+    def _on_group_activated(self, _list, row) -> None:
+        if getattr(row, "_key", None) == _HIDDEN:
+            self.emit("show-hidden")
 
     def _load(self) -> None:
         mt = self.media_type

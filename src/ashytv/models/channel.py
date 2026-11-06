@@ -55,6 +55,7 @@ class Channel:
     quality: int = 0        # live variants: 4=4K 3=FHD 2=HD 1=SD 0=unknown
     base_name: str = ""     # name without the quality suffix
     tmdb: str = ""          # TMDB id of a movie/series, when the provider sends it
+    group_rank: int = 0     # the provider's position of the group (1…), 0 = unknown
     # Runtime only: quality labels of the grouped variants ("FHD", "HD"…).
     variant_labels: tuple[str, ...] = ()
 

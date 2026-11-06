@@ -7,7 +7,7 @@ import time
 
 import pytest
 
-from ashytv.models import MediaType
+from ashytv.models import Channel, MediaType
 from ashytv.services import xtream_client as xc
 from ashytv.services.epg import EpgGuide, _parse_ts
 from ashytv.services.xtream_client import XtreamProvider, parse_provider
@@ -127,7 +127,33 @@ def test_load_catalog_with_fake_api(monkeypatch):
     assert [c.media_type for c in items] == [MediaType.LIVE, MediaType.MOVIE,
                                              MediaType.SERIES]
     assert items[0].group == "FREE-TO-AIR"
+    assert items[0].group_rank == 1 and items[1].group_rank == 0
     assert meta["exp_date"] == 1792889302 and meta["is_trial"] is True
+
+
+def test_m3u_link_of_an_xtream_server_takes_its_category_order(monkeypatch):
+    from ashytv.services import importer
+    cats = {"get_live_categories": [{"category_name": "Globo"}, {"category_name": "Portugal"}],
+            "get_vod_categories": [{"category_name": "Filmes"}],
+            "get_series_categories": []}
+    monkeypatch.setattr(xc.http, "fetch_json",
+                        lambda url, timeout=0: cats[url.split("action=")[1].split("&")[0]])
+    chans = [Channel("A", "http://h/live/1.ts", group="Portugal"),
+             Channel("B", "http://h/live/2.ts", group="Globo"),
+             Channel("C", "http://h/live/3.ts", group="Extra"),
+             Channel("D", "http://h/movie/4.mp4", MediaType.MOVIE, group="Filmes")]
+    importer._provider_group_order("http://h:80/get.php?username=u&password=p&type=m3u_plus", chans)
+    assert [c.group_rank for c in chans] == [2, 1, 0, 1]
+    # Not an Xtream link, or the server does not answer: the file order stays.
+    other = [Channel("A", "u", group="Portugal")]
+    importer._provider_group_order("http://h/lista.m3u", other)
+    assert other[0].group_rank == 0
+
+    def down(*_a, **_k):
+        raise OSError("down")
+    monkeypatch.setattr(xc.http, "fetch_json", down)
+    importer._provider_group_order("http://h/get.php?username=u&password=p", other)
+    assert other[0].group_rank == 0
 
 
 # ---- EPG -----------------------------------------------------------------

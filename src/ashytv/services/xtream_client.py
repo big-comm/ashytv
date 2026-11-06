@@ -234,6 +234,40 @@ def _categories(provider: XtreamProvider, action: str) -> dict[str, str]:
             for c in data if isinstance(c, dict)}
 
 
+def rank_groups(channels: list[Channel], names: list[str]) -> list[Channel]:
+    """Mark each item with its group's position in the provider's category
+    list: the order the provider set (the streams often come A–Z)."""
+    rank: dict[str, int] = {}
+    for name in names:
+        rank.setdefault(name, len(rank) + 1)
+    for c in channels:
+        c.group_rank = rank.get(c.group, 0)
+    return channels
+
+
+_CATEGORY_ACTIONS = {
+    MediaType.LIVE: "get_live_categories",
+    MediaType.MOVIE: "get_vod_categories",
+    MediaType.SERIES: "get_series_categories",
+}
+
+
+def category_order(provider: XtreamProvider) -> dict[MediaType, list[str]]:
+    """The provider's group names in its order, per type — for an M3U link of
+    an Xtream server (get.php), whose file usually comes A–Z by channel.
+    Empty when the server does not answer (the file order stays)."""
+    out: dict[MediaType, list[str]] = {}
+    for media_type, action in _CATEGORY_ACTIONS.items():
+        try:
+            data = http.fetch_json(provider.api_url(action), timeout=20)
+        except Exception:  # best effort: the file order stays
+            return {}
+        if isinstance(data, list):
+            out[media_type] = [str(c.get("category_name") or "") for c in data
+                               if isinstance(c, dict)]
+    return out
+
+
 def _tmdb(item: dict) -> str:
     """TMDB id of a catalog entry ("tmdb" or "tmdb_id"); "" when absent/invalid."""
     value = str(item.get("tmdb") or item.get("tmdb_id") or "").strip()
@@ -335,7 +369,7 @@ def _load_catalog(provider: XtreamProvider) -> tuple[list[Channel], dict]:
         cats = _categories(provider, cat_action)
         items = http.fetch_json(provider.api_url(action), timeout=180) or []
         if isinstance(items, list):
-            result.extend(convert(items, cats))
+            result.extend(rank_groups(convert(items, cats), list(cats.values())))
     user = info.get("user_info", {})
     meta = {
         "status": user.get("status", ""),

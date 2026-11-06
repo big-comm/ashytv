@@ -8,6 +8,7 @@ while the UI reads.
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import time
 from collections.abc import Callable, Iterable
@@ -20,7 +21,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 8
+_SCHEMA_VERSION = 9  # 9: channel.grp_rank (provider group order)
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -59,6 +60,8 @@ class Storage:
         self.group_variants = True
         # Channel group order the user chose (names), set by the window.
         self.group_order: list[str] = []
+        # Groups and channels A–Z instead of the provider's order (setting).
+        self.sort_az = False
         self._migrate()
         # Groups/channels the user hid live in the `hidden` table (per
         # playlist); the filter is skipped while it is empty.
@@ -129,6 +132,8 @@ class Storage:
             "base_name": "TEXT DEFAULT ''",
             "base_key": "TEXT DEFAULT ''",
             "tmdb": "TEXT DEFAULT ''",
+            # the provider's position of the group (0 = unknown: file order)
+            "grp_rank": "INTEGER DEFAULT 0",
         })
         self.db.executescript(
             """
@@ -243,6 +248,16 @@ class Storage:
         self.db.execute("UPDATE playlist SET name = ? WHERE id = ?", (name, row["id"]))
         self.db.commit()
         return int(row["id"])
+
+    def rename_playlist(self, playlist_id: int, name: str,
+                        source: str | None = None) -> None:
+        """New name and, when given, a new source (address or Xtream login)."""
+        if source is None:
+            self.db.execute("UPDATE playlist SET name = ? WHERE id = ?", (name, playlist_id))
+        else:
+            self.db.execute("UPDATE playlist SET name = ?, source = ? WHERE id = ?",
+                            (name, source, playlist_id))
+        self.db.commit()
 
     def list_playlists(self) -> list[sqlite3.Row]:
         return self.db.execute(
@@ -421,8 +436,8 @@ class Storage:
         insert = """INSERT INTO channel
             (playlist_id, num, name, name_key, url, media_type, grp, tvg_id,
              tvg_name, logo, ext_id, rating, year, plot, genre, backdrop, added,
-             user_agent, referrer, tmdb, quality, base_name, base_key)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+             user_agent, referrer, tmdb, grp_rank, quality, base_name, base_key)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
         # Build every row before taking the write lock: the transaction then
         # only runs the inserts, so UI writes (history, favorites) wait less.
         rows, series_rows = [], []
@@ -432,7 +447,7 @@ class Storage:
             row = (playlist_id, num, c.name, normalize(c.display_name), c.url,
                    c.media_type.value, c.group, c.tvg_id, c.tvg_name, c.logo,
                    c.ext_id, c.rating, c.year, c.plot, c.genre, c.backdrop,
-                   c.added, c.user_agent, c.referrer, c.tmdb, *variant)
+                   c.added, c.user_agent, c.referrer, c.tmdb, c.group_rank, *variant)
             (series_rows if c.url in episodes else rows).append(row)
         count = len(rows) + len(series_rows)
         with self.db:
@@ -540,6 +555,8 @@ class Storage:
         if min_rating:
             where += (" AND " if where else " WHERE ") + "c.rating >= ?"
             params.append(min_rating)
+        if order == "num" and self.sort_az:
+            order = "name"
         order_sql = {
             "num": "c.playlist_id, c.num",
             "name": "c.name_key",
@@ -573,13 +590,21 @@ class Storage:
         """List of (group, count) for a category, in provider order."""
         where, params = self._where(media_type, False, None, "")
         what = self._VARIANT_KEY if collapse else "COUNT(*)"
+        # The provider's group order (its category list); groups it does not
+        # list, and lists without one, by their first item in the file.
         rows = self.db.execute(
-            f"""SELECT c.grp, {what} AS n, MIN(c.playlist_id * 10000000 + c.num) AS o
+            f"""SELECT c.grp, {what} AS n,
+                       MIN(c.playlist_id * 10000000000000
+                           + (CASE WHEN c.grp_rank > 0 THEN c.grp_rank ELSE 999999 END)
+                             * 10000000
+                           + c.num) AS o
                 {self._FROM}{where} {'AND' if where else 'WHERE'} c.grp <> ''
                 GROUP BY c.grp ORDER BY o""",
             params,
         ).fetchall()
         result = [(r["grp"], r["n"]) for r in rows]
+        if self.sort_az:
+            result.sort(key=lambda gn: az_key(gn[0]))
         if self.group_order:
             # Groups the user moved come first, in their order; the rest
             # keep the provider order.
@@ -938,6 +963,13 @@ def channel_key(channel: Channel) -> str:
 
 def _like_escape(text: str) -> str:
     return text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
+def az_key(name: str) -> str:
+    """A–Z key of a name: accents and case aside, and the emoji/symbols many
+    providers put in front ("🇵🇹 Canais") do not count."""
+    key = normalize(name)
+    return re.sub(r"^[^0-9a-z]+", "", key) or key
 
 
 def collapse_variants(channels: Iterable[Channel]) -> list[Channel]:

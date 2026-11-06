@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 18:42-0300\n"
+"POT-Creation-Date: 2026-11-06 14:58-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -17,15 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/ashytv/application.py:84
+#: src/ashytv/application.py:90
 msgid "AshyTV could not open its database"
 msgstr "AshyTV 无法打开其数据库"
 
-#: src/ashytv/application.py:94
+#: src/ashytv/application.py:118
+msgid "Some channels will not play"
+msgstr "部分频道将无法播放"
+
+#: src/ashytv/application.py:119
+#, python-brace-format
+msgid "The system's video codecs lack {codecs}, used by most TV channels."
+msgstr "系统的视频编解码器缺少大多数电视频道使用的 {codecs}。"
+
+#: src/ashytv/application.py:122 src/ashytv/application.py:129
+#: src/ashytv/ui/install_dialog.py:62
 msgid "Close"
 msgstr "关闭"
 
-#: src/ashytv/application.py:161
+#: src/ashytv/application.py:215
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -33,33 +43,37 @@ msgstr ""
 "适用于 Linux 桌面的现代 IPTV 播放器。\n"
 "导入您自己的播放列表——应用本身不提供任何内容。"
 
-#: src/ashytv/application.py:168 src/ashytv/ui/pages/settings_page.py:341
+#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
 msgstr "演员数据：TMDB。本产品使用 TMDB API，但未获得 TMDB 的认可或认证。"
 
+#: src/ashytv/application.py:241 src/ashytv/window.py:134
+msgid "Keyboard Shortcuts"
+msgstr "键盘快捷键"
+
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
 msgstr "直播电视"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/ui/pages/favorites_page.py:48 src/ashytv/window.py:220
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
+#: src/ashytv/window.py:222
 msgid "Movies"
 msgstr "电影"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/ui/pages/favorites_page.py:49 src/ashytv/window.py:229
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
+#: src/ashytv/window.py:231
 msgid "Series"
 msgstr "剧集"
 
-#: src/ashytv/models/channel.py:63
+#: src/ashytv/models/channel.py:64
 msgid "Unnamed"
 msgstr "未命名"
 
-#: src/ashytv/models/channel.py:81
+#: src/ashytv/models/channel.py:82
 #, python-brace-format
 msgid "S{season} • E{episode}"
 msgstr "S{season} • E{episode}"
@@ -97,11 +111,11 @@ msgstr "动画"
 msgid "Business"
 msgstr "商业"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:39
+#: src/ashytv/services/free_tv.py:157
 msgid "News"
 msgstr "新闻"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:45
+#: src/ashytv/services/free_tv.py:158
 msgid "Documentaries"
 msgstr "纪录片"
 
@@ -109,11 +123,11 @@ msgstr "纪录片"
 msgid "Weather"
 msgstr "天气"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:47
+#: src/ashytv/services/free_tv.py:159
 msgid "Music"
 msgstr "音乐"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:236
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:242
 msgid "All countries"
 msgstr "所有国家"
 
@@ -148,73 +162,93 @@ msgstr "服务器响应时间过长。"
 msgid "Could not reach the server: {reason}"
 msgstr "无法连接到服务器：{reason}"
 
-#: src/ashytv/services/importer.py:38 src/ashytv/services/importer.py:58
+#: src/ashytv/services/importer.py:39 src/ashytv/services/importer.py:61
 msgid "The address did not return an M3U playlist"
 msgstr "该地址没有返回 M3U 播放列表"
 
-#: src/ashytv/services/importer.py:53
+#: src/ashytv/services/importer.py:56
 msgid "Downloading playlist…"
 msgstr "正在下载播放列表…"
 
-#: src/ashytv/services/importer.py:61
+#: src/ashytv/services/importer.py:64
 msgid "Processing playlist…"
 msgstr "正在处理播放列表…"
 
-#: src/ashytv/services/importer.py:68
+#: src/ashytv/services/importer.py:73
 msgid "No channels found in the playlist"
 msgstr "播放列表中未找到频道"
 
-#: src/ashytv/services/importer.py:75 src/ashytv/services/importer.py:112
+#: src/ashytv/services/importer.py:84 src/ashytv/services/importer.py:146
 msgid "Saving…"
 msgstr "正在保存…"
 
-#: src/ashytv/services/importer.py:90
+#: src/ashytv/services/importer.py:121
 msgid "Connecting to provider…"
 msgstr "正在连接提供商…"
 
-#: src/ashytv/services/importer.py:93
+#: src/ashytv/services/importer.py:124
 msgid "The provider returned no content"
 msgstr "提供商未返回任何内容"
 
-#: src/ashytv/services/settings.py:48
+#: src/ashytv/services/settings.py:49
 msgid "Blue"
 msgstr "蓝色"
 
-#: src/ashytv/services/settings.py:49
+#: src/ashytv/services/settings.py:50
 msgid "Teal"
 msgstr "青色"
 
-#: src/ashytv/services/settings.py:50
+#: src/ashytv/services/settings.py:51
 msgid "Green"
 msgstr "绿色"
 
-#: src/ashytv/services/settings.py:51
+#: src/ashytv/services/settings.py:52
 msgid "Yellow"
 msgstr "黄色"
 
-#: src/ashytv/services/settings.py:52
+#: src/ashytv/services/settings.py:53
 msgid "Orange"
 msgstr "橙色"
 
-#: src/ashytv/services/settings.py:53
+#: src/ashytv/services/settings.py:54
 msgid "Red"
 msgstr "红色"
 
-#: src/ashytv/services/settings.py:54
+#: src/ashytv/services/settings.py:55
 msgid "Pink"
 msgstr "粉色"
 
-#: src/ashytv/services/settings.py:55
+#: src/ashytv/services/settings.py:56
 msgid "Purple"
 msgstr "紫色"
 
-#: src/ashytv/services/settings.py:56
+#: src/ashytv/services/settings.py:57
 msgid "Slate"
 msgstr "石板灰"
 
-#: src/ashytv/services/settings.py:57
+#: src/ashytv/services/settings.py:58
 msgid "Emerald"
 msgstr "祖母绿"
+
+#: src/ashytv/services/system_deps.py:108
+msgid ""
+"Enable the RPM Fusion repository and install the full codecs:\n"
+"sudo dnf install libavcodec-freeworld"
+msgstr ""
+"启用 RPM Fusion 软件源并安装完整的编解码器：\n"
+"sudo dnf install libavcodec-freeworld"
+
+#: src/ashytv/services/system_deps.py:113
+msgid ""
+"Add the Packman repository and switch the FFmpeg libraries to it:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+msgstr ""
+"添加 Packman 软件源并将 FFmpeg 库切换到该源：\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+
+#: src/ashytv/services/system_deps.py:116
+msgid "Install your distribution's full FFmpeg libraries (libavcodec)."
+msgstr "安装发行版提供的完整 FFmpeg 库（libavcodec）。"
 
 #: src/ashytv/services/text.py:26
 #, python-brace-format
@@ -230,97 +264,98 @@ msgstr "用户名或密码无效"
 msgid "Account status: {status}"
 msgstr "账户状态：{status}"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Actor"
 msgstr "演员"
 
-#: src/ashytv/ui/cast.py:182 src/ashytv/ui/detail_dialog.py:244
+#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:280
 msgid "Director"
 msgstr "导演"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Writer"
 msgstr "编剧"
 
-#: src/ashytv/ui/cast.py:183
+#: src/ashytv/ui/cast.py:210
 msgid "Producer"
 msgstr "制片"
 
-#: src/ashytv/ui/cast.py:214 src/ashytv/ui/detail_dialog.py:246
+#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:289
 msgid "Cast"
 msgstr "演员"
 
-#: src/ashytv/ui/cast.py:246
+#: src/ashytv/ui/cast.py:273
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} 的作品"
 
-#: src/ashytv/ui/cast.py:305
+#: src/ashytv/ui/cast.py:332
 msgid "Cast data: TMDB"
 msgstr "演员数据：TMDB"
 
-#: src/ashytv/ui/cast.py:329 src/ashytv/ui/detail_dialog.py:386
-#: src/ashytv/ui/pages/catalog_page.py:280
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/pages/catalog_page.py:353
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "从收藏中移除"
 
-#: src/ashytv/ui/cast.py:330 src/ashytv/ui/detail_dialog.py:387
-#: src/ashytv/ui/pages/catalog_page.py:281
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:452
+#: src/ashytv/ui/pages/catalog_page.py:354
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "添加到收藏"
 
-#: src/ashytv/ui/cast.py:356
+#: src/ashytv/ui/cast.py:383
 msgid "Nothing in your playlists"
 msgstr "播放列表中没有"
 
-#: src/ashytv/ui/cast.py:357
+#: src/ashytv/ui/cast.py:384
 msgid "None of this person's movies or series are in your playlists."
 msgstr "此人的电影或剧集都不在你的播放列表中。"
 
-#: src/ashytv/ui/cast.py:362
+#: src/ashytv/ui/cast.py:389
 msgid "Found in the details of the titles you opened."
 msgstr "在你打开过的作品详情中找到。"
 
-#: src/ashytv/ui/channel_info.py:70
+#: src/ashytv/ui/channel_info.py:71
 msgid "Live"
 msgstr "直播"
 
-#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
+#: src/ashytv/ui/channel_info.py:76 src/ashytv/ui/channel_info.py:225
 msgid "Unmute"
 msgstr "取消静音"
 
-#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:332
+#: src/ashytv/ui/channel_info.py:121 src/ashytv/ui/channel_overlay.py:332
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "无节目表"
 
-#: src/ashytv/ui/channel_info.py:151
+#: src/ashytv/ui/channel_info.py:152
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "频道 {number}"
 
-#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "现在"
 
-#: src/ashytv/ui/channel_info.py:180
+#: src/ashytv/ui/channel_info.py:181
 #, python-brace-format
 msgid "{m} min left"
 msgstr "剩余 {m} 分钟"
 
-#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:812
+#: src/ashytv/ui/channel_info.py:185 src/ashytv/ui/player_view.py:813
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "接下来：{title}"
 
-#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:857
+#: src/ashytv/ui/channel_info.py:225 src/ashytv/ui/player_view.py:858
 #: src/ashytv/ui/shortcuts.py:38
 msgid "Mute"
 msgstr "静音"
 
-#: src/ashytv/ui/channel_overlay.py:58
+#: src/ashytv/ui/channel_overlay.py:58 src/ashytv/ui/pages/_common.py:37
+#: src/ashytv/ui/pages/_common.py:38
 msgid "Groups"
 msgstr "分组"
 
@@ -330,7 +365,7 @@ msgstr "→ 或 Enter：频道  •  Esc：返回"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:590
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
 msgid "Channels"
 msgstr "频道"
 
@@ -338,96 +373,121 @@ msgstr "频道"
 msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter：观看  •  ←：分组  •  Esc：关闭"
 
-#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
-#: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1479 src/ashytv/window.py:1485
+#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
+#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
 msgid "Watch"
 msgstr "观看"
 
-#: src/ashytv/ui/detail_dialog.py:134
+#: src/ashytv/ui/detail_dialog.py:141
 msgid "Episodes"
 msgstr "剧集列表"
 
-#: src/ashytv/ui/detail_dialog.py:149
+#: src/ashytv/ui/detail_dialog.py:156
 msgid "Could not load"
 msgstr "无法加载"
 
-#: src/ashytv/ui/detail_dialog.py:194
+#: src/ashytv/ui/detail_dialog.py:201
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "从 {time} 继续观看"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:234
+msgid "More like this"
+msgstr "更多类似内容"
+
+#: src/ashytv/ui/detail_dialog.py:256
+#, python-brace-format
+msgid "{m} min per episode"
+msgstr "每集 {m} 分钟"
+
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{h} h {m} min"
 msgstr "{h} 小时 {m} 分钟"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{m} min"
 msgstr "{m} 分钟"
 
-#: src/ashytv/ui/detail_dialog.py:240
+#: src/ashytv/ui/detail_dialog.py:270
 #, python-brace-format
 msgid "Ends at {time}"
 msgstr "{time} 结束"
 
-#: src/ashytv/ui/detail_dialog.py:243 src/ashytv/ui/player_view.py:1052
-msgid "Audio"
-msgstr "音频"
+#: src/ashytv/ui/detail_dialog.py:280
+msgid "Created by"
+msgstr "主创"
 
-#: src/ashytv/ui/detail_dialog.py:243
-msgid "Video"
-msgstr "视频"
+#: src/ashytv/ui/detail_dialog.py:282
+msgid "Writers"
+msgstr "编剧"
 
-#: src/ashytv/ui/detail_dialog.py:247
-msgid "Country"
-msgstr "国家"
+#: src/ashytv/ui/detail_dialog.py:283
+msgid "Studios"
+msgstr "制片公司"
 
-#: src/ashytv/ui/detail_dialog.py:247
+#: src/ashytv/ui/detail_dialog.py:284
 msgid "Genres"
 msgstr "类型"
 
-#: src/ashytv/ui/detail_dialog.py:248
+#: src/ashytv/ui/detail_dialog.py:286
+msgid "Tags"
+msgstr "标签"
+
+#: src/ashytv/ui/detail_dialog.py:287 src/ashytv/ui/player_view.py:1053
+msgid "Audio"
+msgstr "音频"
+
+#: src/ashytv/ui/detail_dialog.py:287
+msgid "Video"
+msgstr "视频"
+
+#: src/ashytv/ui/detail_dialog.py:290
+msgid "Country"
+msgstr "国家"
+
+#: src/ashytv/ui/detail_dialog.py:291
 msgid "Released"
 msgstr "上映"
 
-#: src/ashytv/ui/detail_dialog.py:249 src/ashytv/ui/player_view.py:239
-#: src/ashytv/ui/player_view.py:1007 src/ashytv/ui/player_view.py:1024
+#: src/ashytv/ui/detail_dialog.py:292 src/ashytv/ui/player_view.py:240
+#: src/ashytv/ui/player_view.py:1008 src/ashytv/ui/player_view.py:1025
 msgid "Subtitles"
 msgstr "字幕"
 
-#: src/ashytv/ui/detail_dialog.py:249
+#: src/ashytv/ui/detail_dialog.py:292
 #, python-brace-format
 msgid "{n} file"
 msgid_plural "{n} files"
 msgstr[0] "{n} 个文件"
 
-#: src/ashytv/ui/detail_dialog.py:266
+#: src/ashytv/ui/detail_dialog.py:331
 msgid "Trailer"
 msgstr "预告片"
 
-#: src/ashytv/ui/detail_dialog.py:292
+#: src/ashytv/ui/detail_dialog.py:357
 msgid "No episodes available"
 msgstr "没有可用的剧集"
 
-#: src/ashytv/ui/detail_dialog.py:297
+#: src/ashytv/ui/detail_dialog.py:362
 #, python-brace-format
 msgid "Season {n}"
 msgstr "第 {n} 季"
 
-#: src/ashytv/ui/detail_dialog.py:305
+#: src/ashytv/ui/detail_dialog.py:370
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "观看 {label}"
 
-#: src/ashytv/ui/detail_dialog.py:346
+#: src/ashytv/ui/detail_dialog.py:411
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "第 {n} 集"
 
-#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:153
-#: src/ashytv/ui/pages/settings_page.py:154
+#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:156
+#: src/ashytv/ui/pages/settings_page.py:157
 msgid "Hidden channels and groups"
 msgstr "隐藏的频道和分组"
 
@@ -459,6 +519,51 @@ msgstr "频道"
 msgid "Show"
 msgstr "显示"
 
+#: src/ashytv/ui/install_dialog.py:31
+msgid "Video player library not found"
+msgstr "未找到视频播放器库"
+
+#: src/ashytv/ui/install_dialog.py:32
+msgid ""
+"AshyTV plays video with libmpv, which is not installed on this system. It is "
+"installed once from your distribution's packages."
+msgstr ""
+"AshyTV 使用 libmpv 播放视频，但本系统尚未安装。只需从发行版的软件包中安装一"
+"次。"
+
+#: src/ashytv/ui/install_dialog.py:39
+msgid "Install it with your package manager"
+msgstr "使用软件包管理器安装"
+
+#: src/ashytv/ui/install_dialog.py:40
+msgid ""
+"Install the package that provides libmpv.so.2 (usually “mpv”, “libmpv2” or "
+"“mpv-libs”) and open AshyTV again."
+msgstr ""
+"安装提供 libmpv.so.2 的软件包（通常为“mpv”、“libmpv2”或“mpv-libs”），然后重新"
+"打开 AshyTV。"
+
+#: src/ashytv/ui/install_dialog.py:45
+msgid "Command to be executed"
+msgstr "将要执行的命令"
+
+#: src/ashytv/ui/install_dialog.py:65
+msgid "Install"
+msgstr "安装"
+
+#: src/ashytv/ui/install_dialog.py:125
+msgid "Installed. Open AshyTV again to start watching."
+msgstr "已安装。重新打开 AshyTV 即可开始观看。"
+
+#: src/ashytv/ui/install_dialog.py:126
+msgid "Close AshyTV"
+msgstr "关闭 AshyTV"
+
+#: src/ashytv/ui/install_dialog.py:129
+msgid ""
+"The installation did not finish. Check the messages above and try again."
+msgstr "安装未完成。请查看上方消息后重试。"
+
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
 msgstr "返回 AshyTV"
@@ -471,11 +576,10 @@ msgstr "停止"
 msgid "Home"
 msgstr "主页"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:81
-#: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:601
-#: src/ashytv/window.py:624
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
+#: src/ashytv/window.py:628
 msgid "Favorites"
 msgstr "收藏"
 
@@ -483,145 +587,124 @@ msgstr "收藏"
 msgid "Recordings"
 msgstr "录制"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:72
-#: src/ashytv/window.py:1293
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
+#: src/ashytv/window.py:1399
 msgid "Playlists"
 msgstr "播放列表"
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1299
+#: src/ashytv/window.py:1405
 msgid "Settings"
 msgstr "设置"
 
-#: src/ashytv/ui/pages/catalog_page.py:59
+#: src/ashytv/ui/pages/catalog_page.py:85
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "人物"
 
-#: src/ashytv/ui/pages/catalog_page.py:90
+#: src/ashytv/ui/pages/catalog_page.py:114
 msgid "Nothing found"
 msgstr "未找到内容"
 
-#: src/ashytv/ui/pages/catalog_page.py:91
+#: src/ashytv/ui/pages/catalog_page.py:115
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "请在“播放列表”中添加播放列表，或更改筛选条件。"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
-#: src/ashytv/ui/pages/channels_page.py:264
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "All"
 msgstr "全部"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "New Releases"
 msgstr "最新上线"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:197
 msgid "Trending"
 msgstr "热门"
 
-#: src/ashytv/ui/pages/catalog_page.py:170
-#: src/ashytv/ui/pages/channels_page.py:343
+#: src/ashytv/ui/pages/catalog_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:286
+msgid "See hidden channels and groups"
+msgstr "查看隐藏的频道和分组"
+
+#: src/ashytv/ui/pages/catalog_page.py:212
+#: src/ashytv/ui/pages/channels_page.py:291
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "已隐藏（{n}）"
 
-#: src/ashytv/ui/pages/catalog_page.py:172
-#: src/ashytv/ui/pages/channels_page.py:338
-msgid "See hidden channels and groups"
-msgstr "查看隐藏的频道和分组"
-
-#: src/ashytv/ui/pages/catalog_page.py:178
+#: src/ashytv/ui/pages/catalog_page.py:235
 msgid "Hide category"
 msgstr "隐藏分类"
 
-#: src/ashytv/ui/pages/channels_page.py:37
-msgid "Sports"
-msgstr "体育"
-
-#: src/ashytv/ui/pages/channels_page.py:40
-msgid "Free-to-air"
-msgstr "免费频道"
-
-#: src/ashytv/ui/pages/channels_page.py:43
-msgid "Kids"
-msgstr "少儿"
-
-#: src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/pages/channels_page.py:68
 msgid "TV Channels"
 msgstr "电视频道"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "Channels, movies and series you marked"
 msgstr "您标记的频道、电影和剧集"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "All your channels organized by category"
 msgstr "按分类整理的所有频道"
 
-#: src/ashytv/ui/pages/channels_page.py:95
+#: src/ashytv/ui/pages/channels_page.py:82
 msgid "List"
 msgstr "列表"
 
-#: src/ashytv/ui/pages/channels_page.py:96
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "Guide"
 msgstr "节目指南"
 
-#: src/ashytv/ui/pages/channels_page.py:171
+#: src/ashytv/ui/pages/channels_page.py:146
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "这里还没有内容"
 
-#: src/ashytv/ui/pages/channels_page.py:172
+#: src/ashytv/ui/pages/channels_page.py:147
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "点按频道、电影或剧集上的心形图标，即可保存在这里。"
 
-#: src/ashytv/ui/pages/channels_page.py:174
+#: src/ashytv/ui/pages/channels_page.py:149
 msgid "No channels in this category."
 msgstr "此分类中没有频道。"
 
-#: src/ashytv/ui/pages/channels_page.py:264
-msgid "Recent"
-msgstr "最近"
-
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:602
-#: src/ashytv/window.py:625
-msgid "Recently watched"
-msgstr "最近观看"
-
-#: src/ashytv/ui/pages/channels_page.py:293
+#: src/ashytv/ui/pages/channels_page.py:241
 msgid "All Channels"
 msgstr "所有频道"
 
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All in this category"
-msgstr "此分类中的全部内容"
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
+#: src/ashytv/window.py:629
+msgid "Recently watched"
+msgstr "最近观看"
 
-#: src/ashytv/ui/pages/channels_page.py:372
+#: src/ashytv/ui/pages/channels_page.py:324
 msgid "Move up"
 msgstr "上移"
 
-#: src/ashytv/ui/pages/channels_page.py:373
+#: src/ashytv/ui/pages/channels_page.py:325
 msgid "Move down"
 msgstr "下移"
 
-#: src/ashytv/ui/pages/channels_page.py:374
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Hide group"
 msgstr "隐藏分组"
 
-#: src/ashytv/ui/pages/channels_page.py:583 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:178
 msgid "Favorite"
 msgstr "收藏"
 
-#: src/ashytv/ui/pages/channels_page.py:590
+#: src/ashytv/ui/pages/channels_page.py:539
 msgid "More options"
 msgstr "更多选项"
 
-#: src/ashytv/ui/pages/channels_page.py:613
+#: src/ashytv/ui/pages/channels_page.py:562
 msgid "View schedule"
 msgstr "查看节目表"
 
-#: src/ashytv/ui/pages/channels_page.py:615
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Hide channel"
 msgstr "隐藏频道"
 
@@ -694,52 +777,53 @@ msgstr "在“{section}”中查看更多"
 msgid "See more"
 msgstr "查看更多"
 
-#: src/ashytv/ui/pages/home_page.py:209
+#: src/ashytv/ui/pages/home_page.py:212
 msgid "Continue Watching"
 msgstr "继续观看"
 
-#: src/ashytv/ui/pages/home_page.py:210 src/ashytv/ui/welcome_view.py:62
+#: src/ashytv/ui/pages/home_page.py:213 src/ashytv/ui/welcome_view.py:62
 msgid "Live Channels"
 msgstr "直播频道"
 
-#: src/ashytv/ui/pages/home_page.py:211 src/ashytv/ui/pages/home_page.py:213
-#: src/ashytv/ui/pages/home_page.py:215
+#: src/ashytv/ui/pages/home_page.py:214 src/ashytv/ui/pages/home_page.py:216
+#: src/ashytv/ui/pages/home_page.py:218
 msgid "See all"
 msgstr "查看全部"
 
-#: src/ashytv/ui/pages/home_page.py:212
+#: src/ashytv/ui/pages/home_page.py:215
 msgid "Recently Added Movies"
 msgstr "最近添加的电影"
 
-#: src/ashytv/ui/pages/home_page.py:214
+#: src/ashytv/ui/pages/home_page.py:217
 msgid "Recently Added Series"
 msgstr "最近添加的剧集"
 
-#: src/ashytv/ui/pages/home_page.py:301
+#: src/ashytv/ui/pages/home_page.py:319
 msgid "Welcome to AshyTV"
 msgstr "欢迎使用 AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:302
+#: src/ashytv/ui/pages/home_page.py:320
 msgid "Your channels, movies and series in one place"
 msgstr "您的频道、电影和剧集，尽在一处"
 
-#: src/ashytv/ui/pages/home_page.py:303
+#: src/ashytv/ui/pages/home_page.py:321
 msgid "Enter: view channels"
 msgstr "Enter：查看频道"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "Enter: details"
 msgstr "Enter：详情"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "← → more titles"
 msgstr "← → 更多影片"
 
-#: src/ashytv/ui/pages/lists_page.py:17
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
 msgid "The guide link must be a web address (http or https)."
 msgstr "指南链接必须是网址（http 或 https）。"
 
-#: src/ashytv/ui/pages/lists_page.py:27 src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:70
+#: src/ashytv/ui/servers_dialog.py:59
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -747,134 +831,136 @@ msgstr ""
 "同一服务商的其他地址，使用相同的登录信息。主地址无响应时，AshyTV 会自动切换到"
 "下一个。"
 
-#: src/ashytv/ui/pages/lists_page.py:35 src/ashytv/ui/servers_dialog.py:64
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:75
+#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "备用服务器 {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:39 src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:69
+#: src/ashytv/ui/servers_dialog.py:58
 msgid "Backup servers (alternative DNS)"
 msgstr "备用服务器（备用 DNS）"
 
-#: src/ashytv/ui/pages/lists_page.py:73
+#: src/ashytv/ui/pages/lists_page.py:79
 msgid "Manage your playlists or add a new one"
 msgstr "管理您的播放列表或添加新的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Playlist"
 msgstr "添加播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:102 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:108 src/ashytv/ui/pages/lists_page.py:366
 msgid "Free TV"
 msgstr "免费电视"
 
-#: src/ashytv/ui/pages/lists_page.py:102
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "M3U File"
 msgstr "M3U 文件"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:109 src/ashytv/ui/pages/lists_page.py:366
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:114
+#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:48
 msgid "Playlist name"
 msgstr "播放列表名称"
 
-#: src/ashytv/ui/pages/lists_page.py:115 src/ashytv/ui/pages/lists_page.py:527
-#: src/ashytv/ui/pages/lists_page.py:595 src/ashytv/ui/pages/lists_page.py:603
+#: src/ashytv/ui/pages/lists_page.py:121 src/ashytv/ui/pages/lists_page.py:566
+#: src/ashytv/ui/pages/lists_page.py:634 src/ashytv/ui/pages/lists_page.py:642
 msgid "My Playlist"
 msgstr "我的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:122
+#: src/ashytv/ui/pages/lists_page.py:128
 msgid "Choose .m3u file…"
 msgstr "选择 .m3u 文件…"
 
-#: src/ashytv/ui/pages/lists_page.py:124 src/ashytv/ui/pages/lists_page.py:340
+#: src/ashytv/ui/pages/lists_page.py:130 src/ashytv/ui/pages/lists_page.py:346
 msgid "No file selected"
 msgstr "未选择文件"
 
-#: src/ashytv/ui/pages/lists_page.py:130
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "File"
 msgstr "文件"
 
-#: src/ashytv/ui/pages/lists_page.py:135
+#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:52
 msgid "Server (URL)"
 msgstr "服务器 (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:53
 msgid "Username"
 msgstr "用户名"
 
-#: src/ashytv/ui/pages/lists_page.py:139
+#: src/ashytv/ui/pages/lists_page.py:145
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:140
+#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:54
 msgid "Password"
 msgstr "密码"
 
-#: src/ashytv/ui/pages/lists_page.py:141
+#: src/ashytv/ui/pages/lists_page.py:147
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:143
+#: src/ashytv/ui/pages/lists_page.py:149
 msgid "Paste provider message"
 msgstr "粘贴提供商消息"
 
-#: src/ashytv/ui/pages/lists_page.py:145
+#: src/ashytv/ui/pages/lists_page.py:151
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
 msgstr "粘贴提供商的欢迎消息：服务器、用户名和密码将自动填写"
 
-#: src/ashytv/ui/pages/lists_page.py:154
+#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:58
 msgid "Playlist URL (M3U)"
 msgstr "播放列表 URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:166 src/ashytv/ui/pages/lists_page.py:478
+#: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
+#: src/ashytv/ui/playlist_dialog.py:60
 msgid "Guide link (EPG) — optional"
 msgstr "指南链接 (EPG) — 可选"
 
-#: src/ashytv/ui/pages/lists_page.py:170
+#: src/ashytv/ui/pages/lists_page.py:176
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr "XMLTV 节目指南；将替代播放列表中指定的指南 (url-tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:182
+#: src/ashytv/ui/pages/lists_page.py:188
 msgid "Save and Connect"
 msgstr "保存并连接"
 
-#: src/ashytv/ui/pages/lists_page.py:199
+#: src/ashytv/ui/pages/lists_page.py:205
 msgid "Secure Connection"
 msgstr "安全连接"
 
-#: src/ashytv/ui/pages/lists_page.py:201
+#: src/ashytv/ui/pages/lists_page.py:207
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
 msgstr "您的信息仅存储在您的设备上。密码保存在系统密钥环中。"
 
-#: src/ashytv/ui/pages/lists_page.py:213
+#: src/ashytv/ui/pages/lists_page.py:219
 msgid "Your Playlists"
 msgstr "您的播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:242
+#: src/ashytv/ui/pages/lists_page.py:248
 msgid "TV channels from"
 msgstr "电视频道来源"
 
-#: src/ashytv/ui/pages/lists_page.py:247
+#: src/ashytv/ui/pages/lists_page.py:253
 msgid "Free movies and cartoons"
 msgstr "免费电影和动画"
 
-#: src/ashytv/ui/pages/lists_page.py:249
+#: src/ashytv/ui/pages/lists_page.py:255
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "公有领域经典电影和 Blender 开放电影"
 
-#: src/ashytv/ui/pages/lists_page.py:259
+#: src/ashytv/ui/pages/lists_page.py:265
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -883,70 +969,74 @@ msgstr ""
 "仅包含广播机构公开提供的免费频道，以及开放许可或公有领域的电影。AshyTV 只是播"
 "放器，不托管任何内容。"
 
-#: src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Another Playlist"
 msgstr "添加另一个播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:367
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:368
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} 项"
 
-#: src/ashytv/ui/pages/lists_page.py:365
+#: src/ashytv/ui/pages/lists_page.py:371
 msgid "Disabled"
 msgstr "已停用"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:373
 #, python-brace-format
 msgid "updated {when}"
 msgstr "更新于 {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:372
+#: src/ashytv/ui/pages/lists_page.py:378
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "指南：{n}/{m} 个频道"
 
-#: src/ashytv/ui/pages/lists_page.py:377
+#: src/ashytv/ui/pages/lists_page.py:383
 #, python-brace-format
 msgid "expires {when}"
 msgstr "{when} 到期"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:384
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "已于 {when} 过期"
 
-#: src/ashytv/ui/pages/lists_page.py:396
+#: src/ashytv/ui/pages/lists_page.py:402
 msgid "Show this playlist's channels"
 msgstr "显示此播放列表的频道"
 
-#: src/ashytv/ui/pages/lists_page.py:405
+#: src/ashytv/ui/pages/lists_page.py:411
 msgid "Guide link (EPG)"
 msgstr "指南链接 (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:410
+#: src/ashytv/ui/pages/lists_page.py:416 src/ashytv/ui/playlist_dialog.py:28
+msgid "Edit playlist"
+msgstr "编辑播放列表"
+
+#: src/ashytv/ui/pages/lists_page.py:420
 msgid "Refresh playlist"
 msgstr "刷新播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:414
+#: src/ashytv/ui/pages/lists_page.py:424
 msgid "Remove playlist"
 msgstr "移除播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:451
+#: src/ashytv/ui/pages/lists_page.py:462
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "服务器：{status} — 点击查看详情"
 
-#: src/ashytv/ui/pages/lists_page.py:452 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:463 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "尚未检查"
 
-#: src/ashytv/ui/pages/lists_page.py:476
+#: src/ashytv/ui/pages/lists_page.py:515
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -955,60 +1045,61 @@ msgstr ""
 "“{name}”的 XMLTV 节目指南。它将替代播放列表中指定的指南；留空则使用播放列表自"
 "带的指南。"
 
-#: src/ashytv/ui/pages/lists_page.py:480 src/ashytv/ui/pages/lists_page.py:508
+#: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:442
+#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
 msgid "Cancel"
 msgstr "取消"
 
-#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
+#: src/ashytv/ui/servers_dialog.py:70
 msgid "Save"
 msgstr "保存"
 
-#: src/ashytv/ui/pages/lists_page.py:505
+#: src/ashytv/ui/pages/lists_page.py:544
 msgid "Remove playlist?"
 msgstr "要移除播放列表吗？"
 
-#: src/ashytv/ui/pages/lists_page.py:506
+#: src/ashytv/ui/pages/lists_page.py:545
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
 "this device."
 msgstr "“{name}”及其所有频道、收藏和历史记录将从此设备中移除。"
 
-#: src/ashytv/ui/pages/lists_page.py:509
+#: src/ashytv/ui/pages/lists_page.py:548
 msgid "Remove"
 msgstr "移除"
 
-#: src/ashytv/ui/pages/lists_page.py:532
+#: src/ashytv/ui/pages/lists_page.py:571
 msgid "Select M3U playlist"
 msgstr "选择 M3U 播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:534
+#: src/ashytv/ui/pages/lists_page.py:573
 msgid "M3U Playlists"
 msgstr "M3U 播放列表"
 
-#: src/ashytv/ui/pages/lists_page.py:571
+#: src/ashytv/ui/pages/lists_page.py:610
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "在复制的文本中未找到服务器、用户名和密码。"
 
-#: src/ashytv/ui/pages/lists_page.py:577
+#: src/ashytv/ui/pages/lists_page.py:616
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr "已填写提供商信息。请检查后点击“保存并连接”。"
 
-#: src/ashytv/ui/pages/lists_page.py:593
+#: src/ashytv/ui/pages/lists_page.py:632
 msgid "Choose an .m3u file."
 msgstr "请选择 .m3u 文件。"
 
-#: src/ashytv/ui/pages/lists_page.py:600
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
 msgid "Enter a URL starting with http:// or https://."
 msgstr "请输入以 http:// 或 https:// 开头的 URL。"
 
-#: src/ashytv/ui/pages/lists_page.py:614
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
 msgid "Fill in server, username and password."
 msgstr "请填写服务器、用户名和密码。"
 
-#: src/ashytv/ui/pages/lists_page.py:616
+#: src/ashytv/ui/pages/lists_page.py:655
 msgid "Xtream Provider"
 msgstr "Xtream 提供商"
 
@@ -1017,7 +1108,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "使用播放器中的 ● 按钮录制正在播放的内容"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:323
+#: src/ashytv/ui/pages/settings_page.py:326
 msgid "Open folder"
 msgstr "打开文件夹"
 
@@ -1064,12 +1155,12 @@ msgid "General"
 msgstr "常规"
 
 #: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:197
+#: src/ashytv/ui/pages/settings_page.py:200
 msgid "Appearance"
 msgstr "外观"
 
 #: src/ashytv/ui/pages/settings_page.py:23
-#: src/ashytv/ui/pages/settings_page.py:248
+#: src/ashytv/ui/pages/settings_page.py:251
 msgid "Playback"
 msgstr "播放"
 
@@ -1078,7 +1169,7 @@ msgid "Shortcuts"
 msgstr "快捷方式"
 
 #: src/ashytv/ui/pages/settings_page.py:25
-#: src/ashytv/ui/pages/settings_page.py:284
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Parental Controls"
 msgstr "家长控制"
 
@@ -1087,12 +1178,12 @@ msgid "Network"
 msgstr "网络"
 
 #: src/ashytv/ui/pages/settings_page.py:27
-#: src/ashytv/ui/pages/settings_page.py:305
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Data"
 msgstr "数据"
 
 #: src/ashytv/ui/pages/settings_page.py:28
-#: src/ashytv/ui/pages/settings_page.py:331
+#: src/ashytv/ui/pages/settings_page.py:334
 msgid "About"
 msgstr "关于"
 
@@ -1132,41 +1223,51 @@ msgstr "合并同一频道的不同画质"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "将“News FHD”“News HD”和“News SD”显示为同一个频道"
 
-#: src/ashytv/ui/pages/settings_page.py:150 src/ashytv/window.py:1274
+#: src/ashytv/ui/pages/settings_page.py:150
+msgid "Sort from A to Z"
+msgstr "按 A–Z 排序"
+
+#: src/ashytv/ui/pages/settings_page.py:151
+msgid ""
+"Groups and channels in alphabetical order. Off, they keep the playlist's "
+"order"
+msgstr "分组和频道按字母顺序排列。关闭时保持播放列表的顺序"
+
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
 msgid "Live preview"
 msgstr "直播预览"
 
-#: src/ashytv/ui/pages/settings_page.py:151
+#: src/ashytv/ui/pages/settings_page.py:154
 msgid "Plays the selected channel, muted, next to the channel list"
 msgstr "在频道列表旁静音播放所选频道"
 
-#: src/ashytv/ui/pages/settings_page.py:162 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:165 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV 播放列表"
 
-#: src/ashytv/ui/pages/settings_page.py:163
+#: src/ashytv/ui/pages/settings_page.py:166
 msgid "Reload playlists automatically"
 msgstr "自动重新加载播放列表"
 
-#: src/ashytv/ui/pages/settings_page.py:164
+#: src/ashytv/ui/pages/settings_page.py:167
 msgid "Updates channels and catalog when the app opens"
 msgstr "应用打开时更新频道和目录"
 
-#: src/ashytv/ui/pages/settings_page.py:165
+#: src/ashytv/ui/pages/settings_page.py:168
 msgid "Check every"
 msgstr "检查间隔"
 
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:170
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
 msgstr[0] "{h} 小时"
 
-#: src/ashytv/ui/pages/settings_page.py:178
+#: src/ashytv/ui/pages/settings_page.py:181
 msgid "Secure DNS (DNS over HTTPS)"
 msgstr "安全 DNS（DNS over HTTPS）"
 
-#: src/ashytv/ui/pages/settings_page.py:179
+#: src/ashytv/ui/pages/settings_page.py:182
 msgid ""
 "Looks up server names over an encrypted connection, for more privacy and "
 "fewer failures from the provider's DNS. If it doesn't answer, the system DNS "
@@ -1175,393 +1276,393 @@ msgstr ""
 "通过加密连接解析服务器名称，提升隐私并减少服务商 DNS 导致的故障。如果它无响"
 "应，将使用系统 DNS。HTTPS 视频使用系统 DNS。"
 
-#: src/ashytv/ui/pages/settings_page.py:183
+#: src/ashytv/ui/pages/settings_page.py:186
 msgid "Secure DNS"
 msgstr "安全 DNS"
 
-#: src/ashytv/ui/pages/settings_page.py:191
+#: src/ashytv/ui/pages/settings_page.py:194
 msgid "Backup servers"
 msgstr "备用服务器"
 
-#: src/ashytv/ui/pages/settings_page.py:192
+#: src/ashytv/ui/pages/settings_page.py:195
 msgid "Desktop notifications"
 msgstr "桌面通知"
 
-#: src/ashytv/ui/pages/settings_page.py:193
+#: src/ashytv/ui/pages/settings_page.py:196
 msgid "Tell me when a playlist's main server goes down or comes back"
 msgstr "播放列表的主服务器宕机或恢复时通知我"
 
-#: src/ashytv/ui/pages/settings_page.py:198
+#: src/ashytv/ui/pages/settings_page.py:201
 msgid "Theme"
 msgstr "主题"
 
-#: src/ashytv/ui/pages/settings_page.py:208
+#: src/ashytv/ui/pages/settings_page.py:211
 msgid "Accent Color"
 msgstr "强调色"
 
-#: src/ashytv/ui/pages/settings_page.py:209
+#: src/ashytv/ui/pages/settings_page.py:212
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "选择用于按钮、选中项和高亮的颜色。"
 
-#: src/ashytv/ui/pages/settings_page.py:231
+#: src/ashytv/ui/pages/settings_page.py:234
 msgid "Transparency"
 msgstr "透明度"
 
-#: src/ashytv/ui/pages/settings_page.py:232
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "使窗口背景半透明（取决于合成器）。"
 
-#: src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/pages/settings_page.py:237
 msgid "Translucent window"
 msgstr "半透明窗口"
 
-#: src/ashytv/ui/pages/settings_page.py:236
+#: src/ashytv/ui/pages/settings_page.py:239
 msgid "Background opacity (%)"
 msgstr "背景不透明度 (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:242
+#: src/ashytv/ui/pages/settings_page.py:245
 msgid "Content"
 msgstr "内容"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Show logos and covers"
 msgstr "显示图标和封面"
 
-#: src/ashytv/ui/pages/settings_page.py:244
+#: src/ashytv/ui/pages/settings_page.py:247
 msgid "Turn off to save data"
 msgstr "关闭以节省流量"
 
-#: src/ashytv/ui/pages/settings_page.py:249
+#: src/ashytv/ui/pages/settings_page.py:252
 msgid "Applies from the next video you open."
 msgstr "下次打开视频时生效。"
 
-#: src/ashytv/ui/pages/settings_page.py:250 src/ashytv/ui/player_view.py:788
+#: src/ashytv/ui/pages/settings_page.py:253 src/ashytv/ui/player_view.py:789
 msgid "Automatic quality"
 msgstr "自动画质"
 
-#: src/ashytv/ui/pages/settings_page.py:251
+#: src/ashytv/ui/pages/settings_page.py:254
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "根据你的网络连接在频道的各种画质之间切换"
 
-#: src/ashytv/ui/pages/settings_page.py:252
+#: src/ashytv/ui/pages/settings_page.py:255
 msgid "Hardware acceleration"
 msgstr "硬件加速"
 
-#: src/ashytv/ui/pages/settings_page.py:253
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "使用 GPU 解码视频 (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:255
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Network buffer (seconds)"
 msgstr "网络缓冲（秒）"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr "缓冲越大卡顿越少，但切换频道时延迟更长"
 
-#: src/ashytv/ui/pages/settings_page.py:274
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Game controller"
 msgstr "游戏手柄"
 
-#: src/ashytv/ui/pages/settings_page.py:275
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Connect a controller to use AshyTV like a TV remote."
 msgstr "连接手柄后，可像电视遥控器一样使用 AshyTV。"
 
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:289
 msgid "Hide adult content"
 msgstr "隐藏成人内容"
 
-#: src/ashytv/ui/pages/settings_page.py:287
+#: src/ashytv/ui/pages/settings_page.py:290
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "隐藏包含“adult”“XXX”“+18”等字样的分类"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "With a PIN set, it is required to show adult content."
 msgstr "设置 PIN 后，显示成人内容时需要输入 PIN。"
 
-#: src/ashytv/ui/pages/settings_page.py:295
+#: src/ashytv/ui/pages/settings_page.py:298
 msgid "New PIN (4+ digits)"
 msgstr "新 PIN（至少 4 位数字）"
 
-#: src/ashytv/ui/pages/settings_page.py:299
+#: src/ashytv/ui/pages/settings_page.py:302
 msgid "Remove PIN"
 msgstr "移除 PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:306
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid "Clear cache"
 msgstr "清除缓存"
 
-#: src/ashytv/ui/pages/settings_page.py:307
+#: src/ashytv/ui/pages/settings_page.py:310
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "删除已下载的图标、封面和指南数据"
 
-#: src/ashytv/ui/pages/settings_page.py:309
-#: src/ashytv/ui/pages/settings_page.py:316
+#: src/ashytv/ui/pages/settings_page.py:312
+#: src/ashytv/ui/pages/settings_page.py:319
 msgid "Clear"
 msgstr "清除"
 
-#: src/ashytv/ui/pages/settings_page.py:314
+#: src/ashytv/ui/pages/settings_page.py:317
 msgid "Clear history"
 msgstr "清除历史记录"
 
-#: src/ashytv/ui/pages/settings_page.py:315
+#: src/ashytv/ui/pages/settings_page.py:318
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "清除“继续观看”和最近项目"
 
-#: src/ashytv/ui/pages/settings_page.py:321
+#: src/ashytv/ui/pages/settings_page.py:324
 msgid "Recordings folder"
 msgstr "录制文件夹"
 
-#: src/ashytv/ui/pages/settings_page.py:333
+#: src/ashytv/ui/pages/settings_page.py:336
 #, python-brace-format
 msgid "Version {version}"
 msgstr "版本 {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:336
+#: src/ashytv/ui/pages/settings_page.py:339
 msgid "Disclaimer"
 msgstr "免责声明"
 
-#: src/ashytv/ui/pages/settings_page.py:337
+#: src/ashytv/ui/pages/settings_page.py:340
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
 msgstr "AshyTV 不提供也不包含任何内容：它只播放您添加的播放列表。"
 
-#: src/ashytv/ui/pages/settings_page.py:343 src/ashytv/window.py:132
+#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
 msgid "Guided tour"
 msgstr "引导教程"
 
-#: src/ashytv/ui/pages/settings_page.py:346
+#: src/ashytv/ui/pages/settings_page.py:349
 msgid "More information"
 msgstr "更多信息"
 
-#: src/ashytv/ui/pages/settings_page.py:369
+#: src/ashytv/ui/pages/settings_page.py:372
 #, python-brace-format
 msgid "{n} hidden item · Click to see it and show it again"
 msgid_plural "{n} hidden items · Click to see them and show them again"
 msgstr[0] "{n} 个隐藏项 · 点击查看并重新显示"
 
-#: src/ashytv/ui/pages/settings_page.py:372
+#: src/ashytv/ui/pages/settings_page.py:375
 msgid "Nothing hidden · Right-click a group or channel to hide it"
 msgstr "没有隐藏的内容 · 右键单击分组或频道即可隐藏"
 
-#: src/ashytv/ui/pages/settings_page.py:384
+#: src/ashytv/ui/pages/settings_page.py:387
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "删除已下载的图标、封面和指南数据 — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:400
+#: src/ashytv/ui/pages/settings_page.py:403
 msgid "Cache cleared."
 msgstr "缓存已清除。"
 
-#: src/ashytv/ui/pages/settings_page.py:408
+#: src/ashytv/ui/pages/settings_page.py:411
 msgid "History cleared."
 msgstr "历史记录已清除。"
 
-#: src/ashytv/ui/pages/settings_page.py:438
+#: src/ashytv/ui/pages/settings_page.py:441
 msgid "Enter PIN"
 msgstr "输入 PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:439
+#: src/ashytv/ui/pages/settings_page.py:442
 msgid "Required to show adult content."
 msgstr "显示成人内容时需要。"
 
-#: src/ashytv/ui/pages/settings_page.py:443
+#: src/ashytv/ui/pages/settings_page.py:446
 msgid "Unlock"
 msgstr "解锁"
 
-#: src/ashytv/ui/pages/settings_page.py:453
+#: src/ashytv/ui/pages/settings_page.py:456
 msgid "Incorrect PIN."
 msgstr "PIN 不正确。"
 
-#: src/ashytv/ui/pages/settings_page.py:461
+#: src/ashytv/ui/pages/settings_page.py:464
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN 必须至少为 4 位数字。"
 
-#: src/ashytv/ui/pages/settings_page.py:466
+#: src/ashytv/ui/pages/settings_page.py:469
 msgid "PIN set."
 msgstr "PIN 已设置。"
 
-#: src/ashytv/ui/pages/settings_page.py:478
+#: src/ashytv/ui/pages/settings_page.py:481
 msgid "PIN removed."
 msgstr "PIN 已移除。"
 
-#: src/ashytv/ui/player_view.py:25
+#: src/ashytv/ui/player_view.py:26
 msgid "Auto"
 msgstr "自动"
 
-#: src/ashytv/ui/player_view.py:153
+#: src/ashytv/ui/player_view.py:154
 msgid "Back (Esc)"
 msgstr "返回 (Esc)"
 
-#: src/ashytv/ui/player_view.py:179 src/ashytv/ui/player_view.py:956
+#: src/ashytv/ui/player_view.py:180 src/ashytv/ui/player_view.py:957
 msgid "Record"
 msgstr "录制"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:181
 msgid "Mini player"
 msgstr "迷你播放器"
 
-#: src/ashytv/ui/player_view.py:209 src/ashytv/ui/player_view.py:404
-#: src/ashytv/ui/player_view.py:703 src/ashytv/ui/player_view.py:717
-#: src/ashytv/ui/player_view.py:723
+#: src/ashytv/ui/player_view.py:210 src/ashytv/ui/player_view.py:405
+#: src/ashytv/ui/player_view.py:704 src/ashytv/ui/player_view.py:718
+#: src/ashytv/ui/player_view.py:724
 msgid "● LIVE"
 msgstr "● 直播"
 
-#: src/ashytv/ui/player_view.py:211
+#: src/ashytv/ui/player_view.py:212
 msgid "Go live"
 msgstr "回到直播"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:213
 msgid "Back to live"
 msgstr "返回直播"
 
-#: src/ashytv/ui/player_view.py:222
+#: src/ashytv/ui/player_view.py:223
 msgid "Previous (↑)"
 msgstr "上一个 (↑)"
 
-#: src/ashytv/ui/player_view.py:224
+#: src/ashytv/ui/player_view.py:225
 msgid "Back 10 s (←)"
 msgstr "快退 10 秒 (←)"
 
-#: src/ashytv/ui/player_view.py:226
+#: src/ashytv/ui/player_view.py:227
 msgid "Pause (Space)"
 msgstr "暂停 (空格键)"
 
-#: src/ashytv/ui/player_view.py:228
+#: src/ashytv/ui/player_view.py:229
 msgid "Forward 10 s (→)"
 msgstr "快进 10 秒 (→)"
 
-#: src/ashytv/ui/player_view.py:230
+#: src/ashytv/ui/player_view.py:231
 msgid "Next (↓)"
 msgstr "下一个 (↓)"
 
-#: src/ashytv/ui/player_view.py:237 src/ashytv/ui/shortcuts.py:39
+#: src/ashytv/ui/player_view.py:238 src/ashytv/ui/shortcuts.py:39
 msgid "Volume"
 msgstr "音量"
 
-#: src/ashytv/ui/player_view.py:241
+#: src/ashytv/ui/player_view.py:242
 msgid "Audio & Video"
 msgstr "音频和视频"
 
-#: src/ashytv/ui/player_view.py:243
+#: src/ashytv/ui/player_view.py:244
 msgid "Fullscreen (F)"
 msgstr "全屏 (F)"
 
-#: src/ashytv/ui/player_view.py:268
+#: src/ashytv/ui/player_view.py:269
 msgid "Try again"
 msgstr "重试"
 
-#: src/ashytv/ui/player_view.py:506 src/ashytv/ui/player_view.py:517
+#: src/ashytv/ui/player_view.py:507 src/ashytv/ui/player_view.py:518
 msgid "Reconnecting…"
 msgstr "正在重新连接…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Buffering…"
 msgstr "正在缓冲…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Loading…"
 msgstr "正在加载…"
 
-#: src/ashytv/ui/player_view.py:546
+#: src/ashytv/ui/player_view.py:547
 msgid "Could not play"
 msgstr "无法播放"
 
-#: src/ashytv/ui/player_view.py:547
+#: src/ashytv/ui/player_view.py:548
 msgid "The channel may be offline or the connection dropped."
 msgstr "频道可能已离线或连接已断开。"
 
-#: src/ashytv/ui/player_view.py:554
+#: src/ashytv/ui/player_view.py:555
 msgid "Broadcast ended"
 msgstr "广播已结束"
 
-#: src/ashytv/ui/player_view.py:555
+#: src/ashytv/ui/player_view.py:556
 msgid "The signal was interrupted."
 msgstr "信号已中断。"
 
-#: src/ashytv/ui/player_view.py:774
+#: src/ashytv/ui/player_view.py:775
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "画质：{label}"
 
-#: src/ashytv/ui/player_view.py:776
+#: src/ashytv/ui/player_view.py:777
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "不可用，正在切换到 {label}"
 
-#: src/ashytv/ui/player_view.py:778
+#: src/ashytv/ui/player_view.py:779
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "画质：{label}（自动）"
 
-#: src/ashytv/ui/player_view.py:858 src/ashytv/ui/player_view.py:865
+#: src/ashytv/ui/player_view.py:859 src/ashytv/ui/player_view.py:866
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "音量 {level}%"
 
-#: src/ashytv/ui/player_view.py:925
+#: src/ashytv/ui/player_view.py:926
 msgid "Recording"
 msgstr "录制"
 
-#: src/ashytv/ui/player_view.py:936
+#: src/ashytv/ui/player_view.py:937
 msgid "Stop recording"
 msgstr "停止录制"
 
-#: src/ashytv/ui/player_view.py:939
+#: src/ashytv/ui/player_view.py:940
 msgid "Recording…"
 msgstr "正在录制…"
 
-#: src/ashytv/ui/player_view.py:947
+#: src/ashytv/ui/player_view.py:948
 msgid "Could not record this channel."
 msgstr "无法录制此频道。"
 
-#: src/ashytv/ui/player_view.py:958
+#: src/ashytv/ui/player_view.py:959
 msgid "Recording saved to Recordings."
 msgstr "录制内容已保存到“录制”。"
 
-#: src/ashytv/ui/player_view.py:970
+#: src/ashytv/ui/player_view.py:971
 msgid "Mute (M)"
 msgstr "静音 (M)"
 
-#: src/ashytv/ui/player_view.py:1005
+#: src/ashytv/ui/player_view.py:1006
 msgid "Off"
 msgstr "关闭"
 
-#: src/ashytv/ui/player_view.py:1010
+#: src/ashytv/ui/player_view.py:1011
 msgid "No subtitles in this video."
 msgstr "此视频没有字幕。"
 
-#: src/ashytv/ui/player_view.py:1015
+#: src/ashytv/ui/player_view.py:1016
 msgid "Load subtitle file…"
 msgstr "加载字幕文件…"
 
-#: src/ashytv/ui/player_view.py:1022
+#: src/ashytv/ui/player_view.py:1023
 msgid "Load subtitle file"
 msgstr "加载字幕文件"
 
-#: src/ashytv/ui/player_view.py:1039
+#: src/ashytv/ui/player_view.py:1040
 #, python-brace-format
 msgid "Subtitles: {name}"
 msgstr "字幕：{name}"
 
-#: src/ashytv/ui/player_view.py:1045
+#: src/ashytv/ui/player_view.py:1046
 msgid "Automatic"
 msgstr "自动"
 
-#: src/ashytv/ui/player_view.py:1048
+#: src/ashytv/ui/player_view.py:1049
 msgid "Quality"
 msgstr "画质"
 
-#: src/ashytv/ui/player_view.py:1055
+#: src/ashytv/ui/player_view.py:1056
 msgid "Aspect ratio"
 msgstr "宽高比"
 
-#: src/ashytv/ui/player_view.py:1059
+#: src/ashytv/ui/player_view.py:1060
 msgid "Speed"
 msgstr "速度"
 
@@ -1643,7 +1744,7 @@ msgstr "分组选项(移动、隐藏)"
 msgid "Keyboard shortcuts"
 msgstr "键盘快捷键"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:135
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
 msgid "Quit"
 msgstr "退出"
 
@@ -1719,7 +1820,7 @@ msgstr "返回"
 msgid "Pause/resume"
 msgstr "暂停/继续"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1270
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
 msgid "Channel list"
 msgstr "频道列表"
 
@@ -1858,139 +1959,143 @@ msgstr "开始使用"
 msgid "AshyTV is only a player: it does not host any content."
 msgstr "AshyTV 只是播放器，不托管任何内容。"
 
-#: src/ashytv/window.py:125
+#: src/ashytv/window.py:126
 msgid "Search…"
 msgstr "搜索…"
 
-#: src/ashytv/window.py:133
-msgid "Keyboard Shortcuts"
-msgstr "键盘快捷键"
-
-#: src/ashytv/window.py:134
+#: src/ashytv/window.py:135
 msgid "About AshyTV"
 msgstr "关于 AshyTV"
 
-#: src/ashytv/window.py:137
+#: src/ashytv/window.py:138
 msgid "Main Menu"
 msgstr "主菜单"
 
-#: src/ashytv/window.py:140
+#: src/ashytv/window.py:141
 msgid "Search (Ctrl+F)"
 msgstr "搜索 (Ctrl+F)"
 
-#: src/ashytv/window.py:221
+#: src/ashytv/window.py:223
 msgid "The best movies for you"
 msgstr "为您精选的好电影"
 
-#: src/ashytv/window.py:230
+#: src/ashytv/window.py:232
 msgid "Your favorite series in one place"
 msgstr "您喜爱的剧集，尽在一处"
 
-#: src/ashytv/window.py:512
+#: src/ashytv/window.py:516
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "播放器不可用：请安装 mpv 和 python-mpv（{error}）"
 
-#: src/ashytv/window.py:561
+#: src/ashytv/window.py:565
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "没有 {number} 号频道"
 
-#: src/ashytv/window.py:638
+#: src/ashytv/window.py:642
 msgid "Next episode…"
 msgstr "下一集…"
 
-#: src/ashytv/window.py:669 src/ashytv/window.py:678
+#: src/ashytv/window.py:673 src/ashytv/window.py:682
 msgid "This item is no longer in the playlist."
 msgstr "此项目已不在播放列表中。"
 
-#: src/ashytv/window.py:674
+#: src/ashytv/window.py:678
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "打开失败：{error}"
 
-#: src/ashytv/window.py:685
+#: src/ashytv/window.py:689
 msgid "This episode is no longer available."
 msgstr "此剧集已不可用。"
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Added to favorites"
 msgstr "已添加到收藏"
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Removed from favorites"
 msgstr "已从收藏中移除"
 
-#: src/ashytv/window.py:925
+#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
 msgid "Please wait: an import is already in progress."
 msgstr "请稍候：已有导入正在进行。"
 
-#: src/ashytv/window.py:943
+#: src/ashytv/window.py:948
 msgid "Importing playlist…"
 msgstr "正在导入播放列表…"
 
-#: src/ashytv/window.py:962
+#: src/ashytv/window.py:967
 msgid "Connecting to the Xtream provider…"
 msgstr "正在连接 Xtream 提供商…"
 
-#: src/ashytv/window.py:980
-msgid "Provider password not found; add the playlist again."
-msgstr "未找到提供商密码；请重新添加播放列表。"
+#: src/ashytv/window.py:997
+msgid "Another playlist already uses this server and user."
+msgstr "另一个播放列表已在使用此服务器和用户。"
 
-#: src/ashytv/window.py:984
+#: src/ashytv/window.py:1012
+msgid "Another playlist already uses this address."
+msgstr "另一个播放列表已在使用此地址。"
+
+#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
 msgid "Updating playlist…"
 msgstr "正在更新播放列表…"
 
-#: src/ashytv/window.py:1013
+#: src/ashytv/window.py:1068
+msgid "Provider password not found; add the playlist again."
+msgstr "未找到提供商密码；请重新添加播放列表。"
+
+#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "播放列表“{name}”已更新。"
 
-#: src/ashytv/window.py:1017
+#: src/ashytv/window.py:1115
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "已导入 {n} 项。"
 
-#: src/ashytv/window.py:1018
+#: src/ashytv/window.py:1116
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "播放列表已就绪：{n} 项"
 
-#: src/ashytv/window.py:1040
+#: src/ashytv/window.py:1139
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "无法更新“{name}”：{error}"
 
-#: src/ashytv/window.py:1044
+#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "失败：{error}"
 
-#: src/ashytv/window.py:1045
+#: src/ashytv/window.py:1149
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "导入失败：{error}"
 
-#: src/ashytv/window.py:1051
+#: src/ashytv/window.py:1155
 msgid "Please wait for the import to finish."
 msgstr "请等待导入完成。"
 
-#: src/ashytv/window.py:1070
+#: src/ashytv/window.py:1174
 msgid "Playlist removed."
 msgstr "播放列表已移除。"
 
-#: src/ashytv/window.py:1148
+#: src/ashytv/window.py:1252
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "节目指南 (EPG) 不可用：{error}"
 
-#: src/ashytv/window.py:1210
+#: src/ashytv/window.py:1316
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "要快速了解一下 AshyTV 吗？"
 
-#: src/ashytv/window.py:1211
+#: src/ashytv/window.py:1317
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -1998,19 +2103,19 @@ msgstr ""
 "在真实界面上走几步：频道、节目指南、电影、播放列表和设置。可随时从主菜单重新"
 "打开。"
 
-#: src/ashytv/window.py:1213
+#: src/ashytv/window.py:1319
 msgid "Not now"
 msgstr "以后再说"
 
-#: src/ashytv/window.py:1214
+#: src/ashytv/window.py:1320
 msgid "Start"
 msgstr "开始"
 
-#: src/ashytv/window.py:1262
+#: src/ashytv/window.py:1368
 msgid "Sections"
 msgstr "分区"
 
-#: src/ashytv/window.py:1263
+#: src/ashytv/window.py:1369
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2018,50 +2123,50 @@ msgstr ""
 "主页、电视频道、电影、剧集、收藏、录制、播放列表和设置。也可以使用键盘、遥控"
 "器或游戏手柄。"
 
-#: src/ashytv/window.py:1266
+#: src/ashytv/window.py:1372
 msgid "Channel groups"
 msgstr "频道分组"
 
-#: src/ashytv/window.py:1267
+#: src/ashytv/window.py:1373
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
 msgstr "选择一个分组即可查看其频道。右键点击（或长按）分组可移动或隐藏它。"
 
-#: src/ashytv/window.py:1271
+#: src/ashytv/window.py:1377
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
 msgstr ""
 "单击选中频道；双击或按 Enter 打开。右键点击频道可隐藏它或将其加入收藏。"
 
-#: src/ashytv/window.py:1275
+#: src/ashytv/window.py:1381
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
 msgstr "选中的频道会在这里静音播放（按钮可开启声音），并显示当前和下一个节目。"
 
-#: src/ashytv/window.py:1278
+#: src/ashytv/window.py:1384
 msgid "Hidden items"
 msgstr "隐藏的项目"
 
-#: src/ashytv/window.py:1279
+#: src/ashytv/window.py:1385
 msgid "Everything you hid is here. Open it to show items again."
 msgstr "你隐藏的所有内容都在这里。打开即可重新显示这些项目。"
 
-#: src/ashytv/window.py:1281
+#: src/ashytv/window.py:1387
 msgid "Program guide"
 msgstr "节目指南"
 
-#: src/ashytv/window.py:1282
+#: src/ashytv/window.py:1388
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr "切换到节目指南，按小时查看正在播出的内容并设置提醒。"
 
-#: src/ashytv/window.py:1284
+#: src/ashytv/window.py:1390
 msgid "Movies and series"
 msgstr "电影和剧集"
 
-#: src/ashytv/window.py:1285
+#: src/ashytv/window.py:1391
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2070,18 +2175,18 @@ msgstr ""
 "标题较长的海报在指针悬停时会滚动显示。打开一个即可查看详情和演员；点击演员可"
 "查看其在你播放列表中的其他作品。"
 
-#: src/ashytv/window.py:1289
+#: src/ashytv/window.py:1395
 msgid "Favorites and recordings"
 msgstr "收藏和录制"
 
-#: src/ashytv/window.py:1290
+#: src/ashytv/window.py:1396
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
 msgstr ""
 "点击爱心即可把频道、电影和剧集保存在这里；直播电视的录制内容列在“录制”中。"
 
-#: src/ashytv/window.py:1294
+#: src/ashytv/window.py:1400
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2090,97 +2195,97 @@ msgstr ""
 "添加 M3U 或 Xtream 列表。每个列表都可以有备用服务器（服务商的其他 DNS）：圆点"
 "显示每个服务器是在线、较慢还是离线，AshyTV 会自动切换。"
 
-#: src/ashytv/window.py:1300
+#: src/ashytv/window.py:1406
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
 msgstr "主题和颜色、隐藏的频道和分组、安全 DNS、家长 PIN 码等。"
 
-#: src/ashytv/window.py:1303
+#: src/ashytv/window.py:1409
 msgid "See it again"
 msgstr "再看一遍"
 
-#: src/ashytv/window.py:1304
+#: src/ashytv/window.py:1410
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr "可从主菜单（引导教程）或 设置 → 关于 重新打开此教程。"
 
-#: src/ashytv/window.py:1354
+#: src/ashytv/window.py:1460
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr "“{name}”：主服务器无响应。正在使用备用服务器。"
 
-#: src/ashytv/window.py:1357
+#: src/ashytv/window.py:1463
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "“{name}”：主服务器已恢复。"
 
-#: src/ashytv/window.py:1363
+#: src/ashytv/window.py:1469
 msgid "AshyTV servers"
 msgstr "AshyTV 服务器"
 
-#: src/ashytv/window.py:1385
+#: src/ashytv/window.py:1491
 msgid "Switching to the main server…"
 msgstr "正在切换到主服务器…"
 
-#: src/ashytv/window.py:1386
+#: src/ashytv/window.py:1492
 msgid "Switching to the backup server…"
 msgstr "正在切换到备用服务器…"
 
-#: src/ashytv/window.py:1456
+#: src/ashytv/window.py:1562
 msgid "Programme"
 msgstr "节目"
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1566
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "将在 {time} 提醒你观看“{title}”"
 
-#: src/ashytv/window.py:1461
+#: src/ashytv/window.py:1567
 msgid "Reminder cancelled"
 msgstr "提醒已取消"
 
-#: src/ashytv/window.py:1473
+#: src/ashytv/window.py:1579
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "“{title}”即将在 {channel} 开始"
 
-#: src/ashytv/window.py:1475
+#: src/ashytv/window.py:1581
 msgid "AshyTV reminder"
 msgstr "AshyTV 提醒"
 
-#: src/ashytv/window.py:1494
+#: src/ashytv/window.py:1600
 msgid "This channel is no longer in your playlists."
 msgstr "此频道已不在你的播放列表中。"
 
-#: src/ashytv/window.py:1534
+#: src/ashytv/window.py:1640
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "已隐藏分组“{name}”"
 
-#: src/ashytv/window.py:1535
+#: src/ashytv/window.py:1641
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "已隐藏分类“{name}”"
 
-#: src/ashytv/window.py:1549
+#: src/ashytv/window.py:1655
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "已隐藏频道“{name}”"
 
-#: src/ashytv/window.py:1555
+#: src/ashytv/window.py:1661
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "要重新显示：设置 → 隐藏的频道和分组"
 
-#: src/ashytv/window.py:1557
+#: src/ashytv/window.py:1663
 msgid "See hidden"
 msgstr "查看隐藏项"
 
-#: src/ashytv/window.py:1562
+#: src/ashytv/window.py:1668
 msgid "Undo"
 msgstr "撤销"
 
-#: src/ashytv/window.py:1864
+#: src/ashytv/window.py:1974
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr "现在无法保存：正在更新播放列表。请重试。"
 
@@ -2245,6 +2350,21 @@ msgstr "支持继续观看和下一集的电影与剧集目录"
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "基于 libmpv 的播放，支持硬件解码、画中画和录制"
+
+#~ msgid "Sports"
+#~ msgstr "体育"
+
+#~ msgid "Free-to-air"
+#~ msgstr "免费频道"
+
+#~ msgid "Kids"
+#~ msgstr "少儿"
+
+#~ msgid "Recent"
+#~ msgstr "最近"
+
+#~ msgid "All in this category"
+#~ msgstr "此分类中的全部内容"
 
 #~ msgid "Favorite people"
 #~ msgstr "收藏的人物"

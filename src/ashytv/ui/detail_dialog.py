@@ -8,10 +8,11 @@ from datetime import date
 
 from gi.repository import Adw, GLib, GObject, Gtk
 
+from .. import compat
 from ..i18n import _, ngettext
 from ..services import http
 from ..models import Channel, Episode, MediaType
-from .cast import CastRow
+from .cast import CastRow, poster_section
 from .pages._common import set_picture
 
 
@@ -30,6 +31,8 @@ class DetailDialog(Adw.Dialog):
         "favorite-changed": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # a CastMember was clicked
         "show-person": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # a title of "More like this" was clicked (a Channel)
+        "open-title": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
     def __init__(self, storage, channel: Channel,
@@ -45,6 +48,10 @@ class DetailDialog(Adw.Dialog):
         self._seasons: list[int] = []
         self._load_cast = load_cast
         self._cast_cards = load_cast is not None
+        # The provider's details (movies) and the panel's TMDB data, merged
+        # whenever one of them arrives.
+        self._info: dict = {}
+        self._details = None
 
         view = Adw.ToolbarView()
         header = Adw.HeaderBar(show_title=False)
@@ -87,14 +94,7 @@ class DetailDialog(Adw.Dialog):
                         valign=Gtk.Align.END, hexpand=True)
         title = Gtk.Label(label=channel.display_name, xalign=0, wrap=True)
         title.add_css_class("ashy-hero-title")
-        meta = []
-        for part in (channel.year, channel.genre,
-                     f"★ {channel.rating:.1f}" if channel.rating else "", channel.group):
-            # Skip empty parts and repeats (genre and category are often equal).
-            if part and part.casefold() not in (m.casefold() for m in meta):
-                meta.append(part)
-        self._meta = meta
-        meta_lbl = Gtk.Label(label="  •  ".join(meta), xalign=0, wrap=True)
+        meta_lbl = Gtk.Label(xalign=0, wrap=True, use_markup=True)
         meta_lbl.add_css_class("ashy-hero-sub")
         self.meta_lbl = meta_lbl
         # Original title (filled in by the movie details, when different).
@@ -128,6 +128,13 @@ class DetailDialog(Adw.Dialog):
                                   visible=bool(channel.plot))
         self.plot_lbl.add_css_class("ashy-page-subtitle")
         body.append(self.plot_lbl)
+        self.tagline_lbl = Gtk.Label(xalign=0, wrap=True, visible=False)
+        self.tagline_lbl.add_css_class("ashy-tagline")
+        body.prepend(self.tagline_lbl)
+        # Details like in a media center: crew, studios, technical info, links.
+        self.facts = Gtk.Grid(column_spacing=24, row_spacing=8, visible=False)
+        self.facts.add_css_class("ashy-facts")
+        body.append(self.facts)
 
         if channel.media_type is MediaType.SERIES:
             row = Gtk.Box(spacing=12)
@@ -142,7 +149,7 @@ class DetailDialog(Adw.Dialog):
             self.ep_list.add_css_class("boxed-list")
             self.ep_list.connect("row-activated", self._on_episode_row)
             self.ep_stack = Gtk.Stack()
-            spinner = Adw.Spinner(height_request=48, width_request=48)
+            spinner = compat.spinner(height_request=48, width_request=48)
             self.ep_stack.add_named(spinner, "loading")
             self.ep_stack.add_named(self.ep_list, "list")
             self.ep_error = Adw.StatusPage(icon_name="network-error-symbolic",
@@ -154,13 +161,9 @@ class DetailDialog(Adw.Dialog):
             load_episodes(channel, self._episodes_loaded, self._episodes_failed)
         else:
             self._update_resume_label()
-            # Details like in a media center: technical info, people, links.
-            self.facts = Gtk.Grid(column_spacing=24, row_spacing=8, visible=False)
-            self.facts.add_css_class("ashy-facts")
-            body.append(self.facts)
             self.links = Gtk.Box(spacing=6, visible=False)
             body.append(self.links)
-            self.info_spinner = Adw.Spinner(height_request=24, width_request=24,
+            self.info_spinner = compat.spinner(height_request=24, width_request=24,
                                             halign=Gtk.Align.START,
                                             visible=load_info is not None)
             body.append(self.info_spinner)
@@ -169,6 +172,10 @@ class DetailDialog(Adw.Dialog):
         self.cast_row = CastRow()
         self.cast_row.connect("person", lambda _r, member: self.emit("show-person", member))
         body.append(self.cast_row)
+        # "More like this": TMDB's recommendations that are in the user's lists.
+        self.more_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, visible=False)
+        body.append(self.more_box)
+        self._render_meta()
 
         page.append(body)
         # Fixed height with a scrolling body: the details arrive later and a
@@ -205,10 +212,103 @@ class DetailDialog(Adw.Dialog):
         if load is not None:
             load(self.channel, info, self._cast_loaded)
 
-    def _cast_loaded(self, members: list, _from_tmdb: bool) -> None:
+    def _cast_loaded(self, members: list, _from_tmdb: bool, details=None, similar=()) -> None:
         self.cast_row.set_cast(members)
-        if members and self.channel.media_type is not MediaType.SERIES:
+        if details is not None:
+            self._details = details
+            if details.overview and not self.plot_lbl.get_label():
+                self.plot_lbl.set_label(details.overview)
+                self.plot_lbl.set_visible(True)
+            if details.tagline:
+                self.tagline_lbl.set_label(details.tagline)
+                self.tagline_lbl.set_visible(True)
+            orig = details.original_title
+            if orig and orig.casefold() not in self.channel.display_name.casefold():
+                self.orig_lbl.set_label(orig)
+                self.orig_lbl.set_visible(True)
+            if details.backdrop and not self.channel.backdrop and not self._info.get("backdrop"):
+                set_picture(self.backdrop, details.backdrop, 780)
+            self._render_meta()
+            self._render_facts()
+        if similar:
+            self.more_box.append(poster_section(_("More like this"), list(similar),
+                                                lambda ch: self.emit("open-title", ch)))
+            self.more_box.set_visible(True)
+        if (members or details is not None) and self.channel.media_type is not MediaType.SERIES:
             self._fit_height()
+
+    def _render_meta(self) -> None:
+        """'2011 • 1 h 49 min • ★ 5.5 • Ends at 19:21' with a yellow star."""
+        info, d = self._info, self._details
+        ch = self.channel
+        duration = info.get("duration", 0) or (d.runtime * 60 if d is not None else 0)
+        parts: list[str] = []
+
+        def add(text: str) -> None:
+            # Skip empty parts and repeats (genre and category are often equal).
+            if text and text.casefold() not in (p.casefold() for p in parts):
+                parts.append(text)
+
+        add(ch.year)
+        if duration:
+            h, m = divmod(duration // 60, 60)
+            if ch.media_type is MediaType.SERIES:
+                add(_("{m} min per episode").format(m=duration // 60))
+            else:
+                add(_("{h} h {m} min").format(h=h, m=m) if h else _("{m} min").format(m=m))
+        add(ch.genre if d is None or not d.genres else "")
+        add(info.get("age", ""))
+        add(ch.group)
+        markup = [GLib.markup_escape_text(p) for p in parts]
+        rating = d.rating if d is not None and d.rating else ch.rating
+        if rating:
+            star = f'<span foreground="#f5c518">★</span> <b>{rating:.1f}</b>'
+            markup.insert(min(len(markup), 2 if duration else 1), star)
+        if duration and ch.media_type is not MediaType.SERIES:
+            remaining = duration - self.storage.resume_position(ch.playlist_id, ch.url)
+            ends = time.strftime("%H:%M", time.localtime(time.time() + remaining))
+            markup.append(GLib.markup_escape_text(_("Ends at {time}").format(time=ends)))
+        self.meta_lbl.set_markup("  •  ".join(markup))
+
+    def _render_facts(self) -> None:
+        info, d = self._info, self._details
+
+        def names(items) -> str:
+            return ", ".join(items) if items else ""
+
+        is_series = self.channel.media_type is MediaType.SERIES
+        rows = [(_("Created by") if is_series else _("Director"),
+                 names(d.directors) if d is not None and d.directors else info.get("director")),
+                (_("Writers"), names(d.writers) if d is not None else ""),
+                (_("Studios"), names(d.studios) if d is not None else ""),
+                (_("Genres"), names(d.genres) if d is not None and d.genres
+                 else info.get("genre") or (self.channel.genre if is_series else "")),
+                (_("Tags"), names(d.keywords) if d is not None else ""),
+                (_("Video"), info.get("video")), (_("Audio"), info.get("audio")),
+                # With a cast loader the names are cards below, not a line here.
+                (_("Cast"), "" if self._cast_cards else info.get("cast")),
+                (_("Country"), info.get("country")),
+                (_("Released"), _format_date(info.get("released", ""))),
+                (_("Subtitles"), ngettext("{n} file", "{n} files",
+                                          len(info["subtitles"])).format(
+                                              n=len(info["subtitles"]))
+                 if info.get("subtitles") else "")]
+        while (child := self.facts.get_first_child()) is not None:
+            self.facts.remove(child)
+        row = 0
+        for name, value in rows:
+            if not value:
+                continue
+            key = Gtk.Label(label=name, xalign=0, valign=Gtk.Align.START)
+            key.add_css_class("dim-label")
+            # Not selectable: a selectable label is a Tab stop with no visible
+            # focus, and one made unfocusable traps Tab (GTK keeps it).
+            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True)
+            val.add_css_class("ashy-fact-value")
+            self.facts.attach(key, 0, row, 1, 1)
+            self.facts.attach(val, 1, row, 1, 1)
+            row += 1
+        self.facts.set_visible(row > 0)
 
     def _info_loaded(self, info: dict) -> None:
         self.info_spinner.set_visible(False)
@@ -225,44 +325,9 @@ class DetailDialog(Adw.Dialog):
             self.orig_lbl.set_visible(True)
         if info.get("backdrop") and not self.channel.backdrop:
             set_picture(self.backdrop, info["backdrop"], 780)
-        meta = list(self._meta)
-        duration = info.get("duration", 0)
-        if duration:
-            h, m = divmod(duration // 60, 60)
-            meta.insert(1 if meta else 0,
-                        _("{h} h {m} min").format(h=h, m=m) if h else _("{m} min").format(m=m))
-        if info.get("age"):
-            meta.append(info["age"])
-        if duration:
-            remaining = duration - self.storage.resume_position(self.channel.playlist_id,
-                                                                self.channel.url)
-            ends = time.strftime("%H:%M", time.localtime(time.time() + remaining))
-            meta.append(_("Ends at {time}").format(time=ends))
-        self.meta_lbl.set_label("  •  ".join(meta))
-
-        rows = [(_("Video"), info.get("video")), (_("Audio"), info.get("audio")),
-                (_("Director"), info.get("director")),
-                # With a cast loader the names are cards below, not a line here.
-                (_("Cast"), "" if self._cast_cards else info.get("cast")),
-                (_("Genres"), info.get("genre")), (_("Country"), info.get("country")),
-                (_("Released"), _format_date(info.get("released", ""))),
-                (_("Subtitles"), ngettext("{n} file", "{n} files",
-                                          len(info["subtitles"])).format(
-                                              n=len(info["subtitles"]))
-                 if info.get("subtitles") else "")]
-        row = 0
-        for name, value in rows:
-            if not value:
-                continue
-            key = Gtk.Label(label=name, xalign=0, valign=Gtk.Align.START)
-            key.add_css_class("dim-label")
-            # Not selectable: a selectable label is a Tab stop with no visible
-            # focus, and one made unfocusable traps Tab (GTK keeps it).
-            val = Gtk.Label(label=value, xalign=0, wrap=True, hexpand=True)
-            self.facts.attach(key, 0, row, 1, 1)
-            self.facts.attach(val, 1, row, 1, 1)
-            row += 1
-        self.facts.set_visible(row > 0)
+        self._info = info
+        self._render_meta()
+        self._render_facts()
         for label, url in ((_("Trailer"), info.get("trailer")), ("TMDB", info.get("tmdb_url"))):
             if url:
                 self.links.append(Gtk.LinkButton(uri=url, label=label))

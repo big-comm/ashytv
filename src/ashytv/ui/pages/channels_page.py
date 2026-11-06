@@ -1,4 +1,4 @@
-"""Channels page — category chips + groups + channel list."""
+"""Channels page — groups (beside, folding) + channel list."""
 
 from __future__ import annotations
 
@@ -8,13 +8,12 @@ from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
-from ...services.text import normalize
 from ...services.storage import channel_key, collapse_variants
 from ..channel_info import ChannelInfoPanel
 from ..channel_object import ChannelObject
 from .epg_page import EpgPage
 from ._common import (
-    ChipRow,
+    GroupColumn,
     SearchFilter,
     add_context_menu,
     fill_menu,
@@ -26,26 +25,15 @@ from ._common import (
 )
 
 _ALL = "__all__"
+_FAV = "__fav__"
+_RECENT = "__recent__"
 _HIDDEN = "__hidden__"
+_SPECIAL = (_ALL, _FAV, _RECENT, _HIDDEN)
 # Arrowing through the list must not open a stream per row.
 PREVIEW_DELAY_MS = 400
 # Below this width of the list area the info panel is hidden.
 _PANEL_MIN_AREA = "max-width: 680px"
 
-# Shortcut chips: (key, label, generic terms matched against the group name).
-_KEYWORD_CHIPS = [
-    ("sports", _("Sports"), ("esport", "sport", "futebol", "football", "soccer",
-                            "jogos", "combate", "fight", "racing", "corrida")),
-    ("news", _("News"), ("notic", "news", "jornal")),
-    ("open", _("Free-to-air"), ("abert", "aberta", "free", "local", "regional")),
-    ("movies", _("Movies"), ("filme", "movie", "cine")),
-    ("series", _("Series"), ("serie", "seriado", "novela", "show")),
-    ("kids", _("Kids"), ("infant", "kids", "crianca", "desenho", "cartoon",
-                          "anime", "kid")),
-    ("docs", _("Documentaries"), ("document", "docs", "natureza", "nature",
-                               "ciencia", "science")),
-    ("music", _("Music"), ("music", "musica", "radio")),
-]
 
 
 class ChannelsPage(Gtk.Box):
@@ -71,7 +59,6 @@ class ChannelsPage(Gtk.Box):
         self._guide = None
         self._dirty = True
         self._group_key = _ALL
-        self._chip = "all"
         self._preview_source = 0
         self._focus_handler = 0
         self._suspend_handler = 0
@@ -108,34 +95,22 @@ class ChannelsPage(Gtk.Box):
             top.append(switch)
         self.append(top)
 
-        self.chips = ChipRow(self._on_chip)
-        if not favorites_only:
-            self.append(self.chips)
-
         body = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=14)
         body.set_margin_start(28)
         body.set_margin_end(28)
         body.set_margin_bottom(22)
         body.set_vexpand(True)
 
-        # ---- groups column ----
+        # ---- groups column (Favorites and Recent are groups too, as on the TVs) ----
         self.group_list = Gtk.ListBox()
         self.group_list.add_css_class("ashy-grouplist")
         self.group_list.set_selection_mode(Gtk.SelectionMode.SINGLE)
         self.group_list.connect("row-selected", self._on_group_selected)
         self.group_list.connect("row-activated", self._on_group_activated)
-        gscroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER,
-                                     vexpand=True, hexpand=True)
-        gscroll.set_child(self.group_list)
-        gpanel = Gtk.Box()
-        gpanel.add_css_class("ashy-panel")
-        gpanel.set_size_request(250, -1)
-        gpanel.set_hexpand(False)  # don't inherit the inner list's hexpand
-        gpanel.set_overflow(Gtk.Overflow.HIDDEN)
-        gpanel.append(gscroll)
-        self.group_panel = gpanel
+        self.groups = GroupColumn(self.group_list)
+        self.group_panel = self.groups.panel
         if not favorites_only:
-            body.append(gpanel)
+            self.groups.append_to(body)
 
         # ---- channel list (virtualized) ----
         self.store = Gio.ListStore.new(ChannelObject)
@@ -178,6 +153,8 @@ class ChannelsPage(Gtk.Box):
         self.list_stack.add_named(self.empty, "empty")
 
         cpanel = Gtk.Box(hexpand=True)
+        if not favorites_only:
+            self.groups.watch(cpanel)
         cpanel.add_css_class("ashy-panel")
         cpanel.set_overflow(Gtk.Overflow.HIDDEN)
         cpanel.append(self.list_stack)
@@ -233,7 +210,6 @@ class ChannelsPage(Gtk.Box):
             self._load_channels(self._collapse(
                 self.storage.channels(favorites=True, order="favorite")))
             return
-        self._build_chips()
         self._build_groups()
 
     def set_guide(self, guide) -> None:
@@ -256,44 +232,16 @@ class ChannelsPage(Gtk.Box):
                 self.listview.scroll_to(i, Gtk.ListScrollFlags.FOCUS, None)
                 return
 
-    # ---- chips and groups ------------------------------------------------
-
-    def _build_chips(self) -> None:
-        groups = [g for g, _n in self.storage.groups(self.media_type)]
-        keys = [normalize(g) for g in groups]
-        chips = [("all", _("All")), ("fav", _("Favorites")), ("recent", _("Recent"))]
-        for key, label, words in _KEYWORD_CHIPS:
-            if any(w in k for k in keys for w in words):
-                chips.append((key, label))
-        if self._chip not in {k for k, _l in chips}:
-            self._chip = "all"
-        self.chips.set_chips(chips, self._chip)
-
-    def _on_chip(self, key: str) -> None:
-        self._chip = key
-        self._group_key = _ALL
-        self._build_groups()
-
-    def _chip_groups(self) -> list[tuple[str, int]]:
-        groups = self.storage.groups(self.media_type, collapse=self._grouped)
-        words = next((w for k, _l, w in _KEYWORD_CHIPS if k == self._chip), None)
-        if words is None:
-            return groups
-        return [(g, n) for g, n in groups if any(w in normalize(g) for w in words)]
+    # ---- groups ----------------------------------------------------------
 
     def _group_entries(self) -> list[tuple[str, int, str]]:
-        """(label, count, key) of the group list for the current chip."""
-        if self._chip == "fav":
-            return [(_("Favorites"), self.storage.count(
-                self.media_type, favorites=True, collapse=self._grouped), _ALL)]
-        if self._chip == "recent":
-            return [(_("Recently watched"), len(self._collapse(
-                self.storage.recent_channels(self.media_type))), _ALL)]
-        groups = self._chip_groups()
-        label = _("All Channels") if self._chip == "all" else _("All in this category")
-        total = (self.storage.count(self.media_type, collapse=self._grouped)
-                 if self._chip == "all" else sum(n for _g, n in groups))
-        return [(label, total, _ALL)] + [(name, count, name) for name, count in groups]
+        """(label, count, key): All, Favorites, Recent, then the groups."""
+        mt, grouped = self.media_type, self._grouped
+        return [
+            (_("All Channels"), self.storage.count(mt, collapse=grouped), _ALL),
+            (_("Favorites"), self.storage.count(mt, favorites=True, collapse=grouped), _FAV),
+            (_("Recently watched"), len(self._collapse(self.storage.recent_channels(mt))), _RECENT),
+        ] + [(name, count, name) for name, count in self.storage.groups(mt, collapse=grouped)]
 
     def _build_groups(self) -> None:
         self.group_list.remove_all()
@@ -323,7 +271,7 @@ class ChannelsPage(Gtk.Box):
         row._count = c  # type: ignore[attr-defined]
         row.set_child(box)
         self.group_list.append(row)
-        if key != _ALL and not self.favorites_only:
+        if key not in _SPECIAL and not self.favorites_only:
             # Right click, long press or the Menu key: hide / reorder it.
             add_context_menu(row, lambda: self._group_menu(row, key))
 
@@ -348,6 +296,10 @@ class ChannelsPage(Gtk.Box):
     def hidden_row(self) -> Gtk.Widget | None:
         """The 'Hidden (N)' entry, when there is one (guided tour)."""
         return next((r for r in self._rows() if r._key == _HIDDEN), None)  # type: ignore[attr-defined]
+
+    def show_groups(self) -> Gtk.Widget:
+        """The group column, opened if it was folded (the guided tour points at it)."""
+        return self.groups.show()
 
     def _on_group_activated(self, _list, row) -> None:
         if getattr(row, "_key", None) == _HIDDEN:
@@ -379,17 +331,14 @@ class ChannelsPage(Gtk.Box):
             return
         key = row._key  # type: ignore[attr-defined]
         self._group_key = key
-        if self._chip == "fav":
+        if key == _FAV:
             chans = self.storage.channels(self.media_type, favorites=True)
-        elif self._chip == "recent":
+        elif key == _RECENT:
             chans = self.storage.recent_channels(self.media_type)
-        elif key != _ALL:
-            chans = self.storage.channels(self.media_type, group=key)
-        elif self._chip == "all":
+        elif key == _ALL:
             chans = self.storage.channels(self.media_type)
         else:
-            groups = [g for g, _n in self._chip_groups()]
-            chans = self.storage.channels(self.media_type, groups=groups) if groups else []
+            chans = self.storage.channels(self.media_type, group=key)
         self._load_channels(self._collapse(chans))
 
     @property

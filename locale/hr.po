@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 18:42-0300\n"
+"POT-Creation-Date: 2026-11-06 14:58-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -18,15 +18,26 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/ashytv/application.py:84
+#: src/ashytv/application.py:90
 msgid "AshyTV could not open its database"
 msgstr "AshyTV nije mogao otvoriti svoju bazu podataka"
 
-#: src/ashytv/application.py:94
+#: src/ashytv/application.py:118
+msgid "Some channels will not play"
+msgstr "Neki se kanali neće reproducirati"
+
+#: src/ashytv/application.py:119
+#, python-brace-format
+msgid "The system's video codecs lack {codecs}, used by most TV channels."
+msgstr ""
+"Videokodecima sustava nedostaje {codecs}, koji koristi većina TV kanala."
+
+#: src/ashytv/application.py:122 src/ashytv/application.py:129
+#: src/ashytv/ui/install_dialog.py:62
 msgid "Close"
 msgstr "Zatvori"
 
-#: src/ashytv/application.py:161
+#: src/ashytv/application.py:215
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -34,7 +45,7 @@ msgstr ""
 "Moderni IPTV reproduktor za Linux radnu površinu.\n"
 "Uvezite vlastitu playlistu — aplikacija ne pruža nikakav sadržaj."
 
-#: src/ashytv/application.py:168 src/ashytv/ui/pages/settings_page.py:341
+#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
@@ -42,27 +53,31 @@ msgstr ""
 "Podaci o glumcima: TMDB. Ovaj proizvod koristi TMDB API, ali ga TMDB nije "
 "odobrio niti certificirao."
 
+#: src/ashytv/application.py:241 src/ashytv/window.py:134
+msgid "Keyboard Shortcuts"
+msgstr "Prečaci tipkovnice"
+
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
 msgstr "TV uživo"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/ui/pages/favorites_page.py:48 src/ashytv/window.py:220
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
+#: src/ashytv/window.py:222
 msgid "Movies"
 msgstr "Filmovi"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/ui/pages/favorites_page.py:49 src/ashytv/window.py:229
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
+#: src/ashytv/window.py:231
 msgid "Series"
 msgstr "Serije"
 
-#: src/ashytv/models/channel.py:63
+#: src/ashytv/models/channel.py:64
 msgid "Unnamed"
 msgstr "Bez naziva"
 
-#: src/ashytv/models/channel.py:81
+#: src/ashytv/models/channel.py:82
 #, python-brace-format
 msgid "S{season} • E{episode}"
 msgstr "S{season} • E{episode}"
@@ -100,11 +115,11 @@ msgstr "Crtići"
 msgid "Business"
 msgstr "Poslovanje"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:39
+#: src/ashytv/services/free_tv.py:157
 msgid "News"
 msgstr "Vijesti"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:45
+#: src/ashytv/services/free_tv.py:158
 msgid "Documentaries"
 msgstr "Dokumentarci"
 
@@ -112,11 +127,11 @@ msgstr "Dokumentarci"
 msgid "Weather"
 msgstr "Vrijeme"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:47
+#: src/ashytv/services/free_tv.py:159
 msgid "Music"
 msgstr "Glazba"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:236
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:242
 msgid "All countries"
 msgstr "Sve zemlje"
 
@@ -153,73 +168,94 @@ msgstr "Poslužitelju je trebalo predugo za odgovor."
 msgid "Could not reach the server: {reason}"
 msgstr "Nije moguće doći do poslužitelja: {reason}"
 
-#: src/ashytv/services/importer.py:38 src/ashytv/services/importer.py:58
+#: src/ashytv/services/importer.py:39 src/ashytv/services/importer.py:61
 msgid "The address did not return an M3U playlist"
 msgstr "Adresa nije vratila M3U popis"
 
-#: src/ashytv/services/importer.py:53
+#: src/ashytv/services/importer.py:56
 msgid "Downloading playlist…"
 msgstr "Preuzimanje playliste…"
 
-#: src/ashytv/services/importer.py:61
+#: src/ashytv/services/importer.py:64
 msgid "Processing playlist…"
 msgstr "Obrada playliste…"
 
-#: src/ashytv/services/importer.py:68
+#: src/ashytv/services/importer.py:73
 msgid "No channels found in the playlist"
 msgstr "U playlisti nisu pronađeni kanali"
 
-#: src/ashytv/services/importer.py:75 src/ashytv/services/importer.py:112
+#: src/ashytv/services/importer.py:84 src/ashytv/services/importer.py:146
 msgid "Saving…"
 msgstr "Spremanje…"
 
-#: src/ashytv/services/importer.py:90
+#: src/ashytv/services/importer.py:121
 msgid "Connecting to provider…"
 msgstr "Povezivanje s pružateljem…"
 
-#: src/ashytv/services/importer.py:93
+#: src/ashytv/services/importer.py:124
 msgid "The provider returned no content"
 msgstr "Pružatelj nije vratio sadržaj"
 
-#: src/ashytv/services/settings.py:48
+#: src/ashytv/services/settings.py:49
 msgid "Blue"
 msgstr "Plava"
 
-#: src/ashytv/services/settings.py:49
+#: src/ashytv/services/settings.py:50
 msgid "Teal"
 msgstr "Tirkizna"
 
-#: src/ashytv/services/settings.py:50
+#: src/ashytv/services/settings.py:51
 msgid "Green"
 msgstr "Zelena"
 
-#: src/ashytv/services/settings.py:51
+#: src/ashytv/services/settings.py:52
 msgid "Yellow"
 msgstr "Žuta"
 
-#: src/ashytv/services/settings.py:52
+#: src/ashytv/services/settings.py:53
 msgid "Orange"
 msgstr "Narančasta"
 
-#: src/ashytv/services/settings.py:53
+#: src/ashytv/services/settings.py:54
 msgid "Red"
 msgstr "Crvena"
 
-#: src/ashytv/services/settings.py:54
+#: src/ashytv/services/settings.py:55
 msgid "Pink"
 msgstr "Ružičasta"
 
-#: src/ashytv/services/settings.py:55
+#: src/ashytv/services/settings.py:56
 msgid "Purple"
 msgstr "Ljubičasta"
 
-#: src/ashytv/services/settings.py:56
+#: src/ashytv/services/settings.py:57
 msgid "Slate"
 msgstr "Škriljasta"
 
-#: src/ashytv/services/settings.py:57
+#: src/ashytv/services/settings.py:58
 msgid "Emerald"
 msgstr "Smaragdna"
+
+#: src/ashytv/services/system_deps.py:108
+msgid ""
+"Enable the RPM Fusion repository and install the full codecs:\n"
+"sudo dnf install libavcodec-freeworld"
+msgstr ""
+"Omogućite repozitorij RPM Fusion i instalirajte potpune kodeke:\n"
+"sudo dnf install libavcodec-freeworld"
+
+#: src/ashytv/services/system_deps.py:113
+msgid ""
+"Add the Packman repository and switch the FFmpeg libraries to it:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+msgstr ""
+"Dodajte repozitorij Packman i prebacite na njega FFmpeg biblioteke:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+
+#: src/ashytv/services/system_deps.py:116
+msgid "Install your distribution's full FFmpeg libraries (libavcodec)."
+msgstr ""
+"Instalirajte potpune FFmpeg biblioteke (libavcodec) svoje distribucije."
 
 #: src/ashytv/services/text.py:26
 #, python-brace-format
@@ -235,97 +271,98 @@ msgstr "Neispravno korisničko ime ili lozinka"
 msgid "Account status: {status}"
 msgstr "Status računa: {status}"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Actor"
 msgstr "Glumac"
 
-#: src/ashytv/ui/cast.py:182 src/ashytv/ui/detail_dialog.py:244
+#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:280
 msgid "Director"
 msgstr "Redatelj"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Writer"
 msgstr "Scenarist"
 
-#: src/ashytv/ui/cast.py:183
+#: src/ashytv/ui/cast.py:210
 msgid "Producer"
 msgstr "Producent"
 
-#: src/ashytv/ui/cast.py:214 src/ashytv/ui/detail_dialog.py:246
+#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:289
 msgid "Cast"
 msgstr "Glumci"
 
-#: src/ashytv/ui/cast.py:246
+#: src/ashytv/ui/cast.py:273
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Naslovi s {name}"
 
-#: src/ashytv/ui/cast.py:305
+#: src/ashytv/ui/cast.py:332
 msgid "Cast data: TMDB"
 msgstr "Podaci o glumcima: TMDB"
 
-#: src/ashytv/ui/cast.py:329 src/ashytv/ui/detail_dialog.py:386
-#: src/ashytv/ui/pages/catalog_page.py:280
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/pages/catalog_page.py:353
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "Ukloni iz favorita"
 
-#: src/ashytv/ui/cast.py:330 src/ashytv/ui/detail_dialog.py:387
-#: src/ashytv/ui/pages/catalog_page.py:281
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:452
+#: src/ashytv/ui/pages/catalog_page.py:354
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "Dodaj u favorite"
 
-#: src/ashytv/ui/cast.py:356
+#: src/ashytv/ui/cast.py:383
 msgid "Nothing in your playlists"
 msgstr "Ništa u vašim popisima"
 
-#: src/ashytv/ui/cast.py:357
+#: src/ashytv/ui/cast.py:384
 msgid "None of this person's movies or series are in your playlists."
 msgstr "Nijedan film ni serija ove osobe nije u vašim popisima."
 
-#: src/ashytv/ui/cast.py:362
+#: src/ashytv/ui/cast.py:389
 msgid "Found in the details of the titles you opened."
 msgstr "Pronađeno u pojedinostima naslova koje ste otvorili."
 
-#: src/ashytv/ui/channel_info.py:70
+#: src/ashytv/ui/channel_info.py:71
 msgid "Live"
 msgstr "Uživo"
 
-#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
+#: src/ashytv/ui/channel_info.py:76 src/ashytv/ui/channel_info.py:225
 msgid "Unmute"
 msgstr "Uključi zvuk"
 
-#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:332
+#: src/ashytv/ui/channel_info.py:121 src/ashytv/ui/channel_overlay.py:332
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "Nema rasporeda"
 
-#: src/ashytv/ui/channel_info.py:151
+#: src/ashytv/ui/channel_info.py:152
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "Kanal {number}"
 
-#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Sada"
 
-#: src/ashytv/ui/channel_info.py:180
+#: src/ashytv/ui/channel_info.py:181
 #, python-brace-format
 msgid "{m} min left"
 msgstr "Još {m} min"
 
-#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:812
+#: src/ashytv/ui/channel_info.py:185 src/ashytv/ui/player_view.py:813
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Sljedeće: {title}"
 
-#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:857
+#: src/ashytv/ui/channel_info.py:225 src/ashytv/ui/player_view.py:858
 #: src/ashytv/ui/shortcuts.py:38
 msgid "Mute"
 msgstr "Isključi zvuk"
 
-#: src/ashytv/ui/channel_overlay.py:58
+#: src/ashytv/ui/channel_overlay.py:58 src/ashytv/ui/pages/_common.py:37
+#: src/ashytv/ui/pages/_common.py:38
 msgid "Groups"
 msgstr "Grupe"
 
@@ -335,7 +372,7 @@ msgstr "→ ili Enter: kanali  •  Esc: natrag"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:590
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
 msgid "Channels"
 msgstr "Kanali"
 
@@ -343,66 +380,91 @@ msgstr "Kanali"
 msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: gledaj  •  ←: grupe  •  Esc: zatvori"
 
-#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
-#: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1479 src/ashytv/window.py:1485
+#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
+#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
 msgid "Watch"
 msgstr "Gledaj"
 
-#: src/ashytv/ui/detail_dialog.py:134
+#: src/ashytv/ui/detail_dialog.py:141
 msgid "Episodes"
 msgstr "Epizode"
 
-#: src/ashytv/ui/detail_dialog.py:149
+#: src/ashytv/ui/detail_dialog.py:156
 msgid "Could not load"
 msgstr "Učitavanje nije uspjelo"
 
-#: src/ashytv/ui/detail_dialog.py:194
+#: src/ashytv/ui/detail_dialog.py:201
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Nastavi od {time}"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:234
+msgid "More like this"
+msgstr "Slično ovome"
+
+#: src/ashytv/ui/detail_dialog.py:256
+#, python-brace-format
+msgid "{m} min per episode"
+msgstr "{m} min po epizodi"
+
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{h} h {m} min"
 msgstr "{h} h {m} min"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{m} min"
 msgstr "{m} min"
 
-#: src/ashytv/ui/detail_dialog.py:240
+#: src/ashytv/ui/detail_dialog.py:270
 #, python-brace-format
 msgid "Ends at {time}"
 msgstr "Završava u {time}"
 
-#: src/ashytv/ui/detail_dialog.py:243 src/ashytv/ui/player_view.py:1052
-msgid "Audio"
-msgstr "Zvuk"
+#: src/ashytv/ui/detail_dialog.py:280
+msgid "Created by"
+msgstr "Autori"
 
-#: src/ashytv/ui/detail_dialog.py:243
-msgid "Video"
-msgstr "Video"
+#: src/ashytv/ui/detail_dialog.py:282
+msgid "Writers"
+msgstr "Scenarij"
 
-#: src/ashytv/ui/detail_dialog.py:247
-msgid "Country"
-msgstr "Zemlja"
+#: src/ashytv/ui/detail_dialog.py:283
+msgid "Studios"
+msgstr "Studiji"
 
-#: src/ashytv/ui/detail_dialog.py:247
+#: src/ashytv/ui/detail_dialog.py:284
 msgid "Genres"
 msgstr "Žanrovi"
 
-#: src/ashytv/ui/detail_dialog.py:248
+#: src/ashytv/ui/detail_dialog.py:286
+msgid "Tags"
+msgstr "Oznake"
+
+#: src/ashytv/ui/detail_dialog.py:287 src/ashytv/ui/player_view.py:1053
+msgid "Audio"
+msgstr "Zvuk"
+
+#: src/ashytv/ui/detail_dialog.py:287
+msgid "Video"
+msgstr "Video"
+
+#: src/ashytv/ui/detail_dialog.py:290
+msgid "Country"
+msgstr "Zemlja"
+
+#: src/ashytv/ui/detail_dialog.py:291
 msgid "Released"
 msgstr "Objavljeno"
 
-#: src/ashytv/ui/detail_dialog.py:249 src/ashytv/ui/player_view.py:239
-#: src/ashytv/ui/player_view.py:1007 src/ashytv/ui/player_view.py:1024
+#: src/ashytv/ui/detail_dialog.py:292 src/ashytv/ui/player_view.py:240
+#: src/ashytv/ui/player_view.py:1008 src/ashytv/ui/player_view.py:1025
 msgid "Subtitles"
 msgstr "Titlovi"
 
-#: src/ashytv/ui/detail_dialog.py:249
+#: src/ashytv/ui/detail_dialog.py:292
 #, python-brace-format
 msgid "{n} file"
 msgid_plural "{n} files"
@@ -410,31 +472,31 @@ msgstr[0] "{n} datoteka"
 msgstr[1] "{n} datoteke"
 msgstr[2] "{n} datoteka"
 
-#: src/ashytv/ui/detail_dialog.py:266
+#: src/ashytv/ui/detail_dialog.py:331
 msgid "Trailer"
 msgstr "Najava"
 
-#: src/ashytv/ui/detail_dialog.py:292
+#: src/ashytv/ui/detail_dialog.py:357
 msgid "No episodes available"
 msgstr "Nema dostupnih epizoda"
 
-#: src/ashytv/ui/detail_dialog.py:297
+#: src/ashytv/ui/detail_dialog.py:362
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Sezona {n}"
 
-#: src/ashytv/ui/detail_dialog.py:305
+#: src/ashytv/ui/detail_dialog.py:370
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Gledaj: {label}"
 
-#: src/ashytv/ui/detail_dialog.py:346
+#: src/ashytv/ui/detail_dialog.py:411
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Epizoda {n}"
 
-#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:153
-#: src/ashytv/ui/pages/settings_page.py:154
+#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:156
+#: src/ashytv/ui/pages/settings_page.py:157
 msgid "Hidden channels and groups"
 msgstr "Skriveni kanali i grupe"
 
@@ -466,6 +528,52 @@ msgstr "Kanal"
 msgid "Show"
 msgstr "Prikaži"
 
+#: src/ashytv/ui/install_dialog.py:31
+msgid "Video player library not found"
+msgstr "Biblioteka video reproduktora nije pronađena"
+
+#: src/ashytv/ui/install_dialog.py:32
+msgid ""
+"AshyTV plays video with libmpv, which is not installed on this system. It is "
+"installed once from your distribution's packages."
+msgstr ""
+"AshyTV reproducira video pomoću libmpv, koja nije instalirana na ovom "
+"sustavu. Instalira se jednom iz paketa vaše distribucije."
+
+#: src/ashytv/ui/install_dialog.py:39
+msgid "Install it with your package manager"
+msgstr "Instalirajte je upraviteljem paketa"
+
+#: src/ashytv/ui/install_dialog.py:40
+msgid ""
+"Install the package that provides libmpv.so.2 (usually “mpv”, “libmpv2” or "
+"“mpv-libs”) and open AshyTV again."
+msgstr ""
+"Instalirajte paket koji pruža libmpv.so.2 (obično „mpv”, „libmpv2” ili „mpv-"
+"libs”) i ponovno otvorite AshyTV."
+
+#: src/ashytv/ui/install_dialog.py:45
+msgid "Command to be executed"
+msgstr "Naredba koja će se izvršiti"
+
+#: src/ashytv/ui/install_dialog.py:65
+msgid "Install"
+msgstr "Instaliraj"
+
+#: src/ashytv/ui/install_dialog.py:125
+msgid "Installed. Open AshyTV again to start watching."
+msgstr "Instalirano. Ponovno otvorite AshyTV i počnite gledati."
+
+#: src/ashytv/ui/install_dialog.py:126
+msgid "Close AshyTV"
+msgstr "Zatvori AshyTV"
+
+#: src/ashytv/ui/install_dialog.py:129
+msgid ""
+"The installation did not finish. Check the messages above and try again."
+msgstr ""
+"Instalacija nije dovršena. Provjerite gornje poruke i pokušajte ponovno."
+
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
 msgstr "Natrag na AshyTV"
@@ -478,11 +586,10 @@ msgstr "Zaustavi"
 msgid "Home"
 msgstr "Početna"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:81
-#: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:601
-#: src/ashytv/window.py:624
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
+#: src/ashytv/window.py:628
 msgid "Favorites"
 msgstr "Favoriti"
 
@@ -490,145 +597,124 @@ msgstr "Favoriti"
 msgid "Recordings"
 msgstr "Snimke"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:72
-#: src/ashytv/window.py:1293
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
+#: src/ashytv/window.py:1399
 msgid "Playlists"
 msgstr "Playliste"
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1299
+#: src/ashytv/window.py:1405
 msgid "Settings"
 msgstr "Postavke"
 
-#: src/ashytv/ui/pages/catalog_page.py:59
+#: src/ashytv/ui/pages/catalog_page.py:85
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "Osobe"
 
-#: src/ashytv/ui/pages/catalog_page.py:90
+#: src/ashytv/ui/pages/catalog_page.py:114
 msgid "Nothing found"
 msgstr "Ništa nije pronađeno"
 
-#: src/ashytv/ui/pages/catalog_page.py:91
+#: src/ashytv/ui/pages/catalog_page.py:115
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Dodajte playlistu u odjeljku „Playliste” ili promijenite filtar."
 
-#: src/ashytv/ui/pages/catalog_page.py:124
-#: src/ashytv/ui/pages/channels_page.py:264
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "All"
 msgstr "Sve"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "New Releases"
 msgstr "Novo"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:197
 msgid "Trending"
 msgstr "U trendu"
 
-#: src/ashytv/ui/pages/catalog_page.py:170
-#: src/ashytv/ui/pages/channels_page.py:343
+#: src/ashytv/ui/pages/catalog_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:286
+msgid "See hidden channels and groups"
+msgstr "Pogledajte skrivene kanale i grupe"
+
+#: src/ashytv/ui/pages/catalog_page.py:212
+#: src/ashytv/ui/pages/channels_page.py:291
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "Skriveno ({n})"
 
-#: src/ashytv/ui/pages/catalog_page.py:172
-#: src/ashytv/ui/pages/channels_page.py:338
-msgid "See hidden channels and groups"
-msgstr "Pogledajte skrivene kanale i grupe"
-
-#: src/ashytv/ui/pages/catalog_page.py:178
+#: src/ashytv/ui/pages/catalog_page.py:235
 msgid "Hide category"
 msgstr "Sakrij kategoriju"
 
-#: src/ashytv/ui/pages/channels_page.py:37
-msgid "Sports"
-msgstr "Sport"
-
-#: src/ashytv/ui/pages/channels_page.py:40
-msgid "Free-to-air"
-msgstr "Slobodni program"
-
-#: src/ashytv/ui/pages/channels_page.py:43
-msgid "Kids"
-msgstr "Za djecu"
-
-#: src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/pages/channels_page.py:68
 msgid "TV Channels"
 msgstr "TV kanali"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "Channels, movies and series you marked"
 msgstr "Kanali, filmovi i serije koje ste označili"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "All your channels organized by category"
 msgstr "Svi vaši kanali poredani po kategorijama"
 
-#: src/ashytv/ui/pages/channels_page.py:95
+#: src/ashytv/ui/pages/channels_page.py:82
 msgid "List"
 msgstr "Popis"
 
-#: src/ashytv/ui/pages/channels_page.py:96
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "Guide"
 msgstr "Vodič"
 
-#: src/ashytv/ui/pages/channels_page.py:171
+#: src/ashytv/ui/pages/channels_page.py:146
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "Ovdje još nema ničega"
 
-#: src/ashytv/ui/pages/channels_page.py:172
+#: src/ashytv/ui/pages/channels_page.py:147
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "Dodirnite srce na kanalu, filmu ili seriji da ga zadržite ovdje."
 
-#: src/ashytv/ui/pages/channels_page.py:174
+#: src/ashytv/ui/pages/channels_page.py:149
 msgid "No channels in this category."
 msgstr "Nema kanala u ovoj kategoriji."
 
-#: src/ashytv/ui/pages/channels_page.py:264
-msgid "Recent"
-msgstr "Nedavno"
-
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:602
-#: src/ashytv/window.py:625
-msgid "Recently watched"
-msgstr "Nedavno gledano"
-
-#: src/ashytv/ui/pages/channels_page.py:293
+#: src/ashytv/ui/pages/channels_page.py:241
 msgid "All Channels"
 msgstr "Svi kanali"
 
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All in this category"
-msgstr "Sve u ovoj kategoriji"
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
+#: src/ashytv/window.py:629
+msgid "Recently watched"
+msgstr "Nedavno gledano"
 
-#: src/ashytv/ui/pages/channels_page.py:372
+#: src/ashytv/ui/pages/channels_page.py:324
 msgid "Move up"
 msgstr "Pomakni gore"
 
-#: src/ashytv/ui/pages/channels_page.py:373
+#: src/ashytv/ui/pages/channels_page.py:325
 msgid "Move down"
 msgstr "Pomakni dolje"
 
-#: src/ashytv/ui/pages/channels_page.py:374
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Hide group"
 msgstr "Sakrij grupu"
 
-#: src/ashytv/ui/pages/channels_page.py:583 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:178
 msgid "Favorite"
 msgstr "Favorit"
 
-#: src/ashytv/ui/pages/channels_page.py:590
+#: src/ashytv/ui/pages/channels_page.py:539
 msgid "More options"
 msgstr "Više opcija"
 
-#: src/ashytv/ui/pages/channels_page.py:613
+#: src/ashytv/ui/pages/channels_page.py:562
 msgid "View schedule"
 msgstr "Prikaži raspored"
 
-#: src/ashytv/ui/pages/channels_page.py:615
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Hide channel"
 msgstr "Sakrij kanal"
 
@@ -702,52 +788,53 @@ msgstr "Više u odjeljku {section}"
 msgid "See more"
 msgstr "Prikaži više"
 
-#: src/ashytv/ui/pages/home_page.py:209
+#: src/ashytv/ui/pages/home_page.py:212
 msgid "Continue Watching"
 msgstr "Nastavi gledati"
 
-#: src/ashytv/ui/pages/home_page.py:210 src/ashytv/ui/welcome_view.py:62
+#: src/ashytv/ui/pages/home_page.py:213 src/ashytv/ui/welcome_view.py:62
 msgid "Live Channels"
 msgstr "Kanali uživo"
 
-#: src/ashytv/ui/pages/home_page.py:211 src/ashytv/ui/pages/home_page.py:213
-#: src/ashytv/ui/pages/home_page.py:215
+#: src/ashytv/ui/pages/home_page.py:214 src/ashytv/ui/pages/home_page.py:216
+#: src/ashytv/ui/pages/home_page.py:218
 msgid "See all"
 msgstr "Prikaži sve"
 
-#: src/ashytv/ui/pages/home_page.py:212
+#: src/ashytv/ui/pages/home_page.py:215
 msgid "Recently Added Movies"
 msgstr "Nedavno dodani filmovi"
 
-#: src/ashytv/ui/pages/home_page.py:214
+#: src/ashytv/ui/pages/home_page.py:217
 msgid "Recently Added Series"
 msgstr "Nedavno dodane serije"
 
-#: src/ashytv/ui/pages/home_page.py:301
+#: src/ashytv/ui/pages/home_page.py:319
 msgid "Welcome to AshyTV"
 msgstr "Dobro došli u AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:302
+#: src/ashytv/ui/pages/home_page.py:320
 msgid "Your channels, movies and series in one place"
 msgstr "Vaši kanali, filmovi i serije na jednom mjestu"
 
-#: src/ashytv/ui/pages/home_page.py:303
+#: src/ashytv/ui/pages/home_page.py:321
 msgid "Enter: view channels"
 msgstr "Enter: prikaži kanale"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "Enter: details"
 msgstr "Enter: detalji"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "← → more titles"
 msgstr "← → više naslova"
 
-#: src/ashytv/ui/pages/lists_page.py:17
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
 msgid "The guide link must be a web address (http or https)."
 msgstr "Poveznica vodiča mora biti web adresa (http ili https)."
 
-#: src/ashytv/ui/pages/lists_page.py:27 src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:70
+#: src/ashytv/ui/servers_dialog.py:59
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -755,86 +842,87 @@ msgstr ""
 "Druge adrese istog pružatelja, s istom prijavom. Kad glavna ne odgovara, "
 "AshyTV automatski prelazi na sljedeću."
 
-#: src/ashytv/ui/pages/lists_page.py:35 src/ashytv/ui/servers_dialog.py:64
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:75
+#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "Rezervni poslužitelj {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:39 src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:69
+#: src/ashytv/ui/servers_dialog.py:58
 msgid "Backup servers (alternative DNS)"
 msgstr "Rezervni poslužitelji (alternativni DNS)"
 
-#: src/ashytv/ui/pages/lists_page.py:73
+#: src/ashytv/ui/pages/lists_page.py:79
 msgid "Manage your playlists or add a new one"
 msgstr "Upravljajte svojim playlistama ili dodajte novu"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Playlist"
 msgstr "Dodaj playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:102 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:108 src/ashytv/ui/pages/lists_page.py:366
 msgid "Free TV"
 msgstr "Besplatna TV"
 
-#: src/ashytv/ui/pages/lists_page.py:102
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "M3U File"
 msgstr "M3U datoteka"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:109 src/ashytv/ui/pages/lists_page.py:366
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:114
+#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:48
 msgid "Playlist name"
 msgstr "Naziv playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:115 src/ashytv/ui/pages/lists_page.py:527
-#: src/ashytv/ui/pages/lists_page.py:595 src/ashytv/ui/pages/lists_page.py:603
+#: src/ashytv/ui/pages/lists_page.py:121 src/ashytv/ui/pages/lists_page.py:566
+#: src/ashytv/ui/pages/lists_page.py:634 src/ashytv/ui/pages/lists_page.py:642
 msgid "My Playlist"
 msgstr "Moja playlista"
 
-#: src/ashytv/ui/pages/lists_page.py:122
+#: src/ashytv/ui/pages/lists_page.py:128
 msgid "Choose .m3u file…"
 msgstr "Odaberi .m3u datoteku…"
 
-#: src/ashytv/ui/pages/lists_page.py:124 src/ashytv/ui/pages/lists_page.py:340
+#: src/ashytv/ui/pages/lists_page.py:130 src/ashytv/ui/pages/lists_page.py:346
 msgid "No file selected"
 msgstr "Nije odabrana datoteka"
 
-#: src/ashytv/ui/pages/lists_page.py:130
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "File"
 msgstr "Datoteka"
 
-#: src/ashytv/ui/pages/lists_page.py:135
+#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:52
 msgid "Server (URL)"
 msgstr "Poslužitelj (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:53
 msgid "Username"
 msgstr "Korisničko ime"
 
-#: src/ashytv/ui/pages/lists_page.py:139
+#: src/ashytv/ui/pages/lists_page.py:145
 msgid "your_username"
 msgstr "vase_korisnicko_ime"
 
-#: src/ashytv/ui/pages/lists_page.py:140
+#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:54
 msgid "Password"
 msgstr "Lozinka"
 
-#: src/ashytv/ui/pages/lists_page.py:141
+#: src/ashytv/ui/pages/lists_page.py:147
 msgid "your_password"
 msgstr "vasa_lozinka"
 
-#: src/ashytv/ui/pages/lists_page.py:143
+#: src/ashytv/ui/pages/lists_page.py:149
 msgid "Paste provider message"
 msgstr "Zalijepi poruku pružatelja"
 
-#: src/ashytv/ui/pages/lists_page.py:145
+#: src/ashytv/ui/pages/lists_page.py:151
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -842,27 +930,28 @@ msgstr ""
 "Zalijepite pozdravnu poruku pružatelja: poslužitelj, korisničko ime i "
 "lozinka popunit će se automatski"
 
-#: src/ashytv/ui/pages/lists_page.py:154
+#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:58
 msgid "Playlist URL (M3U)"
 msgstr "URL playliste (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:166 src/ashytv/ui/pages/lists_page.py:478
+#: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
+#: src/ashytv/ui/playlist_dialog.py:60
 msgid "Guide link (EPG) — optional"
 msgstr "Poveznica vodiča (EPG) — neobavezno"
 
-#: src/ashytv/ui/pages/lists_page.py:170
+#: src/ashytv/ui/pages/lists_page.py:176
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr "XMLTV vodič; zamjenjuje onaj naveden u playlisti (url-tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:182
+#: src/ashytv/ui/pages/lists_page.py:188
 msgid "Save and Connect"
 msgstr "Spremi i poveži"
 
-#: src/ashytv/ui/pages/lists_page.py:199
+#: src/ashytv/ui/pages/lists_page.py:205
 msgid "Secure Connection"
 msgstr "Sigurna veza"
 
-#: src/ashytv/ui/pages/lists_page.py:201
+#: src/ashytv/ui/pages/lists_page.py:207
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -870,23 +959,23 @@ msgstr ""
 "Vaši se podaci pohranjuju samo na vašem uređaju. Lozinke se čuvaju u "
 "sustavskom privjesku ključeva."
 
-#: src/ashytv/ui/pages/lists_page.py:213
+#: src/ashytv/ui/pages/lists_page.py:219
 msgid "Your Playlists"
 msgstr "Vaše playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:242
+#: src/ashytv/ui/pages/lists_page.py:248
 msgid "TV channels from"
 msgstr "TV kanali iz"
 
-#: src/ashytv/ui/pages/lists_page.py:247
+#: src/ashytv/ui/pages/lists_page.py:253
 msgid "Free movies and cartoons"
 msgstr "Besplatni filmovi i crtići"
 
-#: src/ashytv/ui/pages/lists_page.py:249
+#: src/ashytv/ui/pages/lists_page.py:255
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "Klasični filmovi u javnom vlasništvu i otvoreni filmovi Blendera"
 
-#: src/ashytv/ui/pages/lists_page.py:259
+#: src/ashytv/ui/pages/lists_page.py:265
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -895,15 +984,15 @@ msgstr ""
 "Samo besplatni kanali koje emiteri javno nude i filmovi s otvorenom licencom "
 "ili u javnom vlasništvu. AshyTV je reproduktor: ne hostira ništa od toga."
 
-#: src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Another Playlist"
 msgstr "Dodaj još jednu playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:367
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:368
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
@@ -911,56 +1000,60 @@ msgstr[0] "{n} stavka"
 msgstr[1] "{n} stavke"
 msgstr[2] "{n} stavki"
 
-#: src/ashytv/ui/pages/lists_page.py:365
+#: src/ashytv/ui/pages/lists_page.py:371
 msgid "Disabled"
 msgstr "Isključeno"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:373
 #, python-brace-format
 msgid "updated {when}"
 msgstr "ažurirano {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:372
+#: src/ashytv/ui/pages/lists_page.py:378
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "Vodič: {n} od {m} kanala"
 
-#: src/ashytv/ui/pages/lists_page.py:377
+#: src/ashytv/ui/pages/lists_page.py:383
 #, python-brace-format
 msgid "expires {when}"
 msgstr "istječe {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:384
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "isteklo {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:396
+#: src/ashytv/ui/pages/lists_page.py:402
 msgid "Show this playlist's channels"
 msgstr "Prikaži kanale ovog popisa"
 
-#: src/ashytv/ui/pages/lists_page.py:405
+#: src/ashytv/ui/pages/lists_page.py:411
 msgid "Guide link (EPG)"
 msgstr "Poveznica vodiča (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:410
+#: src/ashytv/ui/pages/lists_page.py:416 src/ashytv/ui/playlist_dialog.py:28
+msgid "Edit playlist"
+msgstr "Uredi popis"
+
+#: src/ashytv/ui/pages/lists_page.py:420
 msgid "Refresh playlist"
 msgstr "Osvježi playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:414
+#: src/ashytv/ui/pages/lists_page.py:424
 msgid "Remove playlist"
 msgstr "Ukloni playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:451
+#: src/ashytv/ui/pages/lists_page.py:462
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "Poslužitelji: {status} — kliknite za pojedinosti"
 
-#: src/ashytv/ui/pages/lists_page.py:452 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:463 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "još nije provjereno"
 
-#: src/ashytv/ui/pages/lists_page.py:476
+#: src/ashytv/ui/pages/lists_page.py:515
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -969,21 +1062,22 @@ msgstr ""
 "XMLTV vodič za „{name}”. Zamjenjuje onaj naveden u playlisti; ostavite "
 "prazno za korištenje vodiča same playliste."
 
-#: src/ashytv/ui/pages/lists_page.py:480 src/ashytv/ui/pages/lists_page.py:508
+#: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:442
+#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
 msgid "Cancel"
 msgstr "Odustani"
 
-#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
+#: src/ashytv/ui/servers_dialog.py:70
 msgid "Save"
 msgstr "Spremi"
 
-#: src/ashytv/ui/pages/lists_page.py:505
+#: src/ashytv/ui/pages/lists_page.py:544
 msgid "Remove playlist?"
 msgstr "Ukloniti playlistu?"
 
-#: src/ashytv/ui/pages/lists_page.py:506
+#: src/ashytv/ui/pages/lists_page.py:545
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -992,41 +1086,41 @@ msgstr ""
 "„{name}” i svi njezini kanali, favoriti i povijest bit će uklonjeni s ovog "
 "uređaja."
 
-#: src/ashytv/ui/pages/lists_page.py:509
+#: src/ashytv/ui/pages/lists_page.py:548
 msgid "Remove"
 msgstr "Ukloni"
 
-#: src/ashytv/ui/pages/lists_page.py:532
+#: src/ashytv/ui/pages/lists_page.py:571
 msgid "Select M3U playlist"
 msgstr "Odaberi M3U playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:534
+#: src/ashytv/ui/pages/lists_page.py:573
 msgid "M3U Playlists"
 msgstr "M3U playliste"
 
-#: src/ashytv/ui/pages/lists_page.py:571
+#: src/ashytv/ui/pages/lists_page.py:610
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "U kopiranom tekstu nisu pronađeni poslužitelj, korisničko ime i lozinka."
 
-#: src/ashytv/ui/pages/lists_page.py:577
+#: src/ashytv/ui/pages/lists_page.py:616
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Podaci pružatelja su popunjeni. Provjerite ih i kliknite „Spremi i poveži”."
 
-#: src/ashytv/ui/pages/lists_page.py:593
+#: src/ashytv/ui/pages/lists_page.py:632
 msgid "Choose an .m3u file."
 msgstr "Odaberite .m3u datoteku."
 
-#: src/ashytv/ui/pages/lists_page.py:600
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Unesite URL koji počinje s http:// ili https://."
 
-#: src/ashytv/ui/pages/lists_page.py:614
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
 msgid "Fill in server, username and password."
 msgstr "Popunite poslužitelj, korisničko ime i lozinku."
 
-#: src/ashytv/ui/pages/lists_page.py:616
+#: src/ashytv/ui/pages/lists_page.py:655
 msgid "Xtream Provider"
 msgstr "Xtream pružatelj"
 
@@ -1035,7 +1129,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "Gumbom ● u reproduktoru snimite što se trenutačno emitira"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:323
+#: src/ashytv/ui/pages/settings_page.py:326
 msgid "Open folder"
 msgstr "Otvori mapu"
 
@@ -1082,12 +1176,12 @@ msgid "General"
 msgstr "Općenito"
 
 #: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:197
+#: src/ashytv/ui/pages/settings_page.py:200
 msgid "Appearance"
 msgstr "Izgled"
 
 #: src/ashytv/ui/pages/settings_page.py:23
-#: src/ashytv/ui/pages/settings_page.py:248
+#: src/ashytv/ui/pages/settings_page.py:251
 msgid "Playback"
 msgstr "Reprodukcija"
 
@@ -1096,7 +1190,7 @@ msgid "Shortcuts"
 msgstr "Prečaci"
 
 #: src/ashytv/ui/pages/settings_page.py:25
-#: src/ashytv/ui/pages/settings_page.py:284
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Parental Controls"
 msgstr "Roditeljski nadzor"
 
@@ -1105,12 +1199,12 @@ msgid "Network"
 msgstr "Mreža"
 
 #: src/ashytv/ui/pages/settings_page.py:27
-#: src/ashytv/ui/pages/settings_page.py:305
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Data"
 msgstr "Podaci"
 
 #: src/ashytv/ui/pages/settings_page.py:28
-#: src/ashytv/ui/pages/settings_page.py:331
+#: src/ashytv/ui/pages/settings_page.py:334
 msgid "About"
 msgstr "O aplikaciji"
 
@@ -1150,31 +1244,42 @@ msgstr "Grupiraj kvalitete istog kanala"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "Prikazuje „News FHD“, „News HD“ i „News SD“ kao jedan kanal"
 
-#: src/ashytv/ui/pages/settings_page.py:150 src/ashytv/window.py:1274
+#: src/ashytv/ui/pages/settings_page.py:150
+msgid "Sort from A to Z"
+msgstr "Poredaj od A do Ž"
+
+#: src/ashytv/ui/pages/settings_page.py:151
+msgid ""
+"Groups and channels in alphabetical order. Off, they keep the playlist's "
+"order"
+msgstr ""
+"Grupe i kanali abecednim redom. Isključeno: zadržavaju redoslijed popisa"
+
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
 msgid "Live preview"
 msgstr "Pregled uživo"
 
-#: src/ashytv/ui/pages/settings_page.py:151
+#: src/ashytv/ui/pages/settings_page.py:154
 msgid "Plays the selected channel, muted, next to the channel list"
 msgstr "Reproducira odabrani kanal bez zvuka pokraj popisa kanala"
 
-#: src/ashytv/ui/pages/settings_page.py:162 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:165 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV playliste"
 
-#: src/ashytv/ui/pages/settings_page.py:163
+#: src/ashytv/ui/pages/settings_page.py:166
 msgid "Reload playlists automatically"
 msgstr "Automatski ponovno učitaj playliste"
 
-#: src/ashytv/ui/pages/settings_page.py:164
+#: src/ashytv/ui/pages/settings_page.py:167
 msgid "Updates channels and catalog when the app opens"
 msgstr "Ažurira kanale i katalog pri otvaranju aplikacije"
 
-#: src/ashytv/ui/pages/settings_page.py:165
+#: src/ashytv/ui/pages/settings_page.py:168
 msgid "Check every"
 msgstr "Provjeri svakih"
 
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:170
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
@@ -1182,11 +1287,11 @@ msgstr[0] "{h} sat"
 msgstr[1] "{h} sata"
 msgstr[2] "{h} sati"
 
-#: src/ashytv/ui/pages/settings_page.py:178
+#: src/ashytv/ui/pages/settings_page.py:181
 msgid "Secure DNS (DNS over HTTPS)"
 msgstr "Sigurni DNS (DNS over HTTPS)"
 
-#: src/ashytv/ui/pages/settings_page.py:179
+#: src/ashytv/ui/pages/settings_page.py:182
 msgid ""
 "Looks up server names over an encrypted connection, for more privacy and "
 "fewer failures from the provider's DNS. If it doesn't answer, the system DNS "
@@ -1196,160 +1301,160 @@ msgstr ""
 "kvarova DNS-a pružatelja. Ako ne odgovara, koristi se DNS sustava. HTTPS "
 "videozapisi koriste DNS sustava."
 
-#: src/ashytv/ui/pages/settings_page.py:183
+#: src/ashytv/ui/pages/settings_page.py:186
 msgid "Secure DNS"
 msgstr "Sigurni DNS"
 
-#: src/ashytv/ui/pages/settings_page.py:191
+#: src/ashytv/ui/pages/settings_page.py:194
 msgid "Backup servers"
 msgstr "Rezervni poslužitelji"
 
-#: src/ashytv/ui/pages/settings_page.py:192
+#: src/ashytv/ui/pages/settings_page.py:195
 msgid "Desktop notifications"
 msgstr "Obavijesti na radnoj površini"
 
-#: src/ashytv/ui/pages/settings_page.py:193
+#: src/ashytv/ui/pages/settings_page.py:196
 msgid "Tell me when a playlist's main server goes down or comes back"
 msgstr ""
 "Obavijesti me kad glavni poslužitelj playliste prestane raditi ili se vrati"
 
-#: src/ashytv/ui/pages/settings_page.py:198
+#: src/ashytv/ui/pages/settings_page.py:201
 msgid "Theme"
 msgstr "Tema"
 
-#: src/ashytv/ui/pages/settings_page.py:208
+#: src/ashytv/ui/pages/settings_page.py:211
 msgid "Accent Color"
 msgstr "Naglasna boja"
 
-#: src/ashytv/ui/pages/settings_page.py:209
+#: src/ashytv/ui/pages/settings_page.py:212
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "Odaberite boju za gumbe, odabire i istaknute elemente."
 
-#: src/ashytv/ui/pages/settings_page.py:231
+#: src/ashytv/ui/pages/settings_page.py:234
 msgid "Transparency"
 msgstr "Prozirnost"
 
-#: src/ashytv/ui/pages/settings_page.py:232
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "Čini pozadinu prozora prozirnom (ovisi o compositoru)."
 
-#: src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/pages/settings_page.py:237
 msgid "Translucent window"
 msgstr "Prozirni prozor"
 
-#: src/ashytv/ui/pages/settings_page.py:236
+#: src/ashytv/ui/pages/settings_page.py:239
 msgid "Background opacity (%)"
 msgstr "Neprozirnost pozadine (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:242
+#: src/ashytv/ui/pages/settings_page.py:245
 msgid "Content"
 msgstr "Sadržaj"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Show logos and covers"
 msgstr "Prikaži logotipe i naslovnice"
 
-#: src/ashytv/ui/pages/settings_page.py:244
+#: src/ashytv/ui/pages/settings_page.py:247
 msgid "Turn off to save data"
 msgstr "Isključite za uštedu podataka"
 
-#: src/ashytv/ui/pages/settings_page.py:249
+#: src/ashytv/ui/pages/settings_page.py:252
 msgid "Applies from the next video you open."
 msgstr "Primjenjuje se od sljedećeg otvorenog videa."
 
-#: src/ashytv/ui/pages/settings_page.py:250 src/ashytv/ui/player_view.py:788
+#: src/ashytv/ui/pages/settings_page.py:253 src/ashytv/ui/player_view.py:789
 msgid "Automatic quality"
 msgstr "Automatska kvaliteta"
 
-#: src/ashytv/ui/pages/settings_page.py:251
+#: src/ashytv/ui/pages/settings_page.py:254
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "Prebacuje se između kvaliteta kanala prema vašoj vezi"
 
-#: src/ashytv/ui/pages/settings_page.py:252
+#: src/ashytv/ui/pages/settings_page.py:255
 msgid "Hardware acceleration"
 msgstr "Hardversko ubrzanje"
 
-#: src/ashytv/ui/pages/settings_page.py:253
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "Dekodira video na GPU-u (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:255
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Network buffer (seconds)"
 msgstr "Mrežni međuspremnik (sekunde)"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr ""
 "Veći međuspremnik = manje zastajkivanja, ali veće kašnjenje pri promjeni "
 "kanala"
 
-#: src/ashytv/ui/pages/settings_page.py:274
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Game controller"
 msgstr "Kontroler za igre"
 
-#: src/ashytv/ui/pages/settings_page.py:275
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Connect a controller to use AshyTV like a TV remote."
 msgstr "Spoji kontroler za korištenje AshyTV-a kao TV daljinskog upravljača."
 
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:289
 msgid "Hide adult content"
 msgstr "Sakrij sadržaj za odrasle"
 
-#: src/ashytv/ui/pages/settings_page.py:287
+#: src/ashytv/ui/pages/settings_page.py:290
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "Skriva kategorije s pojmovima poput „adult”, „XXX”, „+18”"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "With a PIN set, it is required to show adult content."
 msgstr "Ako je postavljen PIN, potreban je za prikaz sadržaja za odrasle."
 
-#: src/ashytv/ui/pages/settings_page.py:295
+#: src/ashytv/ui/pages/settings_page.py:298
 msgid "New PIN (4+ digits)"
 msgstr "Novi PIN (4+ znamenke)"
 
-#: src/ashytv/ui/pages/settings_page.py:299
+#: src/ashytv/ui/pages/settings_page.py:302
 msgid "Remove PIN"
 msgstr "Ukloni PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:306
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid "Clear cache"
 msgstr "Očisti predmemoriju"
 
-#: src/ashytv/ui/pages/settings_page.py:307
+#: src/ashytv/ui/pages/settings_page.py:310
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "Uklanja preuzete logotipe, naslovnice i podatke vodiča"
 
-#: src/ashytv/ui/pages/settings_page.py:309
-#: src/ashytv/ui/pages/settings_page.py:316
+#: src/ashytv/ui/pages/settings_page.py:312
+#: src/ashytv/ui/pages/settings_page.py:319
 msgid "Clear"
 msgstr "Očisti"
 
-#: src/ashytv/ui/pages/settings_page.py:314
+#: src/ashytv/ui/pages/settings_page.py:317
 msgid "Clear history"
 msgstr "Očisti povijest"
 
-#: src/ashytv/ui/pages/settings_page.py:315
+#: src/ashytv/ui/pages/settings_page.py:318
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "Zaboravlja „Nastavi gledati” i nedavne stavke"
 
-#: src/ashytv/ui/pages/settings_page.py:321
+#: src/ashytv/ui/pages/settings_page.py:324
 msgid "Recordings folder"
 msgstr "Mapa snimki"
 
-#: src/ashytv/ui/pages/settings_page.py:333
+#: src/ashytv/ui/pages/settings_page.py:336
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Verzija {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:336
+#: src/ashytv/ui/pages/settings_page.py:339
 msgid "Disclaimer"
 msgstr "Odricanje od odgovornosti"
 
-#: src/ashytv/ui/pages/settings_page.py:337
+#: src/ashytv/ui/pages/settings_page.py:340
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -1357,15 +1462,15 @@ msgstr ""
 "AshyTV ne pruža niti sadrži nikakav sadržaj: reproducira samo playliste koje "
 "dodate."
 
-#: src/ashytv/ui/pages/settings_page.py:343 src/ashytv/window.py:132
+#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
 msgid "Guided tour"
 msgstr "Vođeni obilazak"
 
-#: src/ashytv/ui/pages/settings_page.py:346
+#: src/ashytv/ui/pages/settings_page.py:349
 msgid "More information"
 msgstr "Više informacija"
 
-#: src/ashytv/ui/pages/settings_page.py:369
+#: src/ashytv/ui/pages/settings_page.py:372
 #, python-brace-format
 msgid "{n} hidden item · Click to see it and show it again"
 msgid_plural "{n} hidden items · Click to see them and show them again"
@@ -1373,223 +1478,223 @@ msgstr[0] "{n} skrivena stavka · Kliknite da je vidite i ponovno prikažete"
 msgstr[1] "{n} skrivene stavke · Kliknite da ih vidite i ponovno prikažete"
 msgstr[2] "{n} skrivenih stavki · Kliknite da ih vidite i ponovno prikažete"
 
-#: src/ashytv/ui/pages/settings_page.py:372
+#: src/ashytv/ui/pages/settings_page.py:375
 msgid "Nothing hidden · Right-click a group or channel to hide it"
 msgstr "Ništa nije skriveno · Desnim klikom na grupu ili kanal sakrijte ga"
 
-#: src/ashytv/ui/pages/settings_page.py:384
+#: src/ashytv/ui/pages/settings_page.py:387
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Uklanja preuzete logotipe, naslovnice i podatke vodiča — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:400
+#: src/ashytv/ui/pages/settings_page.py:403
 msgid "Cache cleared."
 msgstr "Predmemorija je očišćena."
 
-#: src/ashytv/ui/pages/settings_page.py:408
+#: src/ashytv/ui/pages/settings_page.py:411
 msgid "History cleared."
 msgstr "Povijest je očišćena."
 
-#: src/ashytv/ui/pages/settings_page.py:438
+#: src/ashytv/ui/pages/settings_page.py:441
 msgid "Enter PIN"
 msgstr "Unesite PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:439
+#: src/ashytv/ui/pages/settings_page.py:442
 msgid "Required to show adult content."
 msgstr "Potreban za prikaz sadržaja za odrasle."
 
-#: src/ashytv/ui/pages/settings_page.py:443
+#: src/ashytv/ui/pages/settings_page.py:446
 msgid "Unlock"
 msgstr "Otključaj"
 
-#: src/ashytv/ui/pages/settings_page.py:453
+#: src/ashytv/ui/pages/settings_page.py:456
 msgid "Incorrect PIN."
 msgstr "Neispravan PIN."
 
-#: src/ashytv/ui/pages/settings_page.py:461
+#: src/ashytv/ui/pages/settings_page.py:464
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN mora imati najmanje 4 znamenke."
 
-#: src/ashytv/ui/pages/settings_page.py:466
+#: src/ashytv/ui/pages/settings_page.py:469
 msgid "PIN set."
 msgstr "PIN je postavljen."
 
-#: src/ashytv/ui/pages/settings_page.py:478
+#: src/ashytv/ui/pages/settings_page.py:481
 msgid "PIN removed."
 msgstr "PIN je uklonjen."
 
-#: src/ashytv/ui/player_view.py:25
+#: src/ashytv/ui/player_view.py:26
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ashytv/ui/player_view.py:153
+#: src/ashytv/ui/player_view.py:154
 msgid "Back (Esc)"
 msgstr "Natrag (Esc)"
 
-#: src/ashytv/ui/player_view.py:179 src/ashytv/ui/player_view.py:956
+#: src/ashytv/ui/player_view.py:180 src/ashytv/ui/player_view.py:957
 msgid "Record"
 msgstr "Snimi"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:181
 msgid "Mini player"
 msgstr "Mini reproduktor"
 
-#: src/ashytv/ui/player_view.py:209 src/ashytv/ui/player_view.py:404
-#: src/ashytv/ui/player_view.py:703 src/ashytv/ui/player_view.py:717
-#: src/ashytv/ui/player_view.py:723
+#: src/ashytv/ui/player_view.py:210 src/ashytv/ui/player_view.py:405
+#: src/ashytv/ui/player_view.py:704 src/ashytv/ui/player_view.py:718
+#: src/ashytv/ui/player_view.py:724
 msgid "● LIVE"
 msgstr "● UŽIVO"
 
-#: src/ashytv/ui/player_view.py:211
+#: src/ashytv/ui/player_view.py:212
 msgid "Go live"
 msgstr "Idi uživo"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:213
 msgid "Back to live"
 msgstr "Natrag na prijenos uživo"
 
-#: src/ashytv/ui/player_view.py:222
+#: src/ashytv/ui/player_view.py:223
 msgid "Previous (↑)"
 msgstr "Prethodni (↑)"
 
-#: src/ashytv/ui/player_view.py:224
+#: src/ashytv/ui/player_view.py:225
 msgid "Back 10 s (←)"
 msgstr "Natrag 10 s (←)"
 
-#: src/ashytv/ui/player_view.py:226
+#: src/ashytv/ui/player_view.py:227
 msgid "Pause (Space)"
 msgstr "Pauziraj (razmaknica)"
 
-#: src/ashytv/ui/player_view.py:228
+#: src/ashytv/ui/player_view.py:229
 msgid "Forward 10 s (→)"
 msgstr "Naprijed 10 s (→)"
 
-#: src/ashytv/ui/player_view.py:230
+#: src/ashytv/ui/player_view.py:231
 msgid "Next (↓)"
 msgstr "Sljedeći (↓)"
 
-#: src/ashytv/ui/player_view.py:237 src/ashytv/ui/shortcuts.py:39
+#: src/ashytv/ui/player_view.py:238 src/ashytv/ui/shortcuts.py:39
 msgid "Volume"
 msgstr "Glasnoća"
 
-#: src/ashytv/ui/player_view.py:241
+#: src/ashytv/ui/player_view.py:242
 msgid "Audio & Video"
 msgstr "Zvuk i video"
 
-#: src/ashytv/ui/player_view.py:243
+#: src/ashytv/ui/player_view.py:244
 msgid "Fullscreen (F)"
 msgstr "Cijeli zaslon (F)"
 
-#: src/ashytv/ui/player_view.py:268
+#: src/ashytv/ui/player_view.py:269
 msgid "Try again"
 msgstr "Pokušaj ponovno"
 
-#: src/ashytv/ui/player_view.py:506 src/ashytv/ui/player_view.py:517
+#: src/ashytv/ui/player_view.py:507 src/ashytv/ui/player_view.py:518
 msgid "Reconnecting…"
 msgstr "Ponovno povezivanje…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Buffering…"
 msgstr "Međuspremanje…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Loading…"
 msgstr "Učitavanje…"
 
-#: src/ashytv/ui/player_view.py:546
+#: src/ashytv/ui/player_view.py:547
 msgid "Could not play"
 msgstr "Reprodukcija nije uspjela"
 
-#: src/ashytv/ui/player_view.py:547
+#: src/ashytv/ui/player_view.py:548
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanal je možda izvan mreže ili je veza prekinuta."
 
-#: src/ashytv/ui/player_view.py:554
+#: src/ashytv/ui/player_view.py:555
 msgid "Broadcast ended"
 msgstr "Emitiranje završeno"
 
-#: src/ashytv/ui/player_view.py:555
+#: src/ashytv/ui/player_view.py:556
 msgid "The signal was interrupted."
 msgstr "Signal je prekinut."
 
-#: src/ashytv/ui/player_view.py:774
+#: src/ashytv/ui/player_view.py:775
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Kvaliteta: {label}"
 
-#: src/ashytv/ui/player_view.py:776
+#: src/ashytv/ui/player_view.py:777
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Nedostupno, prebacivanje na {label}"
 
-#: src/ashytv/ui/player_view.py:778
+#: src/ashytv/ui/player_view.py:779
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Kvaliteta: {label} (auto)"
 
-#: src/ashytv/ui/player_view.py:858 src/ashytv/ui/player_view.py:865
+#: src/ashytv/ui/player_view.py:859 src/ashytv/ui/player_view.py:866
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Glasnoća {level}%"
 
-#: src/ashytv/ui/player_view.py:925
+#: src/ashytv/ui/player_view.py:926
 msgid "Recording"
 msgstr "Snimanje"
 
-#: src/ashytv/ui/player_view.py:936
+#: src/ashytv/ui/player_view.py:937
 msgid "Stop recording"
 msgstr "Zaustavi snimanje"
 
-#: src/ashytv/ui/player_view.py:939
+#: src/ashytv/ui/player_view.py:940
 msgid "Recording…"
 msgstr "Snimanje…"
 
-#: src/ashytv/ui/player_view.py:947
+#: src/ashytv/ui/player_view.py:948
 msgid "Could not record this channel."
 msgstr "Snimanje ovog kanala nije uspjelo."
 
-#: src/ashytv/ui/player_view.py:958
+#: src/ashytv/ui/player_view.py:959
 msgid "Recording saved to Recordings."
 msgstr "Snimka je spremljena u Snimke."
 
-#: src/ashytv/ui/player_view.py:970
+#: src/ashytv/ui/player_view.py:971
 msgid "Mute (M)"
 msgstr "Isključi zvuk (M)"
 
-#: src/ashytv/ui/player_view.py:1005
+#: src/ashytv/ui/player_view.py:1006
 msgid "Off"
 msgstr "Isključeno"
 
-#: src/ashytv/ui/player_view.py:1010
+#: src/ashytv/ui/player_view.py:1011
 msgid "No subtitles in this video."
 msgstr "Nema titlova u ovom videu."
 
-#: src/ashytv/ui/player_view.py:1015
+#: src/ashytv/ui/player_view.py:1016
 msgid "Load subtitle file…"
 msgstr "Učitaj datoteku titlova…"
 
-#: src/ashytv/ui/player_view.py:1022
+#: src/ashytv/ui/player_view.py:1023
 msgid "Load subtitle file"
 msgstr "Učitaj datoteku titlova"
 
-#: src/ashytv/ui/player_view.py:1039
+#: src/ashytv/ui/player_view.py:1040
 #, python-brace-format
 msgid "Subtitles: {name}"
 msgstr "Titlovi: {name}"
 
-#: src/ashytv/ui/player_view.py:1045
+#: src/ashytv/ui/player_view.py:1046
 msgid "Automatic"
 msgstr "Automatski"
 
-#: src/ashytv/ui/player_view.py:1048
+#: src/ashytv/ui/player_view.py:1049
 msgid "Quality"
 msgstr "Kvaliteta"
 
-#: src/ashytv/ui/player_view.py:1055
+#: src/ashytv/ui/player_view.py:1056
 msgid "Aspect ratio"
 msgstr "Omjer slike"
 
-#: src/ashytv/ui/player_view.py:1059
+#: src/ashytv/ui/player_view.py:1060
 msgid "Speed"
 msgstr "Brzina"
 
@@ -1673,7 +1778,7 @@ msgstr "Mogućnosti grupe (premjesti, sakrij)"
 msgid "Keyboard shortcuts"
 msgstr "Prečaci tipkovnice"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:135
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
 msgid "Quit"
 msgstr "Izlaz"
 
@@ -1749,7 +1854,7 @@ msgstr "Natrag"
 msgid "Pause/resume"
 msgstr "Pauziraj/nastavi"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1270
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
 msgid "Channel list"
 msgstr "Popis kanala"
 
@@ -1889,95 +1994,99 @@ msgstr "Započni"
 msgid "AshyTV is only a player: it does not host any content."
 msgstr "AshyTV je samo reproduktor: ne hostira nikakav sadržaj."
 
-#: src/ashytv/window.py:125
+#: src/ashytv/window.py:126
 msgid "Search…"
 msgstr "Traži…"
 
-#: src/ashytv/window.py:133
-msgid "Keyboard Shortcuts"
-msgstr "Prečaci tipkovnice"
-
-#: src/ashytv/window.py:134
+#: src/ashytv/window.py:135
 msgid "About AshyTV"
 msgstr "O programu AshyTV"
 
-#: src/ashytv/window.py:137
+#: src/ashytv/window.py:138
 msgid "Main Menu"
 msgstr "Glavni izbornik"
 
-#: src/ashytv/window.py:140
+#: src/ashytv/window.py:141
 msgid "Search (Ctrl+F)"
 msgstr "Traži (Ctrl+F)"
 
-#: src/ashytv/window.py:221
+#: src/ashytv/window.py:223
 msgid "The best movies for you"
 msgstr "Najbolji filmovi za vas"
 
-#: src/ashytv/window.py:230
+#: src/ashytv/window.py:232
 msgid "Your favorite series in one place"
 msgstr "Vaše omiljene serije na jednom mjestu"
 
-#: src/ashytv/window.py:512
+#: src/ashytv/window.py:516
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Reproduktor nije dostupan: instalirajte mpv i python-mpv ({error})"
 
-#: src/ashytv/window.py:561
+#: src/ashytv/window.py:565
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Nema kanala {number}"
 
-#: src/ashytv/window.py:638
+#: src/ashytv/window.py:642
 msgid "Next episode…"
 msgstr "Sljedeća epizoda…"
 
-#: src/ashytv/window.py:669 src/ashytv/window.py:678
+#: src/ashytv/window.py:673 src/ashytv/window.py:682
 msgid "This item is no longer in the playlist."
 msgstr "Ova stavka više nije u playlisti."
 
-#: src/ashytv/window.py:674
+#: src/ashytv/window.py:678
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Otvaranje nije uspjelo: {error}"
 
-#: src/ashytv/window.py:685
+#: src/ashytv/window.py:689
 msgid "This episode is no longer available."
 msgstr "Ova epizoda više nije dostupna."
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Added to favorites"
 msgstr "Dodano u favorite"
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Removed from favorites"
 msgstr "Uklonjeno iz favorita"
 
-#: src/ashytv/window.py:925
+#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
 msgid "Please wait: an import is already in progress."
 msgstr "Pričekajte: uvoz je već u tijeku."
 
-#: src/ashytv/window.py:943
+#: src/ashytv/window.py:948
 msgid "Importing playlist…"
 msgstr "Uvoz playliste…"
 
-#: src/ashytv/window.py:962
+#: src/ashytv/window.py:967
 msgid "Connecting to the Xtream provider…"
 msgstr "Povezivanje s Xtream pružateljem…"
 
-#: src/ashytv/window.py:980
-msgid "Provider password not found; add the playlist again."
-msgstr "Lozinka pružatelja nije pronađena; ponovno dodajte playlistu."
+#: src/ashytv/window.py:997
+msgid "Another playlist already uses this server and user."
+msgstr "Drugi popis već koristi ovaj poslužitelj i korisnika."
 
-#: src/ashytv/window.py:984
+#: src/ashytv/window.py:1012
+msgid "Another playlist already uses this address."
+msgstr "Drugi popis već koristi ovu adresu."
+
+#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
 msgid "Updating playlist…"
 msgstr "Ažuriranje playliste…"
 
-#: src/ashytv/window.py:1013
+#: src/ashytv/window.py:1068
+msgid "Provider password not found; add the playlist again."
+msgstr "Lozinka pružatelja nije pronađena; ponovno dodajte playlistu."
+
+#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Playlista „{name}“ ažurirana je."
 
-#: src/ashytv/window.py:1017
+#: src/ashytv/window.py:1115
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
@@ -1985,7 +2094,7 @@ msgstr[0] "Uvezena je {n} stavka."
 msgstr[1] "Uvezene su {n} stavke."
 msgstr[2] "Uvezeno je {n} stavki."
 
-#: src/ashytv/window.py:1018
+#: src/ashytv/window.py:1116
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
@@ -1993,39 +2102,39 @@ msgstr[0] "Playlista je spremna: {n} stavka."
 msgstr[1] "Playlista je spremna: {n} stavke."
 msgstr[2] "Playlista je spremna: {n} stavki."
 
-#: src/ashytv/window.py:1040
+#: src/ashytv/window.py:1139
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Nije moguće ažurirati „{name}“: {error}"
 
-#: src/ashytv/window.py:1044
+#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Neuspjeh: {error}"
 
-#: src/ashytv/window.py:1045
+#: src/ashytv/window.py:1149
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Uvoz nije uspio: {error}"
 
-#: src/ashytv/window.py:1051
+#: src/ashytv/window.py:1155
 msgid "Please wait for the import to finish."
 msgstr "Pričekajte da uvoz završi."
 
-#: src/ashytv/window.py:1070
+#: src/ashytv/window.py:1174
 msgid "Playlist removed."
 msgstr "Playlista je uklonjena."
 
-#: src/ashytv/window.py:1148
+#: src/ashytv/window.py:1252
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Vodič (EPG) nije dostupan: {error}"
 
-#: src/ashytv/window.py:1210
+#: src/ashytv/window.py:1316
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "Želite li kratak obilazak AshyTV-a?"
 
-#: src/ashytv/window.py:1211
+#: src/ashytv/window.py:1317
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -2033,19 +2142,19 @@ msgstr ""
 "Nekoliko koraka kroz stvarne zaslone: kanali, vodič, filmovi, playliste i "
 "postavke. Možete ga ponovno otvoriti iz glavnog izbornika."
 
-#: src/ashytv/window.py:1213
+#: src/ashytv/window.py:1319
 msgid "Not now"
 msgstr "Ne sada"
 
-#: src/ashytv/window.py:1214
+#: src/ashytv/window.py:1320
 msgid "Start"
 msgstr "Započni"
 
-#: src/ashytv/window.py:1262
+#: src/ashytv/window.py:1368
 msgid "Sections"
 msgstr "Odjeljci"
 
-#: src/ashytv/window.py:1263
+#: src/ashytv/window.py:1369
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2053,11 +2162,11 @@ msgstr ""
 "Početna, TV kanali, filmovi, serije, favoriti, snimke, playliste i postavke. "
 "Rade i tipkovnica, daljinski upravljač ili kontroler za igre."
 
-#: src/ashytv/window.py:1266
+#: src/ashytv/window.py:1372
 msgid "Channel groups"
 msgstr "Grupe kanala"
 
-#: src/ashytv/window.py:1267
+#: src/ashytv/window.py:1373
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
@@ -2065,7 +2174,7 @@ msgstr ""
 "Odaberite grupu da biste vidjeli njezine kanale. Desnom tipkom (ili dugim "
 "pritiskom) kliknite grupu da biste je premjestili ili sakrili."
 
-#: src/ashytv/window.py:1271
+#: src/ashytv/window.py:1377
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
@@ -2073,7 +2182,7 @@ msgstr ""
 "Klik odabire kanal; dvoklik ili Enter ga otvara. Desnom tipkom kliknite "
 "kanal da biste ga sakrili ili dodali u favorite."
 
-#: src/ashytv/window.py:1275
+#: src/ashytv/window.py:1381
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
@@ -2081,31 +2190,31 @@ msgstr ""
 "Odabrani kanal ovdje se reproducira utišano (gumb uključuje zvuk), uz ono "
 "što je sada i sljedeće na programu."
 
-#: src/ashytv/window.py:1278
+#: src/ashytv/window.py:1384
 msgid "Hidden items"
 msgstr "Skrivene stavke"
 
-#: src/ashytv/window.py:1279
+#: src/ashytv/window.py:1385
 msgid "Everything you hid is here. Open it to show items again."
 msgstr ""
 "Sve što ste sakrili nalazi se ovdje. Otvorite da biste ponovno prikazali "
 "stavke."
 
-#: src/ashytv/window.py:1281
+#: src/ashytv/window.py:1387
 msgid "Program guide"
 msgstr "TV vodič"
 
-#: src/ashytv/window.py:1282
+#: src/ashytv/window.py:1388
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr ""
 "Prijeđite na Vodič da biste vidjeli što je na programu, sat po sat, i "
 "postavili podsjetnike."
 
-#: src/ashytv/window.py:1284
+#: src/ashytv/window.py:1390
 msgid "Movies and series"
 msgstr "Filmovi i serije"
 
-#: src/ashytv/window.py:1285
+#: src/ashytv/window.py:1391
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2115,11 +2224,11 @@ msgstr ""
 "biste vidjeli pojedinosti i glumce; kliknite glumca da biste vidjeli njegove "
 "druge naslove u vašim playlistama."
 
-#: src/ashytv/window.py:1289
+#: src/ashytv/window.py:1395
 msgid "Favorites and recordings"
 msgstr "Favoriti i snimke"
 
-#: src/ashytv/window.py:1290
+#: src/ashytv/window.py:1396
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
@@ -2127,7 +2236,7 @@ msgstr ""
 "Srce ovdje čuva kanale, filmove i serije; snimke TV-a uživo nalaze se u "
 "Snimkama."
 
-#: src/ashytv/window.py:1294
+#: src/ashytv/window.py:1400
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2137,101 +2246,101 @@ msgstr ""
 "(druge DNS-ove pružatelja): točke pokazuju je li svaki na mreži, spor ili ne "
 "radi, a AshyTV se prebacuje automatski."
 
-#: src/ashytv/window.py:1300
+#: src/ashytv/window.py:1406
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
 msgstr ""
 "Teme i boje, skriveni kanali i grupe, sigurni DNS, roditeljski PIN i više."
 
-#: src/ashytv/window.py:1303
+#: src/ashytv/window.py:1409
 msgid "See it again"
 msgstr "Pogledaj ponovno"
 
-#: src/ashytv/window.py:1304
+#: src/ashytv/window.py:1410
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr ""
 "Ponovno otvorite ovaj obilazak iz glavnog izbornika (Vođeni obilazak) ili iz "
 "Postavke → O aplikaciji."
 
-#: src/ashytv/window.py:1354
+#: src/ashytv/window.py:1460
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr ""
 "„{name}”: glavni poslužitelj ne odgovara. Koristi se rezervni poslužitelj."
 
-#: src/ashytv/window.py:1357
+#: src/ashytv/window.py:1463
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "„{name}”: glavni poslužitelj se vratio."
 
-#: src/ashytv/window.py:1363
+#: src/ashytv/window.py:1469
 msgid "AshyTV servers"
 msgstr "Poslužitelji AshyTV-a"
 
-#: src/ashytv/window.py:1385
+#: src/ashytv/window.py:1491
 msgid "Switching to the main server…"
 msgstr "Prebacivanje na glavni poslužitelj…"
 
-#: src/ashytv/window.py:1386
+#: src/ashytv/window.py:1492
 msgid "Switching to the backup server…"
 msgstr "Prebacivanje na rezervni poslužitelj…"
 
-#: src/ashytv/window.py:1456
+#: src/ashytv/window.py:1562
 msgid "Programme"
 msgstr "Emisija"
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1566
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Podsjetit ćemo te na „{title}” u {time}"
 
-#: src/ashytv/window.py:1461
+#: src/ashytv/window.py:1567
 msgid "Reminder cancelled"
 msgstr "Podsjetnik otkazan"
 
-#: src/ashytv/window.py:1473
+#: src/ashytv/window.py:1579
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "„{title}” uskoro počinje na kanalu {channel}"
 
-#: src/ashytv/window.py:1475
+#: src/ashytv/window.py:1581
 msgid "AshyTV reminder"
 msgstr "AshyTV podsjetnik"
 
-#: src/ashytv/window.py:1494
+#: src/ashytv/window.py:1600
 msgid "This channel is no longer in your playlists."
 msgstr "Ovaj kanal više nije u tvojim playlistama."
 
-#: src/ashytv/window.py:1534
+#: src/ashytv/window.py:1640
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Grupa „{name}” skrivena"
 
-#: src/ashytv/window.py:1535
+#: src/ashytv/window.py:1641
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "Kategorija „{name}” je skrivena"
 
-#: src/ashytv/window.py:1549
+#: src/ashytv/window.py:1655
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "Kanal „{name}” je skriven"
 
-#: src/ashytv/window.py:1555
+#: src/ashytv/window.py:1661
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "Za ponovni prikaz: Postavke → Skriveni kanali i grupe"
 
-#: src/ashytv/window.py:1557
+#: src/ashytv/window.py:1663
 msgid "See hidden"
 msgstr "Prikaži skriveno"
 
-#: src/ashytv/window.py:1562
+#: src/ashytv/window.py:1668
 msgid "Undo"
 msgstr "Poništi"
 
-#: src/ashytv/window.py:1864
+#: src/ashytv/window.py:1974
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr "Spremanje trenutno nije moguće: popis se ažurira. Pokušajte ponovno."
 
@@ -2300,6 +2409,21 @@ msgid ""
 msgstr ""
 "Reprodukcija putem libmpv-a s hardverskim dekodiranjem, slikom u slici i "
 "snimanjem"
+
+#~ msgid "Sports"
+#~ msgstr "Sport"
+
+#~ msgid "Free-to-air"
+#~ msgstr "Slobodni program"
+
+#~ msgid "Kids"
+#~ msgstr "Za djecu"
+
+#~ msgid "Recent"
+#~ msgstr "Nedavno"
+
+#~ msgid "All in this category"
+#~ msgstr "Sve u ovoj kategoriji"
 
 #~ msgid "Favorite people"
 #~ msgstr "Omiljene osobe"

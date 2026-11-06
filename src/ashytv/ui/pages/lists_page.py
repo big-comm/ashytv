@@ -7,9 +7,11 @@ import time
 
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk
 
+from ... import compat
 from ...i18n import _, ngettext
 from ...services import failover, free_tv, http
 from ...services.xtream_client import XtreamProvider, parse_provider
+from ..playlist_dialog import FILE, FREE, URL, XTREAM, PlaylistDialog
 from ..servers_dialog import ServersDialog, status_text
 from ._common import page_header
 
@@ -55,6 +57,8 @@ class ListsPage(Gtk.Box):
         # playlist id, backup servers (edited in the Servers dialog)
         "servers-changed": (GObject.SignalFlags.RUN_FIRST, None, (int, object)),
         "check-servers": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
+        # playlist id, the edited values (dict), the PlaylistDialog to answer
+        "edit-requested": (GObject.SignalFlags.RUN_FIRST, None, (int, object, object)),
         "refresh-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         "delete-requested": (GObject.SignalFlags.RUN_FIRST, None, (int,)),
         # playlist id, enabled
@@ -68,6 +72,8 @@ class ListsPage(Gtk.Box):
         self._switches: dict[int, Gtk.Switch] = {}
         self._refocus: int | None = None  # playlist whose switch gets the focus back
         self._busy = False
+        # Set by the window: the Xtream provider (with its password) of a playlist.
+        self.provider_lookup = lambda _playlist_id: None
 
         self.append(page_header(_("Playlists"),
                                 _("Manage your playlists or add a new one")))
@@ -177,7 +183,7 @@ class ListsPage(Gtk.Box):
 
         self.save_btn = Gtk.Button()
         sbox = Gtk.Box(spacing=8, halign=Gtk.Align.CENTER)
-        self.save_spinner = Adw.Spinner(visible=False)
+        self.save_spinner = compat.spinner(visible=False)
         sbox.append(self.save_spinner)
         sbox.append(Gtk.Label(label=_("Save and Connect")))
         self.save_btn.set_child(sbox)
@@ -406,6 +412,10 @@ class ListsPage(Gtk.Box):
             guide.add_css_class("flat")
             guide.connect("clicked", lambda *_: self._edit_guide_link(pl, meta))
             row.add_suffix(guide)
+        edit = Gtk.Button(icon_name="document-edit-symbolic", valign=Gtk.Align.CENTER,
+                          tooltip_text=_("Edit playlist"))
+        edit.add_css_class("flat")
+        edit.connect("clicked", lambda *_: self._edit_playlist(pl, meta))
         refresh = Gtk.Button(icon_name="view-refresh-symbolic", valign=Gtk.Align.CENTER,
                              tooltip_text=_("Refresh playlist"))
         refresh.add_css_class("flat")
@@ -415,6 +425,7 @@ class ListsPage(Gtk.Box):
         delete.add_css_class("flat")
         delete.connect("clicked", lambda *_: self._confirm_delete(pl))
         row.add_suffix(switch)
+        row.add_suffix(edit)
         row.add_suffix(refresh)
         row.add_suffix(delete)
         return row
@@ -461,6 +472,34 @@ class ListsPage(Gtk.Box):
         dialog.connect("save", lambda _d, backups: self.emit("servers-changed",
                                                              pl["id"], backups))
         dialog.connect("check", lambda _d: self.emit("check-servers", pl["id"]))
+        dialog.present(self)
+
+    def _edit_playlist(self, pl, meta: dict) -> None:
+        """Change the name, address, login, backups or guide link of a playlist."""
+        source = pl["source"]
+        backups = failover.clean_backups(self.storage.backups(pl["id"]),
+                                         source if "://" in source else "")
+        guide = {"guide": meta.get("epg_override", ""),
+                 "guide_placeholder": meta.get("epg_url", "")}
+        if pl["kind"] == "xtream":
+            prov = self.provider_lookup(pl["id"])
+            if prov is None:
+                try:
+                    prov = XtreamProvider.from_json(source)
+                except (ValueError, KeyError):
+                    return
+            dialog = PlaylistDialog(XTREAM, pl["name"], host=prov.host,
+                                    username=prov.username, password=prov.password,
+                                    backups=failover.clean_backups(
+                                        self.storage.backups(pl["id"]), prov.host))
+        elif free_tv.is_free_tv(source):
+            dialog = PlaylistDialog(FREE, pl["name"])
+        elif "://" in source:
+            dialog = PlaylistDialog(URL, pl["name"], url=source, backups=backups, **guide)
+        else:
+            dialog = PlaylistDialog(FILE, pl["name"], **guide)
+        dialog.connect("save", lambda d, values: self.emit("edit-requested", pl["id"],
+                                                           values, d))
         dialog.present(self)
 
     def _edit_guide_link(self, pl, meta: dict) -> None:

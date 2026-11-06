@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 18:42-0300\n"
+"POT-Creation-Date: 2026-11-06 14:58-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -17,15 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/ashytv/application.py:84
+#: src/ashytv/application.py:90
 msgid "AshyTV could not open its database"
 msgstr "AshyTV ei voinut avata tietokantaansa"
 
-#: src/ashytv/application.py:94
+#: src/ashytv/application.py:118
+msgid "Some channels will not play"
+msgstr "Joitakin kanavia ei voi toistaa"
+
+#: src/ashytv/application.py:119
+#, python-brace-format
+msgid "The system's video codecs lack {codecs}, used by most TV channels."
+msgstr ""
+"Järjestelmän videokoodekeista puuttuu {codecs}, jota useimmat tv-kanavat "
+"käyttävät."
+
+#: src/ashytv/application.py:122 src/ashytv/application.py:129
+#: src/ashytv/ui/install_dialog.py:62
 msgid "Close"
 msgstr "Sulje"
 
-#: src/ashytv/application.py:161
+#: src/ashytv/application.py:215
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -33,7 +45,7 @@ msgstr ""
 "Moderni IPTV-soitin Linux-työpöydälle.\n"
 "Tuo oma soittolistasi — sovellus ei tarjoa sisältöä."
 
-#: src/ashytv/application.py:168 src/ashytv/ui/pages/settings_page.py:341
+#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
@@ -41,27 +53,31 @@ msgstr ""
 "Näyttelijätiedot: TMDB. Tämä tuote käyttää TMDB:n rajapintaa, mutta TMDB ei "
 "ole hyväksynyt tai sertifioinut sitä."
 
+#: src/ashytv/application.py:241 src/ashytv/window.py:134
+msgid "Keyboard Shortcuts"
+msgstr "Pikanäppäimet"
+
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
 msgstr "Suora TV"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/channels_page.py:41
-#: src/ashytv/ui/pages/favorites_page.py:48 src/ashytv/window.py:220
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
+#: src/ashytv/window.py:222
 msgid "Movies"
 msgstr "Elokuvat"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:351
-#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/channels_page.py:42
-#: src/ashytv/ui/pages/favorites_page.py:49 src/ashytv/window.py:229
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
+#: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
+#: src/ashytv/window.py:231
 msgid "Series"
 msgstr "Sarjat"
 
-#: src/ashytv/models/channel.py:63
+#: src/ashytv/models/channel.py:64
 msgid "Unnamed"
 msgstr "Nimetön"
 
-#: src/ashytv/models/channel.py:81
+#: src/ashytv/models/channel.py:82
 #, python-brace-format
 msgid "S{season} • E{episode}"
 msgstr "S{season} • E{episode}"
@@ -99,11 +115,11 @@ msgstr "Piirretyt"
 msgid "Business"
 msgstr "Talous"
 
-#: src/ashytv/services/free_tv.py:157 src/ashytv/ui/pages/channels_page.py:39
+#: src/ashytv/services/free_tv.py:157
 msgid "News"
 msgstr "Uutiset"
 
-#: src/ashytv/services/free_tv.py:158 src/ashytv/ui/pages/channels_page.py:45
+#: src/ashytv/services/free_tv.py:158
 msgid "Documentaries"
 msgstr "Dokumentit"
 
@@ -111,11 +127,11 @@ msgstr "Dokumentit"
 msgid "Weather"
 msgstr "Sää"
 
-#: src/ashytv/services/free_tv.py:159 src/ashytv/ui/pages/channels_page.py:47
+#: src/ashytv/services/free_tv.py:159
 msgid "Music"
 msgstr "Musiikki"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:236
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:242
 msgid "All countries"
 msgstr "Kaikki maat"
 
@@ -152,73 +168,93 @@ msgstr "Palvelin vastasi liian hitaasti."
 msgid "Could not reach the server: {reason}"
 msgstr "Palvelimeen ei saatu yhteyttä: {reason}"
 
-#: src/ashytv/services/importer.py:38 src/ashytv/services/importer.py:58
+#: src/ashytv/services/importer.py:39 src/ashytv/services/importer.py:61
 msgid "The address did not return an M3U playlist"
 msgstr "Osoite ei palauttanut M3U-soittolistaa"
 
-#: src/ashytv/services/importer.py:53
+#: src/ashytv/services/importer.py:56
 msgid "Downloading playlist…"
 msgstr "Ladataan soittolistaa…"
 
-#: src/ashytv/services/importer.py:61
+#: src/ashytv/services/importer.py:64
 msgid "Processing playlist…"
 msgstr "Käsitellään soittolistaa…"
 
-#: src/ashytv/services/importer.py:68
+#: src/ashytv/services/importer.py:73
 msgid "No channels found in the playlist"
 msgstr "Soittolistasta ei löytynyt kanavia"
 
-#: src/ashytv/services/importer.py:75 src/ashytv/services/importer.py:112
+#: src/ashytv/services/importer.py:84 src/ashytv/services/importer.py:146
 msgid "Saving…"
 msgstr "Tallennetaan…"
 
-#: src/ashytv/services/importer.py:90
+#: src/ashytv/services/importer.py:121
 msgid "Connecting to provider…"
 msgstr "Yhdistetään palveluntarjoajaan…"
 
-#: src/ashytv/services/importer.py:93
+#: src/ashytv/services/importer.py:124
 msgid "The provider returned no content"
 msgstr "Palveluntarjoaja ei palauttanut sisältöä"
 
-#: src/ashytv/services/settings.py:48
+#: src/ashytv/services/settings.py:49
 msgid "Blue"
 msgstr "Sininen"
 
-#: src/ashytv/services/settings.py:49
+#: src/ashytv/services/settings.py:50
 msgid "Teal"
 msgstr "Sinivihreä"
 
-#: src/ashytv/services/settings.py:50
+#: src/ashytv/services/settings.py:51
 msgid "Green"
 msgstr "Vihreä"
 
-#: src/ashytv/services/settings.py:51
+#: src/ashytv/services/settings.py:52
 msgid "Yellow"
 msgstr "Keltainen"
 
-#: src/ashytv/services/settings.py:52
+#: src/ashytv/services/settings.py:53
 msgid "Orange"
 msgstr "Oranssi"
 
-#: src/ashytv/services/settings.py:53
+#: src/ashytv/services/settings.py:54
 msgid "Red"
 msgstr "Punainen"
 
-#: src/ashytv/services/settings.py:54
+#: src/ashytv/services/settings.py:55
 msgid "Pink"
 msgstr "Vaaleanpunainen"
 
-#: src/ashytv/services/settings.py:55
+#: src/ashytv/services/settings.py:56
 msgid "Purple"
 msgstr "Violetti"
 
-#: src/ashytv/services/settings.py:56
+#: src/ashytv/services/settings.py:57
 msgid "Slate"
 msgstr "Liuskekivi"
 
-#: src/ashytv/services/settings.py:57
+#: src/ashytv/services/settings.py:58
 msgid "Emerald"
 msgstr "Smaragdi"
+
+#: src/ashytv/services/system_deps.py:108
+msgid ""
+"Enable the RPM Fusion repository and install the full codecs:\n"
+"sudo dnf install libavcodec-freeworld"
+msgstr ""
+"Ota RPM Fusion -ohjelmistolähde käyttöön ja asenna täydet koodekit:\n"
+"sudo dnf install libavcodec-freeworld"
+
+#: src/ashytv/services/system_deps.py:113
+msgid ""
+"Add the Packman repository and switch the FFmpeg libraries to it:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+msgstr ""
+"Lisää Packman-ohjelmistolähde ja vaihda FFmpeg-kirjastot siihen:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+
+#: src/ashytv/services/system_deps.py:116
+msgid "Install your distribution's full FFmpeg libraries (libavcodec)."
+msgstr "Asenna jakelusi täydet FFmpeg-kirjastot (libavcodec)."
 
 #: src/ashytv/services/text.py:26
 #, python-brace-format
@@ -234,98 +270,99 @@ msgstr "Virheellinen käyttäjätunnus tai salasana"
 msgid "Account status: {status}"
 msgstr "Tilin tila: {status}"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Actor"
 msgstr "Näyttelijä"
 
-#: src/ashytv/ui/cast.py:182 src/ashytv/ui/detail_dialog.py:244
+#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:280
 msgid "Director"
 msgstr "Ohjaaja"
 
-#: src/ashytv/ui/cast.py:182
+#: src/ashytv/ui/cast.py:209
 msgid "Writer"
 msgstr "Käsikirjoittaja"
 
-#: src/ashytv/ui/cast.py:183
+#: src/ashytv/ui/cast.py:210
 msgid "Producer"
 msgstr "Tuottaja"
 
-#: src/ashytv/ui/cast.py:214 src/ashytv/ui/detail_dialog.py:246
+#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:289
 msgid "Cast"
 msgstr "Näyttelijät"
 
-#: src/ashytv/ui/cast.py:246
+#: src/ashytv/ui/cast.py:273
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Nimikkeet, joissa {name}"
 
-#: src/ashytv/ui/cast.py:305
+#: src/ashytv/ui/cast.py:332
 msgid "Cast data: TMDB"
 msgstr "Näyttelijätiedot: TMDB"
 
-#: src/ashytv/ui/cast.py:329 src/ashytv/ui/detail_dialog.py:386
-#: src/ashytv/ui/pages/catalog_page.py:280
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/pages/catalog_page.py:353
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "Poista suosikeista"
 
-#: src/ashytv/ui/cast.py:330 src/ashytv/ui/detail_dialog.py:387
-#: src/ashytv/ui/pages/catalog_page.py:281
-#: src/ashytv/ui/pages/channels_page.py:610
+#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:452
+#: src/ashytv/ui/pages/catalog_page.py:354
+#: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "Lisää suosikkeihin"
 
-#: src/ashytv/ui/cast.py:356
+#: src/ashytv/ui/cast.py:383
 msgid "Nothing in your playlists"
 msgstr "Ei mitään soittolistoillasi"
 
-#: src/ashytv/ui/cast.py:357
+#: src/ashytv/ui/cast.py:384
 msgid "None of this person's movies or series are in your playlists."
 msgstr ""
 "Mikään tämän henkilön elokuvista tai sarjoista ei ole soittolistoillasi."
 
-#: src/ashytv/ui/cast.py:362
+#: src/ashytv/ui/cast.py:389
 msgid "Found in the details of the titles you opened."
 msgstr "Löytyi avaamiesi nimikkeiden tiedoista."
 
-#: src/ashytv/ui/channel_info.py:70
+#: src/ashytv/ui/channel_info.py:71
 msgid "Live"
 msgstr "Suora"
 
-#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
+#: src/ashytv/ui/channel_info.py:76 src/ashytv/ui/channel_info.py:225
 msgid "Unmute"
 msgstr "Palauta ääni"
 
-#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:332
+#: src/ashytv/ui/channel_info.py:121 src/ashytv/ui/channel_overlay.py:332
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "Ei ohjelmistoa"
 
-#: src/ashytv/ui/channel_info.py:151
+#: src/ashytv/ui/channel_info.py:152
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "Kanava {number}"
 
-#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Nyt"
 
-#: src/ashytv/ui/channel_info.py:180
+#: src/ashytv/ui/channel_info.py:181
 #, python-brace-format
 msgid "{m} min left"
 msgstr "{m} min jäljellä"
 
-#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:812
+#: src/ashytv/ui/channel_info.py:185 src/ashytv/ui/player_view.py:813
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Seuraavaksi: {title}"
 
-#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:857
+#: src/ashytv/ui/channel_info.py:225 src/ashytv/ui/player_view.py:858
 #: src/ashytv/ui/shortcuts.py:38
 msgid "Mute"
 msgstr "Mykistä"
 
-#: src/ashytv/ui/channel_overlay.py:58
+#: src/ashytv/ui/channel_overlay.py:58 src/ashytv/ui/pages/_common.py:37
+#: src/ashytv/ui/pages/_common.py:38
 msgid "Groups"
 msgstr "Ryhmät"
 
@@ -335,7 +372,7 @@ msgstr "→ tai Enter: kanavat  •  Esc: takaisin"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:590
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
 msgid "Channels"
 msgstr "Kanavat"
 
@@ -343,97 +380,122 @@ msgstr "Kanavat"
 msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: katso  •  ←: ryhmät  •  Esc: sulje"
 
-#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:195
-#: src/ashytv/ui/pages/channels_page.py:609 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1479 src/ashytv/window.py:1485
+#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
+#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
 msgid "Watch"
 msgstr "Katso"
 
-#: src/ashytv/ui/detail_dialog.py:134
+#: src/ashytv/ui/detail_dialog.py:141
 msgid "Episodes"
 msgstr "Jaksot"
 
-#: src/ashytv/ui/detail_dialog.py:149
+#: src/ashytv/ui/detail_dialog.py:156
 msgid "Could not load"
 msgstr "Lataus epäonnistui"
 
-#: src/ashytv/ui/detail_dialog.py:194
+#: src/ashytv/ui/detail_dialog.py:201
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Jatka kohdasta {time}"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:234
+msgid "More like this"
+msgstr "Lisää samanlaisia"
+
+#: src/ashytv/ui/detail_dialog.py:256
+#, python-brace-format
+msgid "{m} min per episode"
+msgstr "{m} min / jakso"
+
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{h} h {m} min"
 msgstr "{h} h {m} min"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{m} min"
 msgstr "{m} min"
 
-#: src/ashytv/ui/detail_dialog.py:240
+#: src/ashytv/ui/detail_dialog.py:270
 #, python-brace-format
 msgid "Ends at {time}"
 msgstr "Päättyy klo {time}"
 
-#: src/ashytv/ui/detail_dialog.py:243 src/ashytv/ui/player_view.py:1052
-msgid "Audio"
-msgstr "Ääni"
+#: src/ashytv/ui/detail_dialog.py:280
+msgid "Created by"
+msgstr "Luoja"
 
-#: src/ashytv/ui/detail_dialog.py:243
-msgid "Video"
-msgstr "Video"
+#: src/ashytv/ui/detail_dialog.py:282
+msgid "Writers"
+msgstr "Käsikirjoitus"
 
-#: src/ashytv/ui/detail_dialog.py:247
-msgid "Country"
-msgstr "Maa"
+#: src/ashytv/ui/detail_dialog.py:283
+msgid "Studios"
+msgstr "Studiot"
 
-#: src/ashytv/ui/detail_dialog.py:247
+#: src/ashytv/ui/detail_dialog.py:284
 msgid "Genres"
 msgstr "Lajityypit"
 
-#: src/ashytv/ui/detail_dialog.py:248
+#: src/ashytv/ui/detail_dialog.py:286
+msgid "Tags"
+msgstr "Tunnisteet"
+
+#: src/ashytv/ui/detail_dialog.py:287 src/ashytv/ui/player_view.py:1053
+msgid "Audio"
+msgstr "Ääni"
+
+#: src/ashytv/ui/detail_dialog.py:287
+msgid "Video"
+msgstr "Video"
+
+#: src/ashytv/ui/detail_dialog.py:290
+msgid "Country"
+msgstr "Maa"
+
+#: src/ashytv/ui/detail_dialog.py:291
 msgid "Released"
 msgstr "Julkaistu"
 
-#: src/ashytv/ui/detail_dialog.py:249 src/ashytv/ui/player_view.py:239
-#: src/ashytv/ui/player_view.py:1007 src/ashytv/ui/player_view.py:1024
+#: src/ashytv/ui/detail_dialog.py:292 src/ashytv/ui/player_view.py:240
+#: src/ashytv/ui/player_view.py:1008 src/ashytv/ui/player_view.py:1025
 msgid "Subtitles"
 msgstr "Tekstitykset"
 
-#: src/ashytv/ui/detail_dialog.py:249
+#: src/ashytv/ui/detail_dialog.py:292
 #, python-brace-format
 msgid "{n} file"
 msgid_plural "{n} files"
 msgstr[0] "{n} tiedosto"
 msgstr[1] "{n} tiedostoa"
 
-#: src/ashytv/ui/detail_dialog.py:266
+#: src/ashytv/ui/detail_dialog.py:331
 msgid "Trailer"
 msgstr "Traileri"
 
-#: src/ashytv/ui/detail_dialog.py:292
+#: src/ashytv/ui/detail_dialog.py:357
 msgid "No episodes available"
 msgstr "Jaksoja ei ole saatavilla"
 
-#: src/ashytv/ui/detail_dialog.py:297
+#: src/ashytv/ui/detail_dialog.py:362
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Kausi {n}"
 
-#: src/ashytv/ui/detail_dialog.py:305
+#: src/ashytv/ui/detail_dialog.py:370
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Katso {label}"
 
-#: src/ashytv/ui/detail_dialog.py:346
+#: src/ashytv/ui/detail_dialog.py:411
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Jakso {n}"
 
-#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:153
-#: src/ashytv/ui/pages/settings_page.py:154
+#: src/ashytv/ui/hidden_dialog.py:18 src/ashytv/ui/pages/settings_page.py:156
+#: src/ashytv/ui/pages/settings_page.py:157
 msgid "Hidden channels and groups"
 msgstr "Piilotetut kanavat ja ryhmät"
 
@@ -467,6 +529,52 @@ msgstr "Kanava"
 msgid "Show"
 msgstr "Näytä"
 
+#: src/ashytv/ui/install_dialog.py:31
+msgid "Video player library not found"
+msgstr "Videosoittimen kirjastoa ei löytynyt"
+
+#: src/ashytv/ui/install_dialog.py:32
+msgid ""
+"AshyTV plays video with libmpv, which is not installed on this system. It is "
+"installed once from your distribution's packages."
+msgstr ""
+"AshyTV toistaa videota libmpv-kirjastolla, jota ei ole asennettu tähän "
+"järjestelmään. Se asennetaan kerran jakelusi paketeista."
+
+#: src/ashytv/ui/install_dialog.py:39
+msgid "Install it with your package manager"
+msgstr "Asenna se paketinhallinnalla"
+
+#: src/ashytv/ui/install_dialog.py:40
+msgid ""
+"Install the package that provides libmpv.so.2 (usually “mpv”, “libmpv2” or "
+"“mpv-libs”) and open AshyTV again."
+msgstr ""
+"Asenna paketti, joka tarjoaa libmpv.so.2:n (yleensä ”mpv”, ”libmpv2” tai "
+"”mpv-libs”), ja avaa AshyTV uudelleen."
+
+#: src/ashytv/ui/install_dialog.py:45
+msgid "Command to be executed"
+msgstr "Suoritettava komento"
+
+#: src/ashytv/ui/install_dialog.py:65
+msgid "Install"
+msgstr "Asenna"
+
+#: src/ashytv/ui/install_dialog.py:125
+msgid "Installed. Open AshyTV again to start watching."
+msgstr "Asennettu. Avaa AshyTV uudelleen aloittaaksesi katselun."
+
+#: src/ashytv/ui/install_dialog.py:126
+msgid "Close AshyTV"
+msgstr "Sulje AshyTV"
+
+#: src/ashytv/ui/install_dialog.py:129
+msgid ""
+"The installation did not finish. Check the messages above and try again."
+msgstr ""
+"Asennus ei valmistunut. Tarkista yllä olevat viestit ja yritä uudelleen."
+
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
 msgstr "Takaisin AshyTV:hen"
@@ -479,11 +587,10 @@ msgstr "Pysäytä"
 msgid "Home"
 msgstr "Koti"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:81
-#: src/ashytv/ui/pages/channels_page.py:264
-#: src/ashytv/ui/pages/channels_page.py:287
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:601
-#: src/ashytv/window.py:624
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:242
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
+#: src/ashytv/window.py:628
 msgid "Favorites"
 msgstr "Suosikit"
 
@@ -491,147 +598,126 @@ msgstr "Suosikit"
 msgid "Recordings"
 msgstr "Tallenteet"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:72
-#: src/ashytv/window.py:1293
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
+#: src/ashytv/window.py:1399
 msgid "Playlists"
 msgstr "Soittolistat"
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1299
+#: src/ashytv/window.py:1405
 msgid "Settings"
 msgstr "Asetukset"
 
-#: src/ashytv/ui/pages/catalog_page.py:59
+#: src/ashytv/ui/pages/catalog_page.py:85
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "Henkilöt"
 
-#: src/ashytv/ui/pages/catalog_page.py:90
+#: src/ashytv/ui/pages/catalog_page.py:114
 msgid "Nothing found"
 msgstr "Mitään ei löytynyt"
 
-#: src/ashytv/ui/pages/catalog_page.py:91
+#: src/ashytv/ui/pages/catalog_page.py:115
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Lisää soittolista kohdassa ”Soittolistat” tai muuta suodatinta."
 
-#: src/ashytv/ui/pages/catalog_page.py:124
-#: src/ashytv/ui/pages/channels_page.py:264
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "All"
 msgstr "Kaikki"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:196
 msgid "New Releases"
 msgstr "Uutuudet"
 
-#: src/ashytv/ui/pages/catalog_page.py:124
+#: src/ashytv/ui/pages/catalog_page.py:197
 msgid "Trending"
 msgstr "Trendaavat"
 
-#: src/ashytv/ui/pages/catalog_page.py:170
-#: src/ashytv/ui/pages/channels_page.py:343
+#: src/ashytv/ui/pages/catalog_page.py:207
+#: src/ashytv/ui/pages/channels_page.py:286
+msgid "See hidden channels and groups"
+msgstr "Näytä piilotetut kanavat ja ryhmät"
+
+#: src/ashytv/ui/pages/catalog_page.py:212
+#: src/ashytv/ui/pages/channels_page.py:291
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "Piilotetut ({n})"
 
-#: src/ashytv/ui/pages/catalog_page.py:172
-#: src/ashytv/ui/pages/channels_page.py:338
-msgid "See hidden channels and groups"
-msgstr "Näytä piilotetut kanavat ja ryhmät"
-
-#: src/ashytv/ui/pages/catalog_page.py:178
+#: src/ashytv/ui/pages/catalog_page.py:235
 msgid "Hide category"
 msgstr "Piilota luokka"
 
-#: src/ashytv/ui/pages/channels_page.py:37
-msgid "Sports"
-msgstr "Urheilu"
-
-#: src/ashytv/ui/pages/channels_page.py:40
-msgid "Free-to-air"
-msgstr "Ilmaiskanavat"
-
-#: src/ashytv/ui/pages/channels_page.py:43
-msgid "Kids"
-msgstr "Lapset"
-
-#: src/ashytv/ui/pages/channels_page.py:81
+#: src/ashytv/ui/pages/channels_page.py:68
 msgid "TV Channels"
 msgstr "TV-kanavat"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "Channels, movies and series you marked"
 msgstr "Merkitsemäsi kanavat, elokuvat ja sarjat"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "All your channels organized by category"
 msgstr "Kaikki kanavasi luokittain"
 
-#: src/ashytv/ui/pages/channels_page.py:95
+#: src/ashytv/ui/pages/channels_page.py:82
 msgid "List"
 msgstr "Luettelo"
 
-#: src/ashytv/ui/pages/channels_page.py:96
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "Guide"
 msgstr "Opas"
 
-#: src/ashytv/ui/pages/channels_page.py:171
+#: src/ashytv/ui/pages/channels_page.py:146
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "Täällä ei ole vielä mitään"
 
-#: src/ashytv/ui/pages/channels_page.py:172
+#: src/ashytv/ui/pages/channels_page.py:147
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr ""
 "Napauta sydäntä kanavan, elokuvan tai sarjan kohdalla, niin se tallentuu "
 "tänne."
 
-#: src/ashytv/ui/pages/channels_page.py:174
+#: src/ashytv/ui/pages/channels_page.py:149
 msgid "No channels in this category."
 msgstr "Tässä luokassa ei ole kanavia."
 
-#: src/ashytv/ui/pages/channels_page.py:264
-msgid "Recent"
-msgstr "Viimeisimmät"
-
-#: src/ashytv/ui/pages/channels_page.py:290 src/ashytv/window.py:602
-#: src/ashytv/window.py:625
-msgid "Recently watched"
-msgstr "Äskettäin katsotut"
-
-#: src/ashytv/ui/pages/channels_page.py:293
+#: src/ashytv/ui/pages/channels_page.py:241
 msgid "All Channels"
 msgstr "Kaikki kanavat"
 
-#: src/ashytv/ui/pages/channels_page.py:293
-msgid "All in this category"
-msgstr "Kaikki tässä luokassa"
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
+#: src/ashytv/window.py:629
+msgid "Recently watched"
+msgstr "Äskettäin katsotut"
 
-#: src/ashytv/ui/pages/channels_page.py:372
+#: src/ashytv/ui/pages/channels_page.py:324
 msgid "Move up"
 msgstr "Siirrä ylös"
 
-#: src/ashytv/ui/pages/channels_page.py:373
+#: src/ashytv/ui/pages/channels_page.py:325
 msgid "Move down"
 msgstr "Siirrä alas"
 
-#: src/ashytv/ui/pages/channels_page.py:374
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Hide group"
 msgstr "Piilota ryhmä"
 
-#: src/ashytv/ui/pages/channels_page.py:583 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:178
 msgid "Favorite"
 msgstr "Suosikki"
 
-#: src/ashytv/ui/pages/channels_page.py:590
+#: src/ashytv/ui/pages/channels_page.py:539
 msgid "More options"
 msgstr "Lisää vaihtoehtoja"
 
-#: src/ashytv/ui/pages/channels_page.py:613
+#: src/ashytv/ui/pages/channels_page.py:562
 msgid "View schedule"
 msgstr "Näytä ohjelmisto"
 
-#: src/ashytv/ui/pages/channels_page.py:615
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "Hide channel"
 msgstr "Piilota kanava"
 
@@ -706,52 +792,53 @@ msgstr "Lisää osiossa {section}"
 msgid "See more"
 msgstr "Näytä lisää"
 
-#: src/ashytv/ui/pages/home_page.py:209
+#: src/ashytv/ui/pages/home_page.py:212
 msgid "Continue Watching"
 msgstr "Jatka katselua"
 
-#: src/ashytv/ui/pages/home_page.py:210 src/ashytv/ui/welcome_view.py:62
+#: src/ashytv/ui/pages/home_page.py:213 src/ashytv/ui/welcome_view.py:62
 msgid "Live Channels"
 msgstr "Suorat kanavat"
 
-#: src/ashytv/ui/pages/home_page.py:211 src/ashytv/ui/pages/home_page.py:213
-#: src/ashytv/ui/pages/home_page.py:215
+#: src/ashytv/ui/pages/home_page.py:214 src/ashytv/ui/pages/home_page.py:216
+#: src/ashytv/ui/pages/home_page.py:218
 msgid "See all"
 msgstr "Näytä kaikki"
 
-#: src/ashytv/ui/pages/home_page.py:212
+#: src/ashytv/ui/pages/home_page.py:215
 msgid "Recently Added Movies"
 msgstr "Äskettäin lisätyt elokuvat"
 
-#: src/ashytv/ui/pages/home_page.py:214
+#: src/ashytv/ui/pages/home_page.py:217
 msgid "Recently Added Series"
 msgstr "Äskettäin lisätyt sarjat"
 
-#: src/ashytv/ui/pages/home_page.py:301
+#: src/ashytv/ui/pages/home_page.py:319
 msgid "Welcome to AshyTV"
 msgstr "Tervetuloa AshyTV:hen"
 
-#: src/ashytv/ui/pages/home_page.py:302
+#: src/ashytv/ui/pages/home_page.py:320
 msgid "Your channels, movies and series in one place"
 msgstr "Kanavasi, elokuvasi ja sarjasi yhdessä paikassa"
 
-#: src/ashytv/ui/pages/home_page.py:303
+#: src/ashytv/ui/pages/home_page.py:321
 msgid "Enter: view channels"
 msgstr "Enter: näytä kanavat"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "Enter: details"
 msgstr "Enter: tiedot"
 
-#: src/ashytv/ui/pages/home_page.py:334
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "← → more titles"
 msgstr "← → lisää nimikkeitä"
 
-#: src/ashytv/ui/pages/lists_page.py:17
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
 msgid "The guide link must be a web address (http or https)."
 msgstr "Oppaan linkin on oltava verkko-osoite (http tai https)."
 
-#: src/ashytv/ui/pages/lists_page.py:27 src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:70
+#: src/ashytv/ui/servers_dialog.py:59
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -759,86 +846,87 @@ msgstr ""
 "Saman palveluntarjoajan muut osoitteet samoilla kirjautumistiedoilla. Kun "
 "pääosoite ei vastaa, AshyTV vaihtaa automaattisesti seuraavaan."
 
-#: src/ashytv/ui/pages/lists_page.py:35 src/ashytv/ui/servers_dialog.py:64
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:75
+#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "Varapalvelin {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:39 src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:69
+#: src/ashytv/ui/servers_dialog.py:58
 msgid "Backup servers (alternative DNS)"
 msgstr "Varapalvelimet (vaihtoehtoinen DNS)"
 
-#: src/ashytv/ui/pages/lists_page.py:73
+#: src/ashytv/ui/pages/lists_page.py:79
 msgid "Manage your playlists or add a new one"
 msgstr "Hallitse soittolistojasi tai lisää uusi"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Playlist"
 msgstr "Lisää soittolista"
 
-#: src/ashytv/ui/pages/lists_page.py:102 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:108 src/ashytv/ui/pages/lists_page.py:366
 msgid "Free TV"
 msgstr "Ilmainen TV"
 
-#: src/ashytv/ui/pages/lists_page.py:102
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "M3U File"
 msgstr "M3U-tiedosto"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:109 src/ashytv/ui/pages/lists_page.py:366
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:114
+#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:48
 msgid "Playlist name"
 msgstr "Soittolistan nimi"
 
-#: src/ashytv/ui/pages/lists_page.py:115 src/ashytv/ui/pages/lists_page.py:527
-#: src/ashytv/ui/pages/lists_page.py:595 src/ashytv/ui/pages/lists_page.py:603
+#: src/ashytv/ui/pages/lists_page.py:121 src/ashytv/ui/pages/lists_page.py:566
+#: src/ashytv/ui/pages/lists_page.py:634 src/ashytv/ui/pages/lists_page.py:642
 msgid "My Playlist"
 msgstr "Oma soittolistani"
 
-#: src/ashytv/ui/pages/lists_page.py:122
+#: src/ashytv/ui/pages/lists_page.py:128
 msgid "Choose .m3u file…"
 msgstr "Valitse .m3u-tiedosto…"
 
-#: src/ashytv/ui/pages/lists_page.py:124 src/ashytv/ui/pages/lists_page.py:340
+#: src/ashytv/ui/pages/lists_page.py:130 src/ashytv/ui/pages/lists_page.py:346
 msgid "No file selected"
 msgstr "Tiedostoa ei ole valittu"
 
-#: src/ashytv/ui/pages/lists_page.py:130
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "File"
 msgstr "Tiedosto"
 
-#: src/ashytv/ui/pages/lists_page.py:135
+#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:52
 msgid "Server (URL)"
 msgstr "Palvelin (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:53
 msgid "Username"
 msgstr "Käyttäjätunnus"
 
-#: src/ashytv/ui/pages/lists_page.py:139
+#: src/ashytv/ui/pages/lists_page.py:145
 msgid "your_username"
 msgstr "käyttäjätunnuksesi"
 
-#: src/ashytv/ui/pages/lists_page.py:140
+#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:54
 msgid "Password"
 msgstr "Salasana"
 
-#: src/ashytv/ui/pages/lists_page.py:141
+#: src/ashytv/ui/pages/lists_page.py:147
 msgid "your_password"
 msgstr "salasanasi"
 
-#: src/ashytv/ui/pages/lists_page.py:143
+#: src/ashytv/ui/pages/lists_page.py:149
 msgid "Paste provider message"
 msgstr "Liitä palveluntarjoajan viesti"
 
-#: src/ashytv/ui/pages/lists_page.py:145
+#: src/ashytv/ui/pages/lists_page.py:151
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -846,27 +934,28 @@ msgstr ""
 "Liitä palveluntarjoajan tervetuloviesti: palvelin, käyttäjätunnus ja "
 "salasana täytetään automaattisesti"
 
-#: src/ashytv/ui/pages/lists_page.py:154
+#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:58
 msgid "Playlist URL (M3U)"
 msgstr "Soittolistan URL (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:166 src/ashytv/ui/pages/lists_page.py:478
+#: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
+#: src/ashytv/ui/playlist_dialog.py:60
 msgid "Guide link (EPG) — optional"
 msgstr "Oppaan linkki (EPG) — valinnainen"
 
-#: src/ashytv/ui/pages/lists_page.py:170
+#: src/ashytv/ui/pages/lists_page.py:176
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr "XMLTV-opas; korvaa soittolistassa mainitun oppaan (url-tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:182
+#: src/ashytv/ui/pages/lists_page.py:188
 msgid "Save and Connect"
 msgstr "Tallenna ja yhdistä"
 
-#: src/ashytv/ui/pages/lists_page.py:199
+#: src/ashytv/ui/pages/lists_page.py:205
 msgid "Secure Connection"
 msgstr "Suojattu yhteys"
 
-#: src/ashytv/ui/pages/lists_page.py:201
+#: src/ashytv/ui/pages/lists_page.py:207
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -874,23 +963,23 @@ msgstr ""
 "Tietosi tallennetaan vain laitteellesi. Salasanat säilytetään järjestelmän "
 "avainnipussa."
 
-#: src/ashytv/ui/pages/lists_page.py:213
+#: src/ashytv/ui/pages/lists_page.py:219
 msgid "Your Playlists"
 msgstr "Soittolistasi"
 
-#: src/ashytv/ui/pages/lists_page.py:242
+#: src/ashytv/ui/pages/lists_page.py:248
 msgid "TV channels from"
 msgstr "TV-kanavat maasta"
 
-#: src/ashytv/ui/pages/lists_page.py:247
+#: src/ashytv/ui/pages/lists_page.py:253
 msgid "Free movies and cartoons"
 msgstr "Ilmaiset elokuvat ja piirretyt"
 
-#: src/ashytv/ui/pages/lists_page.py:249
+#: src/ashytv/ui/pages/lists_page.py:255
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "Vapaasti käytettäviä klassikkoelokuvia ja Blenderin avoimet elokuvat"
 
-#: src/ashytv/ui/pages/lists_page.py:259
+#: src/ashytv/ui/pages/lists_page.py:265
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -900,71 +989,75 @@ msgstr ""
 "julkisesti, sekä avoimesti lisensoituja tai tekijänoikeudesta vapaita "
 "elokuvia. AshyTV on soitin: se ei isännöi mitään niistä."
 
-#: src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Another Playlist"
 msgstr "Lisää toinen soittolista"
 
-#: src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:367
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:368
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} kohde"
 msgstr[1] "{n} kohdetta"
 
-#: src/ashytv/ui/pages/lists_page.py:365
+#: src/ashytv/ui/pages/lists_page.py:371
 msgid "Disabled"
 msgstr "Poistettu käytöstä"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:373
 #, python-brace-format
 msgid "updated {when}"
 msgstr "päivitetty {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:372
+#: src/ashytv/ui/pages/lists_page.py:378
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "Opas: {n}/{m} kanavaa"
 
-#: src/ashytv/ui/pages/lists_page.py:377
+#: src/ashytv/ui/pages/lists_page.py:383
 #, python-brace-format
 msgid "expires {when}"
 msgstr "päättyy {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:384
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "päättyi {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:396
+#: src/ashytv/ui/pages/lists_page.py:402
 msgid "Show this playlist's channels"
 msgstr "Näytä tämän soittolistan kanavat"
 
-#: src/ashytv/ui/pages/lists_page.py:405
+#: src/ashytv/ui/pages/lists_page.py:411
 msgid "Guide link (EPG)"
 msgstr "Oppaan linkki (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:410
+#: src/ashytv/ui/pages/lists_page.py:416 src/ashytv/ui/playlist_dialog.py:28
+msgid "Edit playlist"
+msgstr "Muokkaa soittolistaa"
+
+#: src/ashytv/ui/pages/lists_page.py:420
 msgid "Refresh playlist"
 msgstr "Päivitä soittolista"
 
-#: src/ashytv/ui/pages/lists_page.py:414
+#: src/ashytv/ui/pages/lists_page.py:424
 msgid "Remove playlist"
 msgstr "Poista soittolista"
 
-#: src/ashytv/ui/pages/lists_page.py:451
+#: src/ashytv/ui/pages/lists_page.py:462
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "Palvelimet: {status} — napsauta nähdäksesi tiedot"
 
-#: src/ashytv/ui/pages/lists_page.py:452 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:463 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "ei vielä tarkistettu"
 
-#: src/ashytv/ui/pages/lists_page.py:476
+#: src/ashytv/ui/pages/lists_page.py:515
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -973,21 +1066,22 @@ msgstr ""
 "XMLTV-opas kohteelle ”{name}”. Korvaa soittolistassa mainitun oppaan; jätä "
 "tyhjäksi, jos haluat käyttää soittolistan omaa opasta."
 
-#: src/ashytv/ui/pages/lists_page.py:480 src/ashytv/ui/pages/lists_page.py:508
+#: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:442
+#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
+#: src/ashytv/ui/servers_dialog.py:70
 msgid "Save"
 msgstr "Tallenna"
 
-#: src/ashytv/ui/pages/lists_page.py:505
+#: src/ashytv/ui/pages/lists_page.py:544
 msgid "Remove playlist?"
 msgstr "Poistetaanko soittolista?"
 
-#: src/ashytv/ui/pages/lists_page.py:506
+#: src/ashytv/ui/pages/lists_page.py:545
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -996,42 +1090,42 @@ msgstr ""
 "”{name}” ja kaikki sen kanavat, suosikit ja historia poistetaan tältä "
 "laitteelta."
 
-#: src/ashytv/ui/pages/lists_page.py:509
+#: src/ashytv/ui/pages/lists_page.py:548
 msgid "Remove"
 msgstr "Poista"
 
-#: src/ashytv/ui/pages/lists_page.py:532
+#: src/ashytv/ui/pages/lists_page.py:571
 msgid "Select M3U playlist"
 msgstr "Valitse M3U-soittolista"
 
-#: src/ashytv/ui/pages/lists_page.py:534
+#: src/ashytv/ui/pages/lists_page.py:573
 msgid "M3U Playlists"
 msgstr "M3U-soittolistat"
 
-#: src/ashytv/ui/pages/lists_page.py:571
+#: src/ashytv/ui/pages/lists_page.py:610
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "Kopioidusta tekstistä ei löytynyt palvelinta, käyttäjätunnusta ja salasanaa."
 
-#: src/ashytv/ui/pages/lists_page.py:577
+#: src/ashytv/ui/pages/lists_page.py:616
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Palveluntarjoajan tiedot täytetty. Tarkista ne ja napsauta ”Tallenna ja "
 "yhdistä”."
 
-#: src/ashytv/ui/pages/lists_page.py:593
+#: src/ashytv/ui/pages/lists_page.py:632
 msgid "Choose an .m3u file."
 msgstr "Valitse .m3u-tiedosto."
 
-#: src/ashytv/ui/pages/lists_page.py:600
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Anna URL-osoite, joka alkaa merkkijonolla http:// tai https://."
 
-#: src/ashytv/ui/pages/lists_page.py:614
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
 msgid "Fill in server, username and password."
 msgstr "Täytä palvelin, käyttäjätunnus ja salasana."
 
-#: src/ashytv/ui/pages/lists_page.py:616
+#: src/ashytv/ui/pages/lists_page.py:655
 msgid "Xtream Provider"
 msgstr "Xtream-palveluntarjoaja"
 
@@ -1040,7 +1134,7 @@ msgid "Use the ● button in the player to record what's on"
 msgstr "Tallenna meneillään oleva ohjelma soittimen ●-painikkeella"
 
 #: src/ashytv/ui/pages/recordings_page.py:29
-#: src/ashytv/ui/pages/settings_page.py:323
+#: src/ashytv/ui/pages/settings_page.py:326
 msgid "Open folder"
 msgstr "Avaa kansio"
 
@@ -1087,12 +1181,12 @@ msgid "General"
 msgstr "Yleiset"
 
 #: src/ashytv/ui/pages/settings_page.py:22
-#: src/ashytv/ui/pages/settings_page.py:197
+#: src/ashytv/ui/pages/settings_page.py:200
 msgid "Appearance"
 msgstr "Ulkoasu"
 
 #: src/ashytv/ui/pages/settings_page.py:23
-#: src/ashytv/ui/pages/settings_page.py:248
+#: src/ashytv/ui/pages/settings_page.py:251
 msgid "Playback"
 msgstr "Toisto"
 
@@ -1101,7 +1195,7 @@ msgid "Shortcuts"
 msgstr "Pikanäppäimet"
 
 #: src/ashytv/ui/pages/settings_page.py:25
-#: src/ashytv/ui/pages/settings_page.py:284
+#: src/ashytv/ui/pages/settings_page.py:287
 msgid "Parental Controls"
 msgstr "Lapsilukko"
 
@@ -1110,12 +1204,12 @@ msgid "Network"
 msgstr "Verkko"
 
 #: src/ashytv/ui/pages/settings_page.py:27
-#: src/ashytv/ui/pages/settings_page.py:305
+#: src/ashytv/ui/pages/settings_page.py:308
 msgid "Data"
 msgstr "Tiedot"
 
 #: src/ashytv/ui/pages/settings_page.py:28
-#: src/ashytv/ui/pages/settings_page.py:331
+#: src/ashytv/ui/pages/settings_page.py:334
 msgid "About"
 msgstr "Tietoja"
 
@@ -1155,42 +1249,53 @@ msgstr "Ryhmittele saman kanavan laadut"
 msgid "Shows “News FHD”, “News HD” and “News SD” as a single channel"
 msgstr "Näyttää ”News FHD”, ”News HD” ja ”News SD” yhtenä kanavana"
 
-#: src/ashytv/ui/pages/settings_page.py:150 src/ashytv/window.py:1274
+#: src/ashytv/ui/pages/settings_page.py:150
+msgid "Sort from A to Z"
+msgstr "Lajittele A–Ö"
+
+#: src/ashytv/ui/pages/settings_page.py:151
+msgid ""
+"Groups and channels in alphabetical order. Off, they keep the playlist's "
+"order"
+msgstr ""
+"Ryhmät ja kanavat aakkosjärjestyksessä. Pois päältä: soittolistan järjestys"
+
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
 msgid "Live preview"
 msgstr "Suora esikatselu"
 
-#: src/ashytv/ui/pages/settings_page.py:151
+#: src/ashytv/ui/pages/settings_page.py:154
 msgid "Plays the selected channel, muted, next to the channel list"
 msgstr "Toistaa valitun kanavan mykistettynä kanavaluettelon vieressä"
 
-#: src/ashytv/ui/pages/settings_page.py:162 src/ashytv/ui/welcome_view.py:64
+#: src/ashytv/ui/pages/settings_page.py:165 src/ashytv/ui/welcome_view.py:64
 msgid "IPTV Playlists"
 msgstr "IPTV-soittolistat"
 
-#: src/ashytv/ui/pages/settings_page.py:163
+#: src/ashytv/ui/pages/settings_page.py:166
 msgid "Reload playlists automatically"
 msgstr "Lataa soittolistat automaattisesti uudelleen"
 
-#: src/ashytv/ui/pages/settings_page.py:164
+#: src/ashytv/ui/pages/settings_page.py:167
 msgid "Updates channels and catalog when the app opens"
 msgstr "Päivittää kanavat ja luettelon sovelluksen avautuessa"
 
-#: src/ashytv/ui/pages/settings_page.py:165
+#: src/ashytv/ui/pages/settings_page.py:168
 msgid "Check every"
 msgstr "Tarkista"
 
-#: src/ashytv/ui/pages/settings_page.py:167
+#: src/ashytv/ui/pages/settings_page.py:170
 #, python-brace-format
 msgid "{h} hour"
 msgid_plural "{h} hours"
 msgstr[0] "{h} tunti"
 msgstr[1] "{h} tuntia"
 
-#: src/ashytv/ui/pages/settings_page.py:178
+#: src/ashytv/ui/pages/settings_page.py:181
 msgid "Secure DNS (DNS over HTTPS)"
 msgstr "Suojattu DNS (DNS over HTTPS)"
 
-#: src/ashytv/ui/pages/settings_page.py:179
+#: src/ashytv/ui/pages/settings_page.py:182
 msgid ""
 "Looks up server names over an encrypted connection, for more privacy and "
 "fewer failures from the provider's DNS. If it doesn't answer, the system DNS "
@@ -1200,160 +1305,160 @@ msgstr ""
 "ja vähentää palveluntarjoajan DNS:n aiheuttamia virheitä. Jos se ei vastaa, "
 "käytetään järjestelmän DNS:ää. HTTPS-videot käyttävät järjestelmän DNS:ää."
 
-#: src/ashytv/ui/pages/settings_page.py:183
+#: src/ashytv/ui/pages/settings_page.py:186
 msgid "Secure DNS"
 msgstr "Suojattu DNS"
 
-#: src/ashytv/ui/pages/settings_page.py:191
+#: src/ashytv/ui/pages/settings_page.py:194
 msgid "Backup servers"
 msgstr "Varapalvelimet"
 
-#: src/ashytv/ui/pages/settings_page.py:192
+#: src/ashytv/ui/pages/settings_page.py:195
 msgid "Desktop notifications"
 msgstr "Työpöytäilmoitukset"
 
-#: src/ashytv/ui/pages/settings_page.py:193
+#: src/ashytv/ui/pages/settings_page.py:196
 msgid "Tell me when a playlist's main server goes down or comes back"
 msgstr "Ilmoita, kun soittolistan pääpalvelin lakkaa toimimasta tai palaa"
 
-#: src/ashytv/ui/pages/settings_page.py:198
+#: src/ashytv/ui/pages/settings_page.py:201
 msgid "Theme"
 msgstr "Teema"
 
-#: src/ashytv/ui/pages/settings_page.py:208
+#: src/ashytv/ui/pages/settings_page.py:211
 msgid "Accent Color"
 msgstr "Korostusväri"
 
-#: src/ashytv/ui/pages/settings_page.py:209
+#: src/ashytv/ui/pages/settings_page.py:212
 msgid "Choose the color used for buttons, selections and highlights."
 msgstr "Valitse painikkeissa, valinnoissa ja korostuksissa käytettävä väri."
 
-#: src/ashytv/ui/pages/settings_page.py:231
+#: src/ashytv/ui/pages/settings_page.py:234
 msgid "Transparency"
 msgstr "Läpinäkyvyys"
 
-#: src/ashytv/ui/pages/settings_page.py:232
+#: src/ashytv/ui/pages/settings_page.py:235
 msgid "Makes the window background translucent (depends on the compositor)."
 msgstr "Tekee ikkunan taustasta läpikuultavan (riippuu koostimesta)."
 
-#: src/ashytv/ui/pages/settings_page.py:234
+#: src/ashytv/ui/pages/settings_page.py:237
 msgid "Translucent window"
 msgstr "Läpikuultava ikkuna"
 
-#: src/ashytv/ui/pages/settings_page.py:236
+#: src/ashytv/ui/pages/settings_page.py:239
 msgid "Background opacity (%)"
 msgstr "Taustan peittävyys (%)"
 
-#: src/ashytv/ui/pages/settings_page.py:242
+#: src/ashytv/ui/pages/settings_page.py:245
 msgid "Content"
 msgstr "Sisältö"
 
-#: src/ashytv/ui/pages/settings_page.py:243
+#: src/ashytv/ui/pages/settings_page.py:246
 msgid "Show logos and covers"
 msgstr "Näytä logot ja kansikuvat"
 
-#: src/ashytv/ui/pages/settings_page.py:244
+#: src/ashytv/ui/pages/settings_page.py:247
 msgid "Turn off to save data"
 msgstr "Poista käytöstä säästääksesi dataa"
 
-#: src/ashytv/ui/pages/settings_page.py:249
+#: src/ashytv/ui/pages/settings_page.py:252
 msgid "Applies from the next video you open."
 msgstr "Tulee voimaan seuraavasta avaamastasi videosta."
 
-#: src/ashytv/ui/pages/settings_page.py:250 src/ashytv/ui/player_view.py:788
+#: src/ashytv/ui/pages/settings_page.py:253 src/ashytv/ui/player_view.py:789
 msgid "Automatic quality"
 msgstr "Automaattinen laatu"
 
-#: src/ashytv/ui/pages/settings_page.py:251
+#: src/ashytv/ui/pages/settings_page.py:254
 msgid "Switches between a channel's qualities to match your connection"
 msgstr "Vaihtaa kanavan laatujen välillä yhteytesi mukaan"
 
-#: src/ashytv/ui/pages/settings_page.py:252
+#: src/ashytv/ui/pages/settings_page.py:255
 msgid "Hardware acceleration"
 msgstr "Laitteistokiihdytys"
 
-#: src/ashytv/ui/pages/settings_page.py:253
+#: src/ashytv/ui/pages/settings_page.py:256
 msgid "Decodes video on the GPU (VA-API/VDPAU/NVDEC)"
 msgstr "Purkaa videon grafiikkasuorittimella (VA-API/VDPAU/NVDEC)"
 
-#: src/ashytv/ui/pages/settings_page.py:255
+#: src/ashytv/ui/pages/settings_page.py:258
 msgid "Network buffer (seconds)"
 msgstr "Verkkopuskuri (sekuntia)"
 
-#: src/ashytv/ui/pages/settings_page.py:256
+#: src/ashytv/ui/pages/settings_page.py:259
 msgid "More buffer = fewer stutters, but more delay when changing channels"
 msgstr ""
 "Isompi puskuri = vähemmän pätkimistä, mutta enemmän viivettä kanavaa "
 "vaihdettaessa"
 
-#: src/ashytv/ui/pages/settings_page.py:274
+#: src/ashytv/ui/pages/settings_page.py:277
 msgid "Game controller"
 msgstr "Peliohjain"
 
-#: src/ashytv/ui/pages/settings_page.py:275
+#: src/ashytv/ui/pages/settings_page.py:278
 msgid "Connect a controller to use AshyTV like a TV remote."
 msgstr ""
 "Yhdistä ohjain, niin voit käyttää AshyTV:tä kuin television kaukosäädintä."
 
-#: src/ashytv/ui/pages/settings_page.py:286
+#: src/ashytv/ui/pages/settings_page.py:289
 msgid "Hide adult content"
 msgstr "Piilota aikuissisältö"
 
-#: src/ashytv/ui/pages/settings_page.py:287
+#: src/ashytv/ui/pages/settings_page.py:290
 msgid "Hides categories with terms like “adult”, “XXX”, “+18”"
 msgstr "Piilottaa luokat, joiden nimessä on sanoja kuten ”adult”, ”XXX”, ”+18”"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "PIN"
 msgstr "PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:293
+#: src/ashytv/ui/pages/settings_page.py:296
 msgid "With a PIN set, it is required to show adult content."
 msgstr "Kun PIN on asetettu, sitä vaaditaan aikuissisällön näyttämiseen."
 
-#: src/ashytv/ui/pages/settings_page.py:295
+#: src/ashytv/ui/pages/settings_page.py:298
 msgid "New PIN (4+ digits)"
 msgstr "Uusi PIN (vähintään 4 numeroa)"
 
-#: src/ashytv/ui/pages/settings_page.py:299
+#: src/ashytv/ui/pages/settings_page.py:302
 msgid "Remove PIN"
 msgstr "Poista PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:306
+#: src/ashytv/ui/pages/settings_page.py:309
 msgid "Clear cache"
 msgstr "Tyhjennä välimuisti"
 
-#: src/ashytv/ui/pages/settings_page.py:307
+#: src/ashytv/ui/pages/settings_page.py:310
 msgid "Removes downloaded logos, covers and guide data"
 msgstr "Poistaa ladatut logot, kansikuvat ja oppaan tiedot"
 
-#: src/ashytv/ui/pages/settings_page.py:309
-#: src/ashytv/ui/pages/settings_page.py:316
+#: src/ashytv/ui/pages/settings_page.py:312
+#: src/ashytv/ui/pages/settings_page.py:319
 msgid "Clear"
 msgstr "Tyhjennä"
 
-#: src/ashytv/ui/pages/settings_page.py:314
+#: src/ashytv/ui/pages/settings_page.py:317
 msgid "Clear history"
 msgstr "Tyhjennä historia"
 
-#: src/ashytv/ui/pages/settings_page.py:315
+#: src/ashytv/ui/pages/settings_page.py:318
 msgid "Forgets “Continue Watching” and recent items"
 msgstr "Unohtaa ”Jatka katselua” -kohdan ja viimeisimmät kohteet"
 
-#: src/ashytv/ui/pages/settings_page.py:321
+#: src/ashytv/ui/pages/settings_page.py:324
 msgid "Recordings folder"
 msgstr "Tallenteiden kansio"
 
-#: src/ashytv/ui/pages/settings_page.py:333
+#: src/ashytv/ui/pages/settings_page.py:336
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Versio {version}"
 
-#: src/ashytv/ui/pages/settings_page.py:336
+#: src/ashytv/ui/pages/settings_page.py:339
 msgid "Disclaimer"
 msgstr "Vastuuvapauslauseke"
 
-#: src/ashytv/ui/pages/settings_page.py:337
+#: src/ashytv/ui/pages/settings_page.py:340
 msgid ""
 "AshyTV does not provide or contain any content: it only plays the playlists "
 "you add."
@@ -1361,15 +1466,15 @@ msgstr ""
 "AshyTV ei tarjoa eikä sisällä mitään sisältöä: se vain toistaa lisäämiäsi "
 "soittolistoja."
 
-#: src/ashytv/ui/pages/settings_page.py:343 src/ashytv/window.py:132
+#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
 msgid "Guided tour"
 msgstr "Opastettu esittely"
 
-#: src/ashytv/ui/pages/settings_page.py:346
+#: src/ashytv/ui/pages/settings_page.py:349
 msgid "More information"
 msgstr "Lisätietoja"
 
-#: src/ashytv/ui/pages/settings_page.py:369
+#: src/ashytv/ui/pages/settings_page.py:372
 #, python-brace-format
 msgid "{n} hidden item · Click to see it and show it again"
 msgid_plural "{n} hidden items · Click to see them and show them again"
@@ -1378,225 +1483,225 @@ msgstr[0] ""
 msgstr[1] ""
 "{n} piilotettua kohdetta · Napsauta nähdäksesi ja näyttääksesi ne uudelleen"
 
-#: src/ashytv/ui/pages/settings_page.py:372
+#: src/ashytv/ui/pages/settings_page.py:375
 msgid "Nothing hidden · Right-click a group or channel to hide it"
 msgstr ""
 "Ei mitään piilotettua · Piilota ryhmä tai kanava napsauttamalla sitä hiiren "
 "oikealla"
 
-#: src/ashytv/ui/pages/settings_page.py:384
+#: src/ashytv/ui/pages/settings_page.py:387
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Poistaa ladatut logot, kansikuvat ja oppaan tiedot — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:400
+#: src/ashytv/ui/pages/settings_page.py:403
 msgid "Cache cleared."
 msgstr "Välimuisti tyhjennetty."
 
-#: src/ashytv/ui/pages/settings_page.py:408
+#: src/ashytv/ui/pages/settings_page.py:411
 msgid "History cleared."
 msgstr "Historia tyhjennetty."
 
-#: src/ashytv/ui/pages/settings_page.py:438
+#: src/ashytv/ui/pages/settings_page.py:441
 msgid "Enter PIN"
 msgstr "Anna PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:439
+#: src/ashytv/ui/pages/settings_page.py:442
 msgid "Required to show adult content."
 msgstr "Vaaditaan aikuissisällön näyttämiseen."
 
-#: src/ashytv/ui/pages/settings_page.py:443
+#: src/ashytv/ui/pages/settings_page.py:446
 msgid "Unlock"
 msgstr "Avaa lukitus"
 
-#: src/ashytv/ui/pages/settings_page.py:453
+#: src/ashytv/ui/pages/settings_page.py:456
 msgid "Incorrect PIN."
 msgstr "Väärä PIN."
 
-#: src/ashytv/ui/pages/settings_page.py:461
+#: src/ashytv/ui/pages/settings_page.py:464
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN-koodissa on oltava vähintään 4 numeroa."
 
-#: src/ashytv/ui/pages/settings_page.py:466
+#: src/ashytv/ui/pages/settings_page.py:469
 msgid "PIN set."
 msgstr "PIN asetettu."
 
-#: src/ashytv/ui/pages/settings_page.py:478
+#: src/ashytv/ui/pages/settings_page.py:481
 msgid "PIN removed."
 msgstr "PIN poistettu."
 
-#: src/ashytv/ui/player_view.py:25
+#: src/ashytv/ui/player_view.py:26
 msgid "Auto"
 msgstr "Automaattinen"
 
-#: src/ashytv/ui/player_view.py:153
+#: src/ashytv/ui/player_view.py:154
 msgid "Back (Esc)"
 msgstr "Takaisin (Esc)"
 
-#: src/ashytv/ui/player_view.py:179 src/ashytv/ui/player_view.py:956
+#: src/ashytv/ui/player_view.py:180 src/ashytv/ui/player_view.py:957
 msgid "Record"
 msgstr "Tallenna"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:181
 msgid "Mini player"
 msgstr "Pienoissoitin"
 
-#: src/ashytv/ui/player_view.py:209 src/ashytv/ui/player_view.py:404
-#: src/ashytv/ui/player_view.py:703 src/ashytv/ui/player_view.py:717
-#: src/ashytv/ui/player_view.py:723
+#: src/ashytv/ui/player_view.py:210 src/ashytv/ui/player_view.py:405
+#: src/ashytv/ui/player_view.py:704 src/ashytv/ui/player_view.py:718
+#: src/ashytv/ui/player_view.py:724
 msgid "● LIVE"
 msgstr "● SUORA"
 
-#: src/ashytv/ui/player_view.py:211
+#: src/ashytv/ui/player_view.py:212
 msgid "Go live"
 msgstr "Siirry suoraan lähetykseen"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:213
 msgid "Back to live"
 msgstr "Takaisin suoraan lähetykseen"
 
-#: src/ashytv/ui/player_view.py:222
+#: src/ashytv/ui/player_view.py:223
 msgid "Previous (↑)"
 msgstr "Edellinen (↑)"
 
-#: src/ashytv/ui/player_view.py:224
+#: src/ashytv/ui/player_view.py:225
 msgid "Back 10 s (←)"
 msgstr "10 s taakse (←)"
 
-#: src/ashytv/ui/player_view.py:226
+#: src/ashytv/ui/player_view.py:227
 msgid "Pause (Space)"
 msgstr "Tauko (välilyönti)"
 
-#: src/ashytv/ui/player_view.py:228
+#: src/ashytv/ui/player_view.py:229
 msgid "Forward 10 s (→)"
 msgstr "10 s eteen (→)"
 
-#: src/ashytv/ui/player_view.py:230
+#: src/ashytv/ui/player_view.py:231
 msgid "Next (↓)"
 msgstr "Seuraava (↓)"
 
-#: src/ashytv/ui/player_view.py:237 src/ashytv/ui/shortcuts.py:39
+#: src/ashytv/ui/player_view.py:238 src/ashytv/ui/shortcuts.py:39
 msgid "Volume"
 msgstr "Äänenvoimakkuus"
 
-#: src/ashytv/ui/player_view.py:241
+#: src/ashytv/ui/player_view.py:242
 msgid "Audio & Video"
 msgstr "Ääni ja video"
 
-#: src/ashytv/ui/player_view.py:243
+#: src/ashytv/ui/player_view.py:244
 msgid "Fullscreen (F)"
 msgstr "Koko näyttö (F)"
 
-#: src/ashytv/ui/player_view.py:268
+#: src/ashytv/ui/player_view.py:269
 msgid "Try again"
 msgstr "Yritä uudelleen"
 
-#: src/ashytv/ui/player_view.py:506 src/ashytv/ui/player_view.py:517
+#: src/ashytv/ui/player_view.py:507 src/ashytv/ui/player_view.py:518
 msgid "Reconnecting…"
 msgstr "Yhdistetään uudelleen…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Buffering…"
 msgstr "Puskuroidaan…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Loading…"
 msgstr "Ladataan…"
 
-#: src/ashytv/ui/player_view.py:546
+#: src/ashytv/ui/player_view.py:547
 msgid "Could not play"
 msgstr "Toisto epäonnistui"
 
-#: src/ashytv/ui/player_view.py:547
+#: src/ashytv/ui/player_view.py:548
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanava voi olla poissa käytöstä tai yhteys katkesi."
 
-#: src/ashytv/ui/player_view.py:554
+#: src/ashytv/ui/player_view.py:555
 msgid "Broadcast ended"
 msgstr "Lähetys päättyi"
 
-#: src/ashytv/ui/player_view.py:555
+#: src/ashytv/ui/player_view.py:556
 msgid "The signal was interrupted."
 msgstr "Signaali katkesi."
 
-#: src/ashytv/ui/player_view.py:774
+#: src/ashytv/ui/player_view.py:775
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Laatu: {label}"
 
-#: src/ashytv/ui/player_view.py:776
+#: src/ashytv/ui/player_view.py:777
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Ei saatavilla, vaihdetaan laatuun {label}"
 
-#: src/ashytv/ui/player_view.py:778
+#: src/ashytv/ui/player_view.py:779
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Laatu: {label} (automaattinen)"
 
-#: src/ashytv/ui/player_view.py:858 src/ashytv/ui/player_view.py:865
+#: src/ashytv/ui/player_view.py:859 src/ashytv/ui/player_view.py:866
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Äänenvoimakkuus {level} %"
 
-#: src/ashytv/ui/player_view.py:925
+#: src/ashytv/ui/player_view.py:926
 msgid "Recording"
 msgstr "Tallenne"
 
-#: src/ashytv/ui/player_view.py:936
+#: src/ashytv/ui/player_view.py:937
 msgid "Stop recording"
 msgstr "Pysäytä tallennus"
 
-#: src/ashytv/ui/player_view.py:939
+#: src/ashytv/ui/player_view.py:940
 msgid "Recording…"
 msgstr "Tallennetaan…"
 
-#: src/ashytv/ui/player_view.py:947
+#: src/ashytv/ui/player_view.py:948
 msgid "Could not record this channel."
 msgstr "Tätä kanavaa ei voitu tallentaa."
 
-#: src/ashytv/ui/player_view.py:958
+#: src/ashytv/ui/player_view.py:959
 msgid "Recording saved to Recordings."
 msgstr "Tallenne tallennettu kohtaan Tallenteet."
 
-#: src/ashytv/ui/player_view.py:970
+#: src/ashytv/ui/player_view.py:971
 msgid "Mute (M)"
 msgstr "Mykistä (M)"
 
-#: src/ashytv/ui/player_view.py:1005
+#: src/ashytv/ui/player_view.py:1006
 msgid "Off"
 msgstr "Pois"
 
-#: src/ashytv/ui/player_view.py:1010
+#: src/ashytv/ui/player_view.py:1011
 msgid "No subtitles in this video."
 msgstr "Tässä videossa ei ole tekstityksiä."
 
-#: src/ashytv/ui/player_view.py:1015
+#: src/ashytv/ui/player_view.py:1016
 msgid "Load subtitle file…"
 msgstr "Lataa tekstitystiedosto…"
 
-#: src/ashytv/ui/player_view.py:1022
+#: src/ashytv/ui/player_view.py:1023
 msgid "Load subtitle file"
 msgstr "Lataa tekstitystiedosto"
 
-#: src/ashytv/ui/player_view.py:1039
+#: src/ashytv/ui/player_view.py:1040
 #, python-brace-format
 msgid "Subtitles: {name}"
 msgstr "Tekstitys: {name}"
 
-#: src/ashytv/ui/player_view.py:1045
+#: src/ashytv/ui/player_view.py:1046
 msgid "Automatic"
 msgstr "Automaattinen"
 
-#: src/ashytv/ui/player_view.py:1048
+#: src/ashytv/ui/player_view.py:1049
 msgid "Quality"
 msgstr "Laatu"
 
-#: src/ashytv/ui/player_view.py:1055
+#: src/ashytv/ui/player_view.py:1056
 msgid "Aspect ratio"
 msgstr "Kuvasuhde"
 
-#: src/ashytv/ui/player_view.py:1059
+#: src/ashytv/ui/player_view.py:1060
 msgid "Speed"
 msgstr "Nopeus"
 
@@ -1680,7 +1785,7 @@ msgstr "Ryhmän asetukset (siirrä, piilota)"
 msgid "Keyboard shortcuts"
 msgstr "Pikanäppäimet"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:135
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
 msgid "Quit"
 msgstr "Lopeta"
 
@@ -1756,7 +1861,7 @@ msgstr "Takaisin"
 msgid "Pause/resume"
 msgstr "Tauko/jatka"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1270
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
 msgid "Channel list"
 msgstr "Kanavaluettelo"
 
@@ -1896,141 +2001,145 @@ msgstr "Aloita"
 msgid "AshyTV is only a player: it does not host any content."
 msgstr "AshyTV on vain soitin: se ei isännöi mitään sisältöä."
 
-#: src/ashytv/window.py:125
+#: src/ashytv/window.py:126
 msgid "Search…"
 msgstr "Haku…"
 
-#: src/ashytv/window.py:133
-msgid "Keyboard Shortcuts"
-msgstr "Pikanäppäimet"
-
-#: src/ashytv/window.py:134
+#: src/ashytv/window.py:135
 msgid "About AshyTV"
 msgstr "Tietoja: AshyTV"
 
-#: src/ashytv/window.py:137
+#: src/ashytv/window.py:138
 msgid "Main Menu"
 msgstr "Päävalikko"
 
-#: src/ashytv/window.py:140
+#: src/ashytv/window.py:141
 msgid "Search (Ctrl+F)"
 msgstr "Haku (Ctrl+F)"
 
-#: src/ashytv/window.py:221
+#: src/ashytv/window.py:223
 msgid "The best movies for you"
 msgstr "Parhaat elokuvat sinulle"
 
-#: src/ashytv/window.py:230
+#: src/ashytv/window.py:232
 msgid "Your favorite series in one place"
 msgstr "Suosikkisarjasi yhdessä paikassa"
 
-#: src/ashytv/window.py:512
+#: src/ashytv/window.py:516
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Soitin ei ole käytettävissä: asenna mpv ja python-mpv ({error})"
 
-#: src/ashytv/window.py:561
+#: src/ashytv/window.py:565
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Kanavaa {number} ei ole"
 
-#: src/ashytv/window.py:638
+#: src/ashytv/window.py:642
 msgid "Next episode…"
 msgstr "Seuraava jakso…"
 
-#: src/ashytv/window.py:669 src/ashytv/window.py:678
+#: src/ashytv/window.py:673 src/ashytv/window.py:682
 msgid "This item is no longer in the playlist."
 msgstr "Tämä kohde ei ole enää soittolistassa."
 
-#: src/ashytv/window.py:674
+#: src/ashytv/window.py:678
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Avaaminen epäonnistui: {error}"
 
-#: src/ashytv/window.py:685
+#: src/ashytv/window.py:689
 msgid "This episode is no longer available."
 msgstr "Tämä jakso ei ole enää saatavilla."
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Added to favorites"
 msgstr "Lisätty suosikkeihin"
 
-#: src/ashytv/window.py:742 src/ashytv/window.py:812
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Removed from favorites"
 msgstr "Poistettu suosikeista"
 
-#: src/ashytv/window.py:925
+#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
 msgid "Please wait: an import is already in progress."
 msgstr "Odota: tuonti on jo käynnissä."
 
-#: src/ashytv/window.py:943
+#: src/ashytv/window.py:948
 msgid "Importing playlist…"
 msgstr "Tuodaan soittolistaa…"
 
-#: src/ashytv/window.py:962
+#: src/ashytv/window.py:967
 msgid "Connecting to the Xtream provider…"
 msgstr "Yhdistetään Xtream-palveluntarjoajaan…"
 
-#: src/ashytv/window.py:980
-msgid "Provider password not found; add the playlist again."
-msgstr "Palveluntarjoajan salasanaa ei löytynyt; lisää soittolista uudelleen."
+#: src/ashytv/window.py:997
+msgid "Another playlist already uses this server and user."
+msgstr "Toinen soittolista käyttää jo tätä palvelinta ja käyttäjää."
 
-#: src/ashytv/window.py:984
+#: src/ashytv/window.py:1012
+msgid "Another playlist already uses this address."
+msgstr "Toinen soittolista käyttää jo tätä osoitetta."
+
+#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
 msgid "Updating playlist…"
 msgstr "Päivitetään soittolistaa…"
 
-#: src/ashytv/window.py:1013
+#: src/ashytv/window.py:1068
+msgid "Provider password not found; add the playlist again."
+msgstr "Palveluntarjoajan salasanaa ei löytynyt; lisää soittolista uudelleen."
+
+#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Soittolista “{name}” päivitetty."
 
-#: src/ashytv/window.py:1017
+#: src/ashytv/window.py:1115
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} kohde tuotu."
 msgstr[1] "{n} kohdetta tuotu."
 
-#: src/ashytv/window.py:1018
+#: src/ashytv/window.py:1116
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Soittolista valmis: {n} kohde."
 msgstr[1] "Soittolista valmis: {n} kohdetta."
 
-#: src/ashytv/window.py:1040
+#: src/ashytv/window.py:1139
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Kohteen “{name}” päivitys epäonnistui: {error}"
 
-#: src/ashytv/window.py:1044
+#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Epäonnistui: {error}"
 
-#: src/ashytv/window.py:1045
+#: src/ashytv/window.py:1149
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Tuonti epäonnistui: {error}"
 
-#: src/ashytv/window.py:1051
+#: src/ashytv/window.py:1155
 msgid "Please wait for the import to finish."
 msgstr "Odota, että tuonti on valmis."
 
-#: src/ashytv/window.py:1070
+#: src/ashytv/window.py:1174
 msgid "Playlist removed."
 msgstr "Soittolista poistettu."
 
-#: src/ashytv/window.py:1148
+#: src/ashytv/window.py:1252
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Opas (EPG) ei ole saatavilla: {error}"
 
-#: src/ashytv/window.py:1210
+#: src/ashytv/window.py:1316
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "Haluatko lyhyen esittelyn AshyTV:stä?"
 
-#: src/ashytv/window.py:1211
+#: src/ashytv/window.py:1317
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -2038,19 +2147,19 @@ msgstr ""
 "Muutama vaihe oikeissa näkymissä: kanavat, opas, elokuvat, soittolistat ja "
 "asetukset. Voit avata sen uudelleen päävalikosta."
 
-#: src/ashytv/window.py:1213
+#: src/ashytv/window.py:1319
 msgid "Not now"
 msgstr "Ei nyt"
 
-#: src/ashytv/window.py:1214
+#: src/ashytv/window.py:1320
 msgid "Start"
 msgstr "Aloita"
 
-#: src/ashytv/window.py:1262
+#: src/ashytv/window.py:1368
 msgid "Sections"
 msgstr "Osiot"
 
-#: src/ashytv/window.py:1263
+#: src/ashytv/window.py:1369
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2058,11 +2167,11 @@ msgstr ""
 "Koti, TV-kanavat, elokuvat, sarjat, suosikit, tallenteet, soittolistat ja "
 "asetukset. Myös näppäimistö, kaukosäädin tai peliohjain toimii."
 
-#: src/ashytv/window.py:1266
+#: src/ashytv/window.py:1372
 msgid "Channel groups"
 msgstr "Kanavaryhmät"
 
-#: src/ashytv/window.py:1267
+#: src/ashytv/window.py:1373
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
@@ -2070,7 +2179,7 @@ msgstr ""
 "Valitse ryhmä nähdäksesi sen kanavat. Napsauta ryhmää hiiren oikealla (tai "
 "paina pitkään) siirtääksesi tai piilottaaksesi sen."
 
-#: src/ashytv/window.py:1271
+#: src/ashytv/window.py:1377
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
@@ -2078,7 +2187,7 @@ msgstr ""
 "Napsautus valitsee kanavan; kaksoisnapsautus tai Enter avaa sen. Napsauta "
 "kanavaa hiiren oikealla piilottaaksesi sen tai lisätäksesi sen suosikkeihin."
 
-#: src/ashytv/window.py:1275
+#: src/ashytv/window.py:1381
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
@@ -2086,29 +2195,29 @@ msgstr ""
 "Valittu kanava toistuu tässä mykistettynä (painike kytkee äänen päälle) "
 "yhdessä nyt ja seuraavaksi tulevan ohjelman kanssa."
 
-#: src/ashytv/window.py:1278
+#: src/ashytv/window.py:1384
 msgid "Hidden items"
 msgstr "Piilotetut kohteet"
 
-#: src/ashytv/window.py:1279
+#: src/ashytv/window.py:1385
 msgid "Everything you hid is here. Open it to show items again."
 msgstr "Kaikki piilottamasi on täällä. Avaa se näyttääksesi kohteet uudelleen."
 
-#: src/ashytv/window.py:1281
+#: src/ashytv/window.py:1387
 msgid "Program guide"
 msgstr "Ohjelmaopas"
 
-#: src/ashytv/window.py:1282
+#: src/ashytv/window.py:1388
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr ""
 "Vaihda Oppaaseen nähdäksesi, mitä tulee tunti tunnilta, ja asettaaksesi "
 "muistutuksia."
 
-#: src/ashytv/window.py:1284
+#: src/ashytv/window.py:1390
 msgid "Movies and series"
 msgstr "Elokuvat ja sarjat"
 
-#: src/ashytv/window.py:1285
+#: src/ashytv/window.py:1391
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2118,11 +2227,11 @@ msgstr ""
 "tiedot ja näyttelijät; napsauta näyttelijää nähdäksesi hänen muut "
 "nimikkeensä soittolistoillasi."
 
-#: src/ashytv/window.py:1289
+#: src/ashytv/window.py:1395
 msgid "Favorites and recordings"
 msgstr "Suosikit ja tallenteet"
 
-#: src/ashytv/window.py:1290
+#: src/ashytv/window.py:1396
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
@@ -2130,7 +2239,7 @@ msgstr ""
 "Sydän tallentaa tänne kanavat, elokuvat ja sarjat; suoran TV:n tallenteet "
 "löytyvät Tallenteista."
 
-#: src/ashytv/window.py:1294
+#: src/ashytv/window.py:1400
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2140,7 +2249,7 @@ msgstr ""
 "(palveluntarjoajan muita DNS-osoitteita): pisteet näyttävät, onko kukin "
 "verkossa, hidas vai alhaalla, ja AshyTV vaihtaa automaattisesti."
 
-#: src/ashytv/window.py:1300
+#: src/ashytv/window.py:1406
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
@@ -2148,93 +2257,93 @@ msgstr ""
 "Teemat ja värit, piilotetut kanavat ja ryhmät, suojattu DNS, lapsilukon PIN "
 "ja muuta."
 
-#: src/ashytv/window.py:1303
+#: src/ashytv/window.py:1409
 msgid "See it again"
 msgstr "Katso uudelleen"
 
-#: src/ashytv/window.py:1304
+#: src/ashytv/window.py:1410
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr ""
 "Avaa tämä esittely uudelleen päävalikosta (Opastettu esittely) tai kohdasta "
 "Asetukset → Tietoja."
 
-#: src/ashytv/window.py:1354
+#: src/ashytv/window.py:1460
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr "”{name}”: pääpalvelin ei vastaa. Käytetään varapalvelinta."
 
-#: src/ashytv/window.py:1357
+#: src/ashytv/window.py:1463
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "”{name}”: pääpalvelin on palannut."
 
-#: src/ashytv/window.py:1363
+#: src/ashytv/window.py:1469
 msgid "AshyTV servers"
 msgstr "AshyTV:n palvelimet"
 
-#: src/ashytv/window.py:1385
+#: src/ashytv/window.py:1491
 msgid "Switching to the main server…"
 msgstr "Vaihdetaan pääpalvelimeen…"
 
-#: src/ashytv/window.py:1386
+#: src/ashytv/window.py:1492
 msgid "Switching to the backup server…"
 msgstr "Vaihdetaan varapalvelimeen…"
 
-#: src/ashytv/window.py:1456
+#: src/ashytv/window.py:1562
 msgid "Programme"
 msgstr "Ohjelma"
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1566
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Sinua muistutetaan ohjelmasta ”{title}” kello {time}"
 
-#: src/ashytv/window.py:1461
+#: src/ashytv/window.py:1567
 msgid "Reminder cancelled"
 msgstr "Muistutus peruttu"
 
-#: src/ashytv/window.py:1473
+#: src/ashytv/window.py:1579
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "”{title}” alkaa pian kanavalla {channel}"
 
-#: src/ashytv/window.py:1475
+#: src/ashytv/window.py:1581
 msgid "AshyTV reminder"
 msgstr "AshyTV-muistutus"
 
-#: src/ashytv/window.py:1494
+#: src/ashytv/window.py:1600
 msgid "This channel is no longer in your playlists."
 msgstr "Tämä kanava ei ole enää soittolistoillasi."
 
-#: src/ashytv/window.py:1534
+#: src/ashytv/window.py:1640
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Ryhmä ”{name}” piilotettu"
 
-#: src/ashytv/window.py:1535
+#: src/ashytv/window.py:1641
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "Luokka ”{name}” piilotettu"
 
-#: src/ashytv/window.py:1549
+#: src/ashytv/window.py:1655
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "Kanava ”{name}” piilotettu"
 
-#: src/ashytv/window.py:1555
+#: src/ashytv/window.py:1661
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "Näytä uudelleen: Asetukset → Piilotetut kanavat ja ryhmät"
 
-#: src/ashytv/window.py:1557
+#: src/ashytv/window.py:1663
 msgid "See hidden"
 msgstr "Näytä piilotetut"
 
-#: src/ashytv/window.py:1562
+#: src/ashytv/window.py:1668
 msgid "Undo"
 msgstr "Kumoa"
 
-#: src/ashytv/window.py:1864
+#: src/ashytv/window.py:1974
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr "Tallennus ei onnistu nyt: soittolistaa päivitetään. Yritä uudelleen."
 
@@ -2303,6 +2412,21 @@ msgid ""
 msgstr ""
 "Toisto libmpv:llä laitteistopurulla, kuva kuvassa -toiminnolla ja "
 "tallennuksella"
+
+#~ msgid "Sports"
+#~ msgstr "Urheilu"
+
+#~ msgid "Free-to-air"
+#~ msgstr "Ilmaiskanavat"
+
+#~ msgid "Kids"
+#~ msgstr "Lapset"
+
+#~ msgid "Recent"
+#~ msgstr "Viimeisimmät"
+
+#~ msgid "All in this category"
+#~ msgstr "Kaikki tässä luokassa"
 
 #~ msgid "Favorite people"
 #~ msgstr "Suosikkihenkilöt"
