@@ -249,6 +249,16 @@ class Storage:
         self.db.commit()
         return int(row["id"])
 
+    def rename_playlist(self, playlist_id: int, name: str,
+                        source: str | None = None) -> None:
+        """New name and, when given, a new source (address or Xtream login)."""
+        if source is None:
+            self.db.execute("UPDATE playlist SET name = ? WHERE id = ?", (name, playlist_id))
+        else:
+            self.db.execute("UPDATE playlist SET name = ?, source = ? WHERE id = ?",
+                            (name, source, playlist_id))
+        self.db.commit()
+
     def list_playlists(self) -> list[sqlite3.Row]:
         return self.db.execute(
             "SELECT * FROM playlist ORDER BY added_at DESC, id DESC"

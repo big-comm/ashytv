@@ -207,3 +207,62 @@ def test_credentials_are_masked_in_errors():
         "bad http://h/player_api.php?username=me&password=secret and "
         "http://h/live/me/secret/1.ts"))
     assert "secret" not in msg and "me&" not in msg
+
+
+def test_edited_xtream_playlist_keeps_its_place_and_favorites(tmp_path, monkeypatch):
+    items = [Channel(name="A", url="live/1.ts")]
+    monkeypatch.setattr(importer, "load_catalog", lambda _p: (items, {}))
+    monkeypatch.setattr(importer.secrets, "store_password", lambda *_a: True)
+    cleared = []
+    monkeypatch.setattr(importer.secrets, "clear_password", lambda *a: cleared.append(a))
+    db_path = tmp_path / "t.db"
+    r1 = importer.import_xtream(db_path, "X", XtreamProvider("http://old", "u", "p"))
+    db = Storage(db_path)
+    db.set_favorite(db.find_channel(r1.playlist_id, "live/1.ts"), True)
+    db.close()
+    # New server and user, edited in place.
+    r2 = importer.import_xtream(db_path, "Renamed", XtreamProvider("http://new", "u2", "p2"),
+                                playlist_id=r1.playlist_id)
+    db = Storage(db_path)
+    assert r2.playlist_id == r1.playlist_id and len(db.list_playlists()) == 1
+    row = db.get_playlist(r1.playlist_id)
+    prov = XtreamProvider.from_json(row["source"])
+    assert (row["name"], prov.host, prov.username) == ("Renamed", "http://new", "u2")
+    assert db.find_channel(r1.playlist_id, "live/1.ts").favorite
+    assert cleared == [("http://old", "u")]  # the old login left the keyring
+
+
+def test_edited_xtream_login_kept_by_another_playlist_stays_in_keyring(tmp_path, monkeypatch):
+    monkeypatch.setattr(importer, "load_catalog",
+                        lambda _p: ([Channel(name="A", url="live/1.ts")], {}))
+    monkeypatch.setattr(importer.secrets, "store_password", lambda *_a: True)
+    cleared = []
+    monkeypatch.setattr(importer.secrets, "clear_password", lambda *a: cleared.append(a))
+    db_path = tmp_path / "t.db"
+    a = importer.import_xtream(db_path, "A", XtreamProvider("http://h", "u", "p"))
+    db = Storage(db_path)
+    other = db.add_playlist("B", XtreamProvider("http://h", "u", "").to_json(False), "xtream")
+    db.close()
+    importer.import_xtream(db_path, "A", XtreamProvider("http://h2", "u", "p"),
+                           playlist_id=a.playlist_id)
+    assert other and cleared == []
+
+
+def test_edited_m3u_playlist_takes_the_new_address(tmp_path):
+    db_path = tmp_path / "t.db"
+    r1 = importer.import_m3u(db_path, "List", str(SAMPLE))
+    copy = tmp_path / "copy.m3u"
+    copy.write_text(SAMPLE.read_text())
+    r2 = importer.import_m3u(db_path, "New name", str(copy), playlist_id=r1.playlist_id)
+    db = Storage(db_path)
+    assert r2.playlist_id == r1.playlist_id and len(db.list_playlists()) == 1
+    row = db.get_playlist(r1.playlist_id)
+    assert (row["name"], row["source"]) == ("New name", str(copy))
+
+
+def test_rename_playlist(tmp_path):
+    db = Storage(tmp_path / "t.db")
+    pid = db.add_playlist("Old", "http://a/list.m3u")
+    db.rename_playlist(pid, "New")
+    assert (db.get_playlist(pid)["name"], db.get_playlist(pid)["source"]) == \
+        ("New", "http://a/list.m3u")

@@ -11,7 +11,7 @@ from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 from . import APP_ID
 from .i18n import _, ngettext
 from .models import Channel, Episode, MediaType, PlayItem, Variant
-from .services import doh, epg, failover, http, importer, secrets
+from .services import doh, epg, failover, free_tv, http, importer, secrets
 from .services.quality import quality_label
 from .services.gamepad import GamepadInput
 from .services.reminders import Reminder, ReminderBook
@@ -86,6 +86,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._series_ctx: tuple[Channel, list[Episode]] | None = None
         self._importing = False
         self._quiet_id = 0
+        self._edit_dialog = None  # the PlaylistDialog waiting for an edit's import
         self._focus_before_player: Gtk.Widget | None = None
         self._vod_info: dict[tuple[int, str], dict] = {}
         self._refresh_queue: list[int] = []
@@ -258,6 +259,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         lists.connect("enabled-changed", self._on_playlist_enabled)
         lists.connect("servers-changed", self._on_servers_changed)
         lists.connect("check-servers", lambda _w, pid: self._check_servers([pid]))
+        lists.connect("edit-requested", self._on_playlist_edited)
+        lists.provider_lookup = self._providers.get
         lists.connect("guide-link-changed", self._on_guide_link)
 
         settings = SettingsPage(self.settings, self.storage)
@@ -960,14 +963,97 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self._run_xtream_import(name, provider)
 
     def _run_xtream_import(self, name: str, provider: XtreamProvider,
-                           quiet_id: int = 0) -> None:
+                           quiet_id: int = 0, playlist_id: int = 0) -> bool:
         if not self._begin_import(_("Connecting to the Xtream provider…"), quiet_id):
-            return
+            return False
         self._servers_before = self._server_snapshot()
         db_path = self.storage.path
         importer.run_async(
-            lambda progress: importer.import_xtream(db_path, name, provider, progress),
+            lambda progress: importer.import_xtream(db_path, name, provider, progress,
+                                                    playlist_id=playlist_id),
             self._import_done, self._import_error, self._import_progress)
+        return True
+
+    def _on_playlist_edited(self, _w, playlist_id: int, v: dict, dialog) -> None:
+        """Saved in the "Edit playlist" dialog. A new name, backups or guide
+        link apply at once; a new address or login loads the playlist again
+        (in the same place: favorites and history stay)."""
+        row = self.storage.get_playlist(playlist_id)
+        if row is None:
+            dialog.finish(None)
+            return
+        name = v["name"] or row["name"]
+        if row["kind"] == "xtream":
+            old = self._providers.get(playlist_id)
+            host = normalize_host(v["host"])
+            backups = failover.clean_backups(v["backups"], host)
+            login = (host, v["username"], v["password"])
+            if old is None or login != (old.host, old.username, old.password):
+                key = XtreamProvider.source_key(
+                    XtreamProvider(host, v["username"], "").to_json())
+                if any(r["kind"] == "xtream" and int(r["id"]) != playlist_id
+                       and XtreamProvider.source_key(r["source"]) == key
+                       for r in self.storage.list_playlists()):
+                    dialog.finish(_("Another playlist already uses this server and user."))
+                    return
+                provider = XtreamProvider(host=host, username=v["username"],
+                                          password=v["password"], backups=backups)
+                self._start_edit_import(dialog, lambda: self._run_xtream_import(
+                    name, provider, playlist_id=playlist_id))
+                return
+            self._apply_edit(playlist_id, name, backups if backups != old.backups else None)
+        elif row["kind"] == "m3u" and "://" in row["source"] \
+                and not free_tv.is_free_tv(row["source"]):
+            url = v["url"]
+            backups = failover.clean_backups(v["backups"], url)
+            if url != row["source"]:
+                if any(r["kind"] == "m3u" and int(r["id"]) != playlist_id
+                       and r["source"] == url for r in self.storage.list_playlists()):
+                    dialog.finish(_("Another playlist already uses this address."))
+                    return
+                if self._importing:
+                    dialog.finish(_("Please wait: an import is already in progress."))
+                    return
+                self.storage.update_playlist_meta(playlist_id, epg_override=v["guide"])
+                self._start_edit_import(dialog, lambda: self._run_m3u_edit(
+                    playlist_id, name, url, backups))
+                return
+            old_backups = failover.clean_backups(self.storage.backups(playlist_id), url)
+            self._apply_edit(playlist_id, name,
+                             backups if backups != old_backups else None, v["guide"])
+        else:
+            self._apply_edit(playlist_id, name,
+                             guide=None if free_tv.is_free_tv(row["source"]) else v["guide"])
+        dialog.finish(None)
+
+    def _apply_edit(self, playlist_id: int, name: str, backups: list[str] | None = None,
+                    guide: str | None = None) -> None:
+        """What an edit changes without loading the playlist again."""
+        self.storage.rename_playlist(playlist_id, name)
+        if backups is not None:
+            self._on_servers_changed(None, playlist_id, backups)
+        if guide is not None and guide != self.storage.playlist_meta(playlist_id).get(
+                "epg_override", ""):
+            self._on_guide_link(None, playlist_id, guide)
+        self._invalidate_pages()
+
+    def _start_edit_import(self, dialog, start) -> None:
+        self._edit_dialog = dialog
+        if not start():
+            self._edit_dialog = None
+            dialog.finish(_("Please wait: an import is already in progress."))
+
+    def _run_m3u_edit(self, playlist_id: int, name: str, url: str,
+                      backups: list[str]) -> bool:
+        if not self._begin_import(_("Updating playlist…")):
+            return False
+        self._servers_before = self._server_snapshot()
+        db_path = self.storage.path
+        importer.run_async(
+            lambda progress: importer.import_m3u(db_path, name, url, progress,
+                                                 backups=backups, playlist_id=playlist_id),
+            self._import_done, self._import_error, self._import_progress)
+        return True
 
     def _refresh_playlist(self, playlist_id: int, quiet: bool = False) -> bool:
         """Refresh a playlist; returns False when it could not be started."""
@@ -996,6 +1082,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _import_done(self, result) -> None:
         quiet_id, self._quiet_id = self._quiet_id, 0
+        edit, self._edit_dialog = self._edit_dialog, None
         self._importing = False
         self.banner.set_revealed(False)
         self._passwords.clear()  # the import may have saved a new password
@@ -1015,6 +1102,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 self._toast(_("Playlist “{name}” updated.").format(name=row["name"]))
             self._next_auto_refresh()
             return
+        if edit is not None:
+            # An edited playlist: stay on the Playlists page.
+            self.pages["lists"].set_busy(False)
+            edit.finish(None)
+            row = self.storage.get_playlist(result.playlist_id)
+            if row is not None:
+                self._toast(_("Playlist “{name}” updated.").format(name=row["name"]))
+            self._next_auto_refresh()
+            return
         self.pages["lists"].set_busy(False, ngettext(
             "{n} item imported.", "{n} items imported.", result.count).format(n=result.count))
         self._toast(ngettext("Playlist ready: {n} item.", "Playlist ready: {n} items.",
@@ -1029,6 +1125,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
 
     def _import_error(self, exc: Exception) -> None:
         quiet_id, self._quiet_id = self._quiet_id, 0
+        edit, self._edit_dialog = self._edit_dialog, None
         self._importing = False
         self.banner.set_revealed(False)
         msg = http.describe_error(exc)
@@ -1041,6 +1138,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
                 self.storage.update_playlist_meta(quiet_id, refresh_failed_at=int(time.time()))
                 self._toast(_("Could not update “{name}”: {error}").format(
                     name=row["name"], error=msg))
+            self._next_auto_refresh()
+            return
+        if edit is not None:
+            # The playlist keeps its old address and login.
+            edit.finish(_("Failed: {error}").format(error=msg))
             self._next_auto_refresh()
             return
         self.pages["lists"].set_status(_("Failed: {error}").format(error=msg), error=True)

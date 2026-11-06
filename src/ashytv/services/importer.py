@@ -48,9 +48,11 @@ KEPT_META = ("epg_override", "epg_coverage")
 def import_m3u(db_path: Path, name: str, source: str,
                progress: Callable[[str], None] = lambda _m: None,
                backups: list[str] | None = None, active: int = 0,
-               epg_override: str | None = None) -> ImportResult:
+               epg_override: str | None = None, playlist_id: int = 0) -> ImportResult:
     """`backups`: other URLs of the same list, tried when `source` fails.
-    `epg_override`: the guide link typed by the user (wins over url-tvg)."""
+    `epg_override`: the guide link typed by the user (wins over url-tvg).
+    `playlist_id`: an edited playlist, which takes the new name and source
+    (its favorites and history stay); 0 finds the playlist by its source."""
     progress(_("Downloading playlist…"))
     pool = ServerPool([source, *(backups or [])], active)
     if free_tv.is_free_tv(source):
@@ -72,7 +74,11 @@ def import_m3u(db_path: Path, name: str, source: str,
     items, episodes = group_series(channels)
     db = Storage(db_path)
     try:
-        pid = db.upsert_playlist(name, source, "m3u")
+        if playlist_id and db.get_playlist(playlist_id) is not None:
+            pid = playlist_id
+            db.rename_playlist(pid, name, source)
+        else:
+            pid = db.upsert_playlist(name, source, "m3u")
         if backups is not None:
             db.set_servers(pid, backups, pool.active)
         progress(_("Saving…"))
@@ -108,7 +114,10 @@ def _provider_group_order(source: str, channels: list[Channel]) -> None:
 
 
 def import_xtream(db_path: Path, name: str, provider: XtreamProvider,
-                  progress: Callable[[str], None] = lambda _m: None) -> ImportResult:
+                  progress: Callable[[str], None] = lambda _m: None,
+                  playlist_id: int = 0) -> ImportResult:
+    """`playlist_id`: an edited playlist, which takes the new name, server and
+    login (its favorites and history stay); 0 finds it by server and user."""
     progress(_("Connecting to provider…"))
     channels, meta = load_catalog(provider)
     if not channels:
@@ -121,12 +130,15 @@ def import_xtream(db_path: Path, name: str, provider: XtreamProvider,
     db = Storage(db_path)
     try:
         pid = 0
-        for row in db.list_playlists():
+        old = db.get_playlist(playlist_id) if playlist_id else None
+        if old is not None:
+            pid = playlist_id
+            db.rename_playlist(pid, name, source)
+            _forget_old_login(db, old["source"], key)
+        for row in ([] if pid else db.list_playlists()):
             if row["kind"] == "xtream" and XtreamProvider.source_key(row["source"]) == key:
                 pid = int(row["id"])
-                db.db.execute("UPDATE playlist SET name = ?, source = ? WHERE id = ?",
-                              (name, source, pid))
-                db.db.commit()
+                db.rename_playlist(pid, name, source)
                 break
         if not pid:
             pid = db.add_playlist(name, source, "xtream")
@@ -137,6 +149,22 @@ def import_xtream(db_path: Path, name: str, provider: XtreamProvider,
     finally:
         db.close()
     return ImportResult(pid, count, "xtream", meta)
+
+
+def _forget_old_login(db: Storage, old_source: str, new_key: str) -> None:
+    """The edited playlist moved to another server or user: drop the old
+    password from the keyring unless another playlist still uses it."""
+    try:
+        old_key = XtreamProvider.source_key(old_source)
+        old = XtreamProvider.from_json(old_source)
+    except (ValueError, KeyError):
+        return
+    if old_key == new_key:
+        return
+    for row in db.list_playlists():
+        if row["kind"] == "xtream" and XtreamProvider.source_key(row["source"]) == old_key:
+            return
+    secrets.clear_password(old.host, old.username)
 
 
 def run_async(job: Callable[[Callable[[str], None]], ImportResult],

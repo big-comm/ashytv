@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 13:56-0300\n"
+"POT-Creation-Date: 2026-11-06 14:58-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -54,7 +54,7 @@ msgstr ""
 "Δεδομένα ηθοποιών: TMDB. Αυτό το προϊόν χρησιμοποιεί το API του TMDB, αλλά "
 "δεν έχει εγκριθεί ή πιστοποιηθεί από το TMDB."
 
-#: src/ashytv/application.py:241 src/ashytv/window.py:133
+#: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
@@ -64,13 +64,13 @@ msgstr "Ζωντανή τηλεόραση"
 
 #: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
-#: src/ashytv/window.py:221
+#: src/ashytv/window.py:222
 msgid "Movies"
 msgstr "Ταινίες"
 
 #: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
-#: src/ashytv/window.py:230
+#: src/ashytv/window.py:231
 msgid "Series"
 msgstr "Σειρές"
 
@@ -132,7 +132,7 @@ msgstr "Καιρός"
 msgid "Music"
 msgstr "Μουσική"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:237
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:242
 msgid "All countries"
 msgstr "Όλες οι χώρες"
 
@@ -169,31 +169,31 @@ msgstr "Ο διακομιστής άργησε πολύ να απαντήσει.
 msgid "Could not reach the server: {reason}"
 msgstr "Αδυναμία σύνδεσης με τον διακομιστή: {reason}"
 
-#: src/ashytv/services/importer.py:39 src/ashytv/services/importer.py:59
+#: src/ashytv/services/importer.py:39 src/ashytv/services/importer.py:61
 msgid "The address did not return an M3U playlist"
 msgstr "Η διεύθυνση δεν επέστρεψε λίστα M3U"
 
-#: src/ashytv/services/importer.py:54
+#: src/ashytv/services/importer.py:56
 msgid "Downloading playlist…"
 msgstr "Λήψη λίστας αναπαραγωγής…"
 
-#: src/ashytv/services/importer.py:62
+#: src/ashytv/services/importer.py:64
 msgid "Processing playlist…"
 msgstr "Επεξεργασία λίστας αναπαραγωγής…"
 
-#: src/ashytv/services/importer.py:71
+#: src/ashytv/services/importer.py:73
 msgid "No channels found in the playlist"
 msgstr "Δεν βρέθηκαν κανάλια στη λίστα αναπαραγωγής"
 
-#: src/ashytv/services/importer.py:78 src/ashytv/services/importer.py:134
+#: src/ashytv/services/importer.py:84 src/ashytv/services/importer.py:146
 msgid "Saving…"
 msgstr "Αποθήκευση…"
 
-#: src/ashytv/services/importer.py:112
+#: src/ashytv/services/importer.py:121
 msgid "Connecting to provider…"
 msgstr "Σύνδεση με τον πάροχο…"
 
-#: src/ashytv/services/importer.py:115
+#: src/ashytv/services/importer.py:124
 msgid "The provider returned no content"
 msgstr "Ο πάροχος δεν επέστρεψε περιεχόμενο"
 
@@ -374,7 +374,7 @@ msgstr "→ ή Enter: κανάλια  •  Esc: πίσω"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:591
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
 msgid "Channels"
 msgstr "Κανάλια"
 
@@ -384,7 +384,7 @@ msgstr "Enter: προβολή  •  ←: ομάδες  •  Esc: κλείσιμ�
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
 #: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1483 src/ashytv/window.py:1489
+#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
 msgid "Watch"
 msgstr "Παρακολούθηση"
 
@@ -591,8 +591,8 @@ msgstr "Αρχική"
 
 #: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
 #: src/ashytv/ui/pages/channels_page.py:242
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:602
-#: src/ashytv/window.py:625
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
+#: src/ashytv/window.py:628
 msgid "Favorites"
 msgstr "Αγαπημένα"
 
@@ -600,13 +600,13 @@ msgstr "Αγαπημένα"
 msgid "Recordings"
 msgstr "Εγγραφές"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:73
-#: src/ashytv/window.py:1297
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
+#: src/ashytv/window.py:1399
 msgid "Playlists"
 msgstr "Λίστες αναπαραγωγής"
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1303
+#: src/ashytv/window.py:1405
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
@@ -692,8 +692,8 @@ msgstr "Δεν υπάρχουν κανάλια σε αυτήν την κατηγ
 msgid "All Channels"
 msgstr "Όλα τα κανάλια"
 
-#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:603
-#: src/ashytv/window.py:626
+#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
+#: src/ashytv/window.py:629
 msgid "Recently watched"
 msgstr "Είδατε πρόσφατα"
 
@@ -837,11 +837,12 @@ msgstr "Enter: λεπτομέρειες"
 msgid "← → more titles"
 msgstr "← → περισσότεροι τίτλοι"
 
-#: src/ashytv/ui/pages/lists_page.py:18
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
 msgid "The guide link must be a web address (http or https)."
 msgstr "Ο σύνδεσμος του οδηγού πρέπει να είναι διεύθυνση ιστού (http ή https)."
 
-#: src/ashytv/ui/pages/lists_page.py:28 src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:70
+#: src/ashytv/ui/servers_dialog.py:59
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -849,86 +850,87 @@ msgstr ""
 "Άλλες διευθύνσεις του ίδιου παρόχου, με την ίδια σύνδεση. Όταν η κύρια δεν "
 "απαντά, το AshyTV αλλάζει αυτόματα στην επόμενη."
 
-#: src/ashytv/ui/pages/lists_page.py:36 src/ashytv/ui/servers_dialog.py:64
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:75
+#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "Εφεδρικός διακομιστής {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:40 src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:69
+#: src/ashytv/ui/servers_dialog.py:58
 msgid "Backup servers (alternative DNS)"
 msgstr "Εφεδρικοί διακομιστές (εναλλακτικό DNS)"
 
-#: src/ashytv/ui/pages/lists_page.py:74
+#: src/ashytv/ui/pages/lists_page.py:79
 msgid "Manage your playlists or add a new one"
 msgstr "Διαχειριστείτε τις λίστες αναπαραγωγής σας ή προσθέστε μια νέα"
 
-#: src/ashytv/ui/pages/lists_page.py:82 src/ashytv/ui/pages/lists_page.py:318
+#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Playlist"
 msgstr "Προσθήκη λίστας αναπαραγωγής"
 
-#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:108 src/ashytv/ui/pages/lists_page.py:366
 msgid "Free TV"
 msgstr "Δωρεάν TV"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:108
 msgid "M3U File"
 msgstr "Αρχείο M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:104
+#: src/ashytv/ui/pages/lists_page.py:109
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:104 src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:109 src/ashytv/ui/pages/lists_page.py:366
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:115
+#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:48
 msgid "Playlist name"
 msgstr "Όνομα λίστας αναπαραγωγής"
 
-#: src/ashytv/ui/pages/lists_page.py:116 src/ashytv/ui/pages/lists_page.py:528
-#: src/ashytv/ui/pages/lists_page.py:596 src/ashytv/ui/pages/lists_page.py:604
+#: src/ashytv/ui/pages/lists_page.py:121 src/ashytv/ui/pages/lists_page.py:566
+#: src/ashytv/ui/pages/lists_page.py:634 src/ashytv/ui/pages/lists_page.py:642
 msgid "My Playlist"
 msgstr "Η λίστα μου"
 
-#: src/ashytv/ui/pages/lists_page.py:123
+#: src/ashytv/ui/pages/lists_page.py:128
 msgid "Choose .m3u file…"
 msgstr "Επιλογή αρχείου .m3u…"
 
-#: src/ashytv/ui/pages/lists_page.py:125 src/ashytv/ui/pages/lists_page.py:341
+#: src/ashytv/ui/pages/lists_page.py:130 src/ashytv/ui/pages/lists_page.py:346
 msgid "No file selected"
 msgstr "Δεν επιλέχθηκε αρχείο"
 
-#: src/ashytv/ui/pages/lists_page.py:131
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "File"
 msgstr "Αρχείο"
 
-#: src/ashytv/ui/pages/lists_page.py:136
+#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:52
 msgid "Server (URL)"
 msgstr "Διακομιστής (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:139
+#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:53
 msgid "Username"
 msgstr "Όνομα χρήστη"
 
-#: src/ashytv/ui/pages/lists_page.py:140
+#: src/ashytv/ui/pages/lists_page.py:145
 msgid "your_username"
 msgstr "your_username"
 
-#: src/ashytv/ui/pages/lists_page.py:141
+#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:54
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
-#: src/ashytv/ui/pages/lists_page.py:142
+#: src/ashytv/ui/pages/lists_page.py:147
 msgid "your_password"
 msgstr "your_password"
 
-#: src/ashytv/ui/pages/lists_page.py:144
+#: src/ashytv/ui/pages/lists_page.py:149
 msgid "Paste provider message"
 msgstr "Επικόλληση μηνύματος παρόχου"
 
-#: src/ashytv/ui/pages/lists_page.py:146
+#: src/ashytv/ui/pages/lists_page.py:151
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -936,29 +938,30 @@ msgstr ""
 "Επικολλήστε το μήνυμα καλωσορίσματος του παρόχου: ο διακομιστής, το όνομα "
 "χρήστη και ο κωδικός συμπληρώνονται αυτόματα"
 
-#: src/ashytv/ui/pages/lists_page.py:155
+#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:58
 msgid "Playlist URL (M3U)"
 msgstr "URL λίστας αναπαραγωγής (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:167 src/ashytv/ui/pages/lists_page.py:479
+#: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
+#: src/ashytv/ui/playlist_dialog.py:60
 msgid "Guide link (EPG) — optional"
 msgstr "Σύνδεσμος οδηγού (EPG) — προαιρετικό"
 
-#: src/ashytv/ui/pages/lists_page.py:171
+#: src/ashytv/ui/pages/lists_page.py:176
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr ""
 "Ένας οδηγός XMLTV· αντικαθιστά αυτόν που ορίζει η λίστα αναπαραγωγής (url-"
 "tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:183
+#: src/ashytv/ui/pages/lists_page.py:188
 msgid "Save and Connect"
 msgstr "Αποθήκευση και σύνδεση"
 
-#: src/ashytv/ui/pages/lists_page.py:200
+#: src/ashytv/ui/pages/lists_page.py:205
 msgid "Secure Connection"
 msgstr "Ασφαλής σύνδεση"
 
-#: src/ashytv/ui/pages/lists_page.py:202
+#: src/ashytv/ui/pages/lists_page.py:207
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -966,23 +969,23 @@ msgstr ""
 "Οι πληροφορίες σας αποθηκεύονται μόνο στη συσκευή σας. Οι κωδικοί πρόσβασης "
 "φυλάσσονται στο μπρελόκ κλειδιών του συστήματος."
 
-#: src/ashytv/ui/pages/lists_page.py:214
+#: src/ashytv/ui/pages/lists_page.py:219
 msgid "Your Playlists"
 msgstr "Οι λίστες αναπαραγωγής σας"
 
-#: src/ashytv/ui/pages/lists_page.py:243
+#: src/ashytv/ui/pages/lists_page.py:248
 msgid "TV channels from"
 msgstr "Τηλεοπτικά κανάλια από"
 
-#: src/ashytv/ui/pages/lists_page.py:248
+#: src/ashytv/ui/pages/lists_page.py:253
 msgid "Free movies and cartoons"
 msgstr "Δωρεάν ταινίες και κινούμενα σχέδια"
 
-#: src/ashytv/ui/pages/lists_page.py:250
+#: src/ashytv/ui/pages/lists_page.py:255
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "Κλασικές ταινίες κοινής κτήσης και οι ανοιχτές ταινίες του Blender"
 
-#: src/ashytv/ui/pages/lists_page.py:260
+#: src/ashytv/ui/pages/lists_page.py:265
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -992,71 +995,75 @@ msgstr ""
 "άδεια ή κοινής κτήσης. Το AshyTV είναι πρόγραμμα αναπαραγωγής: δεν φιλοξενεί "
 "τίποτα από αυτά."
 
-#: src/ashytv/ui/pages/lists_page.py:318
+#: src/ashytv/ui/pages/lists_page.py:323
 msgid "Add Another Playlist"
 msgstr "Προσθήκη άλλης λίστας αναπαραγωγής"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:367
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:363
+#: src/ashytv/ui/pages/lists_page.py:368
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} στοιχείο"
 msgstr[1] "{n} στοιχεία"
 
-#: src/ashytv/ui/pages/lists_page.py:366
+#: src/ashytv/ui/pages/lists_page.py:371
 msgid "Disabled"
 msgstr "Απενεργοποιημένη"
 
-#: src/ashytv/ui/pages/lists_page.py:368
+#: src/ashytv/ui/pages/lists_page.py:373
 #, python-brace-format
 msgid "updated {when}"
 msgstr "ενημερώθηκε {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:373
+#: src/ashytv/ui/pages/lists_page.py:378
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "Οδηγός: {n} από {m} κανάλια"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:383
 #, python-brace-format
 msgid "expires {when}"
 msgstr "λήγει {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:379
+#: src/ashytv/ui/pages/lists_page.py:384
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "έληξε στις {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:397
+#: src/ashytv/ui/pages/lists_page.py:402
 msgid "Show this playlist's channels"
 msgstr "Εμφάνιση των καναλιών αυτής της λίστας"
 
-#: src/ashytv/ui/pages/lists_page.py:406
+#: src/ashytv/ui/pages/lists_page.py:411
 msgid "Guide link (EPG)"
 msgstr "Σύνδεσμος οδηγού (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:411
+#: src/ashytv/ui/pages/lists_page.py:416 src/ashytv/ui/playlist_dialog.py:28
+msgid "Edit playlist"
+msgstr "Επεξεργασία λίστας"
+
+#: src/ashytv/ui/pages/lists_page.py:420
 msgid "Refresh playlist"
 msgstr "Ανανέωση λίστας αναπαραγωγής"
 
-#: src/ashytv/ui/pages/lists_page.py:415
+#: src/ashytv/ui/pages/lists_page.py:424
 msgid "Remove playlist"
 msgstr "Κατάργηση λίστας αναπαραγωγής"
 
-#: src/ashytv/ui/pages/lists_page.py:452
+#: src/ashytv/ui/pages/lists_page.py:462
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "Διακομιστές: {status} — κάντε κλικ για λεπτομέρειες"
 
-#: src/ashytv/ui/pages/lists_page.py:453 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:463 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "δεν έχει ελεγχθεί ακόμη"
 
-#: src/ashytv/ui/pages/lists_page.py:477
+#: src/ashytv/ui/pages/lists_page.py:515
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -1065,21 +1072,22 @@ msgstr ""
 "Ένας οδηγός XMLTV για «{name}». Αντικαθιστά αυτόν που ορίζει η λίστα "
 "αναπαραγωγής· αφήστε το κενό για να χρησιμοποιηθεί ο οδηγός της λίστας."
 
-#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/pages/lists_page.py:509
+#: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:445
+#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: src/ashytv/ui/pages/lists_page.py:482 src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
+#: src/ashytv/ui/servers_dialog.py:70
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/ashytv/ui/pages/lists_page.py:506
+#: src/ashytv/ui/pages/lists_page.py:544
 msgid "Remove playlist?"
 msgstr "Κατάργηση λίστας αναπαραγωγής;"
 
-#: src/ashytv/ui/pages/lists_page.py:507
+#: src/ashytv/ui/pages/lists_page.py:545
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -1088,42 +1096,42 @@ msgstr ""
 "Η λίστα «{name}» και όλα τα κανάλια, τα αγαπημένα και το ιστορικό της θα "
 "αφαιρεθούν από αυτήν τη συσκευή."
 
-#: src/ashytv/ui/pages/lists_page.py:510
+#: src/ashytv/ui/pages/lists_page.py:548
 msgid "Remove"
 msgstr "Κατάργηση"
 
-#: src/ashytv/ui/pages/lists_page.py:533
+#: src/ashytv/ui/pages/lists_page.py:571
 msgid "Select M3U playlist"
 msgstr "Επιλογή λίστας αναπαραγωγής M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:535
+#: src/ashytv/ui/pages/lists_page.py:573
 msgid "M3U Playlists"
 msgstr "Λίστες αναπαραγωγής M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:572
+#: src/ashytv/ui/pages/lists_page.py:610
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "Δεν βρέθηκαν διακομιστής, όνομα χρήστη και κωδικός στο αντιγραμμένο κείμενο."
 
-#: src/ashytv/ui/pages/lists_page.py:578
+#: src/ashytv/ui/pages/lists_page.py:616
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Τα στοιχεία του παρόχου συμπληρώθηκαν. Ελέγξτε τα και πατήστε «Αποθήκευση "
 "και σύνδεση»."
 
-#: src/ashytv/ui/pages/lists_page.py:594
+#: src/ashytv/ui/pages/lists_page.py:632
 msgid "Choose an .m3u file."
 msgstr "Επιλέξτε ένα αρχείο .m3u."
 
-#: src/ashytv/ui/pages/lists_page.py:601
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Εισαγάγετε ένα URL που ξεκινά με http:// ή https://."
 
-#: src/ashytv/ui/pages/lists_page.py:615
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
 msgid "Fill in server, username and password."
 msgstr "Συμπληρώστε διακομιστή, όνομα χρήστη και κωδικό πρόσβασης."
 
-#: src/ashytv/ui/pages/lists_page.py:617
+#: src/ashytv/ui/pages/lists_page.py:655
 msgid "Xtream Provider"
 msgstr "Πάροχος Xtream"
 
@@ -1260,7 +1268,7 @@ msgstr ""
 "Ομάδες και κανάλια σε αλφαβητική σειρά. Ανενεργό: διατηρούν τη σειρά της "
 "λίστας"
 
-#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1278
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
 msgid "Live preview"
 msgstr "Ζωντανή προεπισκόπηση"
 
@@ -1471,7 +1479,7 @@ msgstr ""
 "Το AshyTV δεν παρέχει ούτε περιέχει κανένα περιεχόμενο: αναπαράγει μόνο τις "
 "λίστες που προσθέτετε."
 
-#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:132
+#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
 msgid "Guided tour"
 msgstr "Ξενάγηση"
 
@@ -1788,7 +1796,7 @@ msgstr "Επιλογές ομάδας (μετακίνηση, απόκρυψη)"
 msgid "Keyboard shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:135
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
 msgid "Quit"
 msgstr "Έξοδος"
 
@@ -1864,7 +1872,7 @@ msgstr "Πίσω"
 msgid "Pause/resume"
 msgstr "Παύση/συνέχιση"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1274
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
 msgid "Channel list"
 msgstr "Λίστα καναλιών"
 
@@ -2006,140 +2014,148 @@ msgid "AshyTV is only a player: it does not host any content."
 msgstr ""
 "Το AshyTV είναι μόνο πρόγραμμα αναπαραγωγής: δεν φιλοξενεί περιεχόμενο."
 
-#: src/ashytv/window.py:125
+#: src/ashytv/window.py:126
 msgid "Search…"
 msgstr "Αναζήτηση…"
 
-#: src/ashytv/window.py:134
+#: src/ashytv/window.py:135
 msgid "About AshyTV"
 msgstr "Σχετικά με το AshyTV"
 
-#: src/ashytv/window.py:137
+#: src/ashytv/window.py:138
 msgid "Main Menu"
 msgstr "Κύριο μενού"
 
-#: src/ashytv/window.py:140
+#: src/ashytv/window.py:141
 msgid "Search (Ctrl+F)"
 msgstr "Αναζήτηση (Ctrl+F)"
 
-#: src/ashytv/window.py:222
+#: src/ashytv/window.py:223
 msgid "The best movies for you"
 msgstr "Οι καλύτερες ταινίες για εσάς"
 
-#: src/ashytv/window.py:231
+#: src/ashytv/window.py:232
 msgid "Your favorite series in one place"
 msgstr "Οι αγαπημένες σας σειρές σε ένα μέρος"
 
-#: src/ashytv/window.py:513
+#: src/ashytv/window.py:516
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr ""
 "Η αναπαραγωγή δεν είναι διαθέσιμη: εγκαταστήστε τα mpv και python-mpv "
 "({error})"
 
-#: src/ashytv/window.py:562
+#: src/ashytv/window.py:565
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Δεν υπάρχει κανάλι {number}"
 
-#: src/ashytv/window.py:639
+#: src/ashytv/window.py:642
 msgid "Next episode…"
 msgstr "Επόμενο επεισόδιο…"
 
-#: src/ashytv/window.py:670 src/ashytv/window.py:679
+#: src/ashytv/window.py:673 src/ashytv/window.py:682
 msgid "This item is no longer in the playlist."
 msgstr "Αυτό το στοιχείο δεν υπάρχει πια στη λίστα αναπαραγωγής."
 
-#: src/ashytv/window.py:675
+#: src/ashytv/window.py:678
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Αποτυχία ανοίγματος: {error}"
 
-#: src/ashytv/window.py:686
+#: src/ashytv/window.py:689
 msgid "This episode is no longer available."
 msgstr "Αυτό το επεισόδιο δεν είναι πλέον διαθέσιμο."
 
-#: src/ashytv/window.py:743 src/ashytv/window.py:814
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Added to favorites"
 msgstr "Προστέθηκε στα αγαπημένα"
 
-#: src/ashytv/window.py:743 src/ashytv/window.py:814
+#: src/ashytv/window.py:746 src/ashytv/window.py:817
 msgid "Removed from favorites"
 msgstr "Αφαιρέθηκε από τα αγαπημένα"
 
-#: src/ashytv/window.py:927
+#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
 msgid "Please wait: an import is already in progress."
 msgstr "Περιμένετε: μια εισαγωγή βρίσκεται ήδη σε εξέλιξη."
 
-#: src/ashytv/window.py:945
+#: src/ashytv/window.py:948
 msgid "Importing playlist…"
 msgstr "Εισαγωγή λίστας αναπαραγωγής…"
 
-#: src/ashytv/window.py:964
+#: src/ashytv/window.py:967
 msgid "Connecting to the Xtream provider…"
 msgstr "Σύνδεση με τον πάροχο Xtream…"
 
-#: src/ashytv/window.py:982
+#: src/ashytv/window.py:997
+msgid "Another playlist already uses this server and user."
+msgstr "Μια άλλη λίστα χρησιμοποιεί ήδη αυτόν τον διακομιστή και χρήστη."
+
+#: src/ashytv/window.py:1012
+msgid "Another playlist already uses this address."
+msgstr "Μια άλλη λίστα χρησιμοποιεί ήδη αυτή τη διεύθυνση."
+
+#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
+msgid "Updating playlist…"
+msgstr "Ενημέρωση λίστας αναπαραγωγής…"
+
+#: src/ashytv/window.py:1068
 msgid "Provider password not found; add the playlist again."
 msgstr ""
 "Ο κωδικός του παρόχου δεν βρέθηκε· προσθέστε ξανά τη λίστα αναπαραγωγής."
 
-#: src/ashytv/window.py:986
-msgid "Updating playlist…"
-msgstr "Ενημέρωση λίστας αναπαραγωγής…"
-
-#: src/ashytv/window.py:1015
+#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Η λίστα αναπαραγωγής «{name}» ενημερώθηκε."
 
-#: src/ashytv/window.py:1019
+#: src/ashytv/window.py:1115
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "Εισήχθη {n} στοιχείο."
 msgstr[1] "Εισήχθησαν {n} στοιχεία."
 
-#: src/ashytv/window.py:1020
+#: src/ashytv/window.py:1116
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Η λίστα αναπαραγωγής είναι έτοιμη: {n} στοιχείο."
 msgstr[1] "Η λίστα αναπαραγωγής είναι έτοιμη: {n} στοιχεία."
 
-#: src/ashytv/window.py:1042
+#: src/ashytv/window.py:1139
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Αδυναμία ενημέρωσης του «{name}»: {error}"
 
-#: src/ashytv/window.py:1046
+#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Αποτυχία: {error}"
 
-#: src/ashytv/window.py:1047
+#: src/ashytv/window.py:1149
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Αποτυχία εισαγωγής: {error}"
 
-#: src/ashytv/window.py:1053
+#: src/ashytv/window.py:1155
 msgid "Please wait for the import to finish."
 msgstr "Περιμένετε να ολοκληρωθεί η εισαγωγή."
 
-#: src/ashytv/window.py:1072
+#: src/ashytv/window.py:1174
 msgid "Playlist removed."
 msgstr "Η λίστα αναπαραγωγής καταργήθηκε."
 
-#: src/ashytv/window.py:1150
+#: src/ashytv/window.py:1252
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Ο οδηγός (EPG) δεν είναι διαθέσιμος: {error}"
 
-#: src/ashytv/window.py:1214
+#: src/ashytv/window.py:1316
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "Θέλετε μια σύντομη ξενάγηση στο AshyTV;"
 
-#: src/ashytv/window.py:1215
+#: src/ashytv/window.py:1317
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -2147,19 +2163,19 @@ msgstr ""
 "Λίγα βήματα στις πραγματικές οθόνες: κανάλια, οδηγός, ταινίες, λίστες "
 "αναπαραγωγής και ρυθμίσεις. Μπορείτε να την ανοίξετε ξανά από το κύριο μενού."
 
-#: src/ashytv/window.py:1217
+#: src/ashytv/window.py:1319
 msgid "Not now"
 msgstr "Όχι τώρα"
 
-#: src/ashytv/window.py:1218
+#: src/ashytv/window.py:1320
 msgid "Start"
 msgstr "Έναρξη"
 
-#: src/ashytv/window.py:1266
+#: src/ashytv/window.py:1368
 msgid "Sections"
 msgstr "Ενότητες"
 
-#: src/ashytv/window.py:1267
+#: src/ashytv/window.py:1369
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2168,11 +2184,11 @@ msgstr ""
 "αναπαραγωγής και ρυθμίσεις. Λειτουργούν επίσης το πληκτρολόγιο, ένα "
 "τηλεχειριστήριο ή ένα χειριστήριο παιχνιδιών."
 
-#: src/ashytv/window.py:1270
+#: src/ashytv/window.py:1372
 msgid "Channel groups"
 msgstr "Ομάδες καναλιών"
 
-#: src/ashytv/window.py:1271
+#: src/ashytv/window.py:1373
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
@@ -2180,7 +2196,7 @@ msgstr ""
 "Επιλέξτε μια ομάδα για να δείτε τα κανάλια της. Κάντε δεξί κλικ (ή "
 "παρατεταμένο πάτημα) σε μια ομάδα για να τη μετακινήσετε ή να την αποκρύψετε."
 
-#: src/ashytv/window.py:1275
+#: src/ashytv/window.py:1377
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
@@ -2188,7 +2204,7 @@ msgstr ""
 "Ένα κλικ επιλέγει ένα κανάλι· διπλό κλικ ή Enter το ανοίγει. Κάντε δεξί κλικ "
 "σε ένα κανάλι για να το αποκρύψετε ή να το προσθέσετε στα αγαπημένα."
 
-#: src/ashytv/window.py:1279
+#: src/ashytv/window.py:1381
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
@@ -2196,31 +2212,31 @@ msgstr ""
 "Το επιλεγμένο κανάλι παίζει εδώ σε σίγαση (το κουμπί ενεργοποιεί τον ήχο), "
 "μαζί με ό,τι προβάλλεται τώρα και στη συνέχεια."
 
-#: src/ashytv/window.py:1282
+#: src/ashytv/window.py:1384
 msgid "Hidden items"
 msgstr "Κρυφά στοιχεία"
 
-#: src/ashytv/window.py:1283
+#: src/ashytv/window.py:1385
 msgid "Everything you hid is here. Open it to show items again."
 msgstr ""
 "Ό,τι έχετε αποκρύψει βρίσκεται εδώ. Ανοίξτε το για να εμφανίσετε ξανά τα "
 "στοιχεία."
 
-#: src/ashytv/window.py:1285
+#: src/ashytv/window.py:1387
 msgid "Program guide"
 msgstr "Οδηγός προγράμματος"
 
-#: src/ashytv/window.py:1286
+#: src/ashytv/window.py:1388
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr ""
 "Μεταβείτε στον Οδηγό για να δείτε τι προβάλλεται ώρα προς ώρα και να ορίσετε "
 "υπενθυμίσεις."
 
-#: src/ashytv/window.py:1288
+#: src/ashytv/window.py:1390
 msgid "Movies and series"
 msgstr "Ταινίες και σειρές"
 
-#: src/ashytv/window.py:1289
+#: src/ashytv/window.py:1391
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2230,11 +2246,11 @@ msgstr ""
 "δείτε λεπτομέρειες και ηθοποιούς· κάντε κλικ σε έναν ηθοποιό για να δείτε "
 "τους άλλους τίτλους του στις λίστες σας."
 
-#: src/ashytv/window.py:1293
+#: src/ashytv/window.py:1395
 msgid "Favorites and recordings"
 msgstr "Αγαπημένα και εγγραφές"
 
-#: src/ashytv/window.py:1294
+#: src/ashytv/window.py:1396
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
@@ -2242,7 +2258,7 @@ msgstr ""
 "Η καρδιά κρατά εδώ κανάλια, ταινίες και σειρές· οι εγγραφές ζωντανής "
 "τηλεόρασης βρίσκονται στις Εγγραφές."
 
-#: src/ashytv/window.py:1298
+#: src/ashytv/window.py:1400
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2252,7 +2268,7 @@ msgstr ""
 "διακομιστές (άλλα DNS του παρόχου): οι κουκκίδες δείχνουν αν ο καθένας είναι "
 "σε σύνδεση, αργός ή εκτός λειτουργίας, και το AshyTV αλλάζει αυτόματα."
 
-#: src/ashytv/window.py:1304
+#: src/ashytv/window.py:1406
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
@@ -2260,95 +2276,95 @@ msgstr ""
 "Θέματα και χρώματα, κρυφά κανάλια και ομάδες, ασφαλές DNS, γονικό PIN και "
 "άλλα."
 
-#: src/ashytv/window.py:1307
+#: src/ashytv/window.py:1409
 msgid "See it again"
 msgstr "Δείτε την ξανά"
 
-#: src/ashytv/window.py:1308
+#: src/ashytv/window.py:1410
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr ""
 "Ανοίξτε ξανά αυτή την ξενάγηση από το κύριο μενού (Ξενάγηση) ή από Ρυθμίσεις "
 "→ Πληροφορίες."
 
-#: src/ashytv/window.py:1358
+#: src/ashytv/window.py:1460
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr ""
 "«{name}»: ο κύριος διακομιστής δεν απαντά. Χρησιμοποιείται ο εφεδρικός "
 "διακομιστής."
 
-#: src/ashytv/window.py:1361
+#: src/ashytv/window.py:1463
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "«{name}»: ο κύριος διακομιστής επανήλθε."
 
-#: src/ashytv/window.py:1367
+#: src/ashytv/window.py:1469
 msgid "AshyTV servers"
 msgstr "Διακομιστές AshyTV"
 
-#: src/ashytv/window.py:1389
+#: src/ashytv/window.py:1491
 msgid "Switching to the main server…"
 msgstr "Μετάβαση στον κύριο διακομιστή…"
 
-#: src/ashytv/window.py:1390
+#: src/ashytv/window.py:1492
 msgid "Switching to the backup server…"
 msgstr "Μετάβαση στον εφεδρικό διακομιστή…"
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1562
 msgid "Programme"
 msgstr "Πρόγραμμα"
 
-#: src/ashytv/window.py:1464
+#: src/ashytv/window.py:1566
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Θα σας υπενθυμίσουμε το «{title}» στις {time}"
 
-#: src/ashytv/window.py:1465
+#: src/ashytv/window.py:1567
 msgid "Reminder cancelled"
 msgstr "Η υπενθύμιση ακυρώθηκε"
 
-#: src/ashytv/window.py:1477
+#: src/ashytv/window.py:1579
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "Το «{title}» ξεκινά σύντομα στο {channel}"
 
-#: src/ashytv/window.py:1479
+#: src/ashytv/window.py:1581
 msgid "AshyTV reminder"
 msgstr "Υπενθύμιση AshyTV"
 
-#: src/ashytv/window.py:1498
+#: src/ashytv/window.py:1600
 msgid "This channel is no longer in your playlists."
 msgstr "Αυτό το κανάλι δεν υπάρχει πλέον στις λίστες αναπαραγωγής σας."
 
-#: src/ashytv/window.py:1538
+#: src/ashytv/window.py:1640
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Η ομάδα «{name}» κρύφτηκε"
 
-#: src/ashytv/window.py:1539
+#: src/ashytv/window.py:1641
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "Η κατηγορία «{name}» κρύφτηκε"
 
-#: src/ashytv/window.py:1553
+#: src/ashytv/window.py:1655
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "Το κανάλι «{name}» κρύφτηκε"
 
-#: src/ashytv/window.py:1559
+#: src/ashytv/window.py:1661
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "Για να εμφανιστεί ξανά: Ρυθμίσεις → Κρυφά κανάλια και ομάδες"
 
-#: src/ashytv/window.py:1561
+#: src/ashytv/window.py:1663
 msgid "See hidden"
 msgstr "Προβολή κρυφών"
 
-#: src/ashytv/window.py:1566
+#: src/ashytv/window.py:1668
 msgid "Undo"
 msgstr "Αναίρεση"
 
-#: src/ashytv/window.py:1872
+#: src/ashytv/window.py:1974
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr ""
 "Δεν είναι δυνατή η αποθήκευση τώρα: ενημερώνεται μια λίστα. Δοκιμάστε ξανά."
