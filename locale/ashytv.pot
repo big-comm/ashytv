@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ashytv 0.24.0\n"
+"Project-Id-Version: ashytv 0.24.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 15:04-0300\n"
+"POT-Creation-Date: 2026-11-06 15:10-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -810,25 +810,25 @@ msgstr ""
 msgid "← → more titles"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:122
 msgid "The guide link must be a web address (http or https)."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:76
-#: src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:77
+#: src/ashytv/ui/servers_dialog.py:60
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:81
-#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:82
+#: src/ashytv/ui/servers_dialog.py:65 src/ashytv/ui/servers_dialog.py:86
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:75
-#: src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:76
+#: src/ashytv/ui/servers_dialog.py:59
 msgid "Backup servers (alternative DNS)"
 msgstr ""
 
@@ -856,7 +856,7 @@ msgstr ""
 msgid "Xtream Codes"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:54
+#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:55
 msgid "Playlist name"
 msgstr ""
 
@@ -877,11 +877,11 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:59
 msgid "Server (URL)"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:60
 msgid "Username"
 msgstr ""
 
@@ -889,7 +889,7 @@ msgstr ""
 msgid "your_username"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:60
+#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:61
 msgid "Password"
 msgstr ""
 
@@ -907,12 +907,12 @@ msgid ""
 "filled in automatically"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:64
+#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:65
 msgid "Playlist URL (M3U)"
 msgstr ""
 
 #: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
-#: src/ashytv/ui/playlist_dialog.py:66
+#: src/ashytv/ui/playlist_dialog.py:67
 msgid "Guide link (EPG) — optional"
 msgstr ""
 
@@ -1034,12 +1034,12 @@ msgstr ""
 
 #: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
 #: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
+#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:33
 msgid "Cancel"
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
-#: src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:40
+#: src/ashytv/ui/servers_dialog.py:71
 msgid "Save"
 msgstr ""
 
@@ -1078,11 +1078,11 @@ msgstr ""
 msgid "Choose an .m3u file."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
+#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:120
 msgid "Enter a URL starting with http:// or https://."
 msgstr ""
 
-#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
+#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:118
 msgid "Fill in server, username and password."
 msgstr ""
 
@@ -1676,30 +1676,30 @@ msgstr ""
 msgid "Servers of “{name}”"
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:43
+#: src/ashytv/ui/servers_dialog.py:44
 msgid "Check now"
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:50
+#: src/ashytv/ui/servers_dialog.py:51
 msgid "Status"
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:51
+#: src/ashytv/ui/servers_dialog.py:52
 msgid ""
 "Checked when the playlist is updated, every 15 minutes while AshyTV is open, "
 "and when playback fails."
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/servers_dialog.py:86
 msgid "Main server"
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:88
+#: src/ashytv/ui/servers_dialog.py:89
 #, python-brace-format
 msgid "checked {when}"
 msgstr ""
 
-#: src/ashytv/ui/servers_dialog.py:90
+#: src/ashytv/ui/servers_dialog.py:91
 msgid "in use"
 msgstr ""
 
