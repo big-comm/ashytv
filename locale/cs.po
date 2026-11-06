@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-05 19:53-0300\n"
+"POT-Creation-Date: 2026-11-06 13:56-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -17,15 +17,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: src/ashytv/application.py:84
+#: src/ashytv/application.py:90
 msgid "AshyTV could not open its database"
 msgstr "AshyTV nemohl otevřít svou databázi"
 
-#: src/ashytv/application.py:94
+#: src/ashytv/application.py:118
+msgid "Some channels will not play"
+msgstr "Některé kanály se nepřehrají"
+
+#: src/ashytv/application.py:119
+#, python-brace-format
+msgid "The system's video codecs lack {codecs}, used by most TV channels."
+msgstr ""
+"Videokodekům systému chybí {codecs}, které používá většina televizních "
+"kanálů."
+
+#: src/ashytv/application.py:122 src/ashytv/application.py:129
+#: src/ashytv/ui/install_dialog.py:62
 msgid "Close"
 msgstr "Zavřít"
 
-#: src/ashytv/application.py:161
+#: src/ashytv/application.py:215
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -33,7 +45,7 @@ msgstr ""
 "Moderní IPTV přehrávač pro desktop Linuxu.\n"
 "Naimportujte vlastní playlist — aplikace neposkytuje žádný obsah."
 
-#: src/ashytv/application.py:168 src/ashytv/ui/pages/settings_page.py:344
+#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
 msgid ""
 "Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
 "certified by TMDB."
@@ -41,17 +53,21 @@ msgstr ""
 "Údaje o obsazení: TMDB. Tento produkt používá API TMDB, ale není schválen "
 "ani certifikován TMDB."
 
+#: src/ashytv/application.py:241 src/ashytv/window.py:133
+msgid "Keyboard Shortcuts"
+msgstr "Klávesové zkratky"
+
 #: src/ashytv/models/channel.py:21
 msgid "Live TV"
 msgstr "Živé vysílání"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:377
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
 #: src/ashytv/window.py:221
 msgid "Movies"
 msgstr "Filmy"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:377
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
 #: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
 #: src/ashytv/window.py:230
 msgid "Series"
@@ -115,7 +131,7 @@ msgstr "Počasí"
 msgid "Music"
 msgstr "Hudba"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:236
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:237
 msgid "All countries"
 msgstr "Všechny země"
 
@@ -220,6 +236,26 @@ msgstr "Břidlicová"
 msgid "Emerald"
 msgstr "Smaragdová"
 
+#: src/ashytv/services/system_deps.py:108
+msgid ""
+"Enable the RPM Fusion repository and install the full codecs:\n"
+"sudo dnf install libavcodec-freeworld"
+msgstr ""
+"Povolte repozitář RPM Fusion a nainstalujte úplné kodeky:\n"
+"sudo dnf install libavcodec-freeworld"
+
+#: src/ashytv/services/system_deps.py:113
+msgid ""
+"Add the Packman repository and switch the FFmpeg libraries to it:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+msgstr ""
+"Přidejte repozitář Packman a přepněte na něj knihovny FFmpeg:\n"
+"sudo zypper dup --from packman --allow-vendor-change"
+
+#: src/ashytv/services/system_deps.py:116
+msgid "Install your distribution's full FFmpeg libraries (libavcodec)."
+msgstr "Nainstalujte úplné knihovny FFmpeg (libavcodec) ze své distribuce."
+
 #: src/ashytv/services/text.py:26
 #, python-brace-format
 msgid "Episode {number}"
@@ -234,92 +270,92 @@ msgstr "Neplatné uživatelské jméno nebo heslo"
 msgid "Account status: {status}"
 msgstr "Stav účtu: {status}"
 
-#: src/ashytv/ui/cast.py:208
+#: src/ashytv/ui/cast.py:209
 msgid "Actor"
 msgstr "Herectví"
 
-#: src/ashytv/ui/cast.py:208 src/ashytv/ui/detail_dialog.py:279
+#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:280
 msgid "Director"
 msgstr "Režie"
 
-#: src/ashytv/ui/cast.py:208
+#: src/ashytv/ui/cast.py:209
 msgid "Writer"
 msgstr "Scénář"
 
-#: src/ashytv/ui/cast.py:209
+#: src/ashytv/ui/cast.py:210
 msgid "Producer"
 msgstr "Produkce"
 
-#: src/ashytv/ui/cast.py:240 src/ashytv/ui/detail_dialog.py:288
+#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:289
 msgid "Cast"
 msgstr "Obsazení"
 
-#: src/ashytv/ui/cast.py:272
+#: src/ashytv/ui/cast.py:273
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Tituly s {name}"
 
-#: src/ashytv/ui/cast.py:331
+#: src/ashytv/ui/cast.py:332
 msgid "Cast data: TMDB"
 msgstr "Údaje o obsazení: TMDB"
 
-#: src/ashytv/ui/cast.py:355 src/ashytv/ui/detail_dialog.py:450
+#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353
 #: src/ashytv/ui/pages/channels_page.py:559
 msgid "Remove from favorites"
 msgstr "Odebrat z oblíbených"
 
-#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
+#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:452
 #: src/ashytv/ui/pages/catalog_page.py:354
 #: src/ashytv/ui/pages/channels_page.py:559
 msgid "Add to favorites"
 msgstr "Přidat do oblíbených"
 
-#: src/ashytv/ui/cast.py:382
+#: src/ashytv/ui/cast.py:383
 msgid "Nothing in your playlists"
 msgstr "Nic ve vašich seznamech"
 
-#: src/ashytv/ui/cast.py:383
+#: src/ashytv/ui/cast.py:384
 msgid "None of this person's movies or series are in your playlists."
 msgstr "Žádný film ani seriál této osoby není ve vašich seznamech."
 
-#: src/ashytv/ui/cast.py:388
+#: src/ashytv/ui/cast.py:389
 msgid "Found in the details of the titles you opened."
 msgstr "Nalezeno v podrobnostech titulů, které jste otevřeli."
 
-#: src/ashytv/ui/channel_info.py:70
+#: src/ashytv/ui/channel_info.py:71
 msgid "Live"
 msgstr "Živě"
 
-#: src/ashytv/ui/channel_info.py:75 src/ashytv/ui/channel_info.py:224
+#: src/ashytv/ui/channel_info.py:76 src/ashytv/ui/channel_info.py:225
 msgid "Unmute"
 msgstr "Zapnout zvuk"
 
-#: src/ashytv/ui/channel_info.py:120 src/ashytv/ui/channel_overlay.py:332
+#: src/ashytv/ui/channel_info.py:121 src/ashytv/ui/channel_overlay.py:332
 #: src/ashytv/ui/schedule_dialog.py:28
 msgid "No schedule"
 msgstr "Žádný program"
 
-#: src/ashytv/ui/channel_info.py:151
+#: src/ashytv/ui/channel_info.py:152
 #, python-brace-format
 msgid "Channel {number}"
 msgstr "Kanál {number}"
 
-#: src/ashytv/ui/channel_info.py:176 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:89
 msgid "Now"
 msgstr "Teď"
 
-#: src/ashytv/ui/channel_info.py:180
+#: src/ashytv/ui/channel_info.py:181
 #, python-brace-format
 msgid "{m} min left"
 msgstr "Zbývá {m} min"
 
-#: src/ashytv/ui/channel_info.py:184 src/ashytv/ui/player_view.py:812
+#: src/ashytv/ui/channel_info.py:185 src/ashytv/ui/player_view.py:813
 #, python-brace-format
 msgid "Up next: {title}"
 msgstr "Následuje: {title}"
 
-#: src/ashytv/ui/channel_info.py:224 src/ashytv/ui/player_view.py:857
+#: src/ashytv/ui/channel_info.py:225 src/ashytv/ui/player_view.py:858
 #: src/ashytv/ui/shortcuts.py:38
 msgid "Mute"
 msgstr "Ztlumit"
@@ -343,91 +379,91 @@ msgstr "Kanály"
 msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: sledovat  •  ←: skupiny  •  Esc: zavřít"
 
-#: src/ashytv/ui/detail_dialog.py:107 src/ashytv/ui/detail_dialog.py:201
+#: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
 #: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
 #: src/ashytv/window.py:1483 src/ashytv/window.py:1489
 msgid "Watch"
 msgstr "Sledovat"
 
-#: src/ashytv/ui/detail_dialog.py:140
+#: src/ashytv/ui/detail_dialog.py:141
 msgid "Episodes"
 msgstr "Epizody"
 
-#: src/ashytv/ui/detail_dialog.py:155
+#: src/ashytv/ui/detail_dialog.py:156
 msgid "Could not load"
 msgstr "Nepodařilo se načíst"
 
-#: src/ashytv/ui/detail_dialog.py:200
+#: src/ashytv/ui/detail_dialog.py:201
 #, python-brace-format
 msgid "Resume from {time}"
 msgstr "Pokračovat od {time}"
 
-#: src/ashytv/ui/detail_dialog.py:233
+#: src/ashytv/ui/detail_dialog.py:234
 msgid "More like this"
 msgstr "Podobné tituly"
 
-#: src/ashytv/ui/detail_dialog.py:255
+#: src/ashytv/ui/detail_dialog.py:256
 #, python-brace-format
 msgid "{m} min per episode"
 msgstr "{m} min na epizodu"
 
-#: src/ashytv/ui/detail_dialog.py:257
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{h} h {m} min"
 msgstr "{h} h {m} min"
 
-#: src/ashytv/ui/detail_dialog.py:257
+#: src/ashytv/ui/detail_dialog.py:258
 #, python-brace-format
 msgid "{m} min"
 msgstr "{m} min"
 
-#: src/ashytv/ui/detail_dialog.py:269
+#: src/ashytv/ui/detail_dialog.py:270
 #, python-brace-format
 msgid "Ends at {time}"
 msgstr "Končí v {time}"
 
-#: src/ashytv/ui/detail_dialog.py:279
+#: src/ashytv/ui/detail_dialog.py:280
 msgid "Created by"
 msgstr "Tvůrci"
 
-#: src/ashytv/ui/detail_dialog.py:281
+#: src/ashytv/ui/detail_dialog.py:282
 msgid "Writers"
 msgstr "Scénář"
 
-#: src/ashytv/ui/detail_dialog.py:282
+#: src/ashytv/ui/detail_dialog.py:283
 msgid "Studios"
 msgstr "Studia"
 
-#: src/ashytv/ui/detail_dialog.py:283
+#: src/ashytv/ui/detail_dialog.py:284
 msgid "Genres"
 msgstr "Žánry"
 
-#: src/ashytv/ui/detail_dialog.py:285
+#: src/ashytv/ui/detail_dialog.py:286
 msgid "Tags"
 msgstr "Štítky"
 
-#: src/ashytv/ui/detail_dialog.py:286 src/ashytv/ui/player_view.py:1052
+#: src/ashytv/ui/detail_dialog.py:287 src/ashytv/ui/player_view.py:1053
 msgid "Audio"
 msgstr "Zvuk"
 
-#: src/ashytv/ui/detail_dialog.py:286
+#: src/ashytv/ui/detail_dialog.py:287
 msgid "Video"
 msgstr "Video"
 
-#: src/ashytv/ui/detail_dialog.py:289
+#: src/ashytv/ui/detail_dialog.py:290
 msgid "Country"
 msgstr "Země"
 
-#: src/ashytv/ui/detail_dialog.py:290
+#: src/ashytv/ui/detail_dialog.py:291
 msgid "Released"
 msgstr "Premiéra"
 
-#: src/ashytv/ui/detail_dialog.py:291 src/ashytv/ui/player_view.py:239
-#: src/ashytv/ui/player_view.py:1007 src/ashytv/ui/player_view.py:1024
+#: src/ashytv/ui/detail_dialog.py:292 src/ashytv/ui/player_view.py:240
+#: src/ashytv/ui/player_view.py:1008 src/ashytv/ui/player_view.py:1025
 msgid "Subtitles"
 msgstr "Titulky"
 
-#: src/ashytv/ui/detail_dialog.py:291
+#: src/ashytv/ui/detail_dialog.py:292
 #, python-brace-format
 msgid "{n} file"
 msgid_plural "{n} files"
@@ -435,25 +471,25 @@ msgstr[0] "{n} soubor"
 msgstr[1] "{n} soubory"
 msgstr[2] "{n} souborů"
 
-#: src/ashytv/ui/detail_dialog.py:330
+#: src/ashytv/ui/detail_dialog.py:331
 msgid "Trailer"
 msgstr "Upoutávka"
 
-#: src/ashytv/ui/detail_dialog.py:356
+#: src/ashytv/ui/detail_dialog.py:357
 msgid "No episodes available"
 msgstr "Žádné dostupné epizody"
 
-#: src/ashytv/ui/detail_dialog.py:361
+#: src/ashytv/ui/detail_dialog.py:362
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Sezóna {n}"
 
-#: src/ashytv/ui/detail_dialog.py:369
+#: src/ashytv/ui/detail_dialog.py:370
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Sledovat: {label}"
 
-#: src/ashytv/ui/detail_dialog.py:410
+#: src/ashytv/ui/detail_dialog.py:411
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Epizoda {n}"
@@ -493,6 +529,52 @@ msgstr "Kanál"
 msgid "Show"
 msgstr "Zobrazit"
 
+#: src/ashytv/ui/install_dialog.py:31
+msgid "Video player library not found"
+msgstr "Knihovna přehrávače videa nebyla nalezena"
+
+#: src/ashytv/ui/install_dialog.py:32
+msgid ""
+"AshyTV plays video with libmpv, which is not installed on this system. It is "
+"installed once from your distribution's packages."
+msgstr ""
+"AshyTV přehrává video pomocí libmpv, která v tomto systému není "
+"nainstalována. Instaluje se jednou z balíčků vaší distribuce."
+
+#: src/ashytv/ui/install_dialog.py:39
+msgid "Install it with your package manager"
+msgstr "Nainstalujte ji správcem balíčků"
+
+#: src/ashytv/ui/install_dialog.py:40
+msgid ""
+"Install the package that provides libmpv.so.2 (usually “mpv”, “libmpv2” or "
+"“mpv-libs”) and open AshyTV again."
+msgstr ""
+"Nainstalujte balíček, který poskytuje libmpv.so.2 (obvykle „mpv“, „libmpv2“ "
+"nebo „mpv-libs“), a znovu otevřete AshyTV."
+
+#: src/ashytv/ui/install_dialog.py:45
+msgid "Command to be executed"
+msgstr "Příkaz, který se provede"
+
+#: src/ashytv/ui/install_dialog.py:65
+msgid "Install"
+msgstr "Nainstalovat"
+
+#: src/ashytv/ui/install_dialog.py:125
+msgid "Installed. Open AshyTV again to start watching."
+msgstr "Nainstalováno. Znovu otevřete AshyTV a začněte sledovat."
+
+#: src/ashytv/ui/install_dialog.py:126
+msgid "Close AshyTV"
+msgstr "Zavřít AshyTV"
+
+#: src/ashytv/ui/install_dialog.py:129
+msgid ""
+"The installation did not finish. Check the messages above and try again."
+msgstr ""
+"Instalace nebyla dokončena. Zkontrolujte zprávy výše a zkuste to znovu."
+
 #: src/ashytv/ui/mini_player.py:32
 msgid "Back to AshyTV"
 msgstr "Zpět do AshyTV"
@@ -516,7 +598,7 @@ msgstr "Oblíbené"
 msgid "Recordings"
 msgstr "Nahrávky"
 
-#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:72
+#: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:73
 #: src/ashytv/window.py:1297
 msgid "Playlists"
 msgstr "Playlisty"
@@ -621,7 +703,7 @@ msgstr "Posunout dolů"
 msgid "Hide group"
 msgstr "Skrýt skupinu"
 
-#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:177
+#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:178
 msgid "Favorite"
 msgstr "Oblíbený"
 
@@ -747,11 +829,11 @@ msgstr "Enter: podrobnosti"
 msgid "← → more titles"
 msgstr "← → další tituly"
 
-#: src/ashytv/ui/pages/lists_page.py:17
+#: src/ashytv/ui/pages/lists_page.py:18
 msgid "The guide link must be a web address (http or https)."
 msgstr "Odkaz na program musí být webová adresa (http nebo https)."
 
-#: src/ashytv/ui/pages/lists_page.py:27 src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:28 src/ashytv/ui/servers_dialog.py:59
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -759,86 +841,86 @@ msgstr ""
 "Další adresy téhož poskytovatele se stejným přihlášením. Když hlavní "
 "neodpovídá, AshyTV automaticky přepne na další."
 
-#: src/ashytv/ui/pages/lists_page.py:35 src/ashytv/ui/servers_dialog.py:64
+#: src/ashytv/ui/pages/lists_page.py:36 src/ashytv/ui/servers_dialog.py:64
 #: src/ashytv/ui/servers_dialog.py:85
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "Záložní server {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:39 src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:40 src/ashytv/ui/servers_dialog.py:58
 msgid "Backup servers (alternative DNS)"
 msgstr "Záložní servery (alternativní DNS)"
 
-#: src/ashytv/ui/pages/lists_page.py:73
+#: src/ashytv/ui/pages/lists_page.py:74
 msgid "Manage your playlists or add a new one"
 msgstr "Spravujte své playlisty nebo přidejte nový"
 
-#: src/ashytv/ui/pages/lists_page.py:81 src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:82 src/ashytv/ui/pages/lists_page.py:318
 msgid "Add Playlist"
 msgstr "Přidat playlist"
 
-#: src/ashytv/ui/pages/lists_page.py:102 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:361
 msgid "Free TV"
 msgstr "TV zdarma"
 
-#: src/ashytv/ui/pages/lists_page.py:102
+#: src/ashytv/ui/pages/lists_page.py:103
 msgid "M3U File"
 msgstr "Soubor M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:103
+#: src/ashytv/ui/pages/lists_page.py:104
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:103 src/ashytv/ui/pages/lists_page.py:360
+#: src/ashytv/ui/pages/lists_page.py:104 src/ashytv/ui/pages/lists_page.py:361
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:114
+#: src/ashytv/ui/pages/lists_page.py:115
 msgid "Playlist name"
 msgstr "Název playlistu"
 
-#: src/ashytv/ui/pages/lists_page.py:115 src/ashytv/ui/pages/lists_page.py:527
-#: src/ashytv/ui/pages/lists_page.py:595 src/ashytv/ui/pages/lists_page.py:603
+#: src/ashytv/ui/pages/lists_page.py:116 src/ashytv/ui/pages/lists_page.py:528
+#: src/ashytv/ui/pages/lists_page.py:596 src/ashytv/ui/pages/lists_page.py:604
 msgid "My Playlist"
 msgstr "Můj playlist"
 
-#: src/ashytv/ui/pages/lists_page.py:122
+#: src/ashytv/ui/pages/lists_page.py:123
 msgid "Choose .m3u file…"
 msgstr "Vybrat soubor .m3u…"
 
-#: src/ashytv/ui/pages/lists_page.py:124 src/ashytv/ui/pages/lists_page.py:340
+#: src/ashytv/ui/pages/lists_page.py:125 src/ashytv/ui/pages/lists_page.py:341
 msgid "No file selected"
 msgstr "Nebyl vybrán žádný soubor"
 
-#: src/ashytv/ui/pages/lists_page.py:130
+#: src/ashytv/ui/pages/lists_page.py:131
 msgid "File"
 msgstr "Soubor"
 
-#: src/ashytv/ui/pages/lists_page.py:135
+#: src/ashytv/ui/pages/lists_page.py:136
 msgid "Server (URL)"
 msgstr "Server (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:138
+#: src/ashytv/ui/pages/lists_page.py:139
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: src/ashytv/ui/pages/lists_page.py:139
+#: src/ashytv/ui/pages/lists_page.py:140
 msgid "your_username"
 msgstr "vase_uzivatelske_jmeno"
 
-#: src/ashytv/ui/pages/lists_page.py:140
+#: src/ashytv/ui/pages/lists_page.py:141
 msgid "Password"
 msgstr "Heslo"
 
-#: src/ashytv/ui/pages/lists_page.py:141
+#: src/ashytv/ui/pages/lists_page.py:142
 msgid "your_password"
 msgstr "vase_heslo"
 
-#: src/ashytv/ui/pages/lists_page.py:143
+#: src/ashytv/ui/pages/lists_page.py:144
 msgid "Paste provider message"
 msgstr "Vložit zprávu od poskytovatele"
 
-#: src/ashytv/ui/pages/lists_page.py:145
+#: src/ashytv/ui/pages/lists_page.py:146
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -846,27 +928,27 @@ msgstr ""
 "Vložte uvítací zprávu poskytovatele: server, uživatelské jméno a heslo se "
 "vyplní automaticky"
 
-#: src/ashytv/ui/pages/lists_page.py:154
+#: src/ashytv/ui/pages/lists_page.py:155
 msgid "Playlist URL (M3U)"
 msgstr "URL playlistu (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:166 src/ashytv/ui/pages/lists_page.py:478
+#: src/ashytv/ui/pages/lists_page.py:167 src/ashytv/ui/pages/lists_page.py:479
 msgid "Guide link (EPG) — optional"
 msgstr "Odkaz na program (EPG) — volitelné"
 
-#: src/ashytv/ui/pages/lists_page.py:170
+#: src/ashytv/ui/pages/lists_page.py:171
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr "Programový průvodce XMLTV; nahradí ten, který uvádí playlist (url-tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:182
+#: src/ashytv/ui/pages/lists_page.py:183
 msgid "Save and Connect"
 msgstr "Uložit a připojit"
 
-#: src/ashytv/ui/pages/lists_page.py:199
+#: src/ashytv/ui/pages/lists_page.py:200
 msgid "Secure Connection"
 msgstr "Zabezpečené připojení"
 
-#: src/ashytv/ui/pages/lists_page.py:201
+#: src/ashytv/ui/pages/lists_page.py:202
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -874,23 +956,23 @@ msgstr ""
 "Vaše údaje jsou uloženy pouze ve vašem zařízení. Hesla jsou uložena v "
 "systémové klíčence."
 
-#: src/ashytv/ui/pages/lists_page.py:213
+#: src/ashytv/ui/pages/lists_page.py:214
 msgid "Your Playlists"
 msgstr "Vaše playlisty"
 
-#: src/ashytv/ui/pages/lists_page.py:242
+#: src/ashytv/ui/pages/lists_page.py:243
 msgid "TV channels from"
 msgstr "Televizní kanály z"
 
-#: src/ashytv/ui/pages/lists_page.py:247
+#: src/ashytv/ui/pages/lists_page.py:248
 msgid "Free movies and cartoons"
 msgstr "Filmy a kreslené seriály zdarma"
 
-#: src/ashytv/ui/pages/lists_page.py:249
+#: src/ashytv/ui/pages/lists_page.py:250
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "Klasické volné filmy a otevřené filmy od Blenderu"
 
-#: src/ashytv/ui/pages/lists_page.py:259
+#: src/ashytv/ui/pages/lists_page.py:260
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -899,15 +981,15 @@ msgstr ""
 "Jen bezplatné kanály, které vysílatelé veřejně nabízejí, a filmy s otevřenou "
 "licencí nebo volná díla. AshyTV je přehrávač: nic z toho nehostuje."
 
-#: src/ashytv/ui/pages/lists_page.py:317
+#: src/ashytv/ui/pages/lists_page.py:318
 msgid "Add Another Playlist"
 msgstr "Přidat další playlist"
 
-#: src/ashytv/ui/pages/lists_page.py:361
+#: src/ashytv/ui/pages/lists_page.py:362
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:362
+#: src/ashytv/ui/pages/lists_page.py:363
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
@@ -915,56 +997,56 @@ msgstr[0] "{n} položka"
 msgstr[1] "{n} položky"
 msgstr[2] "{n} položek"
 
-#: src/ashytv/ui/pages/lists_page.py:365
+#: src/ashytv/ui/pages/lists_page.py:366
 msgid "Disabled"
 msgstr "Vypnuto"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:368
 #, python-brace-format
 msgid "updated {when}"
 msgstr "aktualizováno {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:372
+#: src/ashytv/ui/pages/lists_page.py:373
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "Program: {n} z {m} kanálů"
 
-#: src/ashytv/ui/pages/lists_page.py:377
+#: src/ashytv/ui/pages/lists_page.py:378
 #, python-brace-format
 msgid "expires {when}"
 msgstr "vyprší {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:379
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "vypršelo {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:396
+#: src/ashytv/ui/pages/lists_page.py:397
 msgid "Show this playlist's channels"
 msgstr "Zobrazit kanály tohoto seznamu"
 
-#: src/ashytv/ui/pages/lists_page.py:405
+#: src/ashytv/ui/pages/lists_page.py:406
 msgid "Guide link (EPG)"
 msgstr "Odkaz na program (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:410
+#: src/ashytv/ui/pages/lists_page.py:411
 msgid "Refresh playlist"
 msgstr "Obnovit playlist"
 
-#: src/ashytv/ui/pages/lists_page.py:414
+#: src/ashytv/ui/pages/lists_page.py:415
 msgid "Remove playlist"
 msgstr "Odebrat playlist"
 
-#: src/ashytv/ui/pages/lists_page.py:451
+#: src/ashytv/ui/pages/lists_page.py:452
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "Servery: {status} — klikněte pro podrobnosti"
 
-#: src/ashytv/ui/pages/lists_page.py:452 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:453 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "zatím nezkontrolováno"
 
-#: src/ashytv/ui/pages/lists_page.py:476
+#: src/ashytv/ui/pages/lists_page.py:477
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -973,21 +1055,21 @@ msgstr ""
 "Programový průvodce XMLTV pro „{name}“. Nahradí ten, který uvádí playlist; "
 "ponechte prázdné, chcete-li použít vlastní průvodce playlistu."
 
-#: src/ashytv/ui/pages/lists_page.py:480 src/ashytv/ui/pages/lists_page.py:508
+#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/pages/lists_page.py:509
 #: src/ashytv/ui/pages/recordings_page.py:92
 #: src/ashytv/ui/pages/settings_page.py:445
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/ashytv/ui/pages/lists_page.py:481 src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:482 src/ashytv/ui/servers_dialog.py:70
 msgid "Save"
 msgstr "Uložit"
 
-#: src/ashytv/ui/pages/lists_page.py:505
+#: src/ashytv/ui/pages/lists_page.py:506
 msgid "Remove playlist?"
 msgstr "Odebrat playlist?"
 
-#: src/ashytv/ui/pages/lists_page.py:506
+#: src/ashytv/ui/pages/lists_page.py:507
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -996,42 +1078,42 @@ msgstr ""
 "„{name}“ a všechny jeho kanály, oblíbené položky a historie budou z tohoto "
 "zařízení odstraněny."
 
-#: src/ashytv/ui/pages/lists_page.py:509
+#: src/ashytv/ui/pages/lists_page.py:510
 msgid "Remove"
 msgstr "Odebrat"
 
-#: src/ashytv/ui/pages/lists_page.py:532
+#: src/ashytv/ui/pages/lists_page.py:533
 msgid "Select M3U playlist"
 msgstr "Vybrat playlist M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:534
+#: src/ashytv/ui/pages/lists_page.py:535
 msgid "M3U Playlists"
 msgstr "Playlisty M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:571
+#: src/ashytv/ui/pages/lists_page.py:572
 msgid "Couldn't find server, username and password in the copied text."
 msgstr ""
 "V zkopírovaném textu se nepodařilo najít server, uživatelské jméno a heslo."
 
-#: src/ashytv/ui/pages/lists_page.py:577
+#: src/ashytv/ui/pages/lists_page.py:578
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Údaje poskytovatele byly vyplněny. Zkontrolujte je a klikněte na „Uložit a "
 "připojit“."
 
-#: src/ashytv/ui/pages/lists_page.py:593
+#: src/ashytv/ui/pages/lists_page.py:594
 msgid "Choose an .m3u file."
 msgstr "Vyberte soubor .m3u."
 
-#: src/ashytv/ui/pages/lists_page.py:600
+#: src/ashytv/ui/pages/lists_page.py:601
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Zadejte URL začínající http:// nebo https://."
 
-#: src/ashytv/ui/pages/lists_page.py:614
+#: src/ashytv/ui/pages/lists_page.py:615
 msgid "Fill in server, username and password."
 msgstr "Vyplňte server, uživatelské jméno a heslo."
 
-#: src/ashytv/ui/pages/lists_page.py:616
+#: src/ashytv/ui/pages/lists_page.py:617
 msgid "Xtream Provider"
 msgstr "Poskytovatel Xtream"
 
@@ -1273,7 +1355,7 @@ msgstr "Vypněte pro úsporu dat"
 msgid "Applies from the next video you open."
 msgstr "Platí od příštího otevřeného videa."
 
-#: src/ashytv/ui/pages/settings_page.py:253 src/ashytv/ui/player_view.py:788
+#: src/ashytv/ui/pages/settings_page.py:253 src/ashytv/ui/player_view.py:789
 msgid "Automatic quality"
 msgstr "Automatická kvalita"
 
@@ -1435,178 +1517,178 @@ msgstr "PIN byl nastaven."
 msgid "PIN removed."
 msgstr "PIN byl odebrán."
 
-#: src/ashytv/ui/player_view.py:25
+#: src/ashytv/ui/player_view.py:26
 msgid "Auto"
 msgstr "Auto"
 
-#: src/ashytv/ui/player_view.py:153
+#: src/ashytv/ui/player_view.py:154
 msgid "Back (Esc)"
 msgstr "Zpět (Esc)"
 
-#: src/ashytv/ui/player_view.py:179 src/ashytv/ui/player_view.py:956
+#: src/ashytv/ui/player_view.py:180 src/ashytv/ui/player_view.py:957
 msgid "Record"
 msgstr "Nahrávat"
 
-#: src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:181
 msgid "Mini player"
 msgstr "Mini přehrávač"
 
-#: src/ashytv/ui/player_view.py:209 src/ashytv/ui/player_view.py:404
-#: src/ashytv/ui/player_view.py:703 src/ashytv/ui/player_view.py:717
-#: src/ashytv/ui/player_view.py:723
+#: src/ashytv/ui/player_view.py:210 src/ashytv/ui/player_view.py:405
+#: src/ashytv/ui/player_view.py:704 src/ashytv/ui/player_view.py:718
+#: src/ashytv/ui/player_view.py:724
 msgid "● LIVE"
 msgstr "● ŽIVĚ"
 
-#: src/ashytv/ui/player_view.py:211
+#: src/ashytv/ui/player_view.py:212
 msgid "Go live"
 msgstr "Přejít na živé vysílání"
 
-#: src/ashytv/ui/player_view.py:212
+#: src/ashytv/ui/player_view.py:213
 msgid "Back to live"
 msgstr "Zpět na živé vysílání"
 
-#: src/ashytv/ui/player_view.py:222
+#: src/ashytv/ui/player_view.py:223
 msgid "Previous (↑)"
 msgstr "Předchozí (↑)"
 
-#: src/ashytv/ui/player_view.py:224
+#: src/ashytv/ui/player_view.py:225
 msgid "Back 10 s (←)"
 msgstr "Zpět o 10 s (←)"
 
-#: src/ashytv/ui/player_view.py:226
+#: src/ashytv/ui/player_view.py:227
 msgid "Pause (Space)"
 msgstr "Pozastavit (mezerník)"
 
-#: src/ashytv/ui/player_view.py:228
+#: src/ashytv/ui/player_view.py:229
 msgid "Forward 10 s (→)"
 msgstr "Vpřed o 10 s (→)"
 
-#: src/ashytv/ui/player_view.py:230
+#: src/ashytv/ui/player_view.py:231
 msgid "Next (↓)"
 msgstr "Další (↓)"
 
-#: src/ashytv/ui/player_view.py:237 src/ashytv/ui/shortcuts.py:39
+#: src/ashytv/ui/player_view.py:238 src/ashytv/ui/shortcuts.py:39
 msgid "Volume"
 msgstr "Hlasitost"
 
-#: src/ashytv/ui/player_view.py:241
+#: src/ashytv/ui/player_view.py:242
 msgid "Audio & Video"
 msgstr "Zvuk a video"
 
-#: src/ashytv/ui/player_view.py:243
+#: src/ashytv/ui/player_view.py:244
 msgid "Fullscreen (F)"
 msgstr "Celá obrazovka (F)"
 
-#: src/ashytv/ui/player_view.py:268
+#: src/ashytv/ui/player_view.py:269
 msgid "Try again"
 msgstr "Zkusit znovu"
 
-#: src/ashytv/ui/player_view.py:506 src/ashytv/ui/player_view.py:517
+#: src/ashytv/ui/player_view.py:507 src/ashytv/ui/player_view.py:518
 msgid "Reconnecting…"
 msgstr "Opětovné připojování…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Buffering…"
 msgstr "Načítání do vyrovnávací paměti…"
 
-#: src/ashytv/ui/player_view.py:544
+#: src/ashytv/ui/player_view.py:545
 msgid "Loading…"
 msgstr "Načítání…"
 
-#: src/ashytv/ui/player_view.py:546
+#: src/ashytv/ui/player_view.py:547
 msgid "Could not play"
 msgstr "Nelze přehrát"
 
-#: src/ashytv/ui/player_view.py:547
+#: src/ashytv/ui/player_view.py:548
 msgid "The channel may be offline or the connection dropped."
 msgstr "Kanál může být offline nebo se přerušilo připojení."
 
-#: src/ashytv/ui/player_view.py:554
+#: src/ashytv/ui/player_view.py:555
 msgid "Broadcast ended"
 msgstr "Vysílání skončilo"
 
-#: src/ashytv/ui/player_view.py:555
+#: src/ashytv/ui/player_view.py:556
 msgid "The signal was interrupted."
 msgstr "Signál byl přerušen."
 
-#: src/ashytv/ui/player_view.py:774
+#: src/ashytv/ui/player_view.py:775
 #, python-brace-format
 msgid "Quality: {label}"
 msgstr "Kvalita: {label}"
 
-#: src/ashytv/ui/player_view.py:776
+#: src/ashytv/ui/player_view.py:777
 #, python-brace-format
 msgid "Unavailable, switching to {label}"
 msgstr "Nedostupné, přepínám na {label}"
 
-#: src/ashytv/ui/player_view.py:778
+#: src/ashytv/ui/player_view.py:779
 #, python-brace-format
 msgid "Quality: {label} (auto)"
 msgstr "Kvalita: {label} (automaticky)"
 
-#: src/ashytv/ui/player_view.py:858 src/ashytv/ui/player_view.py:865
+#: src/ashytv/ui/player_view.py:859 src/ashytv/ui/player_view.py:866
 #, python-brace-format
 msgid "Volume {level}%"
 msgstr "Hlasitost {level}%"
 
-#: src/ashytv/ui/player_view.py:925
+#: src/ashytv/ui/player_view.py:926
 msgid "Recording"
 msgstr "Nahrávání"
 
-#: src/ashytv/ui/player_view.py:936
+#: src/ashytv/ui/player_view.py:937
 msgid "Stop recording"
 msgstr "Zastavit nahrávání"
 
-#: src/ashytv/ui/player_view.py:939
+#: src/ashytv/ui/player_view.py:940
 msgid "Recording…"
 msgstr "Nahrávání…"
 
-#: src/ashytv/ui/player_view.py:947
+#: src/ashytv/ui/player_view.py:948
 msgid "Could not record this channel."
 msgstr "Tento kanál se nepodařilo nahrát."
 
-#: src/ashytv/ui/player_view.py:958
+#: src/ashytv/ui/player_view.py:959
 msgid "Recording saved to Recordings."
 msgstr "Nahrávka byla uložena do Nahrávek."
 
-#: src/ashytv/ui/player_view.py:970
+#: src/ashytv/ui/player_view.py:971
 msgid "Mute (M)"
 msgstr "Ztlumit (M)"
 
-#: src/ashytv/ui/player_view.py:1005
+#: src/ashytv/ui/player_view.py:1006
 msgid "Off"
 msgstr "Vypnuto"
 
-#: src/ashytv/ui/player_view.py:1010
+#: src/ashytv/ui/player_view.py:1011
 msgid "No subtitles in this video."
 msgstr "Toto video nemá titulky."
 
-#: src/ashytv/ui/player_view.py:1015
+#: src/ashytv/ui/player_view.py:1016
 msgid "Load subtitle file…"
 msgstr "Načíst soubor titulků…"
 
-#: src/ashytv/ui/player_view.py:1022
+#: src/ashytv/ui/player_view.py:1023
 msgid "Load subtitle file"
 msgstr "Načíst soubor titulků"
 
-#: src/ashytv/ui/player_view.py:1039
+#: src/ashytv/ui/player_view.py:1040
 #, python-brace-format
 msgid "Subtitles: {name}"
 msgstr "Titulky: {name}"
 
-#: src/ashytv/ui/player_view.py:1045
+#: src/ashytv/ui/player_view.py:1046
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: src/ashytv/ui/player_view.py:1048
+#: src/ashytv/ui/player_view.py:1049
 msgid "Quality"
 msgstr "Kvalita"
 
-#: src/ashytv/ui/player_view.py:1055
+#: src/ashytv/ui/player_view.py:1056
 msgid "Aspect ratio"
 msgstr "Poměr stran"
 
-#: src/ashytv/ui/player_view.py:1059
+#: src/ashytv/ui/player_view.py:1060
 msgid "Speed"
 msgstr "Rychlost"
 
@@ -1909,10 +1991,6 @@ msgstr "AshyTV je jen přehrávač: nehostuje žádný obsah."
 #: src/ashytv/window.py:125
 msgid "Search…"
 msgstr "Hledat…"
-
-#: src/ashytv/window.py:133
-msgid "Keyboard Shortcuts"
-msgstr "Klávesové zkratky"
 
 #: src/ashytv/window.py:134
 msgid "About AshyTV"

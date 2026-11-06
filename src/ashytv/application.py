@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
@@ -11,9 +12,12 @@ from . import APP_ID, APP_VERSION, compat
 from .i18n import _
 from .services.logos import logo_loader
 from .services.settings import ACCENTS, Settings
+from .services import system_deps
 from .services.storage import Storage
 from .ui import shortcuts
-from .window import AshyTvWindow
+
+if TYPE_CHECKING:  # the window imports python-mpv, which needs libmpv
+    from .window import AshyTvWindow
 
 _DATA = Path(__file__).parent / "data"
 _CSS = _DATA / "style.css"
@@ -86,9 +90,38 @@ class AshyTvApplication(Adw.Application):
                 self._fatal(_("AshyTV could not open its database"), str(exc))
                 return
         if self.window is None:
+            if not system_deps.libmpv_loads():
+                self._ask_install_libmpv()
+                return
+            from .window import AshyTvWindow
+
             self.window = AshyTvWindow(storage=self.storage, settings=self.settings,
                                        application=self)
+            GLib.idle_add(self._check_codecs)
         self.window.present()
+
+    def _ask_install_libmpv(self) -> None:
+        """The host has no libmpv (the AppImage does not bundle it)."""
+        from .ui.install_dialog import InstallLibmpvWindow
+
+        for window in self.get_windows():
+            if isinstance(window, InstallLibmpvWindow):
+                window.present()
+                return
+        InstallLibmpvWindow(system_deps.install_plan(), application=self).present()
+
+    def _check_codecs(self) -> bool:
+        """Warn once per run when the host's FFmpeg lacks H.264/HEVC."""
+        missing = system_deps.missing_codecs()
+        if missing and self.window is not None:
+            dialog = Adw.AlertDialog(
+                heading=_("Some channels will not play"),
+                body=_("The system's video codecs lack {codecs}, used by most TV "
+                       "channels.").format(codecs=", ".join(c.upper() for c in missing))
+                + "\n\n" + system_deps.codecs_hint())
+            dialog.add_response("close", _("Close"))
+            dialog.present(self.window)
+        return GLib.SOURCE_REMOVE
 
     def _fatal(self, title: str, detail: str) -> None:
         """Say why the app can't start instead of opening nothing."""
