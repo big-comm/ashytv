@@ -87,7 +87,14 @@ class ListsPage(Gtk.Box):
         self.add_head = Gtk.Label(label=_("Add Playlist"), xalign=0)
         self.add_head.add_css_class("ashy-section-title")
         outer.append(self.add_head)
-        top = Gtk.Box(spacing=18)
+        # A grid, not a horizontal box, for the form and the card beside it.
+        # The box handed the form its natural width — over a thousand pixels,
+        # because a wrapping label reports its whole text on one line and the
+        # Stack passes the widest page's figure on from every tab — instead of
+        # its share of the row. The form came out wider than the row itself
+        # and the card went off the screen, and stayed off for the other tabs.
+        # A grid places each column explicitly and cannot do that.
+        top = Gtk.Grid(column_spacing=18)
         outer.append(top)
 
         # ---- form ----
@@ -120,14 +127,8 @@ class ListsPage(Gtk.Box):
         self.name_entry = self._field(inner, _("Playlist name"), "view-list-symbolic",
                                       Gtk.Entry(placeholder_text=_("My Playlist")))
 
-        # Every tab the same height. With vhomogeneous=False, switching to a
-        # shorter tab (M3U file, URL) changed the height, and in that
-        # renegotiation the form was handed its natural width instead of its
-        # share of the row: it ended up wider than the row itself and pushed
-        # the "Secure Connection" card off the screen. The card then stayed
-        # off for the other tabs too.
         self.stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE,
-                               vhomogeneous=True)
+                               vhomogeneous=False)
 
         # file
         fbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
@@ -196,7 +197,7 @@ class ListsPage(Gtk.Box):
         self.save_btn.add_css_class("pill-accent")
         self.save_btn.connect("clicked", self._save)
         inner.append(self.save_btn)
-        top.append(form)
+        top.attach(form, 0, 0, 1, 1)
 
         # ---- "Secure Connection" card ----
         secure = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10,
@@ -218,7 +219,7 @@ class ListsPage(Gtk.Box):
         sin.append(t)
         sin.append(d)
         secure.append(sin)
-        top.append(secure)
+        top.attach(secure, 1, 0, 1, 1)
 
         # ---- existing playlists (on top) ----
         self.existing_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
