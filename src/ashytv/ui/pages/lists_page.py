@@ -120,8 +120,14 @@ class ListsPage(Gtk.Box):
         self.name_entry = self._field(inner, _("Playlist name"), "view-list-symbolic",
                                       Gtk.Entry(placeholder_text=_("My Playlist")))
 
+        # Every tab the same height. With vhomogeneous=False, switching to a
+        # shorter tab (M3U file, URL) changed the height, and in that
+        # renegotiation the form was handed its natural width instead of its
+        # share of the row: it ended up wider than the row itself and pushed
+        # the "Secure Connection" card off the screen. The card then stayed
+        # off for the other tabs too.
         self.stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE,
-                               vhomogeneous=False)
+                               vhomogeneous=True)
 
         # file
         fbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
