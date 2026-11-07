@@ -21,7 +21,7 @@ from ..models import Channel, Episode, MediaType
 from .quality import base_key, quality_label, split_quality
 from .text import normalize
 
-_SCHEMA_VERSION = 9  # 9: channel.grp_rank (provider group order)
+_SCHEMA_VERSION = 10  # 10: idx_channel_grp_order (home page group rails)
 
 # Words that identify adult groups (parental controls).
 ADULT_KEYWORDS = ("adult", "xxx", "+18", "18+", "porn", "hot club", "sexy")
@@ -179,6 +179,13 @@ class Storage:
             CREATE INDEX IF NOT EXISTS idx_channel_url ON channel(playlist_id, url);
             CREATE INDEX IF NOT EXISTS idx_channel_variants
                 ON channel(playlist_id, grp, base_key);
+            -- The home page's group rails: every column the count-and-order
+            -- query reads, so it runs off the index and never touches the
+            -- table. On a library of a hundred and fifty thousand channels
+            -- that is the difference between a tenth of a second and a
+            -- hundredth, and it happens while the window is opening.
+            CREATE INDEX IF NOT EXISTS idx_channel_grp_order
+                ON channel(media_type, grp, playlist_id, grp_rank, num);
             CREATE INDEX IF NOT EXISTS idx_episode_channel ON episode(channel_id);
             CREATE INDEX IF NOT EXISTS idx_history_time ON history(watched_at);
             -- Actors and directors the user follows ("Favorite people"); not
@@ -550,6 +557,7 @@ class Storage:
         limit: int | None = None,
         groups: list[str] | None = None,
         min_rating: float = 0.0,
+        offset: int = 0,
     ) -> list[Channel]:
         where, params = self._where(media_type, favorites, group, search, groups)
         if min_rating:
@@ -564,9 +572,14 @@ class Storage:
             "favorite": "f.added_at DESC",
             "rating": "c.rating DESC, c.year DESC",
         }[order]
-        sql = f"SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}{where} ORDER BY {order_sql}"
-        if limit:
-            sql += f" LIMIT {int(limit)}"
+        # c.id last so that equal rows always come out in the same order:
+        # a page read later must not repeat or skip what an earlier one had.
+        sql = (f"SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}{where} "
+               f"ORDER BY {order_sql}, c.id")
+        if limit or offset:
+            sql += f" LIMIT {int(limit) if limit else -1}"
+        if offset:
+            sql += f" OFFSET {int(offset)}"
         return [self._row_to_channel(r) for r in self.db.execute(sql, params)]
 
     # One entry per channel when quality variants are grouped.
@@ -592,13 +605,16 @@ class Storage:
         what = self._VARIANT_KEY if collapse else "COUNT(*)"
         # The provider's group order (its category list); groups it does not
         # list, and lists without one, by their first item in the file.
+        # Plain FROM channel, not self._FROM: nothing here looks at the
+        # favourites, and joining them made SQLite visit the table once per
+        # channel instead of reading the index straight through.
         rows = self.db.execute(
             f"""SELECT c.grp, {what} AS n,
                        MIN(c.playlist_id * 10000000000000
                            + (CASE WHEN c.grp_rank > 0 THEN c.grp_rank ELSE 999999 END)
                              * 10000000
                            + c.num) AS o
-                {self._FROM}{where} {'AND' if where else 'WHERE'} c.grp <> ''
+                FROM channel c{where} {'AND' if where else 'WHERE'} c.grp <> ''
                 GROUP BY c.grp ORDER BY o""",
             params,
         ).fetchall()

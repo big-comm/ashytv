@@ -97,7 +97,10 @@ class AshyTvApplication(Adw.Application):
 
             self.window = AshyTvWindow(storage=self.storage, settings=self.settings,
                                        application=self)
-            GLib.idle_add(self._check_codecs)
+            # Not on idle: asking FFmpeg what it can decode starts a second
+            # mpv, and on idle that landed between the window being built
+            # and its first frame. The warning can wait a second.
+            GLib.timeout_add_seconds(1, self._check_codecs)
         self.window.present()
 
     def _ask_install_libmpv(self) -> None:

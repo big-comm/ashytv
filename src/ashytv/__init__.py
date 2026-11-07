@@ -3,7 +3,7 @@
 APP_NAME = "AshyTV"
 APP_ID = "org.communitybig.ashytv"
 # Bumped automatically by gitrepo on every commit; keep the "x.y.z" format.
-APP_VERSION = "0.24.3"
+APP_VERSION = "0.24.7"
 APP_VERSION_OWNER = "ashytv"
 
 __version__ = APP_VERSION

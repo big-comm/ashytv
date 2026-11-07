@@ -162,6 +162,7 @@ class HomePage(RailCards, Gtk.Box):
         self.storage = storage
         self._guide = None
         self._dirty = True
+        self._rail_run = 0
         # backdrop_lookup(channel, on_done(channel, url)) is set by the window.
         self.backdrop_lookup = None
         self._pending: dict = {}
@@ -224,7 +225,17 @@ class HomePage(RailCards, Gtk.Box):
 
     def set_guide(self, guide) -> None:
         self._guide = guide
-        self.invalidate()
+        # Only two rails read the guide: the live channels and Continue
+        # watching. Rebuilding the whole page for them meant every poster
+        # on it — some five hundred of them — being made a second time, on
+        # the main loop, a moment after the window appeared; the app froze
+        # just as someone was reaching for it.
+        if self._dirty:
+            self.invalidate()
+            return
+        self._build_continue()
+        self._fill(self.live_box, self.live_row,
+                   self._live_channels(16), self._channel_card)
 
     def mark_stale(self) -> None:
         """Refresh on the next visit, not now."""
@@ -260,15 +271,38 @@ class HomePage(RailCards, Gtk.Box):
             row.append(self._more_card(media_type, chip))
 
     def _build_group_rails(self) -> None:
+        # One rail per turn of the main loop, not all of them in one go.
+        # A full library has dozens of groups and hundreds of posters down
+        # here, all of it below the fold; building it in a single pass held
+        # the loop for a third of a second right after the window appeared,
+        # and the app felt stuck before anyone had touched it.
         clear_box(self.groups_box)
-        rails = home.group_rails(self.storage.groups(MediaType.MOVIE),
-                                 self.storage.groups(MediaType.SERIES))
-        for mt, group, count in rails:
+        # A refresh while a previous run is still going abandons it: the
+        # box it was filling has just been emptied underneath it.
+        self._rail_run += 1
+        run = self._rail_run
+        rails: list = []
+
+        def step(i: int) -> bool:
+            if run != self._rail_run:
+                return False
+            if i == 0:
+                # Counting every group of every list is two sweeps of the
+                # whole library — out of the way of the first frame as well.
+                rails[:] = home.group_rails(self.storage.groups(MediaType.MOVIE),
+                                            self.storage.groups(MediaType.SERIES))
+            if i >= len(rails):
+                return False
+            mt, group, count = rails[i]
             box, row = self._section(self.groups_box, chip_label(group))
             items = self.storage.channels(mt, group=group, limit=home.RAIL_TITLES)
             self._fill(box, row, items, self._poster_card)
             if count > home.RAIL_TITLES:
                 row.append(self._more_card(mt, group))
+            GLib.idle_add(step, i + 1, priority=GLib.PRIORITY_DEFAULT_IDLE)
+            return False
+
+        GLib.idle_add(step, 0, priority=GLib.PRIORITY_DEFAULT_IDLE)
 
     def _live_channels(self, limit: int) -> list[Channel]:
         chans = self.storage.channels(MediaType.LIVE, limit=limit * 4)

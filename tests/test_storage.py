@@ -3,7 +3,7 @@
 import sqlite3
 
 from ashytv.models import Channel, Episode, MediaType
-from ashytv.services.storage import Storage, collapse_variants
+from ashytv.services.storage import _SCHEMA_VERSION, Storage, collapse_variants
 
 
 def _ch(name, url, mt=MediaType.LIVE, group="G", **kw):
@@ -149,7 +149,7 @@ def test_migration_from_v1(tmp_path):
     old.close()
 
     db = Storage(path)
-    assert db.db.execute("PRAGMA user_version").fetchone()[0] == 9
+    assert db.db.execute("PRAGMA user_version").fetchone()[0] == _SCHEMA_VERSION
     ch = db.channels()[0]
     assert ch.favorite  # old favorite migrated to the new table
     assert db.channels(search="acao")[0].name == "Canal Ação"
@@ -395,6 +395,8 @@ def test_an_existing_database_gets_the_new_columns(tmp_path):
     db.replace_channels(pid, [_ch("A", "u/a", group="News")])
     db.close()
     raw = sqlite3.connect(path)
+    # A schema-8 database has neither the column nor the index that reads it.
+    raw.execute("DROP INDEX IF EXISTS idx_channel_grp_order")
     raw.execute("ALTER TABLE channel DROP COLUMN grp_rank")
     raw.execute("PRAGMA user_version = 8")
     raw.commit()
