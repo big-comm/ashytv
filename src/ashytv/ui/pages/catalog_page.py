@@ -25,6 +25,19 @@ from ._common import (
 _PEOPLE_DELAY_MS = 600  # typing pause before asking the panel for people
 _POSTER_W = 150
 _POSTER_H = 225
+# The poster plus the card's side margins: what one column actually takes.
+_CARD_W = _POSTER_W + 12
+# Titles handed to the grid at once when a group is opened: enough to fill
+# several screens. The rest follow a page per turn of the main loop, so a
+# group of ten thousand costs the same to open as one of fifty.
+_FIRST_PAGE = 300
+_NEXT_PAGE = 1500
+# "Recently added" and "Top rated" are a shortlist, not a whole catalogue.
+_SHORTLIST = 300
+# How long the selection in the group column has to sit still before its
+# titles are fetched. Walking down the list with the arrow keys crosses a
+# dozen groups; loading each one on the way made the column crawl.
+_GROUP_DELAY_MS = 170
 # "FILMES - AÇÃO" -> "Ação"; "SERIES - DORAMAS" -> "Doramas"
 _PREFIX_RE = re.compile(r"^\s*(filmes?|movies?|vod|s[ée]ries?)\s*[-|:/]\s*", re.I)
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
@@ -56,6 +69,8 @@ class CatalogPage(Gtk.Box):
         self.media_type = media_type
         self._dirty = True
         self._chip = "all"
+        self._load_run = 0
+        self._group_source = 0
 
         self.append(page_header(title, subtitle))
 
@@ -99,8 +114,13 @@ class CatalogPage(Gtk.Box):
         factory.connect("unbind", lambda _f, li: self._bound.discard(li))
         self._bound: set[Gtk.ListItem] = set()
 
+        # max-columns is not only a cap on what is drawn: GridView builds a
+        # card for thirty-odd rows of it, whatever the window's width. Left
+        # at twelve it made 385 cards to show fifteen, and every change of
+        # group paid for all of them. It is kept at the number of columns
+        # the window can actually fit.
         self.grid = Gtk.GridView(model=selection, factory=factory,
-                                 max_columns=12, min_columns=2,
+                                 max_columns=5, min_columns=2,
                                  single_click_activate=True, vexpand=True)
         self.grid.add_css_class("ashy-posters")
         self.grid.connect("activate", self._on_activate)
@@ -108,6 +128,10 @@ class CatalogPage(Gtk.Box):
         sw = Gtk.ScrolledWindow(hexpand=True, vexpand=True,
                                 hscrollbar_policy=Gtk.PolicyType.NEVER)
         sw.set_child(self.grid)
+        # GtkWidget has no "width" property to watch; the scrolled window's
+        # horizontal adjustment does change with the viewport, so that is
+        # what tells us the window was resized.
+        sw.get_hadjustment().connect("changed", self._fit_columns)
         sw.set_margin_end(22)
 
         icon = "ashy-film-symbolic" if media_type is MediaType.MOVIE else "ashy-series-symbolic"
@@ -215,6 +239,9 @@ class CatalogPage(Gtk.Box):
             self.group_list.append(row)
         self._building = False
         self._select_group(self._chip)
+        if self._group_source:
+            GLib.source_remove(self._group_source)
+            self._group_source = 0
         self._load()
 
     def _add_group_row(self, key: str, label: str, count: int | None) -> None:
@@ -248,26 +275,73 @@ class CatalogPage(Gtk.Box):
         if row is None or self._building:
             return
         self._chip = row._key  # type: ignore[attr-defined]
+        # Not now: the selection is still moving while a key is held down.
+        if self._group_source:
+            GLib.source_remove(self._group_source)
+        self._group_source = GLib.timeout_add(_GROUP_DELAY_MS, self._load_selected)
+
+    def _load_selected(self) -> bool:
+        self._group_source = 0
         self._load()
         if self.filter_model.get_n_items():
             self.grid.scroll_to(0, Gtk.ListScrollFlags.NONE, None)
+        return GLib.SOURCE_REMOVE
 
     def _on_group_activated(self, _list, row) -> None:
         if getattr(row, "_key", None) == _HIDDEN:
             self.emit("show-hidden")
 
-    def _load(self) -> None:
+    def _page(self, offset: int, limit: int) -> list[Channel]:
         mt = self.media_type
-        if self._chip == "all":
-            chans = self.storage.channels(mt)
-        elif self._chip == "new":
-            chans = self.storage.channels(mt, order="added", limit=300)
-        elif self._chip == "top":
-            chans = self.storage.channels(mt, order="rating", min_rating=7.0, limit=300)
-        else:
-            chans = self.storage.channels(mt, group=self._chip)
-        self.store.splice(0, self.store.get_n_items(), [ChannelObject(c) for c in chans])
+        if self._chip in ("new", "top"):
+            if offset >= _SHORTLIST:
+                return []
+            limit = min(limit, _SHORTLIST - offset)
+            if self._chip == "new":
+                return self.storage.channels(mt, order="added",
+                                             limit=limit, offset=offset)
+            return self.storage.channels(mt, order="rating", min_rating=7.0,
+                                         limit=limit, offset=offset)
+        group = None if self._chip == "all" else self._chip
+        return self.storage.channels(mt, group=group, limit=limit, offset=offset)
+
+    def _load(self) -> None:
+        # The first page goes in at once — that is everything the window can
+        # show — and the rest arrive a page at a time while the main loop is
+        # free. Reading ten thousand rows and making ten thousand objects
+        # before drawing anything is what made changing group feel stuck.
+        self._load_run += 1
+        run = self._load_run
+        first = self._page(0, _FIRST_PAGE)
+        self.store.splice(0, self.store.get_n_items(),
+                          [ChannelObject(c) for c in first])
         self._update_empty()
+        if len(first) < _FIRST_PAGE:
+            return
+
+        def more(offset: int) -> bool:
+            # Another group was opened while this one was still arriving.
+            if run != self._load_run:
+                return False
+            part = self._page(offset, _NEXT_PAGE)
+            if part:
+                self.store.splice(self.store.get_n_items(), 0,
+                                  [ChannelObject(c) for c in part])
+                self._update_empty()
+            if len(part) == _NEXT_PAGE:
+                GLib.idle_add(more, offset + _NEXT_PAGE,
+                              priority=GLib.PRIORITY_DEFAULT_IDLE)
+            return False
+
+        GLib.idle_add(more, _FIRST_PAGE, priority=GLib.PRIORITY_DEFAULT_IDLE)
+
+    def _fit_columns(self, *_a) -> None:
+        width = self.grid.get_width()
+        if width <= 0:
+            return
+        columns = max(2, min(12, width // _CARD_W))
+        if columns != self.grid.get_max_columns():
+            self.grid.set_max_columns(columns)
 
     def _update_empty(self) -> None:
         self.stack.set_visible_child_name(

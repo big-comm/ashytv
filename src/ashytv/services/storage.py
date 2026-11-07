@@ -557,6 +557,7 @@ class Storage:
         limit: int | None = None,
         groups: list[str] | None = None,
         min_rating: float = 0.0,
+        offset: int = 0,
     ) -> list[Channel]:
         where, params = self._where(media_type, favorites, group, search, groups)
         if min_rating:
@@ -571,9 +572,14 @@ class Storage:
             "favorite": "f.added_at DESC",
             "rating": "c.rating DESC, c.year DESC",
         }[order]
-        sql = f"SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}{where} ORDER BY {order_sql}"
-        if limit:
-            sql += f" LIMIT {int(limit)}"
+        # c.id last so that equal rows always come out in the same order:
+        # a page read later must not repeat or skip what an earlier one had.
+        sql = (f"SELECT c.*, f.url IS NOT NULL AS fav {self._FROM}{where} "
+               f"ORDER BY {order_sql}, c.id")
+        if limit or offset:
+            sql += f" LIMIT {int(limit) if limit else -1}"
+        if offset:
+            sql += f" OFFSET {int(offset)}"
         return [self._row_to_channel(r) for r in self.db.execute(sql, params)]
 
     # One entry per channel when quality variants are grouped.
