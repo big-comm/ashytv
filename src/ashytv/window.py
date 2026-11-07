@@ -157,12 +157,14 @@ class AshyTvWindow(Adw.ApplicationWindow):
         shell.set_content(self.rail)
 
         # ---- welcome + shell + player (root stack) ----
-        self.welcome = WelcomeView()
-        self.welcome.connect("start", self._on_start)
+        # The welcome screen is built the first time it is asked for. Almost
+        # every launch has playlists already and never shows it, and building
+        # it cost an eighth of a second of the time before the window
+        # appeared.
+        self.welcome: WelcomeView | None = None
 
         self.toasts = Adw.ToastOverlay()
         self.root_stack = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE)
-        self.root_stack.add_named(self.welcome, "welcome")
         self.root_stack.add_named(shell, "shell")
         self.toasts.set_child(self.root_stack)
         # The guided tour draws over everything (toasts included).
@@ -193,7 +195,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
                                      [int(r["id"]) for r in storage.list_playlists()
                                       if r["enabled"]])
         else:
-            self.root_stack.set_visible_child_name("welcome")
+            self._show_welcome()
+
+    def _show_welcome(self) -> None:
+        """The welcome screen, built on first use (see __init__)."""
+        if self.welcome is None:
+            self.welcome = WelcomeView()
+            self.welcome.connect("start", self._on_start)
+            self.root_stack.add_named(self.welcome, "welcome")
+        self.root_stack.set_visible_child_name("welcome")
 
     # ---- page construction ----------------------------------------
 
@@ -1190,7 +1200,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         if not self.storage.has_playlists():
             self._epg_guide = None
             self._epg_source = ""
-            self.root_stack.set_visible_child_name("welcome")
+            self._show_welcome()
 
     def _on_playlist_enabled(self, _w, playlist_id: int, enabled: bool) -> None:
         if not enabled and self.player is not None and self.player.item is not None \
