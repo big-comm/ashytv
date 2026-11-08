@@ -211,7 +211,12 @@ class Storage:
             );
             """
         )
-        if has_v1:
+        # version < 1 as well as has_v1: has_v1 only says the channel table is
+        # there, which is true of every database that already exists, so
+        # without the version this ran again on every schema bump — rewriting
+        # name_key for every channel in the library, a second of a blocked
+        # start for a library of a hundred and fifty thousand.
+        if has_v1 and version < 1:
             # Old favorites (column) -> favorite table; fills name_key.
             self.db.execute(
                 """INSERT OR IGNORE INTO favorite (playlist_id, url)

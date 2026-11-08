@@ -291,18 +291,18 @@ class CatalogPage(Gtk.Box):
         if getattr(row, "_key", None) == _HIDDEN:
             self.emit("show-hidden")
 
-    def _page(self, offset: int, limit: int) -> list[Channel]:
+    def _page(self, chip: str, offset: int, limit: int) -> list[Channel]:
         mt = self.media_type
-        if self._chip in ("new", "top"):
+        if chip in ("new", "top"):
             if offset >= _SHORTLIST:
                 return []
             limit = min(limit, _SHORTLIST - offset)
-            if self._chip == "new":
+            if chip == "new":
                 return self.storage.channels(mt, order="added",
                                              limit=limit, offset=offset)
             return self.storage.channels(mt, order="rating", min_rating=7.0,
                                          limit=limit, offset=offset)
-        group = None if self._chip == "all" else self._chip
+        group = None if chip == "all" else chip
         return self.storage.channels(mt, group=group, limit=limit, offset=offset)
 
     def _load(self) -> None:
@@ -312,7 +312,12 @@ class CatalogPage(Gtk.Box):
         # before drawing anything is what made changing group feel stuck.
         self._load_run += 1
         run = self._load_run
-        first = self._page(0, _FIRST_PAGE)
+        # The group is fixed here, not read again inside more(): the selection
+        # moves the moment an arrow key is pressed, while the load it asks for
+        # waits. A page still queued would otherwise fetch the group now
+        # selected and pile it onto the one on screen.
+        chip = self._chip
+        first = self._page(chip, 0, _FIRST_PAGE)
         self.store.splice(0, self.store.get_n_items(),
                           [ChannelObject(c) for c in first])
         self._update_empty()
@@ -323,7 +328,7 @@ class CatalogPage(Gtk.Box):
             # Another group was opened while this one was still arriving.
             if run != self._load_run:
                 return False
-            part = self._page(offset, _NEXT_PAGE)
+            part = self._page(chip, offset, _NEXT_PAGE)
             if part:
                 self.store.splice(self.store.get_n_items(), 0,
                                   [ChannelObject(c) for c in part])
