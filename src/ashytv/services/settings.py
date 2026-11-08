@@ -41,6 +41,7 @@ DEFAULTS: dict = {
     "hidden_groups": [],        # legacy: moved to the database (hidden table)
     "group_order": [],          # channel group names in the user's order
     "reminders": [],            # programme reminders (see services/reminders.py)
+    "scheduled_recordings": [],  # see services/recordings.py
 }
 
 

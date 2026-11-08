@@ -5,6 +5,7 @@ from __future__ import annotations
 import sqlite3
 import threading
 import time
+from pathlib import Path
 
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 
@@ -14,6 +15,9 @@ from .models import Channel, Episode, MediaType, PlayItem, Variant
 from .services import doh, epg, failover, free_tv, http, importer, secrets
 from .services.quality import quality_label
 from .services.gamepad import GamepadInput
+from .services.recorder import Recording, safe_name
+from .services import recordings as rec
+from .services.recordings import RecordingBook, Scheduled
 from .services.reminders import Reminder, ReminderBook
 from .services.storage import Storage, collapse_variants
 from .services.xtream_client import (
@@ -35,6 +39,7 @@ from .ui.pages.search_page import SearchPage
 from .ui.pages.home_page import HomePage
 from .ui.pages.lists_page import ListsPage
 from .ui.pages.recordings_page import RecordingsPage
+from .ui.pages.settings_page import recordings_dir
 from .ui.pages.settings_page import SettingsPage
 from .ui.schedule_dialog import schedule_dialog
 from .ui.tour import Step, Tour, mark_seen, should_offer
@@ -109,6 +114,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
                                     transition_duration=150, hhomogeneous=False,
                                     vhomogeneous=False)
         self.page_stack.set_name(keynav.PAGES_NAME)
+        # Before the pages: the guide and the Recordings page are handed this
+        # as they are built.
+        self.recordings = RecordingBook(self.settings.get("scheduled_recordings"))
+        # The workers of the recordings running now, by key.
+        self._recorders: dict[str, Recording] = {}
         self._build_pages()
 
         # ---- sidebar ----
@@ -177,7 +187,11 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.reminders = ReminderBook(self.settings.get("reminders"))
         if self.pages["channels"].guide is not None:
             self.pages["channels"].guide.reminders = self.reminders
+            self.pages["channels"].guide.recordings = self.recordings
         GLib.timeout_add_seconds(20, self._check_reminders)
+        GLib.timeout_add_seconds(20, self._check_recordings)
+        # A recording running when the app was last closed is not running now.
+        self._reset_recordings()
         self.connect("close-request", self._on_close_request)
         self.connect("notify::fullscreened", self._on_fullscreen_changed)
         self._connect_settings()
@@ -224,6 +238,7 @@ class AshyTvWindow(Adw.ApplicationWindow):
         channels.connect("hide-channel", self._on_hide_channel)
         channels.connect("show-hidden", lambda *_: self.show_hidden())
         channels.connect("remind", self._on_remind)
+        channels.connect("record", self._on_record)
         channels.connect("move-group", self._on_move_group)
         channels.preview_source = self._preview_source
         if channels.info is not None:
@@ -260,6 +275,8 @@ class AshyTvWindow(Adw.ApplicationWindow):
         search.connect("person", self._on_search_person)
 
         recordings = RecordingsPage()
+        recordings.recordings = self.recordings
+        recordings.connect("cancel-scheduled", self._on_cancel_scheduled)
         recordings.connect("play", self._on_play)
 
         lists = ListsPage(self.storage)
@@ -1590,6 +1607,134 @@ class AshyTvWindow(Adw.ApplicationWindow):
         when = GLib.DateTime.new_from_unix_local(reminder.start).format("%R")
         self._toast(_("You will be reminded of “{title}” at {time}").format(
             title=reminder.title, time=when) if is_set else _("Reminder cancelled"))
+
+    # ---- scheduled recordings -----------------------------------------
+
+    def _on_record(self, _page, channel: Channel, prog) -> None:
+        name = channel.base_name if channel.variant_labels else channel.display_name
+        s = Scheduled(playlist_id=channel.playlist_id, channel_url=channel.url,
+                      channel_name=name, title=prog.title or _("Programme"),
+                      start=int(prog.start), stop=int(prog.stop))
+        clashes = self.recordings.clashes(s)
+        if not self.recordings.toggle(s):
+            self._cancel_recorder(s.key)
+            self._save_recordings()
+            self._toast(_("Recording cancelled"))
+            return
+        self._save_recordings()
+        when = GLib.DateTime.new_from_unix_local(s.start).format("%R")
+        if clashes:
+            # Not refused: an account with enough connections records both.
+            # But a single-connection account cannot, and finding out
+            # afterwards means an empty file and a ruined evening.
+            self._toast(_("“{title}” will be recorded at {time}, at the same time as "
+                          "“{other}”. Your provider has to allow two connections at once.")
+                        .format(title=s.title, time=when, other=clashes[0].title))
+        else:
+            self._toast(_("“{title}” will be recorded at {time}").format(
+                title=s.title, time=when))
+
+    def _on_cancel_scheduled(self, _page, key: str) -> None:
+        s = self.recordings.get(key)
+        running = s is not None and s.state == rec.RECORDING
+        self._cancel_recorder(key)
+        if not running:
+            self.recordings.remove(key)
+        self._save_recordings()
+        self._toast(_("Recording stopped.") if running else _("Recording cancelled"))
+
+    def _save_recordings(self) -> None:
+        self.settings.set("scheduled_recordings", self.recordings.to_list())
+        self.pages["recordings"].invalidate()
+
+    def _reset_recordings(self) -> None:
+        """Nothing is recording at start-up, whatever the list last said."""
+        changed = False
+        for s in self.recordings:
+            if s.state == rec.RECORDING:
+                s.state = rec.FAILED
+                s.error = _("The app was closed during the recording.")
+                # Nothing was ever written to it: leave no empty file behind.
+                try:
+                    f = Path(s.path)
+                    if s.path and f.exists() and f.stat().st_size == 0:
+                        f.unlink()
+                        s.path = ""
+                except OSError:
+                    pass
+                changed = True
+        for s in self.recordings.missed(time.time()):
+            s.state = rec.FAILED
+            s.error = _("The app was not running when it started.")
+            changed = True
+        if changed:
+            self._save_recordings()
+
+    def _check_recordings(self) -> bool:
+        now = time.time()
+        changed = False
+        for s in self.recordings.over(now):
+            self._cancel_recorder(s.key)
+            changed = True
+        for s in self.recordings.missed(now):
+            s.state = rec.FAILED
+            s.error = _("The app was not running when it started.")
+            changed = True
+        for s in self.recordings.due(now):
+            if self._start_recording(s):
+                changed = True
+        if self.recordings.prune(now):
+            changed = True
+        if changed:
+            self._save_recordings()
+        return GLib.SOURCE_CONTINUE
+
+    def _start_recording(self, s: Scheduled) -> bool:
+        channel = self.storage.find_channel(s.playlist_id, s.channel_url)
+        if channel is None:
+            s.state = rec.FAILED
+            s.error = _("This channel is no longer in your playlists.")
+            return True
+        folder = recordings_dir()
+        stem = safe_name(f"{s.channel_name} - {s.title}", _("Recording"))
+        path = folder / f"{stem} {time.strftime('%Y-%m-%d %H-%M', time.localtime(s.start))}.ts"
+        worker = Recording(self._resolve(channel.url, channel.playlist_id), path, until=s.ends,
+                           on_done=lambda w, k=s.key: GLib.idle_add(self._recording_done, k),
+                           on_fail=lambda w, why, k=s.key: GLib.idle_add(
+                               self._recording_failed, k, why))
+        self._recorders[s.key] = worker
+        s.state = rec.RECORDING
+        s.path = str(path)
+        worker.start()
+        self._toast(_("Recording “{title}”…").format(title=s.title))
+        return True
+
+    def _cancel_recorder(self, key: str) -> None:
+        worker = self._recorders.pop(key, None)
+        if worker is not None:
+            worker.stop()
+        s = self.recordings.get(key)
+        if s is not None and s.state == rec.RECORDING:
+            s.state = rec.DONE
+
+    def _recording_done(self, key: str) -> bool:
+        self._recorders.pop(key, None)
+        s = self.recordings.get(key)
+        if s is not None and s.state == rec.RECORDING:
+            s.state = rec.DONE
+            self._save_recordings()
+            self._toast(_("“{title}” was recorded.").format(title=s.title))
+        return GLib.SOURCE_REMOVE
+
+    def _recording_failed(self, key: str, why: str) -> bool:
+        self._recorders.pop(key, None)
+        s = self.recordings.get(key)
+        if s is not None:
+            s.state = rec.FAILED
+            s.error = why
+            self._save_recordings()
+            self._toast(_("“{title}” could not be recorded.").format(title=s.title))
+        return GLib.SOURCE_REMOVE
 
     def _check_reminders(self) -> bool:
         now = time.time()

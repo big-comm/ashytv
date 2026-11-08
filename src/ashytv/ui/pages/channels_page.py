@@ -47,6 +47,7 @@ class ChannelsPage(Gtk.Box):
         "hide-channel": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         "show-hidden": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
+        "record": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
         "move-group": (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
     }
 
@@ -187,6 +188,7 @@ class ChannelsPage(Gtk.Box):
             self.guide = EpgPage(storage, embedded=True)
             self.guide.connect("play", lambda _g, ch: self.emit("play", ch))
             self.guide.connect("remind", lambda _g, ch, prog: self.emit("remind", ch, prog))
+            self.guide.connect("record", lambda _g, ch, prog: self.emit("record", ch, prog))
             self.view_stack.add_named(self.guide, "guide")
             self._view_buttons["list"].set_active(True)
         body.append(self.view_stack)

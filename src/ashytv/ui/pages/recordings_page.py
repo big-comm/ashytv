@@ -1,4 +1,5 @@
-"""Recordings page — files recorded by the player (mpv stream-record)."""
+"""Recordings page: what is scheduled, and the files already recorded
+(by the player through mpv, or by a scheduled recording)."""
 
 from __future__ import annotations
 
@@ -6,6 +7,7 @@ from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ...i18n import _
 from ...models import Channel, MediaType
+from ...services import recordings
 from ._common import page_header
 from .settings_page import recordings_dir
 
@@ -17,13 +19,17 @@ class RecordingsPage(Gtk.Box):
 
     __gsignals__ = {
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+        # key of a scheduled recording the user no longer wants
+        "cancel-scheduled": (GObject.SignalFlags.RUN_FIRST, None, (str,)),
     }
 
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
+        self.recordings = None  # RecordingBook, set by the window
         head = Gtk.Box()
         head.append(page_header(_("Recordings"),
-                                _("Use the ● button in the player to record what's on")))
+                                _("Use the ● button in the player, or schedule one "
+                                  "from the guide")))
         head.get_first_child().set_hexpand(True)
         folder = Gtk.Button(icon_name="folder-videos-symbolic", valign=Gtk.Align.CENTER,
                             tooltip_text=_("Open folder"), margin_end=28)
@@ -32,6 +38,14 @@ class RecordingsPage(Gtk.Box):
         head.append(folder)
         self.append(head)
 
+        # What is scheduled sits above what is already recorded: it is the
+        # part someone comes here to check or call off.
+        self.scheduled = Gtk.ListBox(selection_mode=Gtk.SelectionMode.NONE,
+                                     valign=Gtk.Align.START, visible=False)
+        self.scheduled.add_css_class("boxed-list")
+        self.scheduled_title = Gtk.Label(label=_("Scheduled"), xalign=0, visible=False,
+                                         margin_bottom=6)
+        self.scheduled_title.add_css_class("heading")
         self.list = Gtk.ListBox(selection_mode=Gtk.SelectionMode.NONE,
                                 valign=Gtk.Align.START)
         self.list.add_css_class("boxed-list")
@@ -39,7 +53,11 @@ class RecordingsPage(Gtk.Box):
         self.empty = Adw.StatusPage(icon_name="ashy-record-symbolic",
                                     title=_("No recordings"),
                                     description=_("Recordings appear here."))
-        clamp = Adw.Clamp(maximum_size=900, child=self.list, margin_start=28,
+        inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        inner.append(self.scheduled_title)
+        inner.append(self.scheduled)
+        inner.append(self.list)
+        clamp = Adw.Clamp(maximum_size=900, child=inner, margin_start=28,
                           margin_end=28, margin_bottom=22)
         sw = Gtk.ScrolledWindow(vexpand=True, hscrollbar_policy=Gtk.PolicyType.NEVER,
                                 child=clamp)
@@ -52,6 +70,7 @@ class RecordingsPage(Gtk.Box):
         self.refresh()
 
     def refresh(self) -> None:
+        self._refresh_scheduled()
         self.list.remove_all()
         folder = recordings_dir()
         # One stat() per file, and a file deleted meanwhile is just skipped.
@@ -63,6 +82,12 @@ class RecordingsPage(Gtk.Box):
                 entries.append((f, f.stat()))
             except OSError:
                 continue
+        # A recording in progress is already shown above, as "Recording now".
+        # Its file is still being written, so down here it would appear a
+        # second time, with whatever size happened to be on disk.
+        running = {s.path for s in (self.recordings or ())
+                   if s.state == recordings.RECORDING and s.path}
+        entries = [e for e in entries if str(e[0]) not in running]
         entries.sort(key=lambda e: e[1].st_mtime, reverse=True)
         files = [f for f, _st in entries]
         for f, st in entries:
@@ -80,7 +105,41 @@ class RecordingsPage(Gtk.Box):
             row.add_suffix(delete)
             row.add_suffix(Gtk.Image(icon_name="media-playback-start-symbolic"))
             self.list.append(row)
-        self.stack.set_visible_child_name("list" if files else "empty")
+        # The empty page only when there is nothing of either kind.
+        self.stack.set_visible_child_name(
+            "list" if files or self.scheduled.get_visible() else "empty")
+
+    def _refresh_scheduled(self) -> None:
+        self.scheduled.remove_all()
+        book = self.recordings
+        items = [s for s in book] if book is not None else []
+        for s in items:
+            when = GLib.DateTime.new_from_unix_local(s.start).format("%x %R")
+            if s.state == recordings.RECORDING:
+                note = _("Recording now")
+            elif s.state == recordings.DONE:
+                note = _("Recorded")
+            elif s.state == recordings.FAILED:
+                note = s.error or _("Failed")
+            else:
+                note = _("Waiting")
+            row = Adw.ActionRow(title=GLib.markup_escape_text(s.title),
+                                subtitle=f"{GLib.markup_escape_text(s.channel_name)} • {when} • {note}")
+            icon = ("media-record-symbolic" if s.state == recordings.RECORDING
+                    else "dialog-warning-symbolic" if s.state == recordings.FAILED
+                    else "alarm-symbolic")
+            row.add_prefix(Gtk.Image(icon_name=icon))
+            if s.state == recordings.RECORDING:
+                row.get_first_child().add_css_class("recording")
+            drop = Gtk.Button(icon_name="window-close-symbolic", valign=Gtk.Align.CENTER,
+                              tooltip_text=_("Stop recording") if s.state == recordings.RECORDING
+                              else _("Cancel"))
+            drop.add_css_class("flat")
+            drop.connect("clicked", lambda _b, k=s.key: self.emit("cancel-scheduled", k))
+            row.add_suffix(drop)
+            self.scheduled.append(row)
+        self.scheduled.set_visible(bool(items))
+        self.scheduled_title.set_visible(bool(items))
 
     def _on_row(self, _list, row) -> None:
         path = row._path  # type: ignore[attr-defined]

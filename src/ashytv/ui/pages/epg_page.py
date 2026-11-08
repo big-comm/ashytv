@@ -43,6 +43,8 @@ class EpgPage(Gtk.Box):
         "play": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         # channel, programme: toggle a reminder for a future programme
         "remind": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
+        # channel, programme: schedule or cancel recording it
+        "record": (GObject.SignalFlags.RUN_FIRST, None, (object, object)),
     }
 
     def __init__(self, storage, embedded: bool = False):
@@ -52,6 +54,7 @@ class EpgPage(Gtk.Box):
         self.storage = storage
         self._channels: list[Channel] | None = None
         self.reminders = None  # ReminderBook, set by the window
+        self.recordings = None  # RecordingBook, set by the window
         self._guide = None
         self._dirty = True
         self._t0 = _now_window_start()
@@ -353,13 +356,26 @@ class EpgPage(Gtk.Box):
             box.append(d)
         is_set = bool(self.reminders and self.reminders.has(
             channel.playlist_id, channel.url, int(prog.start)))
-        remind = Gtk.Button(label=_("Cancel reminder") if is_set else _("Remind me"),
-                            halign=Gtk.Align.START, margin_top=6)
+        taped = bool(self.recordings and self.recordings.has(
+            channel.playlist_id, channel.url, int(prog.start)))
+        actions = Gtk.Box(spacing=8, halign=Gtk.Align.START, margin_top=6)
+        remind = Gtk.Button(label=_("Cancel reminder") if is_set else _("Remind me"))
         remind.add_css_class("pill-accent")
-        box.append(remind)
+        actions.append(remind)
+        # Recording a programme that has already ended is not a thing the
+        # guide can offer: there is nothing left to record.
+        record = None
+        if prog.stop > time.time():
+            record = Gtk.Button(label=_("Cancel recording") if taped else _("Record"))
+            record.add_css_class("pill-accent")
+            actions.append(record)
+        box.append(actions)
         pop = Gtk.Popover(child=box)
         remind.connect("clicked", lambda *_: (pop.popdown(),
                                              self.emit("remind", channel, prog)))
+        if record is not None:
+            record.connect("clicked", lambda *_: (pop.popdown(),
+                                                  self.emit("record", channel, prog)))
         pop.set_parent(button)
         pop.connect("closed", lambda p: GLib.idle_add(p.unparent))
         pop.popup()
