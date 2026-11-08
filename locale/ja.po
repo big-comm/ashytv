@@ -46,14 +46,6 @@ msgstr ""
 "自分のプレイリストをインポートしてください。アプリはコンテンツを提供しませ"
 "ん。"
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"出演者データ: TMDB。この製品は TMDB の API を使用していますが、TMDB による承"
-"認や認定は受けていません。"
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
@@ -298,10 +290,6 @@ msgstr "出演"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} の出演作"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "出演者データ: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

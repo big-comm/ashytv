@@ -44,14 +44,6 @@ msgstr ""
 "Kaasaegne IPTV-mängija Linuxi töölauale.\n"
 "Impordi oma esitusloend — rakendus ei paku sisu."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Näitlejate andmed: TMDB. See toode kasutab TMDB API-t, kuid TMDB ei ole seda "
-"heaks kiitnud ega sertifitseerinud."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Kiirklahvid"
@@ -293,10 +285,6 @@ msgstr "Osatäitjad"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Pealkirjad, kus osaleb {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Näitlejate andmed: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

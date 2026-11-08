@@ -44,14 +44,6 @@ msgstr ""
 "En modern IPTV-spelare för Linux-skrivbordet.\n"
 "Importera din egen spellista — appen tillhandahåller inget innehåll."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Rollbesättningsdata: TMDB. Den här produkten använder TMDB:s API men är inte "
-"godkänd eller certifierad av TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Kortkommandon"
@@ -293,10 +285,6 @@ msgstr "Rollista"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Titlar med {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Rollbesättningsdata: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

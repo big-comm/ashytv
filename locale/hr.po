@@ -45,14 +45,6 @@ msgstr ""
 "Moderni IPTV reproduktor za Linux radnu površinu.\n"
 "Uvezite vlastitu playlistu — aplikacija ne pruža nikakav sadržaj."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Podaci o glumcima: TMDB. Ovaj proizvod koristi TMDB API, ali ga TMDB nije "
-"odobrio niti certificirao."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Prečaci tipkovnice"
@@ -295,10 +287,6 @@ msgstr "Glumci"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Naslovi s {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Podaci o glumcima: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

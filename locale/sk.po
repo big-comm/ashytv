@@ -45,14 +45,6 @@ msgstr ""
 "Moderný IPTV prehrávač pre desktop Linuxu.\n"
 "Importujte vlastný playlist — aplikácia neposkytuje žiadny obsah."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Údaje o obsadení: TMDB. Tento produkt používa API TMDB, ale nie je schválený "
-"ani certifikovaný TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové skratky"
@@ -294,10 +286,6 @@ msgstr "Obsadenie"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Tituly s {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Údaje o obsadení: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

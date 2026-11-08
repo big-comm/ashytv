@@ -46,14 +46,6 @@ msgstr ""
 "Nowoczesny odtwarzacz IPTV dla pulpitu Linux.\n"
 "Zaimportuj własną playlistę — aplikacja nie dostarcza żadnych treści."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Dane o obsadzie: TMDB. Ten produkt korzysta z API TMDB, ale nie jest "
-"zatwierdzony ani certyfikowany przez TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Skróty klawiszowe"
@@ -295,10 +287,6 @@ msgstr "Obsada"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Tytuły z {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Dane o obsadzie: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

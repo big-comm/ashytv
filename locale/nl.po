@@ -45,14 +45,6 @@ msgstr ""
 "Een moderne IPTV-speler voor het Linux-bureaublad.\n"
 "Importeer je eigen afspeellijst — de app levert zelf geen inhoud."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Castgegevens: TMDB. Dit product gebruikt de TMDB-API, maar wordt niet "
-"onderschreven of gecertificeerd door TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
@@ -295,10 +287,6 @@ msgstr "Cast"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Titels met {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Castgegevens: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

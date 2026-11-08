@@ -44,14 +44,6 @@ msgstr ""
 "Linux 데스크톱용 최신 IPTV 플레이어.\n"
 "나만의 재생목록을 가져오세요. 앱은 어떤 콘텐츠도 제공하지 않습니다."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"출연진 데이터: TMDB. 이 제품은 TMDB API를 사용하지만 TMDB의 보증이나 인증을 "
-"받지 않았습니다."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "키보드 단축키"
@@ -293,10 +285,6 @@ msgstr "출연"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} 출연작"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "출연진 데이터: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

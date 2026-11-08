@@ -43,12 +43,6 @@ msgstr ""
 "适用于 Linux 桌面的现代 IPTV 播放器。\n"
 "导入您自己的播放列表——应用本身不提供任何内容。"
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr "演员数据：TMDB。本产品使用 TMDB API，但未获得 TMDB 的认可或认证。"
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
@@ -288,10 +282,6 @@ msgstr "演员"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "{name} 的作品"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "演员数据：TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

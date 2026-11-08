@@ -46,14 +46,6 @@ msgstr ""
 "Um player IPTV moderno para o desktop Linux.\n"
 "Importe sua própria playlist — o aplicativo não fornece nenhum conteúdo."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Dados de elenco: TMDB. Este produto usa a API do TMDB, mas não é endossado "
-"nem certificado pelo TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos de teclado"
@@ -296,10 +288,6 @@ msgstr "Elenco"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Títulos com {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Dados de elenco: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

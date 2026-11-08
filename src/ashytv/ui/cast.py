@@ -329,9 +329,6 @@ class ActorDialog(Adw.Dialog):
         page.append(self._spinner)
         self._sections = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
         page.append(self._sections)
-        self._credit = Gtk.Label(label=_("Cast data: TMDB"), xalign=0, visible=False)
-        self._credit.add_css_class(_FAINT)
-        page.append(self._credit)
 
         scroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER)
         scroll.set_child(page)
@@ -390,7 +387,6 @@ class ActorDialog(Adw.Dialog):
                              xalign=0, wrap=True)
             note.add_css_class(_FAINT)
             self._sections.append(note)
-        self._credit.set_visible(from_tmdb)
         # Keyboard: start on the first title (the focus was on the dialog).
         root = self.get_root()
         focus = root.get_focus() if root is not None else None

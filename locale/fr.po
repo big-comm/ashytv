@@ -46,14 +46,6 @@ msgstr ""
 "Importez votre propre liste de lecture — l’application ne fournit aucun "
 "contenu."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Données de distribution : TMDB. Ce produit utilise l’API TMDB mais n’est ni "
-"approuvé ni certifié par TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Raccourcis clavier"
@@ -297,10 +289,6 @@ msgstr "Distribution"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Titres avec {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Données de distribution : TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

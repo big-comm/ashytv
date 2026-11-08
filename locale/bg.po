@@ -46,14 +46,6 @@ msgstr ""
 "Импортирайте собствен плейлист — приложението не предоставя никакво "
 "съдържание."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Данни за актьорския състав: TMDB. Този продукт използва API на TMDB, но не е "
-"одобрен или сертифициран от TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "Клавишни комбинации"
@@ -296,10 +288,6 @@ msgstr "Актьори"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "Заглавия с {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Данни за актьорите: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353

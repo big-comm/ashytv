@@ -44,14 +44,6 @@ msgstr ""
 "נגן IPTV מודרני לשולחן העבודה של Linux.\n"
 "ייבאו את רשימת ההשמעה שלכם — האפליקציה אינה מספקת תוכן."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"נתוני שחקנים: TMDB. מוצר זה משתמש ב־API של TMDB אך אינו מאושר או מוסמך על "
-"ידי TMDB."
-
 #: src/ashytv/application.py:241 src/ashytv/window.py:134
 msgid "Keyboard Shortcuts"
 msgstr "קיצורי מקלדת"
@@ -293,10 +285,6 @@ msgstr "שחקנים"
 #, python-brace-format
 msgid "Titles with {name}"
 msgstr "כותרים עם {name}"
-
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "נתוני שחקנים: TMDB"
 
 #: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
 #: src/ashytv/ui/pages/catalog_page.py:353
