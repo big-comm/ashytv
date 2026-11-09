@@ -97,3 +97,38 @@ def test_groups_are_localized_after_classification(monkeypatch):
 def test_ipv6_hosts_are_dropped():
     assert not free_tv.allowed("Brazil", "http://[2001:db8::1]/live.m3u8")
     assert free_tv.allowed("Brazil", "https://tv.example.org/live/playlist.m3u8")
+
+
+def test_every_group_in_the_catalogue_lands_where_it_belongs():
+    """The catalogue we ship, classified by the same code a playlist goes
+    through.
+
+    _classify falls through to Live TV when a group matches none of its
+    hints, so a group named for what it holds — "Documentaries – Prelinger" —
+    put ten short films in the channel list, between NASA TV and the news.
+    The group names are ours to choose, so they have to be chosen to survive
+    the classifier.
+    """
+    from ashytv.models import MediaType
+    from ashytv.services.free_tv import CATALOG
+    from ashytv.services.m3u_parser import parse_m3u
+
+    esperado = {
+        "Open TV": MediaType.LIVE,
+        "Movies – Blender Studio": MediaType.MOVIE,
+        "Movies – Classics": MediaType.MOVIE,
+        "Movies – Documentaries": MediaType.MOVIE,
+        "Series – Cartoons": MediaType.SERIES,
+    }
+    canais = parse_m3u(CATALOG.read_text())
+    assert canais, "the catalogue parsed to nothing"
+
+    vistos = {}
+    for ch in canais:
+        vistos.setdefault(ch.group, set()).add(ch.media_type)
+
+    assert set(vistos) == set(esperado), (
+        f"groups in the catalogue: {sorted(vistos)}; expected {sorted(esperado)}. "
+        "A new group needs its line here and a name the classifier recognises.")
+    for grupo, tipos in vistos.items():
+        assert tipos == {esperado[grupo]}, f"{grupo} classified as {tipos}"

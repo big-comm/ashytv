@@ -151,6 +151,7 @@ _CATALOG_GROUPS = {
     "Open TV": lambda: _("Open TV"),
     "Movies – Blender Studio": lambda: _("Blender Studio"),
     "Movies – Classics": lambda: _("Classics"),
+    "Movies – Documentaries": lambda: _("Documentaries"),
     "Series – Cartoons": lambda: _("Cartoons"),
 }
 _THEMES = {
