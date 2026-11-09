@@ -28,6 +28,26 @@ https://archive.org/download/Sintel/sintel-2048-surround.mp4
 https://archive.org/download/Tears-of-Steel/tears_of_steel_720p.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/CosmosLaundromatFirstCycle" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY 4.0" group-title="Movies – Blender Studio",Cosmos Laundromat: First Cycle (2015)
 https://archive.org/download/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/sprite-fright-2021" year="2021" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Sprite Fright (2021)
+https://archive.org/download/sprite-fright-2021/Sprite%20Fright%20%282021%29.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/charge-blender-open-movie-1608p" year="2022" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Charge (2022)
+https://archive.org/download/charge-blender-open-movie-1608p/Charge%20-%20Blender%20Open%20Movie%201608p.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/spring_blenderopenmovie" year="2019" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Spring (2019)
+https://archive.org/download/spring_blenderopenmovie/Spring%20-%20Blender%20Open%20Movie%20-%20YouTube.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/coffee-run" year="2020" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Coffee Run (2020)
+https://archive.org/download/coffee-run/Coffee%20Run.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/agent327operationbarbershop" year="2017" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Agent 327: Operation Barbershop (2017)
+https://archive.org/download/agent327operationbarbershop/agent327-1080.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/wing_it" year="2023" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Wing It! (2023)
+https://archive.org/download/wing_it/wing_it.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/GlassHalf1080p" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Glass Half (2015)
+https://archive.org/download/GlassHalf1080p/Glass%20Half-1080p.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Caminandes1LlamaDrama" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llama Drama (2013)
+https://archive.org/download/Caminandes1LlamaDrama/01_llama_drama_1080p.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Caminandes2GranDillama" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Gran Dillama (2013)
+https://archive.org/download/Caminandes2GranDillama/02_gran_dillama_1080p.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/CaminandesLlamigos" year="2016" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llamigos (2016)
+https://archive.org/download/CaminandesLlamigos/Caminandes_%20Llamigos-1080p.mp4
 
 # Movies — public domain classics (sound era, up to 1955)
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/his_girl_friday" year="1940" description="Directed by Howard Hawks. Public domain in the United States and Brazil." group-title="Movies – Classics",His Girl Friday (1940)
@@ -96,3 +116,28 @@ https://archive.org/download/MaxFleischerSuperman/Superman-JungleDrums.mp4
 https://archive.org/download/MaxFleischerSuperman/Superman-TheUndergroundWorld1943.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/MaxFleischerSuperman" group-title="Series – Cartoons",Superman (1941) S01E15 Secret Agent
 https://archive.org/download/MaxFleischerSuperman/Superman-SecretAgent.mp4
+
+# Documentaries — Prelinger Archives, dedicated to the public domain by
+# Rick Prelinger himself (not a licence field typed by whoever uploaded a
+# file): https://archive.org/details/prelinger. Short industrial,
+# educational and newsreel films, 8 to 22 minutes.
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/DuckandC1951" year="1951" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Duck and Cover (1951)
+https://archive.org/download/DuckandC1951/DuckandC1951_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/PrivateL1947" year="1947" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Private Life of a Cat (1947)
+https://archive.org/download/PrivateL1947/PrivateL1947_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/DontBeaS1947" year="1947" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Don't Be a Sucker (1947)
+https://archive.org/download/DontBeaS1947/DontBeaS1947_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/MakeMine1948" year="1948" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Make Mine Freedom (1948)
+https://archive.org/download/MakeMine1948/MakeMine1948_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/CaseofSp1940" year="1940" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",A Case of Spring Fever (1940)
+https://archive.org/download/CaseofSp1940/CaseofSp1940_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/AboutBan1935" year="1935" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",About Bananas (1935)
+https://archive.org/download/AboutBan1935/AboutBan1935_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/ParkCons1938" year="1938" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Park Conscious (1938)
+https://archive.org/download/ParkCons1938/ParkCons1938.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/SpotNews1937" year="1937" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Spot News (1937)
+https://archive.org/download/SpotNews1937/SpotNews1937_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/HowtoGoP1954" year="1954" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",How to Go Places (1954)
+https://archive.org/download/HowtoGoP1954/HowtoGoP1954_edit.mp4
+#EXTINF:-1 tvg-logo="https://archive.org/services/img/Achievem1955" year="1955" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Achievement USA (1955)
+https://archive.org/download/Achievem1955/Achievem1955_edit.mp4
