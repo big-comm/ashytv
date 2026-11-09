@@ -945,8 +945,15 @@ class AshyTvWindow(Adw.ApplicationWindow):
         return GLib.SOURCE_REMOVE
 
     def _on_show_schedule(self, _page, channel: Channel) -> None:
-        schedule_dialog(channel, self._epg_guide,
-                        lambda ch: self._play_channel(ch)).present(self)
+        # The handlers take (_page, channel, prog), so the page argument is
+        # supplied here: the dialog knows nothing about who owns the books.
+        schedule_dialog(
+            channel, self._epg_guide,
+            lambda ch: self._play_channel(ch),
+            on_remind=lambda ch, prog: self._on_remind(None, ch, prog),
+            on_record=lambda ch, prog: self._on_record(None, ch, prog),
+            reminders=self.reminders, recordings=self.recordings,
+        ).present(self)
 
     # ---- playlist import ---------------------------------------------
 
