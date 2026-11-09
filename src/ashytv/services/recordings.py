@@ -17,7 +17,7 @@ and record at the same time. The window says so when a recording starts.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 
 # The guide's times are not exact, and a programme rarely starts on the
 # second. Record a little around it, as a recorder with a tuner would.
@@ -52,7 +52,7 @@ class Scheduled:
     def ends(self) -> int:
         return self.stop + RUN_OVER
 
-    def overlaps(self, other: "Scheduled") -> bool:
+    def overlaps(self, other: Scheduled) -> bool:
         return self.begins < other.ends and other.begins < self.ends
 
 

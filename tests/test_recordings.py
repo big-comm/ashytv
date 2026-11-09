@@ -3,11 +3,10 @@
 import http.server
 import threading
 import time
-from pathlib import Path
 
 from ashytv.services.recorder import Recording, safe_name
 from ashytv.services.recordings import (
-    DONE, FAILED, LEAD_IN, RECORDING, RUN_OVER, WAITING,
+    DONE, LEAD_IN, RECORDING, RUN_OVER, WAITING,
     RecordingBook, Scheduled,
 )
 

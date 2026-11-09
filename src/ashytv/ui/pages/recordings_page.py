@@ -123,8 +123,9 @@ class RecordingsPage(Gtk.Box):
                 note = s.error or _("Failed")
             else:
                 note = _("Waiting")
+            canal = GLib.markup_escape_text(s.channel_name)
             row = Adw.ActionRow(title=GLib.markup_escape_text(s.title),
-                                subtitle=f"{GLib.markup_escape_text(s.channel_name)} • {when} • {note}")
+                                subtitle=f"{canal} • {when} • {note}")
             icon = ("media-record-symbolic" if s.state == recordings.RECORDING
                     else "dialog-warning-symbolic" if s.state == recordings.FAILED
                     else "alarm-symbolic")
