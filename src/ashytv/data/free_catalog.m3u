@@ -18,69 +18,69 @@ https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8
 https://ntv2.akamaized.net/hls/live/2013923/NASA-NTV2-HLS/master.m3u8
 
 # Movies — Blender Studio open movies, (CC) Blender Foundation | studio.blender.org
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/BigBuckBunny_124" year="2008" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Big Buck Bunny (2008)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/i9jJzvoXET4D9pOkoEwncSdNNER.jpg" year="2008" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Big Buck Bunny (2008)
 https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/ElephantsDream" year="2006" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Elephants Dream (2006)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/9zROtU9TkpZQrOuEaMAp68FOWLK.jpg" year="2006" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Elephants Dream (2006)
 https://archive.org/download/ElephantsDream/ed_1024.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Sintel" year="2010" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Sintel (2010)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/l98Zns4oQe1BSvbF4hJ8oL6VSf0.jpg" year="2010" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Sintel (2010)
 https://archive.org/download/Sintel/sintel-2048-surround.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Tears-of-Steel" year="2012" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Tears of Steel (2012)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/8qy3jRmaHR7f8VZh3iXCqCWfFsH.jpg" year="2012" description="(CC) Blender Foundation | studio.blender.org — CC BY 3.0" group-title="Movies – Blender Studio",Tears of Steel (2012)
 https://archive.org/download/Tears-of-Steel/tears_of_steel_720p.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/CosmosLaundromatFirstCycle" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY 4.0" group-title="Movies – Blender Studio",Cosmos Laundromat: First Cycle (2015)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/5ZXi0oitpEgAdoJglFTc5SZF9nt.jpg" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY 4.0" group-title="Movies – Blender Studio",Cosmos Laundromat: First Cycle (2015)
 https://archive.org/download/CosmosLaundromatFirstCycle/Cosmos%20Laundromat%20-%20First%20Cycle%20%281080p%29.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/sprite-fright-2021" year="2021" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Sprite Fright (2021)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/AjWJQOogG4Irpff6K49tzrUTb1s.jpg" year="2021" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Sprite Fright (2021)
 https://archive.org/download/sprite-fright-2021/Sprite%20Fright%20%282021%29.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/charge-blender-open-movie-1608p" year="2022" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Charge (2022)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/nei66j5yYOsXzX71BUSnzv9kFlZ.jpg" year="2022" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Charge (2022)
 https://archive.org/download/charge-blender-open-movie-1608p/Charge%20-%20Blender%20Open%20Movie%201608p.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/spring_blenderopenmovie" year="2019" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Spring (2019)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/g5dSJtpoXYCSVx70srSAc3wqNFc.jpg" year="2019" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Spring (2019)
 https://archive.org/download/spring_blenderopenmovie/Spring%20-%20Blender%20Open%20Movie%20-%20YouTube.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/coffee-run" year="2020" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Coffee Run (2020)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/tFaE5KZOzTTTaNAEDD8CY1ZBjei.jpg" year="2020" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Coffee Run (2020)
 https://archive.org/download/coffee-run/Coffee%20Run.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/agent327operationbarbershop" year="2017" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Agent 327: Operation Barbershop (2017)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/tSIMZK9XZSIb1dL3iQeTESEZvHw.jpg" year="2017" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Agent 327: Operation Barbershop (2017)
 https://archive.org/download/agent327operationbarbershop/agent327-1080.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/wing_it" year="2023" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Wing It! (2023)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/kVRGAgqUC2u75pLsXgDj14tOsRJ.jpg" year="2023" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Wing It! (2023)
 https://archive.org/download/wing_it/wing_it.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/GlassHalf1080p" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Glass Half (2015)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/hrAEYBMb6vitzXMvBC7RKj3ZyWt.jpg" year="2015" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Glass Half (2015)
 https://archive.org/download/GlassHalf1080p/Glass%20Half-1080p.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Caminandes1LlamaDrama" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llama Drama (2013)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/66VPke0YSiyfe97aobbcZ55ts56.jpg" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llama Drama (2013)
 https://archive.org/download/Caminandes1LlamaDrama/01_llama_drama_1080p.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Caminandes2GranDillama" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Gran Dillama (2013)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/7YtEiEzRBVCr8Sbgo1kVsr3OCMk.jpg" year="2013" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Gran Dillama (2013)
 https://archive.org/download/Caminandes2GranDillama/02_gran_dillama_1080p.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/CaminandesLlamigos" year="2016" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llamigos (2016)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/753kJbZ5iS7DUomTKX9qF5Cs5NY.jpg" year="2016" description="(CC) Blender Foundation | studio.blender.org — CC BY" group-title="Movies – Blender Studio",Caminandes: Llamigos (2016)
 https://archive.org/download/CaminandesLlamigos/Caminandes_%20Llamigos-1080p.mp4
 
 # Movies — public domain classics (sound era, up to 1955)
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/his_girl_friday" year="1940" description="Directed by Howard Hawks. Public domain in the United States and Brazil." group-title="Movies – Classics",His Girl Friday (1940)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/zK9GxBsPGoeVTpO6cwVnvZXld7Z.jpg" year="1940" description="Directed by Howard Hawks. Public domain in the United States and Brazil." group-title="Movies – Classics",His Girl Friday (1940)
 https://archive.org/download/his_girl_friday/his_girl_friday.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/meet_john_doe" year="1941" description="Directed by Frank Capra. Public domain in the United States and Brazil." group-title="Movies – Classics",Meet John Doe (1941)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/lB3HWR75hxSiuPtFdV1r14HM8a0.jpg" year="1941" description="Directed by Frank Capra. Public domain in the United States and Brazil." group-title="Movies – Classics",Meet John Doe (1941)
 https://archive.org/download/meet_john_doe/meet_john_doe.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/penny_serenade" year="1941" description="Directed by George Stevens. Public domain in the United States and Brazil." group-title="Movies – Classics",Penny Serenade (1941)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/7MC1fE5FSEIP9xf0N2VD68zRKv2.jpg" year="1941" description="Directed by George Stevens. Public domain in the United States and Brazil." group-title="Movies – Classics",Penny Serenade (1941)
 https://archive.org/download/penny_serenade/penny_serenade.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/MyManGodfrey1936" year="1936" description="Directed by Gregory La Cava. Public domain in the United States and Brazil." group-title="Movies – Classics",My Man Godfrey (1936)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/wtfOW7fIxBZWY78rvUoPpWhMSiR.jpg" year="1936" description="Directed by Gregory La Cava. Public domain in the United States and Brazil." group-title="Movies – Classics",My Man Godfrey (1936)
 https://archive.org/download/MyManGodfrey1936/MyManGodfrey1936.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/NothingSacred" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",Nothing Sacred (1937)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/uqu30x75SjsPNyDN0A5VedoEqyg.jpg" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",Nothing Sacred (1937)
 https://archive.org/download/NothingSacred/NothingSacred.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/AStarIsBorn" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",A Star Is Born (1937)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/r4kKls84ZXIyzIpla0G4cryqgA.jpg" year="1937" description="Directed by William A. Wellman. Public domain in the United States and Brazil." group-title="Movies – Classics",A Star Is Born (1937)
 https://archive.org/download/AStarIsBorn/AStarIsBorn.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Detour" year="1945" description="Directed by Edgar G. Ulmer. Public domain in the United States and Brazil." group-title="Movies – Classics",Detour (1945)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/gJb9HRAs1V4bA0VKsWpT6mhv2RT.jpg" year="1945" description="Directed by Edgar G. Ulmer. Public domain in the United States and Brazil." group-title="Movies – Classics",Detour (1945)
 https://archive.org/download/Detour/Detour.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/ScarletStreet" year="1945" description="Directed by Fritz Lang. Public domain in the United States and Brazil." group-title="Movies – Classics",Scarlet Street (1945)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/6hwIPgcHgfy0sQJu6MlaWm86d6L.jpg" year="1945" description="Directed by Fritz Lang. Public domain in the United States and Brazil." group-title="Movies – Classics",Scarlet Street (1945)
 https://archive.org/download/ScarletStreet/Scarlet_Street.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/TheStranger_0" year="1946" description="Directed by Orson Welles. Public domain in the United States and Brazil." group-title="Movies – Classics",The Stranger (1946)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/pdgS6f1OFLDZmBuLqiVDabyyKOF.jpg" year="1946" description="Directed by Orson Welles. Public domain in the United States and Brazil." group-title="Movies – Classics",The Stranger (1946)
 https://archive.org/download/TheStranger_0/The_Stranger.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/angel_and_the_badman" year="1947" description="Directed by James Edward Grant. Public domain in the United States and Brazil." group-title="Movies – Classics",Angel and the Badman (1947)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/sblbEHqdVf0YRb7tAYvcLx8qHRH.jpg" year="1947" description="Directed by James Edward Grant. Public domain in the United States and Brazil." group-title="Movies – Classics",Angel and the Badman (1947)
 https://archive.org/download/angel_and_the_badman/angel_and_the_badman.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/thoseguysontheradio_gmail_Doa" year="1949" description="Directed by Rudolph Maté. Public domain in the United States and Brazil." group-title="Movies – Classics",D.O.A. (1949)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/m7wZXWOt9XQKJT8r9pbAFo7jB46.jpg" year="1949" description="Directed by Rudolph Maté. Public domain in the United States and Brazil." group-title="Movies – Classics",D.O.A. (1949)
 https://archive.org/download/thoseguysontheradio_gmail_Doa/doa_1949.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/royal_wedding" year="1951" description="Directed by Stanley Donen. Public domain in the United States and Brazil." group-title="Movies – Classics",Royal Wedding (1951)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/gIFEbOjUaurHIZ55KkRNcRXInyJ.jpg" year="1951" description="Directed by Stanley Donen. Public domain in the United States and Brazil." group-title="Movies – Classics",Royal Wedding (1951)
 https://archive.org/download/royal_wedding/royal_wedding.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/fathers-little-dividend-1951_202402" year="1951" description="Directed by Vincente Minnelli. Public domain in the United States and Brazil." group-title="Movies – Classics",Father's Little Dividend (1951)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/nqGO8WJwha5Shc4I640s5xBndOM.jpg" year="1951" description="Directed by Vincente Minnelli. Public domain in the United States and Brazil." group-title="Movies – Classics",Father's Little Dividend (1951)
 https://archive.org/download/fathers-little-dividend-1951_202402/Father%27s%20Little%20Dividend%20%281951%29.ia.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/kansascityconfidencial" year="1952" description="Directed by Phil Karlson. Public domain in the United States and Brazil." group-title="Movies – Classics",Kansas City Confidential (1952)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/2RcTYPzsR0QfN5d8g3HjIkIqcbg.jpg" year="1952" description="Directed by Phil Karlson. Public domain in the United States and Brazil." group-title="Movies – Classics",Kansas City Confidential (1952)
 https://archive.org/download/kansascityconfidencial/kansascityconfidencial.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/cco2_TheLastTimeISawParis" year="1954" description="Directed by Richard Brooks. Public domain in the United States and Brazil." group-title="Movies – Classics",The Last Time I Saw Paris (1954)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/yARMwDXPi5fjcDkWuBApfXQhb2s.jpg" year="1954" description="Directed by Richard Brooks. Public domain in the United States and Brazil." group-title="Movies – Classics",The Last Time I Saw Paris (1954)
 https://archive.org/download/cco2_TheLastTimeISawParis/ccoPublicDomainThe_Last_Time_I_Saw_Paris.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/gullivers_travels1939" year="1939" description="Directed by Dave Fleischer. Public domain in the United States and Brazil." group-title="Movies – Classics",Gulliver's Travels (1939)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/atLFcsnQ6U1IEURmkQBiva0TZ0g.jpg" year="1939" description="Directed by Dave Fleischer. Public domain in the United States and Brazil." group-title="Movies – Classics",Gulliver's Travels (1939)
 https://archive.org/download/gullivers_travels1939/gullivers_travels1939.mp4
 
 # Series — Fleischer/Famous Studios Superman cartoons (1941–1943), public domain
@@ -127,9 +127,9 @@ https://archive.org/download/DuckandC1951/DuckandC1951_edit.mp4
 https://archive.org/download/PrivateL1947/PrivateL1947_edit.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/DontBeaS1947" year="1947" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Don't Be a Sucker (1947)
 https://archive.org/download/DontBeaS1947/DontBeaS1947_edit.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/MakeMine1948" year="1948" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Make Mine Freedom (1948)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/b8Kb26RzqTA6aRErBaTQvd8LnrO.jpg" year="1948" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",Make Mine Freedom (1948)
 https://archive.org/download/MakeMine1948/MakeMine1948_edit.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/CaseofSp1940" year="1940" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",A Case of Spring Fever (1940)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/rEeuJZqwuHKpdH6dqchzP9A5NXt.jpg" year="1940" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",A Case of Spring Fever (1940)
 https://archive.org/download/CaseofSp1940/CaseofSp1940_edit.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/AboutBan1935" year="1935" description="Prelinger Archives — public domain" group-title="Documentaries – Prelinger",About Bananas (1935)
 https://archive.org/download/AboutBan1935/AboutBan1935_edit.mp4
@@ -157,81 +157,81 @@ https://archive.org/download/Achievem1955/Achievem1955_edit.mp4
 https://archive.org/download/charlie_chaplin_film_fest/charlie_chaplin_film_fest.mp4
 #EXTINF:-1 tvg-logo="https://archive.org/services/img/TheFastandtheFuriousJohnIreland1954goofyrip" year="1955" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Fast And The Furious (1955)
 https://archive.org/download/TheFastandtheFuriousJohnIreland1954goofyrip/TheFastandtheFuriousJohnIreland1954goofyrip.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/abraham_lincoln" year="1930" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Abraham Lincoln (1930)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/4BOmqevJBC5gBfQNXpa2epf27yO.jpg" year="1930" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Abraham Lincoln (1930)
 https://archive.org/download/abraham_lincoln/abraham_lincoln.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/dressed_to_kill" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Dressed To Kill (1946)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/oD4z3ON2ciLMv6obEH2K8tGThWG.jpg" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Dressed To Kill (1946)
 https://archive.org/download/dressed_to_kill/dressed_to_kill.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/suddenly" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Suddenly (1954)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/sVLx30Uftwcvf7KFQpikDtyhvI7.jpg" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Suddenly (1954)
 https://archive.org/download/suddenly/suddenly.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/my_favorite_brunette" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",My Favorite Brunette (1947)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/tTI4QFLQirmIw6YLR5kRAKyDKvv.jpg" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",My Favorite Brunette (1947)
 https://archive.org/download/my_favorite_brunette/my_favorite_brunette.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Killers_from_space" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Killers From Space (1954)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/ajQgkwtcVvjqBcDq31qwbn8svyT.jpg" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Killers From Space (1954)
 https://archive.org/download/Killers_from_space/Killers_from_space.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/TheFlyingDeuces" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Flying Deuces (1939)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/wXXA3s9tzRV7tgiFqhm7Nvu9W8B.jpg" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Flying Deuces (1939)
 https://archive.org/download/TheFlyingDeuces/The_Flying_Deuces.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/impact" year="1949" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Impact (1949)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/tNF03oWEefF5dImf0uOt1QgYdew.jpg" year="1949" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Impact (1949)
 https://archive.org/download/impact/impact.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Cyrano_DeBergerac" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Cyrano De Bergerac (1950)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/l4JFOXslwb90opz8xozfIhPke8z.jpg" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Cyrano De Bergerac (1950)
 https://archive.org/download/Cyrano_DeBergerac/Cyrano_De_Bergerac.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Quicksand_clear" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Quicksand (1950)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/rTtFvxrHpLECgLE86zStkHYxTyx.jpg" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Quicksand (1950)
 https://archive.org/download/Quicksand_clear/Quicksand.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/secret_weapon" year="1943" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sherlock Holmes and the Secret Weapon (1943)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/50qLIyhdWrDxcZE0bmHhUaxb2FP.jpg" year="1943" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sherlock Holmes and the Secret Weapon (1943)
 https://archive.org/download/secret_weapon/sherlock_holmes_and_the_secret_weapon.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/mr_robinson_crusoe" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Mr. Robinson Crusoe (1932)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/v9o0gtCiEfJaFjzbyDEnusezzES.jpg" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Mr. Robinson Crusoe (1932)
 https://archive.org/download/mr_robinson_crusoe/mr._robinson_crusoe.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/OnlytheValaint" year="1951" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Only the Valiant (1951)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/7j2DB5PBuyxXMDKM8t5sia87wht.jpg" year="1951" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Only the Valiant (1951)
 https://archive.org/download/OnlytheValaint/OnlytheValaint.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Great_Guy.avi" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Great Guy (1936)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/AcqtAhoYNFR1kjXvuZiT5ZoY76A.jpg" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Great Guy (1936)
 https://archive.org/download/Great_Guy.avi/Great_Guy.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/WarOfTheWildcats-JohnWayne1943" year="1943" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",War of the Wildcats (1943)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/ii1jD3kitpvOY0iUwckHAwWtY7Y.jpg" year="1943" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",War of the Wildcats (1943)
 https://archive.org/download/WarOfTheWildcats-JohnWayne1943/JohnWayne-WarOfTheWildcats1943.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Inner_Sanctum_movie" year="1948" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Inner Sanctum (1948)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/iPIOExn7a2YlyLyC1n48gZUs98R.jpg" year="1948" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Inner Sanctum (1948)
 https://archive.org/download/Inner_Sanctum_movie/Inner_Sanctum.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/AfricaScreams" year="1949" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Africa Screams (1949)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/kwG0Zvu99fFerIJv0qnqHXZ5MWt.jpg" year="1949" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Africa Screams (1949)
 https://archive.org/download/AfricaScreams/Africa_Screams.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/JailBait" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Jail Bait (1954)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/uRHwfkT1rvwMGc8oGjQSoUp6kq6.jpg" year="1954" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Jail Bait (1954)
 https://archive.org/download/JailBait/JailBait.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/texas_terror_1935" year="1935" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Texas Terror (1935)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/rpjXvk37TOPaiy92cpamZHExPC5.jpg" year="1935" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Texas Terror (1935)
 https://archive.org/download/texas_terror_1935/texas_terror_1935.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/the_big_show" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Big Show (1936)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/iWv0GW5nN7iLNFSkfStNgEc5wGl.jpg" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Big Show (1936)
 https://archive.org/download/the_big_show/the_big_show.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/behave_yourself_ipod" year="1951" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Behave Yourself (1951)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/fgoySNLE6bHovezVA8NhBycPAlf.jpg" year="1951" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Behave Yourself (1951)
 https://archive.org/download/behave_yourself_ipod/behave_yourself.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/angel_on_my_shoulder" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Angel on My Shoulder (1946)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/6nKIHzDdtsWZ1xJOym0IuMUPMvu.jpg" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Angel on My Shoulder (1946)
 https://archive.org/download/angel_on_my_shoulder/angel_on_my_shoulder.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/disorder_in_the_court" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Disorder in the Court (1936)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/l801pSeHhCPsimBxzvKaVIWvdsi.jpg" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Disorder in the Court (1936)
 https://archive.org/download/disorder_in_the_court/disorder_in_the_court.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/planet_outlaws_ipod" year="1953" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Planet Outlaws (1953)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/3IZ3UWFRZLwtcTA7KQfmtzwsGEf.jpg" year="1953" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Planet Outlaws (1953)
 https://archive.org/download/planet_outlaws_ipod/planet_outlaws.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/AtWarWithTheArmy" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",At War with the Army (1950)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/viLzurxFrHbosBtTGf0gkPKa9qx.jpg" year="1950" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",At War with the Army (1950)
 https://archive.org/download/AtWarWithTheArmy/AtWarWithTheArmy.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Hitch_Hiker" year="1953" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Hitch-Hiker (1953)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/9ORvQWC2o0FwIEl6zYU1jw9qH0X.jpg" year="1953" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Hitch-Hiker (1953)
 https://archive.org/download/Hitch_Hiker/Hitch-Hiker.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/white_zombie" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",White Zombie (1932)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/s5DnfWHGeCExlweIFF4JOHKyx3H.jpg" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",White Zombie (1932)
 https://archive.org/download/white_zombie/white_zombie.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/sing_a_song_of_six_pants" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sing A Song of Six Pants (1947)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/sPwQaghX0Z9SFooliPl4OiA5pcB.jpg" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sing A Song of Six Pants (1947)
 https://archive.org/download/sing_a_song_of_six_pants/sing_a_song_of_six_pants.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/private_snuffy_smith" year="1942" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Private Snuffy Smith (1942)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/itAGhJdO9SKVte0R69iAEQG0SEm.jpg" year="1942" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Private Snuffy Smith (1942)
 https://archive.org/download/private_snuffy_smith/private_snuffy_smith.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/SagebrushTrail" year="1933" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sagebrush Trail (1933)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/pCJlvS7o6wJ6Xn8qZ5GkVJWpRMc.jpg" year="1933" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Sagebrush Trail (1933)
 https://archive.org/download/SagebrushTrail/SagebrushTrail.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/brideless_groom" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Brideless Groom (1947)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/tkFcZ9OJMIF9awc2pi8u41yu8Xd.jpg" year="1947" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Brideless Groom (1947)
 https://archive.org/download/brideless_groom/brideless_groom.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/They_Made_Me_A_Criminal_1939" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",They Made Me a Criminal (1939)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/aNiWJ2C8Amrun55JCvuvGEPIXli.jpg" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",They Made Me a Criminal (1939)
 https://archive.org/download/They_Made_Me_A_Criminal_1939/they_made_me_a_criminal_1939.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/TheMostDangerousGame" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Most Dangerous Game (1932)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/3aNlOIFlGOnIzxqvAWpgm5Sly1H.jpg" year="1932" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Most Dangerous Game (1932)
 https://archive.org/download/TheMostDangerousGame/TheMostDangerousGame.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/the_gorilla" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Gorilla (1939)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/1SoQjbhbjWnqtbXWoZ4ha9qUBLz.jpg" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Gorilla (1939)
 https://archive.org/download/the_gorilla/the_gorilla.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/cco_jackandthebeanstalk" year="1952" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Jack and the Beanstalk (1952)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/psogkzcA2yOT0Tz669i0Lm1eZXM.jpg" year="1952" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Jack and the Beanstalk (1952)
 https://archive.org/download/cco_jackandthebeanstalk/ccoPublicDomainJack_and_the_Beanstalk.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/BehindGreenLights_high_Q_mp4" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Behind Green Lights (1946)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/pshb0QuZ0dflGwHkox4qt9COPYV.jpg" year="1946" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Behind Green Lights (1946)
 https://archive.org/download/BehindGreenLights_high_Q_mp4/Behind_Green_Lights.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/TheLuckyTexan" year="1934" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Lucky Texan (1934)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/xwf4n8tinAlU07WQd99xdrsbB9f.jpg" year="1934" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Lucky Texan (1934)
 https://archive.org/download/TheLuckyTexan/TheLuckyTexan.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/ThePhantomCreeps" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Phantom Creeps (1939)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/gsjPEN30Z7WJFMQIgAYUzbxCjvx.jpg" year="1939" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",The Phantom Creeps (1939)
 https://archive.org/download/ThePhantomCreeps/ThePhantomCreeps.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/west_of_the_divide" year="1934" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",West of the Divide (1934)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/zC5Lt0TOa9R30KfotXzFNehoexQ.jpg" year="1934" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",West of the Divide (1934)
 https://archive.org/download/west_of_the_divide/west_of_the_divide.mp4
-#EXTINF:-1 tvg-logo="https://archive.org/services/img/Winds_of_the_Wasteland" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Winds of the Wasteland (1936)
+#EXTINF:-1 tvg-logo="https://painel.ashytv.com/api/v1/meta/image/w500/sD0v5nxEoiRG3hwyL9OulUjNcBQ.jpg" year="1936" description="Public domain in the United States (copyright not renewed)" group-title="Movies – Classics",Winds of the Wasteland (1936)
 https://archive.org/download/Winds_of_the_Wasteland/Winds_of_the_Wasteland.mp4
