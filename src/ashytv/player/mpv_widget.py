@@ -410,8 +410,19 @@ class MpvWidget(Gtk.GLArea):
     def set_aspect(self, value: str) -> None:
         self._mpv["video-aspect-override"] = value
 
+    def aspect(self) -> str:
+        """The aspect override in force ("no" = the video's own)."""
+        return str(self._mpv["video-aspect-override"] or "no")
+
     def set_speed(self, value: float) -> None:
         self._mpv.speed = value
+
+    def speed(self) -> float:
+        """Playback speed in force. 1.0 when mpv has nothing to say."""
+        try:
+            return float(self._mpv.speed)
+        except (TypeError, ValueError):
+            return 1.0
 
     def record(self, path: str | None) -> None:
         """Record the current stream to `path` (None to stop)."""

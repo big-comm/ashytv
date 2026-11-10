@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import os
 import re
 import time
@@ -1052,12 +1053,17 @@ class PlayerView(Gtk.Overlay):
             box.append(self._radio_list(
                 _("Audio"), [(label, tid, sel) for tid, label, sel in audio],
                 lambda v: self.mpv.set_track("audio", v)))
+        # Which one is marked has to be what is playing, not the default:
+        # the menu is rebuilt on every opening, so a fixed mark would keep
+        # saying "1x" to someone watching at 1.5x.
+        aspect = self.mpv.aspect()
         box.append(self._radio_list(
-            _("Aspect ratio"), [(label, value, value == "no") for label, value in _ASPECTS],
+            _("Aspect ratio"), [(label, value, value == aspect) for label, value in _ASPECTS],
             self.mpv.set_aspect))
         if self._item and not self._item.is_live:
+            speed = self.mpv.speed()
             box.append(self._radio_list(
-                _("Speed"), [(f"{s:g}x", s, s == 1.0) for s in _SPEEDS],
+                _("Speed"), [(f"{s:g}x", s, math.isclose(s, speed)) for s in _SPEEDS],
                 self.mpv.set_speed))
         return Gtk.Popover(child=box)
 
