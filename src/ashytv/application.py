@@ -220,10 +220,6 @@ class AshyTvApplication(Adw.Application):
             website="https://communitybig.org",
             license_type=Gtk.License.GPL_3_0,
         )
-        about.add_legal_section(
-            "TMDB", None, Gtk.License.CUSTOM,
-            _("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
-              "or certified by TMDB."))
         about.present(self.window)
 
     def _on_shortcuts(self, *_args) -> None:

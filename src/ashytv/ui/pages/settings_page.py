@@ -339,10 +339,6 @@ class SettingsPage(Gtk.Box):
             title=_("Disclaimer"),
             subtitle=_("AshyTV does not provide or contain any content: it only plays "
                        "the playlists you add."), subtitle_lines=3))
-        g.add(Adw.ActionRow(
-            title="TMDB",
-            subtitle=_("Cast data: TMDB. This product uses the TMDB API but is not endorsed "
-                       "or certified by TMDB."), subtitle_lines=3))
         tour = compat.button_row(_("Guided tour"))
         tour.connect("activated", lambda *_: self.activate_action("app.tour", None))
         g.add(tour)

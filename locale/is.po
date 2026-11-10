@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashytv 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 14:58-0300\n"
+"POT-Creation-Date: 2026-11-08 14:45-0300\n"
 "PO-Revision-Date: 2026-10-24 04:07+0000\n"
 "Last-Translator: Community Big <https://communitybig.org>\n"
 "Language-Team: Community Big <https://github.com/big-comm/ashytv>\n"
@@ -21,21 +21,21 @@ msgstr ""
 msgid "AshyTV could not open its database"
 msgstr "AshyTV gat ekki opnað gagnagrunninn sinn"
 
-#: src/ashytv/application.py:118
+#: src/ashytv/application.py:121
 msgid "Some channels will not play"
 msgstr "Sumar rásir munu ekki spilast"
 
-#: src/ashytv/application.py:119
+#: src/ashytv/application.py:122
 #, python-brace-format
 msgid "The system's video codecs lack {codecs}, used by most TV channels."
 msgstr "Myndkóðara kerfisins vantar {codecs}, sem flestar sjónvarpsrásir nota."
 
-#: src/ashytv/application.py:122 src/ashytv/application.py:129
+#: src/ashytv/application.py:125 src/ashytv/application.py:132
 #: src/ashytv/ui/install_dialog.py:62
 msgid "Close"
 msgstr "Loka"
 
-#: src/ashytv/application.py:215
+#: src/ashytv/application.py:218
 msgid ""
 "A modern IPTV player for the Linux desktop.\n"
 "Import your own playlist — no content is provided by the app."
@@ -43,15 +43,7 @@ msgstr ""
 "Nútímalegur IPTV-spilari fyrir Linux-skjáborðið.\n"
 "Fluttu inn þinn eigin spilunarlista — forritið býður ekkert efni."
 
-#: src/ashytv/application.py:222 src/ashytv/ui/pages/settings_page.py:344
-msgid ""
-"Cast data: TMDB. This product uses the TMDB API but is not endorsed or "
-"certified by TMDB."
-msgstr ""
-"Leikaragögn: TMDB. Þessi vara notar API frá TMDB en er hvorki studd né "
-"vottuð af TMDB."
-
-#: src/ashytv/application.py:241 src/ashytv/window.py:134
+#: src/ashytv/application.py:240 src/ashytv/window.py:145
 msgid "Keyboard Shortcuts"
 msgstr "Flýtilyklar"
 
@@ -59,15 +51,15 @@ msgstr "Flýtilyklar"
 msgid "Live TV"
 msgstr "Bein útsending"
 
-#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:378
+#: src/ashytv/models/channel.py:22 src/ashytv/ui/cast.py:375
 #: src/ashytv/ui/nav_sidebar.py:16 src/ashytv/ui/pages/favorites_page.py:48
-#: src/ashytv/window.py:222
+#: src/ashytv/window.py:248
 msgid "Movies"
 msgstr "Kvikmyndir"
 
-#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:378
+#: src/ashytv/models/channel.py:23 src/ashytv/ui/cast.py:375
 #: src/ashytv/ui/nav_sidebar.py:17 src/ashytv/ui/pages/favorites_page.py:49
-#: src/ashytv/window.py:231
+#: src/ashytv/window.py:257
 msgid "Series"
 msgstr "Þættir"
 
@@ -129,7 +121,7 @@ msgstr "Veður"
 msgid "Music"
 msgstr "Tónlist"
 
-#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:242
+#: src/ashytv/services/free_tv.py:222 src/ashytv/ui/pages/lists_page.py:249
 msgid "All countries"
 msgstr "Öll lönd"
 
@@ -194,43 +186,43 @@ msgstr "Tengist þjónustuveitu…"
 msgid "The provider returned no content"
 msgstr "Þjónustuveitan skilaði engu efni"
 
-#: src/ashytv/services/settings.py:49
+#: src/ashytv/services/settings.py:50
 msgid "Blue"
 msgstr "Blár"
 
-#: src/ashytv/services/settings.py:50
+#: src/ashytv/services/settings.py:51
 msgid "Teal"
 msgstr "Blágrænn"
 
-#: src/ashytv/services/settings.py:51
+#: src/ashytv/services/settings.py:52
 msgid "Green"
 msgstr "Grænn"
 
-#: src/ashytv/services/settings.py:52
+#: src/ashytv/services/settings.py:53
 msgid "Yellow"
 msgstr "Gulur"
 
-#: src/ashytv/services/settings.py:53
+#: src/ashytv/services/settings.py:54
 msgid "Orange"
 msgstr "Appelsínugulur"
 
-#: src/ashytv/services/settings.py:54
+#: src/ashytv/services/settings.py:55
 msgid "Red"
 msgstr "Rauður"
 
-#: src/ashytv/services/settings.py:55
+#: src/ashytv/services/settings.py:56
 msgid "Pink"
 msgstr "Bleikur"
 
-#: src/ashytv/services/settings.py:56
+#: src/ashytv/services/settings.py:57
 msgid "Purple"
 msgstr "Fjólublár"
 
-#: src/ashytv/services/settings.py:57
+#: src/ashytv/services/settings.py:58
 msgid "Slate"
 msgstr "Flögugrár"
 
-#: src/ashytv/services/settings.py:58
+#: src/ashytv/services/settings.py:59
 msgid "Emerald"
 msgstr "Smaragðsgrænn"
 
@@ -272,7 +264,7 @@ msgstr "Staða reiknings: {status}"
 msgid "Actor"
 msgstr "Leikari"
 
-#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:280
+#: src/ashytv/ui/cast.py:209 src/ashytv/ui/detail_dialog.py:281
 msgid "Director"
 msgstr "Leikstjóri"
 
@@ -284,7 +276,7 @@ msgstr "Handritshöfundur"
 msgid "Producer"
 msgstr "Framleiðandi"
 
-#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:289
+#: src/ashytv/ui/cast.py:241 src/ashytv/ui/detail_dialog.py:290
 msgid "Cast"
 msgstr "Leikarar"
 
@@ -293,32 +285,28 @@ msgstr "Leikarar"
 msgid "Titles with {name}"
 msgstr "Titlar með {name}"
 
-#: src/ashytv/ui/cast.py:332
-msgid "Cast data: TMDB"
-msgstr "Leikaragögn: TMDB"
-
-#: src/ashytv/ui/cast.py:356 src/ashytv/ui/detail_dialog.py:451
-#: src/ashytv/ui/pages/catalog_page.py:353
-#: src/ashytv/ui/pages/channels_page.py:559
+#: src/ashytv/ui/cast.py:353 src/ashytv/ui/detail_dialog.py:452
+#: src/ashytv/ui/pages/catalog_page.py:432
+#: src/ashytv/ui/pages/channels_page.py:561
 msgid "Remove from favorites"
 msgstr "Fjarlægja úr eftirlætum"
 
-#: src/ashytv/ui/cast.py:357 src/ashytv/ui/detail_dialog.py:452
-#: src/ashytv/ui/pages/catalog_page.py:354
-#: src/ashytv/ui/pages/channels_page.py:559
+#: src/ashytv/ui/cast.py:354 src/ashytv/ui/detail_dialog.py:453
+#: src/ashytv/ui/pages/catalog_page.py:433
+#: src/ashytv/ui/pages/channels_page.py:561
 msgid "Add to favorites"
 msgstr "Bæta í eftirlæti"
 
-#: src/ashytv/ui/cast.py:383
+#: src/ashytv/ui/cast.py:380
 msgid "Nothing in your playlists"
 msgstr "Ekkert í spilunarlistunum þínum"
 
-#: src/ashytv/ui/cast.py:384
+#: src/ashytv/ui/cast.py:381
 msgid "None of this person's movies or series are in your playlists."
 msgstr ""
 "Engin kvikmynd eða þáttaröð þessarar manneskju er í spilunarlistunum þínum."
 
-#: src/ashytv/ui/cast.py:389
+#: src/ashytv/ui/cast.py:386
 msgid "Found in the details of the titles you opened."
 msgstr "Fannst í upplýsingum um titlana sem þú opnaðir."
 
@@ -340,7 +328,7 @@ msgstr "Engin dagskrá"
 msgid "Channel {number}"
 msgstr "Rás {number}"
 
-#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:89
+#: src/ashytv/ui/channel_info.py:177 src/ashytv/ui/pages/epg_page.py:92
 msgid "Now"
 msgstr "Núna"
 
@@ -370,7 +358,7 @@ msgstr "→ eða Enter: rásir  •  Esc: til baka"
 
 #: src/ashytv/ui/channel_overlay.py:81 src/ashytv/ui/channel_overlay.py:144
 #: src/ashytv/ui/nav_sidebar.py:15 src/ashytv/ui/pages/favorites_page.py:47
-#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:594
+#: src/ashytv/ui/pages/settings_page.py:147 src/ashytv/window.py:622
 msgid "Channels"
 msgstr "Rásir"
 
@@ -379,8 +367,8 @@ msgid "Enter: watch  •  ←: groups  •  Esc: close"
 msgstr "Enter: horfa  •  ←: hópar  •  Esc: loka"
 
 #: src/ashytv/ui/detail_dialog.py:108 src/ashytv/ui/detail_dialog.py:202
-#: src/ashytv/ui/pages/channels_page.py:558 src/ashytv/ui/schedule_dialog.py:18
-#: src/ashytv/window.py:1585 src/ashytv/window.py:1591
+#: src/ashytv/ui/pages/channels_page.py:560 src/ashytv/ui/schedule_dialog.py:18
+#: src/ashytv/window.py:1755 src/ashytv/window.py:1761
 msgid "Watch"
 msgstr "Horfa"
 
@@ -416,78 +404,78 @@ msgstr "{h} klst {m} mín"
 msgid "{m} min"
 msgstr "{m} mín"
 
-#: src/ashytv/ui/detail_dialog.py:270
+#: src/ashytv/ui/detail_dialog.py:271
 #, python-brace-format
 msgid "Ends at {time}"
 msgstr "Lýkur kl. {time}"
 
-#: src/ashytv/ui/detail_dialog.py:280
+#: src/ashytv/ui/detail_dialog.py:281
 msgid "Created by"
 msgstr "Höfundar"
 
-#: src/ashytv/ui/detail_dialog.py:282
+#: src/ashytv/ui/detail_dialog.py:283
 msgid "Writers"
 msgstr "Handrit"
 
-#: src/ashytv/ui/detail_dialog.py:283
+#: src/ashytv/ui/detail_dialog.py:284
 msgid "Studios"
 msgstr "Kvikmyndaver"
 
-#: src/ashytv/ui/detail_dialog.py:284
+#: src/ashytv/ui/detail_dialog.py:285
 msgid "Genres"
 msgstr "Tegundir"
 
-#: src/ashytv/ui/detail_dialog.py:286
+#: src/ashytv/ui/detail_dialog.py:287
 msgid "Tags"
 msgstr "Merki"
 
-#: src/ashytv/ui/detail_dialog.py:287 src/ashytv/ui/player_view.py:1053
+#: src/ashytv/ui/detail_dialog.py:288 src/ashytv/ui/player_view.py:1053
 msgid "Audio"
 msgstr "Hljóð"
 
-#: src/ashytv/ui/detail_dialog.py:287
+#: src/ashytv/ui/detail_dialog.py:288
 msgid "Video"
 msgstr "Myndskeið"
 
-#: src/ashytv/ui/detail_dialog.py:290
+#: src/ashytv/ui/detail_dialog.py:291
 msgid "Country"
 msgstr "Land"
 
-#: src/ashytv/ui/detail_dialog.py:291
+#: src/ashytv/ui/detail_dialog.py:292
 msgid "Released"
 msgstr "Útgefið"
 
-#: src/ashytv/ui/detail_dialog.py:292 src/ashytv/ui/player_view.py:240
+#: src/ashytv/ui/detail_dialog.py:293 src/ashytv/ui/player_view.py:240
 #: src/ashytv/ui/player_view.py:1008 src/ashytv/ui/player_view.py:1025
 msgid "Subtitles"
 msgstr "Skjátextar"
 
-#: src/ashytv/ui/detail_dialog.py:292
+#: src/ashytv/ui/detail_dialog.py:293
 #, python-brace-format
 msgid "{n} file"
 msgid_plural "{n} files"
 msgstr[0] "{n} skrá"
 msgstr[1] "{n} skrár"
 
-#: src/ashytv/ui/detail_dialog.py:331
+#: src/ashytv/ui/detail_dialog.py:332
 msgid "Trailer"
 msgstr "Stikla"
 
-#: src/ashytv/ui/detail_dialog.py:357
+#: src/ashytv/ui/detail_dialog.py:358
 msgid "No episodes available"
 msgstr "Engir þættir í boði"
 
-#: src/ashytv/ui/detail_dialog.py:362
+#: src/ashytv/ui/detail_dialog.py:363
 #, python-brace-format
 msgid "Season {n}"
 msgstr "Þáttaröð {n}"
 
-#: src/ashytv/ui/detail_dialog.py:370
+#: src/ashytv/ui/detail_dialog.py:371
 #, python-brace-format
 msgid "Watch {label}"
 msgstr "Horfa á {label}"
 
-#: src/ashytv/ui/detail_dialog.py:411
+#: src/ashytv/ui/detail_dialog.py:412
 #, python-brace-format
 msgid "Episode {n}"
 msgstr "Þáttur {n}"
@@ -582,135 +570,135 @@ msgstr "Stöðva"
 msgid "Home"
 msgstr "Heim"
 
-#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:68
-#: src/ashytv/ui/pages/channels_page.py:242
-#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:605
-#: src/ashytv/window.py:628
+#: src/ashytv/ui/nav_sidebar.py:14 src/ashytv/ui/pages/channels_page.py:69
+#: src/ashytv/ui/pages/channels_page.py:244
+#: src/ashytv/ui/pages/favorites_page.py:39 src/ashytv/window.py:633
+#: src/ashytv/window.py:656
 msgid "Favorites"
 msgstr "Eftirlæti"
 
-#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/recordings_page.py:25
+#: src/ashytv/ui/nav_sidebar.py:18 src/ashytv/ui/pages/recordings_page.py:30
 msgid "Recordings"
 msgstr "Upptökur"
 
 #: src/ashytv/ui/nav_sidebar.py:20 src/ashytv/ui/pages/lists_page.py:78
-#: src/ashytv/window.py:1399
+#: src/ashytv/window.py:1441
 msgid "Playlists"
 msgstr "Spilunarlistar"
 
 #: src/ashytv/ui/nav_sidebar.py:21 src/ashytv/ui/pages/settings_page.py:67
-#: src/ashytv/window.py:1405
+#: src/ashytv/window.py:1447
 msgid "Settings"
 msgstr "Stillingar"
 
-#: src/ashytv/ui/pages/catalog_page.py:85
+#: src/ashytv/ui/pages/catalog_page.py:100
 #: src/ashytv/ui/pages/favorites_page.py:50
 msgid "People"
 msgstr "Fólk"
 
-#: src/ashytv/ui/pages/catalog_page.py:114
+#: src/ashytv/ui/pages/catalog_page.py:138
 msgid "Nothing found"
 msgstr "Ekkert fannst"
 
-#: src/ashytv/ui/pages/catalog_page.py:115
+#: src/ashytv/ui/pages/catalog_page.py:139
 msgid "Add a playlist in “Playlists” or change the filter."
 msgstr "Bættu við spilunarlista undir „Spilunarlistar“ eða breyttu síunni."
 
-#: src/ashytv/ui/pages/catalog_page.py:196
+#: src/ashytv/ui/pages/catalog_page.py:220
 msgid "All"
 msgstr "Allt"
 
-#: src/ashytv/ui/pages/catalog_page.py:196
+#: src/ashytv/ui/pages/catalog_page.py:220
 msgid "New Releases"
 msgstr "Nýjar útgáfur"
 
-#: src/ashytv/ui/pages/catalog_page.py:197
+#: src/ashytv/ui/pages/catalog_page.py:221
 msgid "Trending"
 msgstr "Vinsælt"
 
-#: src/ashytv/ui/pages/catalog_page.py:207
-#: src/ashytv/ui/pages/channels_page.py:286
+#: src/ashytv/ui/pages/catalog_page.py:231
+#: src/ashytv/ui/pages/channels_page.py:288
 msgid "See hidden channels and groups"
 msgstr "Sjá faldar rásir og hópa"
 
-#: src/ashytv/ui/pages/catalog_page.py:212
-#: src/ashytv/ui/pages/channels_page.py:291
+#: src/ashytv/ui/pages/catalog_page.py:236
+#: src/ashytv/ui/pages/channels_page.py:293
 #, python-brace-format
 msgid "Hidden ({n})"
 msgstr "Falið ({n})"
 
-#: src/ashytv/ui/pages/catalog_page.py:235
+#: src/ashytv/ui/pages/catalog_page.py:262
 msgid "Hide category"
 msgstr "Fela flokk"
 
-#: src/ashytv/ui/pages/channels_page.py:68
+#: src/ashytv/ui/pages/channels_page.py:69
 msgid "TV Channels"
 msgstr "Sjónvarpsrásir"
 
-#: src/ashytv/ui/pages/channels_page.py:69
+#: src/ashytv/ui/pages/channels_page.py:70
 msgid "Channels, movies and series you marked"
 msgstr "Rásir, kvikmyndir og þættir sem þú merktir"
 
-#: src/ashytv/ui/pages/channels_page.py:70
+#: src/ashytv/ui/pages/channels_page.py:71
 msgid "All your channels organized by category"
 msgstr "Allar rásirnar þínar flokkaðar"
 
-#: src/ashytv/ui/pages/channels_page.py:82
+#: src/ashytv/ui/pages/channels_page.py:83
 msgid "List"
 msgstr "Listi"
 
-#: src/ashytv/ui/pages/channels_page.py:83
+#: src/ashytv/ui/pages/channels_page.py:84
 msgid "Guide"
 msgstr "Dagskrá"
 
-#: src/ashytv/ui/pages/channels_page.py:146
+#: src/ashytv/ui/pages/channels_page.py:147
 #: src/ashytv/ui/pages/favorites_page.py:59
 #: src/ashytv/ui/pages/favorites_page.py:114
 msgid "Nothing here yet"
 msgstr "Ekkert hér ennþá"
 
-#: src/ashytv/ui/pages/channels_page.py:147
+#: src/ashytv/ui/pages/channels_page.py:148
 msgid "Tap the heart on a channel, movie or series to keep it here."
 msgstr "Ýttu á hjartað á rás, kvikmynd eða þáttaröð til að geyma hana hér."
 
-#: src/ashytv/ui/pages/channels_page.py:149
+#: src/ashytv/ui/pages/channels_page.py:150
 msgid "No channels in this category."
 msgstr "Engar rásir í þessum flokki."
 
-#: src/ashytv/ui/pages/channels_page.py:241
+#: src/ashytv/ui/pages/channels_page.py:243
 msgid "All Channels"
 msgstr "Allar rásir"
 
-#: src/ashytv/ui/pages/channels_page.py:243 src/ashytv/window.py:606
-#: src/ashytv/window.py:629
+#: src/ashytv/ui/pages/channels_page.py:245 src/ashytv/window.py:634
+#: src/ashytv/window.py:657
 msgid "Recently watched"
 msgstr "Nýlega horft á"
 
-#: src/ashytv/ui/pages/channels_page.py:324
+#: src/ashytv/ui/pages/channels_page.py:326
 msgid "Move up"
 msgstr "Færa upp"
 
-#: src/ashytv/ui/pages/channels_page.py:325
+#: src/ashytv/ui/pages/channels_page.py:327
 msgid "Move down"
 msgstr "Færa niður"
 
-#: src/ashytv/ui/pages/channels_page.py:326
+#: src/ashytv/ui/pages/channels_page.py:328
 msgid "Hide group"
 msgstr "Fela hóp"
 
-#: src/ashytv/ui/pages/channels_page.py:532 src/ashytv/ui/player_view.py:178
+#: src/ashytv/ui/pages/channels_page.py:534 src/ashytv/ui/player_view.py:178
 msgid "Favorite"
 msgstr "Eftirlæti"
 
-#: src/ashytv/ui/pages/channels_page.py:539
+#: src/ashytv/ui/pages/channels_page.py:541
 msgid "More options"
 msgstr "Fleiri valkostir"
 
-#: src/ashytv/ui/pages/channels_page.py:562
+#: src/ashytv/ui/pages/channels_page.py:564
 msgid "View schedule"
 msgstr "Skoða dagskrá"
 
-#: src/ashytv/ui/pages/channels_page.py:564
+#: src/ashytv/ui/pages/channels_page.py:566
 msgid "Hide channel"
 msgstr "Fela rás"
 
@@ -729,37 +717,46 @@ msgstr "Á morgun, {date}"
 msgid "Yesterday, {date}"
 msgstr "Í gær, {date}"
 
-#: src/ashytv/ui/pages/epg_page.py:62
+#: src/ashytv/ui/pages/epg_page.py:65
 msgid "Program Guide"
 msgstr "Dagskrá"
 
-#: src/ashytv/ui/pages/epg_page.py:63
+#: src/ashytv/ui/pages/epg_page.py:66
 msgid "See what's on now and what's next"
 msgstr "Sjáðu hvað er í gangi núna og hvað er næst"
 
-#: src/ashytv/ui/pages/epg_page.py:83
+#: src/ashytv/ui/pages/epg_page.py:86
 msgid "1 hour earlier"
 msgstr "1 klukkustund fyrr"
 
-#: src/ashytv/ui/pages/epg_page.py:86
+#: src/ashytv/ui/pages/epg_page.py:89
 msgid "1 hour later"
 msgstr "1 klukkustund síðar"
 
-#: src/ashytv/ui/pages/epg_page.py:129
+#: src/ashytv/ui/pages/epg_page.py:132
 msgid "Guide unavailable"
 msgstr "Dagskrá ekki tiltæk"
 
-#: src/ashytv/ui/pages/epg_page.py:130
+#: src/ashytv/ui/pages/epg_page.py:133
 msgid "The guide appears here once your provider's EPG loads."
 msgstr "Dagskráin birtist hér þegar EPG þjónustuveitunnar hefur hlaðist."
 
-#: src/ashytv/ui/pages/epg_page.py:356
+#: src/ashytv/ui/pages/epg_page.py:362
 msgid "Cancel reminder"
 msgstr "Hætta við áminningu"
 
-#: src/ashytv/ui/pages/epg_page.py:356
+#: src/ashytv/ui/pages/epg_page.py:362
 msgid "Remind me"
 msgstr "Minntu mig á"
+
+#: src/ashytv/ui/pages/epg_page.py:369
+msgid "Cancel recording"
+msgstr "Hætta við upptöku"
+
+#: src/ashytv/ui/pages/epg_page.py:369 src/ashytv/ui/player_view.py:180
+#: src/ashytv/ui/player_view.py:957
+msgid "Record"
+msgstr "Taka upp"
 
 #: src/ashytv/ui/pages/favorites_page.py:40
 msgid "Channels, movies, series and people you marked"
@@ -784,53 +781,53 @@ msgstr "Sjá meira í {section}"
 msgid "See more"
 msgstr "Sjá meira"
 
-#: src/ashytv/ui/pages/home_page.py:212
+#: src/ashytv/ui/pages/home_page.py:213
 msgid "Continue Watching"
 msgstr "Halda áfram að horfa"
 
-#: src/ashytv/ui/pages/home_page.py:213 src/ashytv/ui/welcome_view.py:62
+#: src/ashytv/ui/pages/home_page.py:214 src/ashytv/ui/welcome_view.py:62
 msgid "Live Channels"
 msgstr "Beinar rásir"
 
-#: src/ashytv/ui/pages/home_page.py:214 src/ashytv/ui/pages/home_page.py:216
-#: src/ashytv/ui/pages/home_page.py:218
+#: src/ashytv/ui/pages/home_page.py:215 src/ashytv/ui/pages/home_page.py:217
+#: src/ashytv/ui/pages/home_page.py:219
 msgid "See all"
 msgstr "Sjá allt"
 
-#: src/ashytv/ui/pages/home_page.py:215
+#: src/ashytv/ui/pages/home_page.py:216
 msgid "Recently Added Movies"
 msgstr "Nýlega bætt við kvikmyndum"
 
-#: src/ashytv/ui/pages/home_page.py:217
+#: src/ashytv/ui/pages/home_page.py:218
 msgid "Recently Added Series"
 msgstr "Nýlega bætt við þáttaröðum"
 
-#: src/ashytv/ui/pages/home_page.py:319
+#: src/ashytv/ui/pages/home_page.py:353
 msgid "Welcome to AshyTV"
 msgstr "Velkomin í AshyTV"
 
-#: src/ashytv/ui/pages/home_page.py:320
+#: src/ashytv/ui/pages/home_page.py:354
 msgid "Your channels, movies and series in one place"
 msgstr "Rásirnar þínar, kvikmyndir og þættir á einum stað"
 
-#: src/ashytv/ui/pages/home_page.py:321
+#: src/ashytv/ui/pages/home_page.py:355
 msgid "Enter: view channels"
 msgstr "Enter: skoða rásir"
 
-#: src/ashytv/ui/pages/home_page.py:354
+#: src/ashytv/ui/pages/home_page.py:388
 msgid "Enter: details"
 msgstr "Enter: nánar"
 
-#: src/ashytv/ui/pages/home_page.py:354
+#: src/ashytv/ui/pages/home_page.py:388
 msgid "← → more titles"
 msgstr "← → fleiri titlar"
 
-#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:121
+#: src/ashytv/ui/pages/lists_page.py:19 src/ashytv/ui/playlist_dialog.py:123
 msgid "The guide link must be a web address (http or https)."
 msgstr "Tengill dagskrárinnar verður að vera veffang (http eða https)."
 
-#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:70
-#: src/ashytv/ui/servers_dialog.py:59
+#: src/ashytv/ui/pages/lists_page.py:29 src/ashytv/ui/playlist_dialog.py:77
+#: src/ashytv/ui/servers_dialog.py:60
 msgid ""
 "Other addresses of the same provider, with the same login. When the main one "
 "doesn't answer, AshyTV switches to the next automatically."
@@ -838,14 +835,14 @@ msgstr ""
 "Önnur vistföng sömu þjónustuveitu, með sömu innskráningu. Þegar "
 "aðalvistfangið svarar ekki skiptir AshyTV sjálfkrafa yfir í það næsta."
 
-#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:75
-#: src/ashytv/ui/servers_dialog.py:64 src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/pages/lists_page.py:37 src/ashytv/ui/playlist_dialog.py:82
+#: src/ashytv/ui/servers_dialog.py:65 src/ashytv/ui/servers_dialog.py:86
 #, python-brace-format
 msgid "Backup server {n}"
 msgstr "Varaþjónn {n}"
 
-#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:69
-#: src/ashytv/ui/servers_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:41 src/ashytv/ui/playlist_dialog.py:76
+#: src/ashytv/ui/servers_dialog.py:59
 msgid "Backup servers (alternative DNS)"
 msgstr "Varaþjónar (annað DNS)"
 
@@ -853,72 +850,72 @@ msgstr "Varaþjónar (annað DNS)"
 msgid "Manage your playlists or add a new one"
 msgstr "Stjórnaðu spilunarlistunum þínum eða bættu við nýjum"
 
-#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:323
+#: src/ashytv/ui/pages/lists_page.py:87 src/ashytv/ui/pages/lists_page.py:330
 msgid "Add Playlist"
 msgstr "Bæta við spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:108 src/ashytv/ui/pages/lists_page.py:366
+#: src/ashytv/ui/pages/lists_page.py:115 src/ashytv/ui/pages/lists_page.py:373
 msgid "Free TV"
 msgstr "Ókeypis sjónvarp"
 
-#: src/ashytv/ui/pages/lists_page.py:108
+#: src/ashytv/ui/pages/lists_page.py:115
 msgid "M3U File"
 msgstr "M3U-skrá"
 
-#: src/ashytv/ui/pages/lists_page.py:109
+#: src/ashytv/ui/pages/lists_page.py:116
 msgid "URL"
 msgstr "URL"
 
-#: src/ashytv/ui/pages/lists_page.py:109 src/ashytv/ui/pages/lists_page.py:366
+#: src/ashytv/ui/pages/lists_page.py:116 src/ashytv/ui/pages/lists_page.py:373
 msgid "Xtream Codes"
 msgstr "Xtream Codes"
 
-#: src/ashytv/ui/pages/lists_page.py:120 src/ashytv/ui/playlist_dialog.py:48
+#: src/ashytv/ui/pages/lists_page.py:127 src/ashytv/ui/playlist_dialog.py:55
 msgid "Playlist name"
 msgstr "Heiti spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:121 src/ashytv/ui/pages/lists_page.py:566
-#: src/ashytv/ui/pages/lists_page.py:634 src/ashytv/ui/pages/lists_page.py:642
+#: src/ashytv/ui/pages/lists_page.py:128 src/ashytv/ui/pages/lists_page.py:573
+#: src/ashytv/ui/pages/lists_page.py:641 src/ashytv/ui/pages/lists_page.py:649
 msgid "My Playlist"
 msgstr "Spilunarlistinn minn"
 
-#: src/ashytv/ui/pages/lists_page.py:128
+#: src/ashytv/ui/pages/lists_page.py:135
 msgid "Choose .m3u file…"
 msgstr "Veldu .m3u-skrá…"
 
-#: src/ashytv/ui/pages/lists_page.py:130 src/ashytv/ui/pages/lists_page.py:346
+#: src/ashytv/ui/pages/lists_page.py:137 src/ashytv/ui/pages/lists_page.py:353
 msgid "No file selected"
 msgstr "Engin skrá valin"
 
-#: src/ashytv/ui/pages/lists_page.py:136
+#: src/ashytv/ui/pages/lists_page.py:143
 msgid "File"
 msgstr "Skrá"
 
-#: src/ashytv/ui/pages/lists_page.py:141 src/ashytv/ui/playlist_dialog.py:52
+#: src/ashytv/ui/pages/lists_page.py:148 src/ashytv/ui/playlist_dialog.py:59
 msgid "Server (URL)"
 msgstr "Þjónn (URL)"
 
-#: src/ashytv/ui/pages/lists_page.py:144 src/ashytv/ui/playlist_dialog.py:53
+#: src/ashytv/ui/pages/lists_page.py:151 src/ashytv/ui/playlist_dialog.py:60
 msgid "Username"
 msgstr "Notandanafn"
 
-#: src/ashytv/ui/pages/lists_page.py:145
+#: src/ashytv/ui/pages/lists_page.py:152
 msgid "your_username"
 msgstr "notandanafnið_þitt"
 
-#: src/ashytv/ui/pages/lists_page.py:146 src/ashytv/ui/playlist_dialog.py:54
+#: src/ashytv/ui/pages/lists_page.py:153 src/ashytv/ui/playlist_dialog.py:61
 msgid "Password"
 msgstr "Lykilorð"
 
-#: src/ashytv/ui/pages/lists_page.py:147
+#: src/ashytv/ui/pages/lists_page.py:154
 msgid "your_password"
 msgstr "lykilorðið_þitt"
 
-#: src/ashytv/ui/pages/lists_page.py:149
+#: src/ashytv/ui/pages/lists_page.py:156
 msgid "Paste provider message"
 msgstr "Líma skilaboð þjónustuveitu"
 
-#: src/ashytv/ui/pages/lists_page.py:151
+#: src/ashytv/ui/pages/lists_page.py:158
 msgid ""
 "Paste the provider's welcome message: server, username and password are "
 "filled in automatically"
@@ -926,29 +923,29 @@ msgstr ""
 "Límdu velkomuskilaboð þjónustuveitunnar: þjónn, notandanafn og lykilorð eru "
 "fyllt út sjálfkrafa"
 
-#: src/ashytv/ui/pages/lists_page.py:160 src/ashytv/ui/playlist_dialog.py:58
+#: src/ashytv/ui/pages/lists_page.py:167 src/ashytv/ui/playlist_dialog.py:65
 msgid "Playlist URL (M3U)"
 msgstr "Slóð spilunarlista (M3U)"
 
-#: src/ashytv/ui/pages/lists_page.py:172 src/ashytv/ui/pages/lists_page.py:517
-#: src/ashytv/ui/playlist_dialog.py:60
+#: src/ashytv/ui/pages/lists_page.py:179 src/ashytv/ui/pages/lists_page.py:524
+#: src/ashytv/ui/playlist_dialog.py:67
 msgid "Guide link (EPG) — optional"
 msgstr "Tengill dagskrár (EPG) — valfrjálst"
 
-#: src/ashytv/ui/pages/lists_page.py:176
+#: src/ashytv/ui/pages/lists_page.py:183
 msgid "An XMLTV guide; it replaces the one named in the playlist (url-tvg)"
 msgstr ""
 "XMLTV-dagskrá; kemur í stað þeirrar sem spilunarlistinn tilgreinir (url-tvg)"
 
-#: src/ashytv/ui/pages/lists_page.py:188
+#: src/ashytv/ui/pages/lists_page.py:195
 msgid "Save and Connect"
 msgstr "Vista og tengjast"
 
-#: src/ashytv/ui/pages/lists_page.py:205
+#: src/ashytv/ui/pages/lists_page.py:212
 msgid "Secure Connection"
 msgstr "Örugg tenging"
 
-#: src/ashytv/ui/pages/lists_page.py:207
+#: src/ashytv/ui/pages/lists_page.py:214
 msgid ""
 "Your information is stored only on your device. Passwords are kept in the "
 "system keyring."
@@ -956,23 +953,23 @@ msgstr ""
 "Upplýsingarnar þínar eru aðeins geymdar á tækinu þínu. Lykilorð eru geymd í "
 "lyklakippu kerfisins."
 
-#: src/ashytv/ui/pages/lists_page.py:219
+#: src/ashytv/ui/pages/lists_page.py:226
 msgid "Your Playlists"
 msgstr "Spilunarlistarnir þínir"
 
-#: src/ashytv/ui/pages/lists_page.py:248
+#: src/ashytv/ui/pages/lists_page.py:255
 msgid "TV channels from"
 msgstr "Sjónvarpsrásir frá"
 
-#: src/ashytv/ui/pages/lists_page.py:253
+#: src/ashytv/ui/pages/lists_page.py:260
 msgid "Free movies and cartoons"
 msgstr "Ókeypis kvikmyndir og teiknimyndir"
 
-#: src/ashytv/ui/pages/lists_page.py:255
+#: src/ashytv/ui/pages/lists_page.py:262
 msgid "Classic films in the public domain and Blender's open movies"
 msgstr "Sígildar kvikmyndir í almenningseigu og opnar kvikmyndir Blender"
 
-#: src/ashytv/ui/pages/lists_page.py:265
+#: src/ashytv/ui/pages/lists_page.py:272
 msgid ""
 "Only free channels that broadcasters make publicly available, and films with "
 "an open licence or in the public domain. AshyTV is a player: it does not "
@@ -982,75 +979,75 @@ msgstr ""
 "kvikmyndir með opnu leyfi eða í almenningseigu. AshyTV er spilari: hann "
 "hýsir ekkert af þessu."
 
-#: src/ashytv/ui/pages/lists_page.py:323
+#: src/ashytv/ui/pages/lists_page.py:330
 msgid "Add Another Playlist"
 msgstr "Bæta við öðrum spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:367
+#: src/ashytv/ui/pages/lists_page.py:374
 msgid "M3U"
 msgstr "M3U"
 
-#: src/ashytv/ui/pages/lists_page.py:368
+#: src/ashytv/ui/pages/lists_page.py:375
 #, python-brace-format
 msgid "{n} item"
 msgid_plural "{n} items"
 msgstr[0] "{n} atriði"
 msgstr[1] "{n} atriði"
 
-#: src/ashytv/ui/pages/lists_page.py:371
+#: src/ashytv/ui/pages/lists_page.py:378
 msgid "Disabled"
 msgstr "Óvirk"
 
-#: src/ashytv/ui/pages/lists_page.py:373
+#: src/ashytv/ui/pages/lists_page.py:380
 #, python-brace-format
 msgid "updated {when}"
 msgstr "uppfært {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:378
+#: src/ashytv/ui/pages/lists_page.py:385
 #, python-brace-format
 msgid "Guide: {n} of {m} channels"
 msgstr "Dagskrá: {n} af {m} rásum"
 
-#: src/ashytv/ui/pages/lists_page.py:383
+#: src/ashytv/ui/pages/lists_page.py:390
 #, python-brace-format
 msgid "expires {when}"
 msgstr "rennur út {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:384
+#: src/ashytv/ui/pages/lists_page.py:391
 #, python-brace-format
 msgid "expired on {when}"
 msgstr "rann út {when}"
 
-#: src/ashytv/ui/pages/lists_page.py:402
+#: src/ashytv/ui/pages/lists_page.py:409
 msgid "Show this playlist's channels"
 msgstr "Sýna rásir þessa lagalista"
 
-#: src/ashytv/ui/pages/lists_page.py:411
+#: src/ashytv/ui/pages/lists_page.py:418
 msgid "Guide link (EPG)"
 msgstr "Tengill dagskrár (EPG)"
 
-#: src/ashytv/ui/pages/lists_page.py:416 src/ashytv/ui/playlist_dialog.py:28
+#: src/ashytv/ui/pages/lists_page.py:423 src/ashytv/ui/playlist_dialog.py:28
 msgid "Edit playlist"
 msgstr "Breyta lista"
 
-#: src/ashytv/ui/pages/lists_page.py:420
+#: src/ashytv/ui/pages/lists_page.py:427
 msgid "Refresh playlist"
 msgstr "Endurnýja spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:424
+#: src/ashytv/ui/pages/lists_page.py:431
 msgid "Remove playlist"
 msgstr "Fjarlægja spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:462
+#: src/ashytv/ui/pages/lists_page.py:469
 #, python-brace-format
 msgid "Servers: {status} — click for details"
 msgstr "Þjónar: {status} — smelltu fyrir nánari upplýsingar"
 
-#: src/ashytv/ui/pages/lists_page.py:463 src/ashytv/ui/servers_dialog.py:19
+#: src/ashytv/ui/pages/lists_page.py:470 src/ashytv/ui/servers_dialog.py:19
 msgid "not checked yet"
 msgstr "ekki athugað enn"
 
-#: src/ashytv/ui/pages/lists_page.py:515
+#: src/ashytv/ui/pages/lists_page.py:522
 #, python-brace-format
 msgid ""
 "An XMLTV guide for “{name}”. It replaces the one named in the playlist; "
@@ -1059,22 +1056,23 @@ msgstr ""
 "XMLTV-dagskrá fyrir „{name}“. Kemur í stað þeirrar sem spilunarlistinn "
 "tilgreinir; skildu eftir autt til að nota dagskrá spilunarlistans sjálfs."
 
-#: src/ashytv/ui/pages/lists_page.py:519 src/ashytv/ui/pages/lists_page.py:547
-#: src/ashytv/ui/pages/recordings_page.py:92
-#: src/ashytv/ui/pages/settings_page.py:445 src/ashytv/ui/playlist_dialog.py:32
+#: src/ashytv/ui/pages/lists_page.py:526 src/ashytv/ui/pages/lists_page.py:554
+#: src/ashytv/ui/pages/recordings_page.py:136
+#: src/ashytv/ui/pages/recordings_page.py:151
+#: src/ashytv/ui/pages/settings_page.py:441 src/ashytv/ui/playlist_dialog.py:33
 msgid "Cancel"
 msgstr "Hætta við"
 
-#: src/ashytv/ui/pages/lists_page.py:520 src/ashytv/ui/playlist_dialog.py:39
-#: src/ashytv/ui/servers_dialog.py:70
+#: src/ashytv/ui/pages/lists_page.py:527 src/ashytv/ui/playlist_dialog.py:40
+#: src/ashytv/ui/servers_dialog.py:71
 msgid "Save"
 msgstr "Vista"
 
-#: src/ashytv/ui/pages/lists_page.py:544
+#: src/ashytv/ui/pages/lists_page.py:551
 msgid "Remove playlist?"
 msgstr "Fjarlægja spilunarlista?"
 
-#: src/ashytv/ui/pages/lists_page.py:545
+#: src/ashytv/ui/pages/lists_page.py:552
 #, python-brace-format
 msgid ""
 "“{name}” and all its channels, favorites and history will be removed from "
@@ -1082,70 +1080,94 @@ msgid ""
 msgstr ""
 "„{name}“ og allar rásir hans, eftirlæti og saga verða fjarlægð úr þessu tæki."
 
-#: src/ashytv/ui/pages/lists_page.py:548
+#: src/ashytv/ui/pages/lists_page.py:555
 msgid "Remove"
 msgstr "Fjarlægja"
 
-#: src/ashytv/ui/pages/lists_page.py:571
+#: src/ashytv/ui/pages/lists_page.py:578
 msgid "Select M3U playlist"
 msgstr "Veldu M3U-spilunarlista"
 
-#: src/ashytv/ui/pages/lists_page.py:573
+#: src/ashytv/ui/pages/lists_page.py:580
 msgid "M3U Playlists"
 msgstr "M3U-spilunarlistar"
 
-#: src/ashytv/ui/pages/lists_page.py:610
+#: src/ashytv/ui/pages/lists_page.py:617
 msgid "Couldn't find server, username and password in the copied text."
 msgstr "Fann ekki þjón, notandanafn og lykilorð í afrituðum texta."
 
-#: src/ashytv/ui/pages/lists_page.py:616
+#: src/ashytv/ui/pages/lists_page.py:623
 msgid "Provider details filled in. Check them and click “Save and Connect”."
 msgstr ""
 "Upplýsingar þjónustuveitu útfylltar. Athugaðu þær og smelltu á „Vista og "
 "tengjast“."
 
-#: src/ashytv/ui/pages/lists_page.py:632
+#: src/ashytv/ui/pages/lists_page.py:639
 msgid "Choose an .m3u file."
 msgstr "Veldu .m3u-skrá."
 
-#: src/ashytv/ui/pages/lists_page.py:639 src/ashytv/ui/playlist_dialog.py:119
+#: src/ashytv/ui/pages/lists_page.py:646 src/ashytv/ui/playlist_dialog.py:121
 msgid "Enter a URL starting with http:// or https://."
 msgstr "Settu inn slóð sem byrjar á http:// eða https://."
 
-#: src/ashytv/ui/pages/lists_page.py:653 src/ashytv/ui/playlist_dialog.py:117
+#: src/ashytv/ui/pages/lists_page.py:660 src/ashytv/ui/playlist_dialog.py:119
 msgid "Fill in server, username and password."
 msgstr "Fylltu út þjón, notandanafn og lykilorð."
 
-#: src/ashytv/ui/pages/lists_page.py:655
+#: src/ashytv/ui/pages/lists_page.py:662
 msgid "Xtream Provider"
 msgstr "Xtream-þjónustuveita"
 
-#: src/ashytv/ui/pages/recordings_page.py:26
-msgid "Use the ● button in the player to record what's on"
-msgstr "Notaðu ●-hnappinn í spilaranum til að taka upp það sem er í gangi"
+#: src/ashytv/ui/pages/recordings_page.py:31
+msgid "Use the ● button in the player, or schedule one from the guide"
+msgstr "Notaðu hnappinn ● í spilaranum eða tímasettu upptöku úr dagskránni"
 
-#: src/ashytv/ui/pages/recordings_page.py:29
+#: src/ashytv/ui/pages/recordings_page.py:35
 #: src/ashytv/ui/pages/settings_page.py:326
 msgid "Open folder"
 msgstr "Opna möppu"
 
-#: src/ashytv/ui/pages/recordings_page.py:40
+#: src/ashytv/ui/pages/recordings_page.py:46
+msgid "Scheduled"
+msgstr "Tímasett"
+
+#: src/ashytv/ui/pages/recordings_page.py:54
 msgid "No recordings"
 msgstr "Engar upptökur"
 
-#: src/ashytv/ui/pages/recordings_page.py:41
+#: src/ashytv/ui/pages/recordings_page.py:55
 msgid "Recordings appear here."
 msgstr "Upptökur birtast hér."
 
-#: src/ashytv/ui/pages/recordings_page.py:77
+#: src/ashytv/ui/pages/recordings_page.py:102
 msgid "Delete recording"
 msgstr "Eyða upptöku"
 
-#: src/ashytv/ui/pages/recordings_page.py:91
+#: src/ashytv/ui/pages/recordings_page.py:119
+msgid "Recording now"
+msgstr "Tekur upp núna"
+
+#: src/ashytv/ui/pages/recordings_page.py:121
+msgid "Recorded"
+msgstr "Tekið upp"
+
+#: src/ashytv/ui/pages/recordings_page.py:123
+msgid "Failed"
+msgstr "Mistókst"
+
+#: src/ashytv/ui/pages/recordings_page.py:125
+msgid "Waiting"
+msgstr "Bíður"
+
+#: src/ashytv/ui/pages/recordings_page.py:135 src/ashytv/ui/player_view.py:937
+msgid "Stop recording"
+msgstr "Stöðva upptöku"
+
+#: src/ashytv/ui/pages/recordings_page.py:150
 msgid "Delete recording?"
 msgstr "Eyða upptöku?"
 
-#: src/ashytv/ui/pages/recordings_page.py:93
+#: src/ashytv/ui/pages/recordings_page.py:152
 msgid "Delete"
 msgstr "Eyða"
 
@@ -1250,7 +1272,7 @@ msgid ""
 "order"
 msgstr "Hópar og rásir í stafrófsröð. Slökkt: röð spilunarlistans helst"
 
-#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1380
+#: src/ashytv/ui/pages/settings_page.py:153 src/ashytv/window.py:1422
 msgid "Live preview"
 msgstr "Bein forskoðun"
 
@@ -1453,63 +1475,63 @@ msgstr ""
 "AshyTV býður ekkert efni og inniheldur ekkert efni: það spilar aðeins "
 "spilunarlistana sem þú bætir við."
 
-#: src/ashytv/ui/pages/settings_page.py:346 src/ashytv/window.py:133
+#: src/ashytv/ui/pages/settings_page.py:342 src/ashytv/window.py:144
 msgid "Guided tour"
 msgstr "Kynningarferð"
 
-#: src/ashytv/ui/pages/settings_page.py:349
+#: src/ashytv/ui/pages/settings_page.py:345
 msgid "More information"
 msgstr "Frekari upplýsingar"
 
-#: src/ashytv/ui/pages/settings_page.py:372
+#: src/ashytv/ui/pages/settings_page.py:368
 #, python-brace-format
 msgid "{n} hidden item · Click to see it and show it again"
 msgid_plural "{n} hidden items · Click to see them and show them again"
 msgstr[0] "{n} falið atriði · Smelltu til að sjá það og sýna aftur"
 msgstr[1] "{n} falin atriði · Smelltu til að sjá þau og sýna aftur"
 
-#: src/ashytv/ui/pages/settings_page.py:375
+#: src/ashytv/ui/pages/settings_page.py:371
 msgid "Nothing hidden · Right-click a group or channel to hide it"
 msgstr "Ekkert falið · Hægrismelltu á hóp eða rás til að fela hana"
 
-#: src/ashytv/ui/pages/settings_page.py:387
+#: src/ashytv/ui/pages/settings_page.py:383
 #, python-brace-format
 msgid "Removes downloaded logos, covers and guide data — {size}"
 msgstr "Fjarlægir sótt merki, forsíður og dagskrárgögn — {size}"
 
-#: src/ashytv/ui/pages/settings_page.py:403
+#: src/ashytv/ui/pages/settings_page.py:399
 msgid "Cache cleared."
 msgstr "Skyndiminni hreinsað."
 
-#: src/ashytv/ui/pages/settings_page.py:411
+#: src/ashytv/ui/pages/settings_page.py:407
 msgid "History cleared."
 msgstr "Ferill hreinsaður."
 
-#: src/ashytv/ui/pages/settings_page.py:441
+#: src/ashytv/ui/pages/settings_page.py:437
 msgid "Enter PIN"
 msgstr "Sláðu inn PIN"
 
-#: src/ashytv/ui/pages/settings_page.py:442
+#: src/ashytv/ui/pages/settings_page.py:438
 msgid "Required to show adult content."
 msgstr "Nauðsynlegt til að sýna efni fyrir fullorðna."
 
-#: src/ashytv/ui/pages/settings_page.py:446
+#: src/ashytv/ui/pages/settings_page.py:442
 msgid "Unlock"
 msgstr "Aflæsa"
 
-#: src/ashytv/ui/pages/settings_page.py:456
+#: src/ashytv/ui/pages/settings_page.py:452
 msgid "Incorrect PIN."
 msgstr "Rangt PIN."
 
-#: src/ashytv/ui/pages/settings_page.py:464
+#: src/ashytv/ui/pages/settings_page.py:460
 msgid "The PIN must have at least 4 digits."
 msgstr "PIN verður að hafa að minnsta kosti 4 tölustafi."
 
-#: src/ashytv/ui/pages/settings_page.py:469
+#: src/ashytv/ui/pages/settings_page.py:465
 msgid "PIN set."
 msgstr "PIN stillt."
 
-#: src/ashytv/ui/pages/settings_page.py:481
+#: src/ashytv/ui/pages/settings_page.py:477
 msgid "PIN removed."
 msgstr "PIN fjarlægt."
 
@@ -1520,10 +1542,6 @@ msgstr "Sjálfvirkt"
 #: src/ashytv/ui/player_view.py:154
 msgid "Back (Esc)"
 msgstr "Til baka (Esc)"
-
-#: src/ashytv/ui/player_view.py:180 src/ashytv/ui/player_view.py:957
-msgid "Record"
-msgstr "Taka upp"
 
 #: src/ashytv/ui/player_view.py:181
 msgid "Mini player"
@@ -1627,13 +1645,9 @@ msgstr "Gæði: {label} (sjálfvirkt)"
 msgid "Volume {level}%"
 msgstr "Hljóðstyrkur {level}%"
 
-#: src/ashytv/ui/player_view.py:926
+#: src/ashytv/ui/player_view.py:926 src/ashytv/window.py:1699
 msgid "Recording"
 msgstr "Upptaka"
-
-#: src/ashytv/ui/player_view.py:937
-msgid "Stop recording"
-msgstr "Stöðva upptöku"
 
 #: src/ashytv/ui/player_view.py:940
 msgid "Recording…"
@@ -1711,15 +1725,15 @@ msgstr "Niðri"
 msgid "Servers of “{name}”"
 msgstr "Þjónar „{name}“"
 
-#: src/ashytv/ui/servers_dialog.py:43
+#: src/ashytv/ui/servers_dialog.py:44
 msgid "Check now"
 msgstr "Athuga núna"
 
-#: src/ashytv/ui/servers_dialog.py:50
+#: src/ashytv/ui/servers_dialog.py:51
 msgid "Status"
 msgstr "Staða"
 
-#: src/ashytv/ui/servers_dialog.py:51
+#: src/ashytv/ui/servers_dialog.py:52
 msgid ""
 "Checked when the playlist is updated, every 15 minutes while AshyTV is open, "
 "and when playback fails."
@@ -1727,16 +1741,16 @@ msgstr ""
 "Athugað þegar spilunarlistinn er uppfærður, á 15 mínútna fresti meðan AshyTV "
 "er opið og þegar spilun mistekst."
 
-#: src/ashytv/ui/servers_dialog.py:85
+#: src/ashytv/ui/servers_dialog.py:86
 msgid "Main server"
 msgstr "Aðalþjónn"
 
-#: src/ashytv/ui/servers_dialog.py:88
+#: src/ashytv/ui/servers_dialog.py:89
 #, python-brace-format
 msgid "checked {when}"
 msgstr "athugað {when}"
 
-#: src/ashytv/ui/servers_dialog.py:90
+#: src/ashytv/ui/servers_dialog.py:91
 msgid "in use"
 msgstr "í notkun"
 
@@ -1768,7 +1782,7 @@ msgstr "Valkostir hóps (færa, fela)"
 msgid "Keyboard shortcuts"
 msgstr "Flýtilyklar"
 
-#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:136
+#: src/ashytv/ui/shortcuts.py:25 src/ashytv/window.py:147
 msgid "Quit"
 msgstr "Hætta"
 
@@ -1844,7 +1858,7 @@ msgstr "Til baka"
 msgid "Pause/resume"
 msgstr "Hlé/halda áfram"
 
-#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1376
+#: src/ashytv/ui/shortcuts.py:50 src/ashytv/window.py:1418
 msgid "Channel list"
 msgstr "Rásalisti"
 
@@ -1984,145 +1998,145 @@ msgstr "Byrja"
 msgid "AshyTV is only a player: it does not host any content."
 msgstr "AshyTV er aðeins spilari: hann hýsir ekkert efni."
 
-#: src/ashytv/window.py:126
+#: src/ashytv/window.py:56
+msgid "Please wait: an import is already in progress."
+msgstr "Bíddu: innflutningur er þegar í gangi."
+
+#: src/ashytv/window.py:137
 msgid "Search…"
 msgstr "Leita…"
 
-#: src/ashytv/window.py:135
+#: src/ashytv/window.py:146
 msgid "About AshyTV"
 msgstr "Um AshyTV"
 
-#: src/ashytv/window.py:138
+#: src/ashytv/window.py:149
 msgid "Main Menu"
 msgstr "Aðalvalmynd"
 
-#: src/ashytv/window.py:141
+#: src/ashytv/window.py:152
 msgid "Search (Ctrl+F)"
 msgstr "Leita (Ctrl+F)"
 
-#: src/ashytv/window.py:223
+#: src/ashytv/window.py:249
 msgid "The best movies for you"
 msgstr "Bestu kvikmyndirnar fyrir þig"
 
-#: src/ashytv/window.py:232
+#: src/ashytv/window.py:258
 msgid "Your favorite series in one place"
 msgstr "Uppáhaldsþættirnir þínir á einum stað"
 
-#: src/ashytv/window.py:516
+#: src/ashytv/window.py:544
 #, python-brace-format
 msgid "Player unavailable: install mpv and python-mpv ({error})"
 msgstr "Spilari ekki tiltækur: settu upp mpv og python-mpv ({error})"
 
-#: src/ashytv/window.py:565
+#: src/ashytv/window.py:593
 #, python-brace-format
 msgid "No channel {number}"
 msgstr "Engin rás {number}"
 
-#: src/ashytv/window.py:642
+#: src/ashytv/window.py:670
 msgid "Next episode…"
 msgstr "Næsti þáttur…"
 
-#: src/ashytv/window.py:673 src/ashytv/window.py:682
+#: src/ashytv/window.py:701 src/ashytv/window.py:710
 msgid "This item is no longer in the playlist."
 msgstr "Þetta atriði er ekki lengur í spilunarlistanum."
 
-#: src/ashytv/window.py:678
+#: src/ashytv/window.py:706
 #, python-brace-format
 msgid "Failed to open: {error}"
 msgstr "Ekki tókst að opna: {error}"
 
-#: src/ashytv/window.py:689
+#: src/ashytv/window.py:717
 msgid "This episode is no longer available."
 msgstr "Þessi þáttur er ekki lengur í boði."
 
-#: src/ashytv/window.py:746 src/ashytv/window.py:817
+#: src/ashytv/window.py:774 src/ashytv/window.py:845
 msgid "Added to favorites"
 msgstr "Bætt í eftirlæti"
 
-#: src/ashytv/window.py:746 src/ashytv/window.py:817
+#: src/ashytv/window.py:774 src/ashytv/window.py:845
 msgid "Removed from favorites"
 msgstr "Fjarlægt úr eftirlætum"
 
-#: src/ashytv/window.py:930 src/ashytv/window.py:1015 src/ashytv/window.py:1044
-msgid "Please wait: an import is already in progress."
-msgstr "Bíddu: innflutningur er þegar í gangi."
-
-#: src/ashytv/window.py:948
+#: src/ashytv/window.py:976
 msgid "Importing playlist…"
 msgstr "Flyt inn spilunarlista…"
 
-#: src/ashytv/window.py:967
+#: src/ashytv/window.py:995
 msgid "Connecting to the Xtream provider…"
 msgstr "Tengist Xtream-þjónustuveitunni…"
 
-#: src/ashytv/window.py:997
+#: src/ashytv/window.py:1046
 msgid "Another playlist already uses this server and user."
 msgstr "Annar listi notar nú þegar þennan þjón og notanda."
 
-#: src/ashytv/window.py:1012
+#: src/ashytv/window.py:1062
 msgid "Another playlist already uses this address."
 msgstr "Annar listi notar nú þegar þetta vistfang."
 
-#: src/ashytv/window.py:1048 src/ashytv/window.py:1072
+#: src/ashytv/window.py:1090 src/ashytv/window.py:1114
 msgid "Updating playlist…"
 msgstr "Uppfæri spilunarlista…"
 
-#: src/ashytv/window.py:1068
+#: src/ashytv/window.py:1110
 msgid "Provider password not found; add the playlist again."
 msgstr "Lykilorð þjónustuveitu fannst ekki; bættu spilunarlistanum við aftur."
 
-#: src/ashytv/window.py:1102 src/ashytv/window.py:1111
+#: src/ashytv/window.py:1144 src/ashytv/window.py:1153
 #, python-brace-format
 msgid "Playlist “{name}” updated."
 msgstr "Spilunarlistinn „{name}“ uppfærður."
 
-#: src/ashytv/window.py:1115
+#: src/ashytv/window.py:1157
 #, python-brace-format
 msgid "{n} item imported."
 msgid_plural "{n} items imported."
 msgstr[0] "{n} atriði flutt inn."
 msgstr[1] "{n} atriði flutt inn."
 
-#: src/ashytv/window.py:1116
+#: src/ashytv/window.py:1158
 #, python-brace-format
 msgid "Playlist ready: {n} item."
 msgid_plural "Playlist ready: {n} items."
 msgstr[0] "Spilunarlisti tilbúinn: {n} atriði."
 msgstr[1] "Spilunarlisti tilbúinn: {n} atriði."
 
-#: src/ashytv/window.py:1139
+#: src/ashytv/window.py:1181
 #, python-brace-format
 msgid "Could not update “{name}”: {error}"
 msgstr "Ekki tókst að uppfæra „{name}“: {error}"
 
-#: src/ashytv/window.py:1145 src/ashytv/window.py:1148
+#: src/ashytv/window.py:1187 src/ashytv/window.py:1190
 #, python-brace-format
 msgid "Failed: {error}"
 msgstr "Mistókst: {error}"
 
-#: src/ashytv/window.py:1149
+#: src/ashytv/window.py:1191
 #, python-brace-format
 msgid "Import failed: {error}"
 msgstr "Innflutningur mistókst: {error}"
 
-#: src/ashytv/window.py:1155
+#: src/ashytv/window.py:1197
 msgid "Please wait for the import to finish."
 msgstr "Bíddu þar til innflutningi lýkur."
 
-#: src/ashytv/window.py:1174
+#: src/ashytv/window.py:1216
 msgid "Playlist removed."
 msgstr "Spilunarlisti fjarlægður."
 
-#: src/ashytv/window.py:1252
+#: src/ashytv/window.py:1294
 #, python-brace-format
 msgid "Guide (EPG) unavailable: {error}"
 msgstr "Dagskrá (EPG) ekki tiltæk: {error}"
 
-#: src/ashytv/window.py:1316
+#: src/ashytv/window.py:1358
 msgid "Would you like a quick tour of AshyTV?"
 msgstr "Viltu stutta kynningu á AshyTV?"
 
-#: src/ashytv/window.py:1317
+#: src/ashytv/window.py:1359
 msgid ""
 "A few steps over the real screens: channels, guide, movies, playlists and "
 "settings. You can reopen it from the main menu."
@@ -2130,19 +2144,19 @@ msgstr ""
 "Nokkur skref um raunverulegu skjáina: rásir, dagskrá, kvikmyndir, "
 "spilunarlista og stillingar. Þú getur opnað hana aftur úr aðalvalmyndinni."
 
-#: src/ashytv/window.py:1319
+#: src/ashytv/window.py:1361
 msgid "Not now"
 msgstr "Ekki núna"
 
-#: src/ashytv/window.py:1320
+#: src/ashytv/window.py:1362
 msgid "Start"
 msgstr "Byrja"
 
-#: src/ashytv/window.py:1368
+#: src/ashytv/window.py:1410
 msgid "Sections"
 msgstr "Hlutar"
 
-#: src/ashytv/window.py:1369
+#: src/ashytv/window.py:1411
 msgid ""
 "Home, TV channels, movies, series, favorites, recordings, playlists and "
 "settings. The keyboard, a remote or a game controller work too."
@@ -2151,11 +2165,11 @@ msgstr ""
 "spilunarlistar og stillingar. Lyklaborð, fjarstýring eða leikjastýripinni "
 "virka líka."
 
-#: src/ashytv/window.py:1372
+#: src/ashytv/window.py:1414
 msgid "Channel groups"
 msgstr "Rásahópar"
 
-#: src/ashytv/window.py:1373
+#: src/ashytv/window.py:1415
 msgid ""
 "Pick a group to see its channels. Right-click (or long-press) a group to "
 "move it or hide it."
@@ -2163,7 +2177,7 @@ msgstr ""
 "Veldu hóp til að sjá rásir hans. Hægrismelltu (eða haltu inni) á hóp til að "
 "færa hann eða fela."
 
-#: src/ashytv/window.py:1377
+#: src/ashytv/window.py:1419
 msgid ""
 "A click selects a channel; a double-click or Enter opens it. Right-click a "
 "channel to hide it or add it to your favorites."
@@ -2171,7 +2185,7 @@ msgstr ""
 "Einn smellur velur rás; tvísmellur eða Enter opnar hana. Hægrismelltu á rás "
 "til að fela hana eða bæta henni í eftirlæti."
 
-#: src/ashytv/window.py:1381
+#: src/ashytv/window.py:1423
 msgid ""
 "The selected channel plays here, muted (the button turns the sound on), with "
 "what is on now and next."
@@ -2179,29 +2193,29 @@ msgstr ""
 "Valin rás spilast hér án hljóðs (hnappurinn kveikir á hljóðinu), ásamt því "
 "sem er á dagskrá núna og næst."
 
-#: src/ashytv/window.py:1384
+#: src/ashytv/window.py:1426
 msgid "Hidden items"
 msgstr "Faldir hlutir"
 
-#: src/ashytv/window.py:1385
+#: src/ashytv/window.py:1427
 msgid "Everything you hid is here. Open it to show items again."
 msgstr "Allt sem þú faldir er hér. Opnaðu það til að sýna hlutina aftur."
 
-#: src/ashytv/window.py:1387
+#: src/ashytv/window.py:1429
 msgid "Program guide"
 msgstr "Sjónvarpsdagskrá"
 
-#: src/ashytv/window.py:1388
+#: src/ashytv/window.py:1430
 msgid "Switch to Guide to see what is on, hour by hour, and set reminders."
 msgstr ""
 "Skiptu yfir í Dagskrá til að sjá hvað er á dagskrá, klukkustund fyrir "
 "klukkustund, og stilla áminningar."
 
-#: src/ashytv/window.py:1390
+#: src/ashytv/window.py:1432
 msgid "Movies and series"
 msgstr "Kvikmyndir og þættir"
 
-#: src/ashytv/window.py:1391
+#: src/ashytv/window.py:1433
 msgid ""
 "Posters with long titles scroll when you point at them. Open one to see the "
 "details and the cast; click an actor to see their other titles in your "
@@ -2211,11 +2225,11 @@ msgstr ""
 "að sjá upplýsingar og leikara; smelltu á leikara til að sjá aðra titla hans "
 "í spilunarlistunum þínum."
 
-#: src/ashytv/window.py:1395
+#: src/ashytv/window.py:1437
 msgid "Favorites and recordings"
 msgstr "Eftirlæti og upptökur"
 
-#: src/ashytv/window.py:1396
+#: src/ashytv/window.py:1438
 msgid ""
 "The heart keeps channels, movies and series here; recordings of live TV are "
 "listed in Recordings."
@@ -2223,7 +2237,7 @@ msgstr ""
 "Hjartað geymir rásir, kvikmyndir og þætti hér; upptökur af beinni útsendingu "
 "eru í Upptökum."
 
-#: src/ashytv/window.py:1400
+#: src/ashytv/window.py:1442
 msgid ""
 "Add M3U or Xtream lists. Each list can have backup servers (other DNS of the "
 "provider): the dots show if each one is online, slow or down, and AshyTV "
@@ -2233,100 +2247,143 @@ msgstr ""
 "þjónustuveitunnar): punktarnir sýna hvort hver þeirra er tengdur, hægur eða "
 "niðri, og AshyTV skiptir sjálfkrafa."
 
-#: src/ashytv/window.py:1406
+#: src/ashytv/window.py:1448
 msgid ""
 "Themes and colors, hidden channels and groups, secure DNS, parental PIN and "
 "more."
 msgstr ""
 "Þemu og litir, faldar rásir og hópar, öruggt DNS, PIN foreldra og fleira."
 
-#: src/ashytv/window.py:1409
+#: src/ashytv/window.py:1451
 msgid "See it again"
 msgstr "Sjá aftur"
 
-#: src/ashytv/window.py:1410
+#: src/ashytv/window.py:1452
 msgid ""
 "Reopen this tour from the main menu (Guided tour) or from Settings → About."
 msgstr ""
 "Opnaðu þessa kynningu aftur úr aðalvalmyndinni (Kynningarferð) eða úr "
 "Stillingar → Um forritið."
 
-#: src/ashytv/window.py:1460
+#: src/ashytv/window.py:1502
 #, python-brace-format
 msgid "“{name}”: the main server is not answering. Using the backup server."
 msgstr "„{name}“: aðalþjónninn svarar ekki. Notar varaþjóninn."
 
-#: src/ashytv/window.py:1463
+#: src/ashytv/window.py:1505
 #, python-brace-format
 msgid "“{name}”: the main server is back."
 msgstr "„{name}“: aðalþjónninn er kominn aftur."
 
-#: src/ashytv/window.py:1469
+#: src/ashytv/window.py:1511
 msgid "AshyTV servers"
 msgstr "Þjónar AshyTV"
 
-#: src/ashytv/window.py:1491
+#: src/ashytv/window.py:1533
 msgid "Switching to the main server…"
 msgstr "Skiptir yfir í aðalþjóninn…"
 
-#: src/ashytv/window.py:1492
+#: src/ashytv/window.py:1534
 msgid "Switching to the backup server…"
 msgstr "Skiptir yfir í varaþjóninn…"
 
-#: src/ashytv/window.py:1562
+#: src/ashytv/window.py:1604 src/ashytv/window.py:1616
 msgid "Programme"
 msgstr "Dagskrárliður"
 
-#: src/ashytv/window.py:1566
+#: src/ashytv/window.py:1608
 #, python-brace-format
 msgid "You will be reminded of “{title}” at {time}"
 msgstr "Þú færð áminningu um „{title}“ kl. {time}"
 
-#: src/ashytv/window.py:1567
+#: src/ashytv/window.py:1609
 msgid "Reminder cancelled"
 msgstr "Hætt við áminningu"
 
-#: src/ashytv/window.py:1579
+#: src/ashytv/window.py:1622 src/ashytv/window.py:1644
+msgid "Recording cancelled"
+msgstr "Hætt við upptöku"
+
+#: src/ashytv/window.py:1630
+#, python-brace-format
+msgid ""
+"“{title}” will be recorded at {time}, at the same time as “{other}”. Your "
+"provider has to allow two connections at once."
+msgstr "„{title}“ verður tekið upp kl. {time}, á sama tíma og „{other}“. Þjónustuveitan þín þarf að leyfa tvær tengingar samtímis."
+
+#: src/ashytv/window.py:1634
+#, python-brace-format
+msgid "“{title}” will be recorded at {time}"
+msgstr "„{title}“ verður tekið upp kl. {time}"
+
+#: src/ashytv/window.py:1644
+msgid "Recording stopped."
+msgstr "Upptaka stöðvuð."
+
+#: src/ashytv/window.py:1656
+msgid "The app was closed during the recording."
+msgstr "Forritinu var lokað meðan á upptöku stóð."
+
+#: src/ashytv/window.py:1668 src/ashytv/window.py:1681
+msgid "The app was not running when it started."
+msgstr "Forritið var ekki í gangi þegar upptakan hófst."
+
+#: src/ashytv/window.py:1696 src/ashytv/window.py:1770
+msgid "This channel is no longer in your playlists."
+msgstr "Þessi rás er ekki lengur í spilunarlistunum þínum."
+
+#: src/ashytv/window.py:1709
+#, python-brace-format
+msgid "Recording “{title}”…"
+msgstr "Tek upp „{title}“…"
+
+#: src/ashytv/window.py:1726
+#, python-brace-format
+msgid "“{title}” was recorded."
+msgstr "„{title}“ var tekið upp."
+
+#: src/ashytv/window.py:1736
+#, python-brace-format
+msgid "“{title}” could not be recorded."
+msgstr "Ekki tókst að taka upp „{title}“."
+
+#: src/ashytv/window.py:1749
 #, python-brace-format
 msgid "“{title}” starts soon on {channel}"
 msgstr "„{title}“ hefst bráðum á {channel}"
 
-#: src/ashytv/window.py:1581
+#: src/ashytv/window.py:1751
 msgid "AshyTV reminder"
 msgstr "Áminning frá AshyTV"
 
-#: src/ashytv/window.py:1600
-msgid "This channel is no longer in your playlists."
-msgstr "Þessi rás er ekki lengur í spilunarlistunum þínum."
-
-#: src/ashytv/window.py:1640
+#: src/ashytv/window.py:1810
 #, python-brace-format
 msgid "Group “{name}” hidden"
 msgstr "Hópurinn „{name}“ var falinn"
 
-#: src/ashytv/window.py:1641
+#: src/ashytv/window.py:1811
 #, python-brace-format
 msgid "Category “{name}” hidden"
 msgstr "Flokkurinn „{name}“ falinn"
 
-#: src/ashytv/window.py:1655
+#: src/ashytv/window.py:1825
 #, python-brace-format
 msgid "Channel “{name}” hidden"
 msgstr "Rásin „{name}“ falin"
 
-#: src/ashytv/window.py:1661
+#: src/ashytv/window.py:1831
 msgid "To show it again: Settings → Hidden channels and groups"
 msgstr "Til að sýna aftur: Stillingar → Faldar rásir og hópar"
 
-#: src/ashytv/window.py:1663
+#: src/ashytv/window.py:1833
 msgid "See hidden"
 msgstr "Sjá falið"
 
-#: src/ashytv/window.py:1668
+#: src/ashytv/window.py:1838
 msgid "Undo"
 msgstr "Afturkalla"
 
-#: src/ashytv/window.py:1974
+#: src/ashytv/window.py:2144
 msgid "Could not save now: a playlist is being updated. Try again."
 msgstr "Ekki hægt að vista núna: verið er að uppfæra lista. Reyndu aftur."
 
@@ -2393,6 +2450,9 @@ msgstr "Skrá yfir kvikmyndir og þætti með áframhaldandi áhorfi og næsta �
 msgid ""
 "libmpv playback with hardware decoding, picture-in-picture and recording"
 msgstr "Spilun með libmpv með vélbúnaðarafkóðun, mynd í mynd og upptöku"
+
+#~ msgid "Use the ● button in the player to record what's on"
+#~ msgstr "Notaðu ●-hnappinn í spilaranum til að taka upp það sem er í gangi"
 
 #~ msgid "Sports"
 #~ msgstr "Íþróttir"
