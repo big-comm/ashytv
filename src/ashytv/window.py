@@ -13,6 +13,7 @@ from . import APP_ID
 from .i18n import _, ngettext
 from .models import Channel, Episode, MediaType, PlayItem, Variant
 from .services import doh, epg, failover, free_tv, http, importer, secrets
+from .services import sections
 from .services.quality import quality_label
 from .services.gamepad import GamepadInput
 from .services.recorder import Recording, safe_name
@@ -310,6 +311,10 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def navigate(self, key: str) -> None:
         if key not in self.pages:
             return
+        # The page's section was switched off (Settings is open on another
+        # screen, a shortcut points here, the window was restored on it).
+        if sections.page_hidden(key, self.storage.hidden_sections):
+            key = sections.default_page(self.storage.hidden_sections)
         self._current = key
         if key != "search":  # not a menu item: the page searched from stays marked
             self.nav.set_active(key)
@@ -1338,6 +1343,9 @@ class AshyTvWindow(Adw.ApplicationWindow):
         self.storage.group_variants = bool(s.get("group_variants"))
         self.storage.sort_az = bool(s.get("sort_az"))
         s.connect("sort_az", self._on_sort_az)
+        self.storage.hidden_sections = sections.parse(s.get("hidden_sections"))
+        s.connect("hidden_sections", self._on_hidden_sections)
+        self._apply_hidden_sections(navigate=False)
         if s.get("hidden_groups"):
             # Older versions kept one global list of group names: now they
             # are hidden per playlist in the database.
@@ -1876,6 +1884,24 @@ class AshyTvWindow(Adw.ApplicationWindow):
     def _on_hide_adult(self, value) -> None:
         self.storage.hide_adult = bool(value)
         self._invalidate_pages()
+
+    def _on_hidden_sections(self, value) -> None:
+        self.storage.hidden_sections = sections.parse(value)
+        # Marked stale first: navigate() below refreshes what it opens, and a
+        # page still holding the old catalog would be shown as it was.
+        self._invalidate_pages()
+        self._apply_hidden_sections()
+        page = self.pages[self._current]
+        if hasattr(page, "refresh"):
+            page.refresh()
+
+    def _apply_hidden_sections(self, navigate: bool = True) -> None:
+        """The menu and the current page follow the setting."""
+        off = self.storage.hidden_sections
+        self.nav.set_hidden_pages({k for k in self.pages
+                                   if sections.page_hidden(k, off)})
+        if navigate and sections.page_hidden(self._current, off):
+            self.navigate(sections.default_page(off))
 
     # ---- keyboard / utils ------------------------------------------------
 

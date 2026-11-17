@@ -95,6 +95,16 @@ class NavSidebar(Gtk.Box):
         self.set_active(key)
         self.emit("navigate", key)
 
+    def set_hidden_pages(self, hidden: set[str]) -> None:
+        """Entries whose section was switched off leave the menu.
+
+        Hidden, not insensitive: an entry that is there but refuses to open
+        reads as a fault, and GTK skips invisible widgets when the arrows walk
+        the list, so keyboard navigation follows without anything else knowing.
+        """
+        for key, btn in self._buttons.items():
+            btn.set_visible(key not in hidden)
+
     def set_active(self, key: str) -> None:
         self._active = key
         for k, btn in self._buttons.items():

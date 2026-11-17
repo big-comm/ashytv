@@ -10,7 +10,9 @@ from gi.repository import Adw, Gio, GLib, GObject, Gtk
 
 from ... import APP_VERSION, compat
 from ...i18n import _, ngettext
+from ...models import MediaType
 from ...services import http
+from ...services import sections
 from ...services.logos import logo_loader
 from ...services.settings import ACCENTS, check_pin, hash_pin, set_autostart
 from .. import shortcuts
@@ -174,7 +176,61 @@ class SettingsPage(Gtk.Box):
         every.connect("notify::selected", lambda r, _p: self.settings.set(
             "refresh_hours", _REFRESH[r.get_selected()]))
         g2.add(every)
-        return self._page(g, channels, hidden_group, g2)
+        return self._page(g, self._sections_group(), channels, hidden_group, g2)
+
+    # ---- what the app shows --------------------------------------------
+
+    def _sections_group(self) -> Adw.PreferencesGroup:
+        """Live channels, Movies and Series, each switchable off.
+
+        Switching one off takes its entry out of the menu and empties its
+        catalog everywhere (services/sections.py explains why Home follows
+        films and series).
+        """
+        group = Adw.PreferencesGroup(title=_("What the app shows"))
+        self._section_rows: dict[MediaType, Adw.SwitchRow] = {}
+        labels = {MediaType.LIVE: _("Channels"), MediaType.MOVIE: _("Movies"),
+                  MediaType.SERIES: _("Series")}
+        for media_type in sections.SECTIONS:
+            row = Adw.SwitchRow(title=labels[media_type])
+            row.connect("notify::active", self._on_section, media_type)
+            group.add(row)
+            self._section_rows[media_type] = row
+        # Shown only while there is no Home left: a note that is always there
+        # is read as a warning about something being wrong.
+        self._no_home_row = Adw.ActionRow(
+            title=_("Without films and series there is no Home: "
+                    "the app opens on Channels."),
+            title_lines=2, selectable=False)
+        self._no_home_row.add_prefix(Gtk.Image(icon_name="dialog-information-symbolic"))
+        group.add(self._no_home_row)
+        self._updating_sections = False
+        self._update_sections()
+        return group
+
+    def _on_section(self, row: Adw.SwitchRow, _pspec, media_type: MediaType) -> None:
+        if self._updating_sections:
+            return
+        off = sections.parse(self.settings.get("hidden_sections"))
+        new = sections.toggle(off, media_type, hide=not row.get_active())
+        if new == off:
+            # The last one on: refused. The switch goes back where it was and
+            # the subtitle says why, instead of the row quietly doing nothing.
+            self._update_sections()
+            return
+        self.settings.set("hidden_sections", sections.names(new))
+        self._update_sections()
+
+    def _update_sections(self) -> None:
+        off = sections.parse(self.settings.get("hidden_sections"))
+        self._updating_sections = True
+        for media_type, row in self._section_rows.items():
+            row.set_active(media_type not in off)
+            last = not sections.can_hide(off, media_type)
+            row.set_subtitle(_("At least one of the three has to stay on.")
+                             if last else "")
+        self._updating_sections = False
+        self._no_home_row.set_visible(sections.home_hidden(off))
 
     def _rede(self) -> Gtk.Widget:
         g = Adw.PreferencesGroup(

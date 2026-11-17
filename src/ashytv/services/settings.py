@@ -27,6 +27,7 @@ DEFAULTS: dict = {
     "auto_quality": True,       # adapt between quality variants
     "group_variants": True,     # show "NEWS FHD/HD/SD" as one channel
     "sort_az": False,           # groups and channels A–Z (off: the playlist's order)
+    "hidden_sections": [],      # sections switched off (see services/sections.py)
     "channel_preview": True,    # live preview next to the TV channel list
     "doh": "system",            # secure DNS: system | cloudflare | google
     "server_alerts": True,      # desktop notification when a server goes down/back
