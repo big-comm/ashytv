@@ -62,6 +62,11 @@ class Storage:
         self.group_order: list[str] = []
         # Groups and channels A–Z instead of the provider's order (setting).
         self.sort_az = False
+        # Whole sections switched off in Settings (see services/sections.py).
+        # Cut here, once: every page reads the catalog through this class, so
+        # a section left out here is left out of Home, Favorites, Search and
+        # Continue watching without any of them knowing the setting exists.
+        self.hidden_sections: set[MediaType] = set()
         self._migrate()
         # Groups/channels the user hid live in the `hidden` table (per
         # playlist); the filter is skipped while it is empty.
@@ -494,6 +499,10 @@ class Storage:
         if media_type is not None:
             clauses.append("c.media_type = ?")
             params.append(media_type.value)
+        sect_sql, sect_params = self._sections_sql("c.media_type")
+        if sect_sql:
+            clauses.append(sect_sql)
+            params.extend(sect_params)
         if favorites:
             clauses.append("f.url IS NOT NULL")
         if group is not None:
@@ -512,6 +521,13 @@ class Storage:
             params.extend(hide_params)
         where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
         return where, params
+
+    def _sections_sql(self, column: str) -> tuple[str, list]:
+        """SQL condition (true = visible) leaving out the switched-off sections."""
+        if not self.hidden_sections:
+            return "", []
+        off = sorted(t.value for t in self.hidden_sections)
+        return f"{column} NOT IN ({','.join('?' * len(off))})", off
 
     def _hidden_sql(self, alias: str = "c", groups: bool = True) -> tuple[str, list]:
         """SQL condition (true = visible) on channel `alias` for the parental
@@ -904,6 +920,12 @@ class Storage:
         if media_type is not None:
             clauses.append("media_type = ?")
             params.append(media_type.value)
+        # Continue watching mixes the three: one section off empties its own
+        # entries and leaves the rest alone.
+        sect_sql, sect_params = self._sections_sql("media_type")
+        if sect_sql:
+            clauses.append(sect_sql)
+            params.extend(sect_params)
         visible, vparams = self._history_visible_sql("history")
         if visible:
             clauses.append(visible)
@@ -929,6 +951,8 @@ class Storage:
 
     def recent_channels(self, media_type: MediaType, limit: int = 50) -> list[Channel]:
         """Recently watched items that still exist, most recent first."""
+        if media_type in self.hidden_sections:
+            return []
         hidden, hparams = self._hidden_sql("c")
         rows = self.db.execute(
             f"""SELECT c.*, f.url IS NOT NULL AS fav
